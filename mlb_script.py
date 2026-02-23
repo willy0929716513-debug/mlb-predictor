@@ -2,7 +2,6 @@ import requests
 import os
 from datetime import datetime
 
-# ===== 環境變數 =====
 API_KEY = os.getenv("ODDS_API_KEY")
 WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK")
 
@@ -42,74 +41,122 @@ def analyze_mlb():
         res.raise_for_status()
         games = res.json()
     except Exception as e:
-        send_discord(f"❌ API 連線錯誤: {e}")
+        send_discord(f"API錯誤: {e}")
         return
 
     now = datetime.now().strftime("%m/%d %H:%M")
-    header = f"⚾ **MLB 投手模型 V15 (賽季掃描)**\n⏰ 更新：{now}\n"
-    content = ""
-    
-    if not games:
-        send_discord(header + "⚠️ API 目前未回傳任何比賽數據。可能原因：春訓期間盤口未開或非賽季。")
-        return
+    text = f"⚾ MLB 投手模型 V14（實戰版）\n更新：{now}\n"
+    has_output = False
 
     for g in games:
-        home_en, away_en = g["home_team"], g["away_team"]
-        home, away = TEAM_CN.get(home_en, home_en), TEAM_CN.get(away_en, away_en)
-        
-        bookmakers = g.get("bookmakers", [])
-        content += f"\n**{away} @ {home}**"
+        home_en = g["home_team"]
+        away_en = g["away_team"]
+        home = TEAM_CN.get(home_en, home_en)
+        away = TEAM_CN.get(away_en, away_en)
 
+        bookmakers = g.get("bookmakers", [])
         if not bookmakers:
-            content += "\n  ⚪ 狀態：已排程，但博彩公司尚未釋出賠率。\n"
             continue
 
-        # --- 數據抓取 ---
-        h_odds, a_odds, totals_list = [], [], []
+        home_odds, away_odds = [], []
+        total_lines, over_prices = [], []
+
         for b in bookmakers:
             for m in b.get("markets", []):
                 if m["key"] == "h2h":
                     for o in m["outcomes"]:
-                        if o["name"] == home_en: h_odds.append(o["price"])
-                        elif o["name"] == away_en: a_odds.append(o["price"])
+                        if o["name"] == home_en:
+                            home_odds.append(o["price"])
+                        elif o["name"] == away_en:
+                            away_odds.append(o["price"])
+
                 elif m["key"] == "totals":
                     for o in m["outcomes"]:
-                        if o["name"] == "Over": totals_list.append((o["point"], o["price"]))
+                        if o["name"] == "Over":
+                            total_lines.append(o["point"])
+                            over_prices.append(o["price"])
 
-        if not h_odds or not a_odds:
-            content += "\n  ⚪ 狀態：獨贏盤口數據不足。\n"
+        if not home_odds or not away_odds:
             continue
 
-        # --- 核心計算 ---
-        best_h, best_a = max(h_odds), max(a_odds)
-        avg_h, avg_a = sum(h_odds)/len(h_odds), sum(a_odds)/len(a_odds)
-        p_h = implied_prob(avg_h) / (implied_prob(avg_h) + implied_prob(avg_a))
-        p_a = 1 - p_h
-        
-        t_line = totals_list[0][0] if totals_list else "未開盤"
-        over_p = totals_list[0][1] if totals_list else None
-        
-        content += f"\n  📊 勝率：{away} {p_a:.1%} vs {home} {p_h:.1%}"
-        content += f"\n  🎰 總分盤：{t_line}"
+        # 最佳賠率
+        best_home = max(home_odds)
+        best_away = max(away_odds)
 
-        # --- 靈敏推薦邏輯 ---
+        # 平均賠率（去水位）
+        avg_home = sum(home_odds) / len(home_odds)
+        avg_away = sum(away_odds) / len(away_odds)
+
+        raw_h = implied_prob(avg_home)
+        raw_a = implied_prob(avg_away)
+        p_home = raw_h / (raw_h + raw_a)
+        p_away = 1 - p_home
+
+        # 主流總分（平均）
+        total_line = None
+        avg_over = None
+        if total_lines:
+            total_line = round(sum(total_lines) / len(total_lines), 1)
+            avg_over = sum(over_prices) / len(over_prices)
+
+        # Edge
+        edge_home = p_home * best_home - 1
+        edge_away = p_away * best_away - 1
+
         recs = []
-        # 勝負推薦 (55% 門檻)
-        if p_h > 0.55 and best_h >= 1.60: recs.append(f"🔵 推薦：{home} ({best_h})")
-        elif p_a > 0.55 and best_a >= 1.60: recs.append(f"🔵 推薦：{away} ({best_a})")
-        
-        # 價值感應 (1.5% 門檻)
-        edge_h, edge_a = p_h * best_h - 1, p_a * best_a - 1
-        if edge_h > 0.015: recs.append(f"💰 價值：{home} (+{round(edge_h*100,1)}%)")
-        if edge_a > 0.015: recs.append(f"💰 價值：{away} (+{round(edge_a*100,1)}%)")
+        max_edge = max(edge_home, edge_away)
 
-        if recs:
-            for r in recs: content += f"\n  {r}"
-        else:
-            content += "\n  ⚖️ 數據平衡，建議觀望"
-        content += "\n"
+        # ===== 投手模型邏輯 =====
+        if total_line:
 
-    send_discord(header + content)
+            # 低分＝投手戰
+            if total_line <= 8.0:
+                if p_home > 0.57 and best_home >= 1.65:
+                    recs.append(f"🔵 投手優勢：{home} ({best_home})")
+                if p_away > 0.57 and best_away >= 1.65:
+                    recs.append(f"🔵 投手優勢：{away} ({best_away})")
+
+            # 高分＝打擊戰
+            elif total_line >= 9.0:
+                if avg_over and avg_over <= 1.85:
+                    recs.append(f"🟢 打擊戰大分：Over {total_line}")
+
+                # 爆冷環境
+                if p_home < 0.46 and best_home >= 2.20:
+                    recs.append(f"⭐ 爆冷機會：{home}")
+                if p_away < 0.46 and best_away >= 2.20:
+                    recs.append(f"⭐ 爆冷機會：{away}")
+
+        # ===== Edge 分級 =====
+        if edge_home > 0.05:
+            recs.append(f"💰💰 強價值：{home} +{edge_home*100:.1f}%")
+        elif edge_home > 0.03:
+            recs.append(f"💰 價值：{home} +{edge_home*100:.1f}%")
+
+        if edge_away > 0.05:
+            recs.append(f"💰💰 強價值：{away} +{edge_away*100:.1f}%")
+        elif edge_away > 0.03:
+            recs.append(f"💰 價值：{away} +{edge_away*100:.1f}%")
+
+        # ===== 只輸出有意義的場 =====
+        if recs or max_edge > 0.02:
+            has_output = True
+            text += f"\n**{away} @ {home}**"
+            if total_line:
+                text += f" (總分 {total_line})"
+            text += "\n"
+            text += f"勝率：{away} {p_away:.1%} | {home} {p_home:.1%}\n"
+
+            if recs:
+                for r in recs:
+                    text += f"  {r}\n"
+            else:
+                text += "  ⚖️ 小幅價差觀察\n"
+
+    if not has_output:
+        text += "\n今天市場效率極高，無可交易機會。"
+
+    send_discord(text)
 
 if __name__ == "__main__":
     analyze_mlb()
