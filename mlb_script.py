@@ -8,7 +8,6 @@ WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK")
 
 BASE_URL = "https://api.the-odds-api.com/v4/sports/baseball_mlb/odds"
 
-# ===== 中文隊名對照表 =====
 TEAM_CN = {
     "Arizona Diamondbacks": "響尾蛇", "Atlanta Braves": "勇士", "Baltimore Orioles": "金鶯",
     "Boston Red Sox": "紅襪", "Chicago Cubs": "小熊", "Chicago White Sox": "白襪",
@@ -47,11 +46,10 @@ def analyze_mlb():
         return
 
     now = datetime.now().strftime("%m/%d %H:%M")
-    text = f"⚾ MLB 投手模型 V12 (中文版)\n更新：{now}\n"
+    text = f"⚾ MLB 投手模型 V13 (靈敏數據版)\n更新時間：{now}\n"
     has_pick = False
 
     for g in games:
-        # 轉換成中文名稱，若找不到則顯示原名
         home_en = g["home_team"]
         away_en = g["away_team"]
         home = TEAM_CN.get(home_en, home_en)
@@ -60,9 +58,7 @@ def analyze_mlb():
         bookmakers = g.get("bookmakers", [])
         if not bookmakers: continue
 
-        home_odds = []
-        away_odds = []
-        totals_list = []
+        home_odds, away_odds, totals_list = [], [], []
 
         for b in bookmakers:
             for m in b.get("markets", []):
@@ -77,52 +73,46 @@ def analyze_mlb():
 
         if not home_odds or not away_odds: continue
 
-        best_home = max(home_odds)
-        best_away = max(away_odds)
-        avg_home = sum(home_odds)/len(home_odds)
-        avg_away = sum(away_odds)/len(away_odds)
+        best_home, best_away = max(home_odds), max(away_odds)
+        avg_home, avg_away = sum(home_odds)/len(home_odds), sum(away_odds)/len(away_odds)
 
-        p_home = implied_prob(avg_home) / (implied_prob(avg_home) + implied_prob(avg_away))
+        # 計算去抽水後的公平勝率
+        raw_p_h = implied_prob(avg_home)
+        raw_p_a = implied_prob(avg_away)
+        p_home = raw_p_h / (raw_p_h + raw_p_a)
         p_away = 1 - p_home
 
-        total_line = totals_list[0][0] if totals_list else None
+        total_line = totals_list[0][0] if totals_list else "未開"
         over_price = totals_list[0][1] if totals_list else None
 
         recs = []
 
-        # 核心邏輯
-        if total_line:
+        # --- 靈敏推薦邏輯 ---
+        if isinstance(total_line, float):
             if total_line <= 8.5:
-                if p_home > 0.58 and best_home >= 1.65:
-                    recs.append(f"🔵 強推：{home} ({best_home})")
-                elif p_away > 0.58 and best_away >= 1.65:
-                    recs.append(f"🔵 強推：{away} ({best_away})")
-                if over_price and over_price >= 1.98:
-                    recs.append(f"🟣 小分價值：Under {total_line}")
+                if p_home > 0.55 and best_home >= 1.60: recs.append(f"🔵 推薦：{home} ({best_home})")
+                elif p_away > 0.55 and best_away >= 1.60: recs.append(f"🔵 推薦：{away} ({best_away})")
             else:
-                if over_price and over_price <= 1.90:
-                    recs.append(f"🟢 大分偏好：Over {total_line}")
-                if p_home < 0.48 and best_home >= 2.10:
-                    recs.append(f"⭐ 爆冷機會：{home} ({best_home})")
-                elif p_away < 0.48 and best_away >= 2.10:
-                    recs.append(f"⭐ 爆冷機會：{away} ({best_away})")
+                if over_price and over_price <= 1.95: recs.append(f"🟢 偏大：Over {total_line}")
+                if p_home < 0.49 and best_home >= 2.05: recs.append(f"⭐ 爆冷：{home} ({best_home})")
+                elif p_away < 0.49 and best_away >= 2.05: recs.append(f"⭐ 爆冷：{away} ({best_away})")
 
+        # --- Edge 價值感應 (靈敏度 1.5%) ---
         edge_home = p_home * best_home - 1
         edge_away = p_away * best_away - 1
+        if edge_home > 0.015: recs.append(f"💰 價值：{home} (+{round(edge_home*100,1)}%)")
+        if edge_away > 0.015: recs.append(f"💰 價值：{away} (+{round(edge_away*100,1)}%)")
 
-        if edge_home > 0.03:
-            recs.append(f"💰 價值：{home} (Edge {round(edge_home*100,1)}%)")
-        if edge_away > 0.03:
-            recs.append(f"💰 價值：{away} (Edge {round(edge_away*100,1)}%)")
-
+        # --- 顯示數據 (不論是否有推薦) ---
+        has_pick = True
+        text += f"\n**{away} @ {home}** (總盤: {total_line})\n"
+        text += f"📊 預估勝率：{away} {p_away:.1%} vs {home} {p_home:.1%}\n"
+        
         if recs:
-            has_pick = True
-            text += f"\n**{away} @ {home}** (總盤: {total_line})\n"
             for r in recs:
                 text += f"  {r}\n"
-
-    if not has_pick:
-        text += "\n目前市場數據平衡，無顯著錯價場次。"
+        else:
+            text += "  ⚖️ 市場極度平衡，建議觀望\n"
 
     send_discord(text)
 
