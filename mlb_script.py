@@ -21,18 +21,23 @@ TEAM_CN = {
     "Texas Rangers": "遊騎兵", "Toronto Blue Jays": "藍鳥", "Washington Nationals": "國民"
 }
 
+# ===== Discord 發送 =====
 def send_discord(text):
     MAX = 1900
     for i in range(0, len(text), MAX):
         requests.post(WEBHOOK_URL, json={"content": text[i:i+MAX]})
 
+# ===== Kelly =====
 def kelly(prob, odds):
-    if odds <= 1: return 0
+    if odds <= 1:
+        return 0
     b = odds - 1
     k = (prob * b - (1 - prob)) / b
     return max(0, round(k, 3))
 
+# ===== 主程式 =====
 def analyze_mlb():
+
     params = {
         "apiKey": API_KEY,
         "regions": "us",
@@ -48,71 +53,106 @@ def analyze_mlb():
         send_discord(f"API錯誤: {e}")
         return
 
-    recommend_text = f"**⚾️ MLB 數據平衡版 (V9)**\n"
+    now = datetime.now().strftime("%m/%d %H:%M")
+
+    recommend_text = f"**⚾ MLB 數據平衡版 V10**\n更新時間：{now}\n"
     has_recommend = False
 
     for g in games:
+
         home_en = g["home_team"]
         away_en = g["away_team"]
         home = TEAM_CN.get(home_en, home_en)
         away = TEAM_CN.get(away_en, away_en)
 
         bookmakers = g.get("bookmakers", [])
-        if not bookmakers: continue
+        if not bookmakers:
+            continue
 
-        markets = bookmakers[0].get("markets", [])
-        h2h = next((m["outcomes"] for m in markets if m["key"] == "h2h"), None)
-        spreads = next((m["outcomes"] for m in markets if m["key"] == "spreads"), None)
-        totals = next((m["outcomes"] for m in markets if m["key"] == "totals"), None)
+        # ===== 取得最佳主客勝賠率（多莊比較）=====
+        h_odds = None
+        a_odds = None
+        spreads_data = []
+        totals_data = []
+
+        for b in bookmakers:
+            for m in b.get("markets", []):
+                if m["key"] == "h2h":
+                    for o in m["outcomes"]:
+                        if o["name"] == home_en:
+                            h_odds = max(h_odds or 0, o["price"])
+                        elif o["name"] == away_en:
+                            a_odds = max(a_odds or 0, o["price"])
+
+                elif m["key"] == "spreads":
+                    spreads_data.extend(m["outcomes"])
+
+                elif m["key"] == "totals":
+                    totals_data.extend(m["outcomes"])
 
         recs = []
-        
-        # --- 1. 平衡版勝負判定 ---
-        if h2h:
-            try:
-                h_odds = next(o["price"] for o in h2h if o["name"] == home_en)
-                a_odds = next(o["price"] for o in h2h if o["name"] == away_en)
-                p_home = (1/h_odds) / ((1/h_odds) + (1/a_odds))
-                p_home = min(p_home + 0.03, 0.95) # 主場微修正
-                
-                k_home = kelly(p_home, h_odds)
-                k_away = kelly(1-p_home, a_odds)
 
-                # 門檻降至 58%，但用星等區分
-                if p_home > 0.63 and k_home > 0.05:
-                    recs.append(f"🔵 **強烈推薦：{home}** ⭐️⭐️⭐️")
-                elif p_home > 0.58 and k_home > 0.02:
-                    recs.append(f"🔹 價值推薦：{home} ⭐️⭐️")
-                elif (1-p_home) > 0.63 and k_away > 0.05:
-                    recs.append(f"🔵 **強烈推薦：{away}** ⭐️⭐️⭐️")
-                elif (1-p_home) > 0.58 and k_away > 0.02:
-                    recs.append(f"🔹 價值推薦：{away} ⭐️⭐️")
-            except: pass
+        # ===== 1. 勝負判定 =====
+        if h_odds and a_odds:
 
-        # --- 2. 平衡版讓分判定 ---
-        if spreads:
-            try:
-                h_spread = next(o for o in spreads if o["name"] == home_en)
-                if h_spread["point"] == -1.5 and p_home > 0.62:
-                    recs.append(f"🚩 讓分優勢：{home} (-1.5)")
-                elif h_spread["point"] == 1.5 and p_home > 0.45:
-                    recs.append(f"🛡️ 受讓保險：{home} (+1.5)")
-            except: pass
+            # 市場隱含機率
+            p_home = (1/h_odds) / ((1/h_odds) + (1/a_odds))
 
-        # --- 3. 平衡版大小分判定 ---
-        if totals:
+            # 主場優勢 +2%
+            p_home = min(p_home + 0.02, 0.95)
+
+            k_home = kelly(p_home, h_odds)
+            k_away = kelly(1-p_home, a_odds)
+
+            # ⭐⭐⭐ 強推
+            if p_home > 0.62 and k_home > 0.03:
+                recs.append(f"🔵 強烈推薦：{home} ⭐⭐⭐")
+            elif (1-p_home) > 0.62 and k_away > 0.03:
+                recs.append(f"🔵 強烈推薦：{away} ⭐⭐⭐")
+
+            # ⭐⭐ 價值
+            elif p_home > 0.56 and k_home > 0.01:
+                recs.append(f"🔹 價值推薦：{home} ⭐⭐")
+            elif (1-p_home) > 0.56 and k_away > 0.01:
+                recs.append(f"🔹 價值推薦：{away} ⭐⭐")
+
+            # ⭐ 輕微優勢
+            elif p_home > 0.53:
+                recs.append(f"⚪ 輕微優勢：{home} ⭐")
+            elif (1-p_home) > 0.53:
+                recs.append(f"⚪ 輕微優勢：{away} ⭐")
+
+        # ===== 2. 讓分判定 =====
+        if spreads_data and h_odds and a_odds:
             try:
-                over = next(o for o in totals if o["name"] == "Over")
-                under = next(o for o in totals if o["name"] == "Under")
+                h_spread = next(o for o in spreads_data if o["name"] == home_en)
+
+                if h_spread["point"] == -1.5 and p_home > 0.58:
+                    recs.append(f"🚩 讓分機會：{home} (-1.5)")
+
+                elif h_spread["point"] == 1.5 and p_home > 0.48:
+                    recs.append(f"🛡️ 受讓保護：{home} (+1.5)")
+            except:
+                pass
+
+        # ===== 3. 大小分判定 =====
+        if totals_data:
+            try:
+                over = next(o for o in totals_data if o["name"] == "Over")
+                under = next(o for o in totals_data if o["name"] == "Under")
                 line = over["point"]
-                
-                # 只要賠率在 1.85 以下且盤口進入合理區間就提示
-                if line <= 8.5 and over["price"] < 1.85:
-                    recs.append(f"🟢 傾向大分：{line} Over")
-                elif line >= 8.5 and under["price"] < 1.85:
-                    recs.append(f"🟣 傾向小分：{line} Under")
-            except: pass
 
+                # 放寬條件：市場明顯偏向一邊就提示
+                if over["price"] <= 1.90:
+                    recs.append(f"🟢 市場偏大：{line} Over")
+
+                elif under["price"] <= 1.90:
+                    recs.append(f"🟣 市場偏小：{line} Under")
+
+            except:
+                pass
+
+        # ===== 有推薦才輸出 =====
         if recs:
             has_recommend = True
             recommend_text += f"\n**{away} @ {home}**"
@@ -121,9 +161,11 @@ def analyze_mlb():
             recommend_text += "\n"
 
     if not has_recommend:
-        recommend_text += "\n目前市場盤口極度平衡，無顯著數據優勢場次。"
+        recommend_text += "\n目前市場盤口極度平衡，無明顯優勢場次。"
 
     send_discord(recommend_text)
 
+
+# ===== 執行 =====
 if __name__ == "__main__":
     analyze_mlb()
