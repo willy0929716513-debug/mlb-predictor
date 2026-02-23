@@ -6,9 +6,6 @@ from datetime import datetime
 API_KEY = os.getenv("ODDS_API_KEY")
 WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK")
 
-if not API_KEY or not WEBHOOK_URL:
-    raise ValueError("請確保環境變數已設定")
-
 BASE_URL = "https://api.the-odds-api.com/v4/sports/baseball_mlb/odds"
 
 TEAM_CN = {
@@ -39,7 +36,7 @@ def analyze_mlb():
     params = {
         "apiKey": API_KEY,
         "regions": "us",
-        "markets": "h2h,spreads,totals", # 這裡增加了 totals
+        "markets": "h2h,spreads,totals",
         "oddsFormat": "decimal"
     }
 
@@ -51,7 +48,7 @@ def analyze_mlb():
         send_discord(f"API錯誤: {e}")
         return
 
-    recommend_text = f"**⚾️ MLB 精準預測 (V8 大小分強化版)**\n"
+    recommend_text = f"**⚾️ MLB 數據平衡版 (V9)**\n"
     has_recommend = False
 
     for g in games:
@@ -69,68 +66,62 @@ def analyze_mlb():
         totals = next((m["outcomes"] for m in markets if m["key"] == "totals"), None)
 
         recs = []
-        signal_count = 0
-
-        # --- 1. 獨贏分析 ---
+        
+        # --- 1. 平衡版勝負判定 ---
         if h2h:
             try:
                 h_odds = next(o["price"] for o in h2h if o["name"] == home_en)
                 a_odds = next(o["price"] for o in h2h if o["name"] == away_en)
                 p_home = (1/h_odds) / ((1/h_odds) + (1/a_odds))
-                
-                # 簡單修正：主場 +3%，趨勢修正
-                p_home = min(p_home + 0.03, 0.95)
+                p_home = min(p_home + 0.03, 0.95) # 主場微修正
                 
                 k_home = kelly(p_home, h_odds)
                 k_away = kelly(1-p_home, a_odds)
 
-                if p_home > 0.62 and k_home > 0.04:
-                    recs.append(f"🔵 勝負：{home} (Kelly {k_home})")
-                    signal_count += 1
-                elif p_home < 0.38 and k_away > 0.04:
-                    recs.append(f"🔵 勝負：{away} (Kelly {k_away})")
-                    signal_count += 1
+                # 門檻降至 58%，但用星等區分
+                if p_home > 0.63 and k_home > 0.05:
+                    recs.append(f"🔵 **強烈推薦：{home}** ⭐️⭐️⭐️")
+                elif p_home > 0.58 and k_home > 0.02:
+                    recs.append(f"🔹 價值推薦：{home} ⭐️⭐️")
+                elif (1-p_home) > 0.63 and k_away > 0.05:
+                    recs.append(f"🔵 **強烈推薦：{away}** ⭐️⭐️⭐️")
+                elif (1-p_home) > 0.58 and k_away > 0.02:
+                    recs.append(f"🔹 價值推薦：{away} ⭐️⭐️")
             except: pass
 
-        # --- 2. 讓分分析 (-1.5 / +1.5) ---
+        # --- 2. 平衡版讓分判定 ---
         if spreads:
             try:
                 h_spread = next(o for o in spreads if o["name"] == home_en)
-                # 如果主隊強勢且讓 1.5 分
-                if h_spread["point"] == -1.5 and p_home > 0.65:
-                    recs.append(f"🚩 讓分：{home} -1.5")
-                    signal_count += 1
+                if h_spread["point"] == -1.5 and p_home > 0.62:
+                    recs.append(f"🚩 讓分優勢：{home} (-1.5)")
+                elif h_spread["point"] == 1.5 and p_home > 0.45:
+                    recs.append(f"🛡️ 受讓保險：{home} (+1.5)")
             except: pass
 
-        # --- 3. 大小分分析 (NEW) ---
+        # --- 3. 平衡版大小分判定 ---
         if totals:
             try:
-                # 取得大分(Over)的基準與賠率
                 over = next(o for o in totals if o["name"] == "Over")
                 under = next(o for o in totals if o["name"] == "Under")
                 line = over["point"]
                 
-                # 簡易模型：MLB平均得分約 8.5-9 分
-                # 若盤口開得極低(< 7.5) 且 賠率偏好大分，或 盤口極高(> 10.5) 且偏好小分
-                if line <= 7.5 and over["price"] < 1.90:
-                    recs.append(f"🟢 大分：{line} Over")
-                    signal_count += 1
-                elif line >= 10.5 and under["price"] < 1.90:
-                    recs.append(f"🟣 小分：{line} Under")
-                    signal_count += 1
+                # 只要賠率在 1.85 以下且盤口進入合理區間就提示
+                if line <= 8.5 and over["price"] < 1.85:
+                    recs.append(f"🟢 傾向大分：{line} Over")
+                elif line >= 8.5 and under["price"] < 1.85:
+                    recs.append(f"🟣 傾向小分：{line} Under")
             except: pass
 
-        # --- 輸出判定 ---
-        # 只要有任何一個訊號符合就顯示，增加可看度
-        if signal_count >= 1:
+        if recs:
             has_recommend = True
-            recommend_text += f"\n**{away} vs {home}**"
+            recommend_text += f"\n**{away} @ {home}**"
             for r in recs:
-                recommend_text += f"\n{r}"
+                recommend_text += f"\n  {r}"
             recommend_text += "\n"
 
     if not has_recommend:
-        recommend_text += "\n當前盤口未發現明顯訊號，建議觀望。"
+        recommend_text += "\n目前市場盤口極度平衡，無顯著數據優勢場次。"
 
     send_discord(recommend_text)
 
