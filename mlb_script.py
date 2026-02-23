@@ -42,79 +42,74 @@ def analyze_mlb():
         res.raise_for_status()
         games = res.json()
     except Exception as e:
-        send_discord(f"API錯誤: {e}")
+        send_discord(f"❌ API 連線錯誤: {e}")
         return
 
     now = datetime.now().strftime("%m/%d %H:%M")
-    text = f"⚾ MLB 投手模型 V13 (靈敏數據版)\n更新時間：{now}\n"
-    has_pick = False
+    header = f"⚾ **MLB 投手模型 V15 (賽季掃描)**\n⏰ 更新：{now}\n"
+    content = ""
+    
+    if not games:
+        send_discord(header + "⚠️ API 目前未回傳任何比賽數據。可能原因：春訓期間盤口未開或非賽季。")
+        return
 
     for g in games:
-        home_en = g["home_team"]
-        away_en = g["away_team"]
-        home = TEAM_CN.get(home_en, home_en)
-        away = TEAM_CN.get(away_en, away_en)
-
+        home_en, away_en = g["home_team"], g["away_team"]
+        home, away = TEAM_CN.get(home_en, home_en), TEAM_CN.get(away_en, away_en)
+        
         bookmakers = g.get("bookmakers", [])
-        if not bookmakers: continue
+        content += f"\n**{away} @ {home}**"
 
-        home_odds, away_odds, totals_list = [], [], []
+        if not bookmakers:
+            content += "\n  ⚪ 狀態：已排程，但博彩公司尚未釋出賠率。\n"
+            continue
 
+        # --- 數據抓取 ---
+        h_odds, a_odds, totals_list = [], [], []
         for b in bookmakers:
             for m in b.get("markets", []):
                 if m["key"] == "h2h":
                     for o in m["outcomes"]:
-                        if o["name"] == home_en: home_odds.append(o["price"])
-                        elif o["name"] == away_en: away_odds.append(o["price"])
+                        if o["name"] == home_en: h_odds.append(o["price"])
+                        elif o["name"] == away_en: a_odds.append(o["price"])
                 elif m["key"] == "totals":
                     for o in m["outcomes"]:
-                        if o["name"] == "Over":
-                            totals_list.append((o["point"], o["price"]))
+                        if o["name"] == "Over": totals_list.append((o["point"], o["price"]))
 
-        if not home_odds or not away_odds: continue
+        if not h_odds or not a_odds:
+            content += "\n  ⚪ 狀態：獨贏盤口數據不足。\n"
+            continue
 
-        best_home, best_away = max(home_odds), max(away_odds)
-        avg_home, avg_away = sum(home_odds)/len(home_odds), sum(away_odds)/len(away_odds)
-
-        # 計算去抽水後的公平勝率
-        raw_p_h = implied_prob(avg_home)
-        raw_p_a = implied_prob(avg_away)
-        p_home = raw_p_h / (raw_p_h + raw_p_a)
-        p_away = 1 - p_home
-
-        total_line = totals_list[0][0] if totals_list else "未開"
-        over_price = totals_list[0][1] if totals_list else None
-
-        recs = []
+        # --- 核心計算 ---
+        best_h, best_a = max(h_odds), max(a_odds)
+        avg_h, avg_a = sum(h_odds)/len(h_odds), sum(a_odds)/len(a_odds)
+        p_h = implied_prob(avg_h) / (implied_prob(avg_h) + implied_prob(avg_a))
+        p_a = 1 - p_h
+        
+        t_line = totals_list[0][0] if totals_list else "未開盤"
+        over_p = totals_list[0][1] if totals_list else None
+        
+        content += f"\n  📊 勝率：{away} {p_a:.1%} vs {home} {p_h:.1%}"
+        content += f"\n  🎰 總分盤：{t_line}"
 
         # --- 靈敏推薦邏輯 ---
-        if isinstance(total_line, float):
-            if total_line <= 8.5:
-                if p_home > 0.55 and best_home >= 1.60: recs.append(f"🔵 推薦：{home} ({best_home})")
-                elif p_away > 0.55 and best_away >= 1.60: recs.append(f"🔵 推薦：{away} ({best_away})")
-            else:
-                if over_price and over_price <= 1.95: recs.append(f"🟢 偏大：Over {total_line}")
-                if p_home < 0.49 and best_home >= 2.05: recs.append(f"⭐ 爆冷：{home} ({best_home})")
-                elif p_away < 0.49 and best_away >= 2.05: recs.append(f"⭐ 爆冷：{away} ({best_away})")
-
-        # --- Edge 價值感應 (靈敏度 1.5%) ---
-        edge_home = p_home * best_home - 1
-        edge_away = p_away * best_away - 1
-        if edge_home > 0.015: recs.append(f"💰 價值：{home} (+{round(edge_home*100,1)}%)")
-        if edge_away > 0.015: recs.append(f"💰 價值：{away} (+{round(edge_away*100,1)}%)")
-
-        # --- 顯示數據 (不論是否有推薦) ---
-        has_pick = True
-        text += f"\n**{away} @ {home}** (總盤: {total_line})\n"
-        text += f"📊 預估勝率：{away} {p_away:.1%} vs {home} {p_home:.1%}\n"
+        recs = []
+        # 勝負推薦 (55% 門檻)
+        if p_h > 0.55 and best_h >= 1.60: recs.append(f"🔵 推薦：{home} ({best_h})")
+        elif p_a > 0.55 and best_a >= 1.60: recs.append(f"🔵 推薦：{away} ({best_a})")
         
-        if recs:
-            for r in recs:
-                text += f"  {r}\n"
-        else:
-            text += "  ⚖️ 市場極度平衡，建議觀望\n"
+        # 價值感應 (1.5% 門檻)
+        edge_h, edge_a = p_h * best_h - 1, p_a * best_a - 1
+        if edge_h > 0.015: recs.append(f"💰 價值：{home} (+{round(edge_h*100,1)}%)")
+        if edge_a > 0.015: recs.append(f"💰 價值：{away} (+{round(edge_a*100,1)}%)")
 
-    send_discord(text)
+        if recs:
+            for r in recs: content += f"\n  {r}"
+        else:
+            content += "\n  ⚖️ 數據平衡，建議觀望"
+        content += "\n"
+
+    send_discord(header + content)
 
 if __name__ == "__main__":
     analyze_mlb()
