@@ -191,45 +191,37 @@ def safe_get(url, headers=None, params=None, retries=3, timeout=15):
 
 
 def fetch_team_stats():
-    if not BALLDONTLIE_KEY:
+    """
+    ESPN 免費公開 API，完全不需要 Key。
+    同時嘗試兩個 endpoint，解析勝率與得失分來推算評分。
+    """
+    urls = [
+        "https://site.api.espn.com/apis/v2/sports/baseball/mlb/standings",
+        "https://site.web.api.espn.com/apis/v2/sports/baseball/mlb/standings",
+    ]
+    data = None
+    for url in urls:
+        data = safe_get(url)
+        if data:
+            break
+
+    if not data:
+        log.warning("ESPN standings API failed, using fallback")
         return {}
-    headers = {"Authorization": BALLDONTLIE_KEY}
-    data = safe_get(
-        "https://api.balldontlie.io/mlb/v1/games",
-        headers=headers,
-        params={"seasons[]": 2025, "per_page": 100},
-    )
-    if not data or "data" not in data:
-        log.warning("Balldontlie MLB API failed, using ESPN fallback")
-        return fetch_team_stats_espn()
-    
-    run_stats = {}
-    for game in data["data"]:
-        if game.get("status") != "Final":
-            continue
-        home = normalize_team(game["home_team"]["full_name"])
-        away = normalize_team(game["away_team"]["full_name"])
-        hs   = game.get("home_team_score", 0) or 0
-        vs   = game.get("away_team_score", 0) or 0
-        if hs and vs:
-            for team, scored, allowed in [(home, hs, vs), (away, vs, hs)]:
-                r = run_stats.setdefault(team, {"rs": 0, "ra": 0, "g": 0})
-                r["rs"] += scored
-                r["ra"] += allowed
-                r["g"]  += 1
 
     ratings = {}
-    for team, r in run_stats.items():
-        if team not in TEAM_CN or r["g"] == 0:
-            continue
-        win_pct = 0.5  # 無勝敗紀錄時用中性值
-        ratings[team] = {
-            "off":  round(r["rs"] / r["g"], 2),
-            "def":  round(r["ra"] / r["g"], 2),
-            "form": round((r["rs"] - r["ra"]) / r["g"] * 0.05, 3),
-        }
-    log.info("Balldontlie MLB ratings loaded: %d teams", len(ratings))
-    return ratings
+    try:
+        # ESPN 回傳格式：children[] → standings.entries[] → stats[]
+        # stat 欄位可能叫 "value" 或 "displayValue"，做容錯處理
+        def get_val(stat):
+            for key in ("value", "displayValue"):
+                v = stat.get(key)
+                if v is not None:
+                    try:
+                        return float(v)
+                    except (ValueError, TypeError):
+                        pass
+            return 0.0
 
         for group in data.get("children", []):
             entries = group.get("standings", {}).get("entries", [])
