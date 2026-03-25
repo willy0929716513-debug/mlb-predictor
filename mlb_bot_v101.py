@@ -193,38 +193,65 @@ def safe_get(url, headers=None, params=None, retries=3, timeout=15):
 def fetch_team_stats():
     """
     ESPN 免費公開 API，完全不需要 Key。
-    抓 MLB standings，解析勝率與得失分來推算評分。
+    同時嘗試兩個 endpoint，解析勝率與得失分來推算評分。
     """
-    url  = "https://site.api.espn.com/apis/v2/sports/baseball/mlb/standings"
-    data = safe_get(url)
+    urls = [
+        "https://site.api.espn.com/apis/v2/sports/baseball/mlb/standings",
+        "https://site.web.api.espn.com/apis/v2/sports/baseball/mlb/standings",
+    ]
+    data = None
+    for url in urls:
+        data = safe_get(url)
+        if data:
+            break
+
     if not data:
         log.warning("ESPN standings API failed, using fallback")
         return {}
 
     ratings = {}
     try:
+        # ESPN 回傳格式：children[] → standings.entries[] → stats[]
+        # stat 欄位可能叫 "value" 或 "displayValue"，做容錯處理
+        def get_val(stat):
+            for key in ("value", "displayValue"):
+                v = stat.get(key)
+                if v is not None:
+                    try:
+                        return float(v)
+                    except (ValueError, TypeError):
+                        pass
+            return 0.0
+
         for group in data.get("children", []):
-            for entry in group.get("standings", {}).get("entries", []):
-                slug  = entry.get("team", {}).get("abbreviation", "").lower()
-                full  = ESPN_SLUG_MAP.get(slug)
+            entries = group.get("standings", {}).get("entries", [])
+            for entry in entries:
+                slug = entry.get("team", {}).get("abbreviation", "").lower()
+                full = ESPN_SLUG_MAP.get(slug)
                 if not full:
                     continue
 
-                stats  = {s["name"]: s["value"] for s in entry.get("stats", [])}
-                wins   = float(stats.get("wins", 0))
-                losses = float(stats.get("losses", 0))
+                stat_list = entry.get("stats", [])
+                stats = {}
+                for s in stat_list:
+                    name = s.get("name") or s.get("shortDisplayName", "")
+                    stats[name] = get_val(s)
+
+                wins   = stats.get("wins", stats.get("W", 0))
+                losses = stats.get("losses", stats.get("L", 0))
                 total  = wins + losses
                 if total == 0:
                     continue
 
                 win_pct = wins / total
-                rs = float(stats.get("pointsFor", 0))
-                ra = float(stats.get("pointsAgainst", 0))
+                rs = stats.get("pointsFor",     stats.get("RS", stats.get("runsScored", 0)))
+                ra = stats.get("pointsAgainst", stats.get("RA", stats.get("runsAllowed", 0)))
 
                 if rs > 0 and ra > 0:
                     off  = round(rs / total, 2)
                     def_ = round(ra / total, 2)
                 else:
+                    # 無得失分數據時用勝率推算
                     off  = round(3.5 + win_pct * 3.5, 2)
                     def_ = round(5.5 - win_pct * 3.0, 2)
 
@@ -235,6 +262,12 @@ def fetch_team_stats():
                 }
     except Exception as e:
         log.warning("ESPN parse error: %s", e)
+        # debug：印出第一筆 entry 的原始 stats 方便追查
+        try:
+            first = data["children"][0]["standings"]["entries"][0]
+            log.warning("ESPN first entry sample: %s", json.dumps(first.get("stats", [])[:3]))
+        except Exception:
+            pass
 
     log.info("ESPN live ratings loaded: %d teams", len(ratings))
     return ratings
