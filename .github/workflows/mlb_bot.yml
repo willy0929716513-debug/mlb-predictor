@@ -22,8 +22,8 @@ jobs:
 
       - name: Run MLB Bot
         env:
-          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
-          X_RAPIDAPI_KEY: ${{ secrets.X_RAPIDAPI_KEY }}
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: python mlb_bot.py
+          ODDS_API_KEY:      ${{ secrets.ODDS_API_KEY }}
+          DISCORD_WEBHOOK:   ${{ secrets.DISCORD_WEBHOOK }}
+          GH_TOKEN:          ${{ secrets.GH_TOKEN }}
+          BALLDONTLIE_KEY:   ${{ secrets.BALLDONTLIE_KEY }}
+        run: python mlb_bot_v101.py
