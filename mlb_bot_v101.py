@@ -8,17 +8,16 @@ from datetime import datetime, timedelta
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("MLB_V101")
 
-ODDS_API_KEY    = os.getenv("ODDS_API_KEY", "")
-WEBHOOK         = os.getenv("DISCORD_WEBHOOK", "")
-GITHUB_TOKEN    = os.getenv("GH_TOKEN", "")
-BALLDONTLIE_KEY = os.getenv("BALLDONTLIE_KEY", "")  # 保留結構，MLB不使用
+ODDS_API_KEY  = os.getenv("ODDS_API_KEY", "")
+WEBHOOK       = os.getenv("DISCORD_WEBHOOK", "")
+GITHUB_TOKEN  = os.getenv("GH_TOKEN", "")
 
 SIMS             = 50000
 EDGE_THRESHOLD   = 0.06
 MODEL_WEIGHT     = 0.35
 MARKET_WEIGHT    = 0.65
-DYNAMIC_STD_BASE = 1.8    # MLB 得分標準差（約1.8分）
-HOME_ADVANTAGE   = 0.15   # MLB 主場優勢約0.15分
+DYNAMIC_STD_BASE = 1.8
+HOME_ADVANTAGE   = 0.15
 MAX_RUNLINE      = 2.5
 MIN_RUNLINE      = 0.5
 MIN_PRICE        = 1.75
@@ -61,18 +60,11 @@ IMPACT_PLAYERS = {
 }
 
 SEASON_OUT = {
-    "verlander",   # 手肘傷勢 整季報銷
-    "scherzer",    # 肩膀 整季報銷
-    "acuna",       # ACL 整季報銷
-    "rendon",      # 反覆傷病 長期缺陣
-    "buxton",      # 膝蓋 反覆缺陣
-    "correa",      # 踝傷 短期缺陣
+    "verlander", "scherzer", "acuna", "rendon", "buxton", "correa",
 }
 
 LIMITED_PLAYERS = {
-    "trout",     # 膝蓋管理出賽
-    "devers",    # 肩膀 出賽時間受限
-    "guerrero",  # 手腕傷後回歸
+    "trout", "devers", "guerrero",
 }
 
 SUPERSTARS = {
@@ -81,7 +73,7 @@ SUPERSTARS = {
     "cole", "wheeler", "glasnow", "skubal",
 }
 
-SUPERSTAR_PENALTY = 1.2   # 缺陣影響（得分/場）
+SUPERSTAR_PENALTY = 1.2
 STAR_PENALTY      = 0.8
 LIMITED_PENALTY   = 0.4
 
@@ -152,6 +144,25 @@ TEAM_CN = {
     "Chicago White Sox":       "白襪",
 }
 
+# ESPN 縮寫 → 完整隊名
+ESPN_SLUG_MAP = {
+    "nyy": "New York Yankees",      "lad": "Los Angeles Dodgers",
+    "atl": "Atlanta Braves",        "hou": "Houston Astros",
+    "bal": "Baltimore Orioles",     "phi": "Philadelphia Phillies",
+    "tex": "Texas Rangers",         "ari": "Arizona Diamondbacks",
+    "min": "Minnesota Twins",       "sea": "Seattle Mariners",
+    "mil": "Milwaukee Brewers",     "chc": "Chicago Cubs",
+    "sf":  "San Francisco Giants",  "bos": "Boston Red Sox",
+    "nym": "New York Mets",         "tor": "Toronto Blue Jays",
+    "cle": "Cleveland Guardians",   "tb":  "Tampa Bay Rays",
+    "stl": "St. Louis Cardinals",   "sd":  "San Diego Padres",
+    "det": "Detroit Tigers",        "kc":  "Kansas City Royals",
+    "pit": "Pittsburgh Pirates",    "cin": "Cincinnati Reds",
+    "col": "Colorado Rockies",      "oak": "Oakland Athletics",
+    "laa": "Los Angeles Angels",    "mia": "Miami Marlins",
+    "wsh": "Washington Nationals",  "chw": "Chicago White Sox",
+}
+
 
 def normalize_team(name):
     if not name:
@@ -179,35 +190,79 @@ def safe_get(url, headers=None, params=None, retries=3, timeout=15):
     return None
 
 
+def fetch_team_stats():
+    """
+    ESPN 免費公開 API，完全不需要 Key。
+    抓 MLB standings，解析勝率與得失分來推算評分。
+    """
+    url  = "https://site.api.espn.com/apis/v2/sports/baseball/mlb/standings"
+    data = safe_get(url)
+    if not data:
+        log.warning("ESPN standings API failed, using fallback")
+        return {}
+
+    ratings = {}
+    try:
+        for group in data.get("children", []):
+            for entry in group.get("standings", {}).get("entries", []):
+                slug  = entry.get("team", {}).get("abbreviation", "").lower()
+                full  = ESPN_SLUG_MAP.get(slug)
+                if not full:
+                    continue
+
+                stats  = {s["name"]: s["value"] for s in entry.get("stats", [])}
+                wins   = float(stats.get("wins", 0))
+                losses = float(stats.get("losses", 0))
+                total  = wins + losses
+                if total == 0:
+                    continue
+
+                win_pct = wins / total
+                rs = float(stats.get("pointsFor", 0))
+                ra = float(stats.get("pointsAgainst", 0))
+
+                if rs > 0 and ra > 0:
+                    off  = round(rs / total, 2)
+                    def_ = round(ra / total, 2)
+                else:
+                    off  = round(3.5 + win_pct * 3.5, 2)
+                    def_ = round(5.5 - win_pct * 3.0, 2)
+
+                ratings[full] = {
+                    "off":  off,
+                    "def":  def_,
+                    "form": round((win_pct - 0.5) * 0.5, 3),
+                }
+    except Exception as e:
+        log.warning("ESPN parse error: %s", e)
+
+    log.info("ESPN live ratings loaded: %d teams", len(ratings))
+    return ratings
+
+
 def get_injury_report():
-    """
-    從 RotoWire 爬取 MLB 傷兵報告，邏輯與 NBA V101 相同。
-    """
+    """從 RotoWire 爬取 MLB 傷兵報告。"""
     try:
         url  = "https://www.rotowire.com/baseball/injury-report.php"
-        hdrs = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-        }
-        r = requests.get(url, headers=hdrs, timeout=15)
+        hdrs = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+        r    = requests.get(url, headers=hdrs, timeout=15)
         r.raise_for_status()
 
-        injured = {}
-        text = r.text.lower()
+        injured      = {}
+        text         = r.text.lower()
+        out_keywords = ["ruled out", "will not play", "is out", "has been ruled out",
+                        "out (", "60-day il", "15-day il", "10-day il"]
+        skip_kw      = ["questionable", "probable", "available", "good to go", "day-to-day"]
 
-        out_keywords  = ["ruled out", "will not play", "is out", "has been ruled out",
-                         "out (", "60-day il", "15-day il", "10-day il"]
-        skip_keywords = ["questionable", "probable", "available", "good to go", "day-to-day"]
-
-        for full_team in IMPACT_PLAYERS:
-            for player in IMPACT_PLAYERS[full_team]:
+        for full_team, players in IMPACT_PLAYERS.items():
+            for player in players:
                 if player in text:
                     idx     = text.find(player)
                     context = text[max(0, idx - 80):idx + 200]
-                    if any(s in context for s in skip_keywords):
+                    if any(s in context for s in skip_kw):
                         continue
                     if any(s in context for s in out_keywords):
-                        if player not in injured.get(full_team, []):
-                            injured.setdefault(full_team, []).append(player)
+                        injured.setdefault(full_team, []).append(player)
 
         for team, players in IMPACT_PLAYERS.items():
             for p in players:
@@ -225,50 +280,6 @@ def get_injury_report():
             if out:
                 fallback[team] = out
         return fallback
-
-
-def fetch_team_stats():
-    """
-    從 api-baseball (RapidAPI) 取得本季勝敗紀錄，推算進攻/防守評分。
-    若 API 失敗則回傳空 dict，讓後續使用 FALLBACK_RATINGS。
-    """
-    if not BALLDONTLIE_KEY:
-        return {}
-    headers = {
-        "X-RapidAPI-Key":  BALLDONTLIE_KEY,
-        "X-RapidAPI-Host": "api-baseball.p.rapidapi.com",
-    }
-    data = safe_get(
-        "https://api-baseball.p.rapidapi.com/standings",
-        headers=headers,
-        params={"league": "1", "season": "2025"},
-    )
-    if not data or "response" not in data:
-        return {}
-
-    ratings = {}
-    for group in data["response"]:
-        for team_data in (group if isinstance(group, list) else [group]):
-            try:
-                full_name = normalize_team(team_data["team"]["name"])
-                if not full_name or full_name not in TEAM_CN:
-                    continue
-                win   = int(team_data["games"]["wins"]["total"])
-                loss  = int(team_data["games"]["losses"]["total"])
-                total = win + loss
-                if total == 0:
-                    continue
-                win_pct = win / total
-                ratings[full_name] = {
-                    "off":  round(3.5 + win_pct * 3.5, 2),
-                    "def":  round(5.5 - win_pct * 3.0, 2),
-                    "form": round((win_pct - 0.5) * 0.5, 3),
-                }
-            except (KeyError, TypeError, ValueError):
-                continue
-
-    log.info("MLB live ratings loaded: %d teams", len(ratings))
-    return ratings
 
 
 def load_history():
@@ -308,15 +319,11 @@ def save_history(history):
     }
     try:
         if gist_id:
-            requests.patch(
-                "https://api.github.com/gists/%s" % gist_id,
-                headers=headers, json=payload, timeout=10,
-            )
+            requests.patch("https://api.github.com/gists/%s" % gist_id,
+                           headers=headers, json=payload, timeout=10)
         else:
-            requests.post(
-                "https://api.github.com/gists",
-                headers=headers, json=payload, timeout=10,
-            )
+            requests.post("https://api.github.com/gists",
+                          headers=headers, json=payload, timeout=10)
         log.info("History saved to Gist")
     except Exception as e:
         log.error("Failed to save history: %s", e)
@@ -376,10 +383,9 @@ def predict_margin(home, away, injury_data, live_ratings):
         a_stat["off"] -= penalty * 0.6
         a_stat["def"] += penalty * 0.4
 
-    # MLB：預期得分 = 自身進攻 vs 對手投手（防守）
     h_expected = (h_stat["off"] + a_stat["def"]) / 2 + h_base.get("form", 0.0)
     a_expected = (a_stat["off"] + h_stat["def"]) / 2 + a_base.get("form", 0.0)
-    margin = (h_expected - a_expected) + HOME_ADVANTAGE
+    margin     = (h_expected - a_expected) + HOME_ADVANTAGE
 
     def fmt(lst):
         return ["%s(%s)" % (p.capitalize(), "傷" if s == "out" else "限") for p, s in lst]
@@ -478,12 +484,11 @@ def run():
     now_tw  = now_utc + timedelta(hours=8)
     today_s = now_tw.strftime("%Y-%m-%d")
 
-    # UTC 22:00 = 台灣時間 06:00 → 正式記錄版本
     is_official_run = (now_utc.hour == 22)
     log.info("Official run: %s (UTC hour: %d)", is_official_run, now_utc.hour)
 
     live_ratings = fetch_team_stats()
-    data_source  = "即時數據" if live_ratings else "靜態備用"
+    data_source  = "ESPN即時" if live_ratings else "靜態備用"
     injuries     = get_injury_report()
     games        = fetch_odds()
     history      = load_history()
