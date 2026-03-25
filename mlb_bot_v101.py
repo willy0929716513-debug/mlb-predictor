@@ -6,28 +6,27 @@ import json
 from datetime import datetime, timedelta
 
 logging.basicConfig(level=logging.INFO)
-log = logging.getLogger("MLB_V99")
+log = logging.getLogger("MLB_V101")
 
-ODDS_API_KEY  = os.getenv("ODDS_API_KEY", "")
-RAPID_API_KEY = os.getenv("X_RAPIDAPI_KEY", "")
-WEBHOOK       = os.getenv("DISCORD_WEBHOOK", "")
-GITHUB_TOKEN  = os.getenv("GH_TOKEN", "")
+ODDS_API_KEY    = os.getenv("ODDS_API_KEY", "")
+WEBHOOK         = os.getenv("DISCORD_WEBHOOK", "")
+GITHUB_TOKEN    = os.getenv("GH_TOKEN", "")
+BALLDONTLIE_KEY = os.getenv("BALLDONTLIE_KEY", "")  # 保留結構，MLB不使用
 
 SIMS             = 50000
-EDGE_THRESHOLD   = 0.05
-MODEL_WEIGHT     = 0.40
-MARKET_WEIGHT    = 0.60
-DYNAMIC_STD_BASE = 1.8   # MLB runs std dev (vs NBA points)
-HOME_ADVANTAGE   = 0.15  # ~0.15 run home field advantage in MLB
+EDGE_THRESHOLD   = 0.06
+MODEL_WEIGHT     = 0.35
+MARKET_WEIGHT    = 0.65
+DYNAMIC_STD_BASE = 1.8    # MLB 得分標準差（約1.8分）
+HOME_ADVANTAGE   = 0.15   # MLB 主場優勢約0.15分
 MAX_RUNLINE      = 2.5
 MIN_RUNLINE      = 0.5
-MIN_PRICE        = 1.0
-MAX_PRICE        = 3.0
+MIN_PRICE        = 1.75
+MAX_PRICE        = 2.15
 DISCORD_CHAR_LIMIT = 1900
 BANKROLL         = 1000.0
-KELLY_FRACTION   = 0.25
+KELLY_FRACTION   = 0.20
 
-# Key impact players per team (ace SP, closer, cleanup hitter)
 IMPACT_PLAYERS = {
     "New York Yankees":        ["cole", "judge", "soto"],
     "Los Angeles Dodgers":     ["glasnow", "freeman", "ohtani"],
@@ -61,14 +60,31 @@ IMPACT_PLAYERS = {
     "Chicago White Sox":       ["fried", "robert", "benintendi"],
 }
 
-SEASON_OUT = {"verlander", "scherzer", "acuna", "rendon", "buxton"}
-LIMITED_PLAYERS = {"trout", "devers", "guerrero"}
-SUPERSTARS = {"ohtani", "judge", "freeman", "acuna", "tatis", "ramirez", "alvarez", "harper", "guerrero"}
-SUPERSTAR_PENALTY = 1.2   # runs per game
+SEASON_OUT = {
+    "verlander",   # 手肘傷勢 整季報銷
+    "scherzer",    # 肩膀 整季報銷
+    "acuna",       # ACL 整季報銷
+    "rendon",      # 反覆傷病 長期缺陣
+    "buxton",      # 膝蓋 反覆缺陣
+    "correa",      # 踝傷 短期缺陣
+}
+
+LIMITED_PLAYERS = {
+    "trout",     # 膝蓋管理出賽
+    "devers",    # 肩膀 出賽時間受限
+    "guerrero",  # 手腕傷後回歸
+}
+
+SUPERSTARS = {
+    "ohtani", "judge", "freeman", "acuna", "tatis",
+    "ramirez", "alvarez", "harper", "guerrero", "trout",
+    "cole", "wheeler", "glasnow", "skubal",
+}
+
+SUPERSTAR_PENALTY = 1.2   # 缺陣影響（得分/場）
 STAR_PENALTY      = 0.8
 LIMITED_PENALTY   = 0.4
 
-# Offensive (runs/game) and pitching (ERA-based) ratings
 FALLBACK_RATINGS = {
     "Los Angeles Dodgers":     {"off": 5.2, "def": 3.5},
     "New York Yankees":        {"off": 5.0, "def": 3.7},
@@ -94,7 +110,7 @@ FALLBACK_RATINGS = {
     "Kansas City Royals":      {"off": 4.3, "def": 4.2},
     "Pittsburgh Pirates":      {"off": 4.0, "def": 4.3},
     "Cincinnati Reds":         {"off": 4.1, "def": 4.4},
-    "Colorado Rockies":        {"off": 4.5, "def": 5.1},  # Coors factor
+    "Colorado Rockies":        {"off": 4.5, "def": 5.1},
     "Oakland Athletics":       {"off": 3.9, "def": 4.6},
     "Los Angeles Angels":      {"off": 4.1, "def": 4.5},
     "Miami Marlins":           {"off": 3.8, "def": 4.2},
@@ -163,17 +179,109 @@ def safe_get(url, headers=None, params=None, retries=3, timeout=15):
     return None
 
 
+def get_injury_report():
+    """
+    從 RotoWire 爬取 MLB 傷兵報告，邏輯與 NBA V101 相同。
+    """
+    try:
+        url  = "https://www.rotowire.com/baseball/injury-report.php"
+        hdrs = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+        }
+        r = requests.get(url, headers=hdrs, timeout=15)
+        r.raise_for_status()
+
+        injured = {}
+        text = r.text.lower()
+
+        out_keywords  = ["ruled out", "will not play", "is out", "has been ruled out",
+                         "out (", "60-day il", "15-day il", "10-day il"]
+        skip_keywords = ["questionable", "probable", "available", "good to go", "day-to-day"]
+
+        for full_team in IMPACT_PLAYERS:
+            for player in IMPACT_PLAYERS[full_team]:
+                if player in text:
+                    idx     = text.find(player)
+                    context = text[max(0, idx - 80):idx + 200]
+                    if any(s in context for s in skip_keywords):
+                        continue
+                    if any(s in context for s in out_keywords):
+                        if player not in injured.get(full_team, []):
+                            injured.setdefault(full_team, []).append(player)
+
+        for team, players in IMPACT_PLAYERS.items():
+            for p in players:
+                if p in SEASON_OUT and p not in injured.get(team, []):
+                    injured.setdefault(team, []).append(p)
+
+        log.info("RotoWire MLB injury loaded: %d entries", sum(len(v) for v in injured.values()))
+        return injured
+
+    except Exception as e:
+        log.warning("RotoWire failed: %s, using SEASON_OUT fallback", e)
+        fallback = {}
+        for team, players in IMPACT_PLAYERS.items():
+            out = [p for p in players if p in SEASON_OUT]
+            if out:
+                fallback[team] = out
+        return fallback
+
+
+def fetch_team_stats():
+    """
+    從 api-baseball (RapidAPI) 取得本季勝敗紀錄，推算進攻/防守評分。
+    若 API 失敗則回傳空 dict，讓後續使用 FALLBACK_RATINGS。
+    """
+    if not BALLDONTLIE_KEY:
+        return {}
+    headers = {
+        "X-RapidAPI-Key":  BALLDONTLIE_KEY,
+        "X-RapidAPI-Host": "api-baseball.p.rapidapi.com",
+    }
+    data = safe_get(
+        "https://api-baseball.p.rapidapi.com/standings",
+        headers=headers,
+        params={"league": "1", "season": "2025"},
+    )
+    if not data or "response" not in data:
+        return {}
+
+    ratings = {}
+    for group in data["response"]:
+        for team_data in (group if isinstance(group, list) else [group]):
+            try:
+                full_name = normalize_team(team_data["team"]["name"])
+                if not full_name or full_name not in TEAM_CN:
+                    continue
+                win   = int(team_data["games"]["wins"]["total"])
+                loss  = int(team_data["games"]["losses"]["total"])
+                total = win + loss
+                if total == 0:
+                    continue
+                win_pct = win / total
+                ratings[full_name] = {
+                    "off":  round(3.5 + win_pct * 3.5, 2),
+                    "def":  round(5.5 - win_pct * 3.0, 2),
+                    "form": round((win_pct - 0.5) * 0.5, 3),
+                }
+            except (KeyError, TypeError, ValueError):
+                continue
+
+    log.info("MLB live ratings loaded: %d teams", len(ratings))
+    return ratings
+
+
 def load_history():
     if not GITHUB_TOKEN:
         return {}
     headers = {"Authorization": "token %s" % GITHUB_TOKEN}
-    gists = safe_get("https://api.github.com/gists", headers=headers)
+    gists   = safe_get("https://api.github.com/gists", headers=headers)
     if not gists:
         return {}
     for g in gists:
         if g.get("description") == "mlb_bot_history":
             raw_url = list(g["files"].values())[0]["raw_url"]
-            data = safe_get(raw_url)
+            data    = safe_get(raw_url)
             return data if isinstance(data, dict) else {}
     return {}
 
@@ -183,10 +291,10 @@ def save_history(history):
         return
     headers = {
         "Authorization": "token %s" % GITHUB_TOKEN,
-        "Content-Type": "application/json",
+        "Content-Type":  "application/json",
     }
     content = json.dumps(history, ensure_ascii=False, indent=2)
-    gists = safe_get("https://api.github.com/gists", headers=headers)
+    gists   = safe_get("https://api.github.com/gists", headers=headers)
     gist_id = None
     if gists:
         for g in gists:
@@ -195,8 +303,8 @@ def save_history(history):
                 break
     payload = {
         "description": "mlb_bot_history",
-        "public": False,
-        "files": {"history.json": {"content": content}},
+        "public":      False,
+        "files":       {"history.json": {"content": content}},
     }
     try:
         if gist_id:
@@ -223,7 +331,7 @@ def calc_performance(history):
         total += 1
         stake = record.get("kelly_stake", 10.0)
         if record["result"] == "win":
-            win += 1
+            win    += 1
             profit += stake * (record.get("price", 1.9) - 1)
         else:
             profit -= stake
@@ -239,89 +347,7 @@ def kelly_stake(prob, price, bankroll, fraction=KELLY_FRACTION):
     return round(bankroll * k, 1)
 
 
-def fetch_team_stats():
-    """
-    Fetch MLB standings via RapidAPI (api-baseball or similar).
-    Falls back to FALLBACK_RATINGS if unavailable.
-    """
-    headers = {
-        "X-RapidAPI-Key":  RAPID_API_KEY,
-        "X-RapidAPI-Host": "api-baseball.p.rapidapi.com",
-    }
-    data = safe_get(
-        "https://api-baseball.p.rapidapi.com/standings",
-        headers=headers,
-        params={"league": "1", "season": "2025"},
-    )
-    if not data or "response" not in data:
-        log.warning("Team stats API failed, using fallback ratings")
-        return {}
-    ratings = {}
-    for group in data["response"]:
-        for team_data in (group if isinstance(group, list) else [group]):
-            try:
-                full_name = normalize_team(team_data["team"]["name"])
-                if not full_name or full_name not in TEAM_CN:
-                    continue
-                win   = int(team_data["games"]["wins"]["total"])
-                loss  = int(team_data["games"]["losses"]["total"])
-                total = win + loss
-                if total == 0:
-                    continue
-                win_pct    = win / total
-                # Approximate run scoring/prevention from win%
-                # Better teams score more and allow fewer
-                ratings[full_name] = {
-                    "off":  round(3.5 + win_pct * 3.5, 2),
-                    "def":  round(5.5 - win_pct * 3.0, 2),
-                    "form": round((win_pct - 0.5) * 0.5, 3),
-                }
-            except (KeyError, TypeError, ValueError):
-                continue
-    log.info("Live ratings loaded: %d teams", len(ratings))
-    return ratings
-
-
-def get_injury_report():
-    """
-    Fetch MLB injury/IL report. Falls back to SEASON_OUT list.
-    """
-    url = "https://sports-information.p.rapidapi.com/mlb/injuries"
-    headers = {
-        "X-RapidAPI-Key":  RAPID_API_KEY,
-        "X-RapidAPI-Host": "sports-information.p.rapidapi.com",
-    }
-    data = safe_get(url, headers=headers)
-    if not data:
-        log.warning("Injury API failed, using SEASON_OUT fallback")
-        fallback = {}
-        for team, players in IMPACT_PLAYERS.items():
-            out = [p for p in players if p in SEASON_OUT]
-            if out:
-                fallback[team] = out
-        return fallback
-    injured = {}
-    skip_statuses = {"active", "day-to-day", "probable"}
-    for item in data:
-        team   = normalize_team(item.get("team", ""))
-        player = item.get("player", "").lower()
-        status = item.get("status", "").lower()
-        if not any(s in status for s in skip_statuses):
-            injured.setdefault(team, []).append(player)
-    # Overlay known season-long absences
-    for team, players in IMPACT_PLAYERS.items():
-        for p in players:
-            if p in SEASON_OUT and p not in injured.get(team, []):
-                injured.setdefault(team, []).append(p)
-    log.info("Injury report loaded: %d entries", sum(len(v) for v in injured.values()))
-    return injured
-
-
 def predict_margin(home, away, injury_data, live_ratings):
-    """
-    Predict run-line margin (positive = home team favoured).
-    Uses offensive runs/game minus opponents' defensive runs allowed.
-    """
     h_base = live_ratings.get(home, FALLBACK_RATINGS.get(home, DEFAULT_RATING))
     a_base = live_ratings.get(away, FALLBACK_RATINGS.get(away, DEFAULT_RATING))
     h_stat = dict(h_base)
@@ -341,22 +367,16 @@ def predict_margin(home, away, injury_data, live_ratings):
     a_missing = get_missing(away)
 
     for p, status in h_missing:
-        if status == "out":
-            penalty = SUPERSTAR_PENALTY if p in SUPERSTARS else STAR_PENALTY
-        else:
-            penalty = LIMITED_PENALTY
+        penalty = (SUPERSTAR_PENALTY if p in SUPERSTARS else STAR_PENALTY) if status == "out" else LIMITED_PENALTY
         h_stat["off"] -= penalty * 0.6
-        h_stat["def"] += penalty * 0.4   # losing an ace hurts pitching (def goes up = more runs allowed)
+        h_stat["def"] += penalty * 0.4
 
     for p, status in a_missing:
-        if status == "out":
-            penalty = SUPERSTAR_PENALTY if p in SUPERSTARS else STAR_PENALTY
-        else:
-            penalty = LIMITED_PENALTY
+        penalty = (SUPERSTAR_PENALTY if p in SUPERSTARS else STAR_PENALTY) if status == "out" else LIMITED_PENALTY
         a_stat["off"] -= penalty * 0.6
         a_stat["def"] += penalty * 0.4
 
-    # Expected runs: team offense vs opponent's pitching (def = runs allowed)
+    # MLB：預期得分 = 自身進攻 vs 對手投手（防守）
     h_expected = (h_stat["off"] + a_stat["def"]) / 2 + h_base.get("form", 0.0)
     a_expected = (a_stat["off"] + h_stat["def"]) / 2 + a_base.get("form", 0.0)
     margin = (h_expected - a_expected) + HOME_ADVANTAGE
@@ -368,13 +388,11 @@ def predict_margin(home, away, injury_data, live_ratings):
 
 
 def predict_total(home, away, live_ratings):
-    """Predict total runs (over/under)."""
     h_base = live_ratings.get(home, FALLBACK_RATINGS.get(home, DEFAULT_RATING))
     a_base = live_ratings.get(away, FALLBACK_RATINGS.get(away, DEFAULT_RATING))
-    # Both teams' offense averaged against both teams' pitching
-    h_exp = (h_base["off"] + a_base["def"]) / 2
-    a_exp = (a_base["off"] + h_base["def"]) / 2
-    return round((h_exp + a_exp) * 0.98, 1)  # small park/weather adjustment
+    h_exp  = (h_base["off"] + a_base["def"]) / 2
+    a_exp  = (a_base["off"] + h_base["def"]) / 2
+    return round((h_exp + a_exp) * 0.98, 1)
 
 
 def get_consensus_line(bookmakers, team_name):
@@ -406,7 +424,6 @@ def get_consensus_total(bookmakers):
 
 
 def simulate_cover(blended, line):
-    """Monte Carlo simulation for run-line cover probability."""
     wins = sum(
         1 for _ in range(SIMS)
         if blended + random.gauss(0, DYNAMIC_STD_BASE) + line > 0
@@ -453,13 +470,17 @@ def chunked_send(content, webhook):
 
 
 def run():
-    if not all([ODDS_API_KEY, RAPID_API_KEY, WEBHOOK]):
+    if not all([ODDS_API_KEY, WEBHOOK]):
         log.error("Missing env vars")
         return
 
     now_utc = datetime.utcnow()
     now_tw  = now_utc + timedelta(hours=8)
     today_s = now_tw.strftime("%Y-%m-%d")
+
+    # UTC 22:00 = 台灣時間 06:00 → 正式記錄版本
+    is_official_run = (now_utc.hour == 22)
+    log.info("Official run: %s (UTC hour: %d)", is_official_run, now_utc.hour)
 
     live_ratings = fetch_team_stats()
     data_source  = "即時數據" if live_ratings else "靜態備用"
@@ -521,6 +542,10 @@ def run():
                     if consensus is None:
                         consensus = line
 
+                    line_advantage = line - consensus if line > 0 else consensus - line
+                    if line_advantage < 0:
+                        continue
+
                     target  = margin if name == home else -margin
                     blended = target * MODEL_WEIGHT + (-consensus) * MARKET_WEIGHT
                     prob    = simulate_cover(blended, line)
@@ -534,9 +559,9 @@ def run():
 
                     stake = kelly_stake(prob, price, BANKROLL)
 
-                    if edge > 0.07:
+                    if edge > 0.12:
                         tier = "💎 頂級"
-                    elif edge > 0.05:
+                    elif edge > 0.09:
                         tier = "🔥 強力"
                     else:
                         tier = "⭐ 穩定"
@@ -571,20 +596,24 @@ def run():
                             "kelly_stake": stake,
                             "msg":         msg,
                         }
-                        if game_id not in history:
+
+                    if edge > 0.12 and is_official_run and g_date == today_s:
+                        existing_h = history.get(game_id)
+                        if existing_h is None or edge > existing_h.get("edge", 0):
                             history[game_id] = {
                                 "date":        g_date,
                                 "bet":         "%s %+.1f" % (TEAM_CN.get(name, name), line),
+                                "book":        book.get("title", "?"),
                                 "price":       price,
                                 "prob":        round(prob, 4),
                                 "edge":        round(edge, 4),
                                 "kelly_stake": stake,
-                                "result":      "pending",
+                                "result":      existing_h.get("result", "pending") if existing_h else "pending",
                             }
 
     total_rec, wins, win_rate, profit = calc_performance(history)
     perf_msg = (
-        "\n📊 **歷史績效報告**\n"
+        "\n📊 **歷史績效報告** (僅統計💎頂級)\n"
         "總推薦: %d 場 | 已結算: %d 場\n"
         "勝率: %.1f%% | 損益: %+.1f 元\n"
         "（以每場 Kelly 建議金額計算）\n"
@@ -596,9 +625,14 @@ def run():
         if total_picks else 0
     )
 
-    output = "⚾ MLB V99.0 | 更新: %s | 資料: %s | 推薦: %d 場 | 平均Edge: %+.1f%%\n" % (
+    output = "⚾ MLB V101.0 | 更新: %s | 資料: %s | 推薦: %d 場 | 平均Edge: %+.1f%%\n" % (
         now_tw.strftime("%m/%d %H:%M"), data_source, total_picks, avg_edge * 100
     )
+
+    if is_official_run:
+        output += "📌 正式記錄版本\n"
+    else:
+        output += "🔧 測試版本（不寫入回測）\n"
 
     if not daily_picks:
         output += "\n今日無符合條件之推薦。\n"
@@ -612,7 +646,12 @@ def run():
 
     output += perf_msg
 
-    save_history(history)
+    if is_official_run:
+        save_history(history)
+        log.info("History saved (official run, top tier only)")
+    else:
+        log.info("History NOT saved (test run)")
+
     log.info("Sending to Discord, length: %d", len(output))
     chunked_send(output, WEBHOOK)
     log.info("Done")
