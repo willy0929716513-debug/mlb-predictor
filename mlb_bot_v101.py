@@ -26,8 +26,6 @@ DISCORD_CHAR_LIMIT = 1900
 BANKROLL         = 1000.0
 KELLY_FRACTION   = 0.20
 
-# 2026 開季陣容更新
-
 IMPACT_PLAYERS = {
 “New York Yankees”:        [“fried”, “cole”, “judge”, “goldschmidt”],
 “Los Angeles Dodgers”:     [“ohtani”, “freeman”, “betts”, “tucker”],
@@ -61,27 +59,13 @@ IMPACT_PLAYERS = {
 “Chicago White Sox”:       [“smith”, “montgomery”, “teel”, “benintendi”],
 }
 
-# 2026 確定缺陣（整季或長期）
-
 SEASON_OUT = {
-“cole”,        # 洋基 手肘 預計季中回歸
-“santander”,   # 藍鳥 肩傷 大半季缺陣
-“lopez”,       # 雙城 手肘手術 整季報銷
-“jones”,       # 海盜 傷後復健中
-“mccullers”,   # 太空人 反覆傷病
+“cole”, “santander”, “lopez”, “jones”, “mccullers”,
 }
-
-# 出賽受限球員
 
 LIMITED_PLAYERS = {
-“trout”,    # 天使 膝蓋管理
-“acuna”,    # 勇士 ACL 復健回歸
-“buxton”,   # 雙城 膝蓋反覆
-“degrom”,   # 遊騎兵 王牌但傷病史
-“steele”,   # 小熊 傷後回歸
+“trout”, “acuna”, “buxton”, “degrom”, “steele”,
 }
-
-# 超級球星（缺陣懲罰最高）
 
 SUPERSTARS = {
 “ohtani”, “judge”, “freeman”, “acuna”, “tatis”,
@@ -94,8 +78,6 @@ SUPERSTARS = {
 SUPERSTAR_PENALTY = 1.2
 STAR_PENALTY      = 0.8
 LIMITED_PENALTY   = 0.4
-
-# 2026 開季實力評估（進攻得分/場, 防守失分/場）
 
 FALLBACK_RATINGS = {
 “Los Angeles Dodgers”:     {“off”: 5.4, “def”: 3.3},
@@ -124,7 +106,7 @@ FALLBACK_RATINGS = {
 “Minnesota Twins”:         {“off”: 4.3, “def”: 4.2},
 “Oakland Athletics”:       {“off”: 4.2, “def”: 4.3},
 “Washington Nationals”:    {“off”: 4.0, “def”: 4.4},
-“Colorado Rockies”:        {“off”: 4.4, “def”: 5.2},  # Coors
+“Colorado Rockies”:        {“off”: 4.4, “def”: 5.2},
 “Los Angeles Angels”:      {“off”: 4.1, “def”: 4.5},
 “Miami Marlins”:           {“off”: 3.8, “def”: 4.4},
 “Chicago White Sox”:       {“off”: 3.7, “def”: 4.9},
@@ -132,36 +114,36 @@ FALLBACK_RATINGS = {
 DEFAULT_RATING = {“off”: 4.3, “def”: 4.3}
 
 TEAM_CN = {
-“New York Yankees”:        “洋基”,
-“Los Angeles Dodgers”:     “道奇”,
-“Atlanta Braves”:          “勇士”,
-“Houston Astros”:          “太空人”,
-“Baltimore Orioles”:       “金鶯”,
-“Philadelphia Phillies”:   “費城人”,
-“Texas Rangers”:           “遊騎兵”,
-“Arizona Diamondbacks”:    “響尾蛇”,
-“Minnesota Twins”:         “雙城”,
-“Seattle Mariners”:        “水手”,
-“Milwaukee Brewers”:       “釀酒人”,
-“Chicago Cubs”:            “小熊”,
-“San Francisco Giants”:    “巨人”,
-“Boston Red Sox”:          “紅襪”,
-“New York Mets”:           “大都會”,
-“Toronto Blue Jays”:       “藍鳥”,
-“Cleveland Guardians”:     “守護者”,
-“Tampa Bay Rays”:          “光芒”,
-“St. Louis Cardinals”:     “紅雀”,
-“San Diego Padres”:        “教士”,
-“Detroit Tigers”:          “老虎”,
-“Kansas City Royals”:      “皇家”,
-“Pittsburgh Pirates”:      “海盜”,
-“Cincinnati Reds”:         “紅人”,
-“Colorado Rockies”:        “洛磯”,
-“Oakland Athletics”:       “運動家”,
-“Los Angeles Angels”:      “天使”,
-“Miami Marlins”:           “馬林魚”,
-“Washington Nationals”:    “國民”,
-“Chicago White Sox”:       “白襪”,
+“New York Yankees”:        “\u6d0b\u57fa”,
+“Los Angeles Dodgers”:     “\u9053\u5947”,
+“Atlanta Braves”:          “\u52c7\u58eb”,
+“Houston Astros”:          “\u592a\u7a7a\u4eba”,
+“Baltimore Orioles”:       “\u91d1\u9db6”,
+“Philadelphia Phillies”:   “\u8cbb\u57ce\u4eba”,
+“Texas Rangers”:           “\u904a\u9a0e\u5175”,
+“Arizona Diamondbacks”:    “\u97ff\u5c3e\u86c7”,
+“Minnesota Twins”:         “\u96d9\u57ce”,
+“Seattle Mariners”:        “\u6c34\u624b”,
+“Milwaukee Brewers”:       “\u91c0\u9152\u4eba”,
+“Chicago Cubs”:            “\u5c0f\u718a”,
+“San Francisco Giants”:    “\u5de8\u4eba”,
+“Boston Red Sox”:          “\u7d05\u896a”,
+“New York Mets”:           “\u5927\u90fd\u6703”,
+“Toronto Blue Jays”:       “\u85cd\u9ce5”,
+“Cleveland Guardians”:     “\u5b88\u8b77\u8005”,
+“Tampa Bay Rays”:          “\u5149\u82b3”,
+“St. Louis Cardinals”:     “\u7d05\u96c0”,
+“San Diego Padres”:        “\u6559\u58eb”,
+“Detroit Tigers”:          “\u8001\u864e”,
+“Kansas City Royals”:      “\u7687\u5bb6”,
+“Pittsburgh Pirates”:      “\u6d77\u76dc”,
+“Cincinnati Reds”:         “\u7d05\u4eba”,
+“Colorado Rockies”:        “\u6d1b\u78f4”,
+“Oakland Athletics”:       “\u904b\u52d5\u5bb6”,
+“Los Angeles Angels”:      “\u5929\u4f7f”,
+“Miami Marlins”:           “\u99ac\u6797\u9b5a”,
+“Washington Nationals”:    “\u570b\u6c11”,
+“Chicago White Sox”:       “\u767d\u896a”,
 }
 
 ESPN_SLUG_MAP = {
@@ -207,10 +189,6 @@ log.warning(“Request failed attempt %d/%d: %s”, attempt, retries, e)
 return None
 
 def fetch_team_stats():
-“””
-ESPN 免費公開 API，完全不需要 Key。
-多端點嘗試 + 多欄位名稱容錯。
-“””
 urls = [
 “https://site.api.espn.com/apis/v2/sports/baseball/mlb/standings”,
 “https://site.web.api.espn.com/apis/v2/sports/baseball/mlb/standings”,
@@ -220,12 +198,11 @@ for url in urls:
 data = safe_get(url)
 if data:
 break
+if not data:
+log.warning(“ESPN standings API failed, using fallback”)
+return {}
 
 ```
-if not data:
-    log.warning("ESPN standings API failed, using fallback")
-    return {}
-
 def get_val(stat):
     for key in ("value", "displayValue", "summary"):
         v = stat.get(key)
@@ -245,30 +222,25 @@ try:
             full = ESPN_SLUG_MAP.get(slug)
             if not full:
                 continue
-
             stats = {}
             for s in entry.get("stats", []):
                 name = s.get("name") or s.get("shortDisplayName", "")
                 if name:
                     stats[name] = get_val(s)
-
-            wins   = stats.get("wins",   stats.get("W",  stats.get("w",  0)))
-            losses = stats.get("losses", stats.get("L",  stats.get("l",  0)))
+            wins   = stats.get("wins",   stats.get("W", stats.get("w", 0)))
+            losses = stats.get("losses", stats.get("L", stats.get("l", 0)))
             total  = wins + losses
             if total == 0:
                 continue
-
             win_pct = wins / total
             rs = stats.get("pointsFor",     stats.get("RS", stats.get("runsScored",  0)))
             ra = stats.get("pointsAgainst", stats.get("RA", stats.get("runsAllowed", 0)))
-
             if rs > 10 and ra > 10:
                 off  = round(rs / total, 2)
                 def_ = round(ra / total, 2)
             else:
                 off  = round(3.5 + win_pct * 3.5, 2)
                 def_ = round(5.5 - win_pct * 3.0, 2)
-
             ratings[full] = {
                 "off":  off,
                 "def":  def_,
@@ -287,47 +259,39 @@ return ratings
 ```
 
 def get_injury_report():
-“”“從 RotoWire 爬取 MLB 傷兵報告。”””
 try:
 url  = “https://www.rotowire.com/baseball/injury-report.php”
 hdrs = {“User-Agent”: “Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36”}
 r    = requests.get(url, headers=hdrs, timeout=15)
 r.raise_for_status()
-
-```
-    injured      = {}
-    text         = r.text.lower()
-    out_keywords = ["ruled out", "will not play", "is out", "has been ruled out",
-                    "out (", "60-day il", "15-day il", "10-day il"]
-    skip_kw      = ["questionable", "probable", "available", "good to go", "day-to-day"]
-
-    for full_team, players in IMPACT_PLAYERS.items():
-        for player in players:
-            if player in text:
-                idx     = text.find(player)
-                context = text[max(0, idx - 80):idx + 200]
-                if any(s in context for s in skip_kw):
-                    continue
-                if any(s in context for s in out_keywords):
-                    injured.setdefault(full_team, []).append(player)
-
-    for team, players in IMPACT_PLAYERS.items():
-        for p in players:
-            if p in SEASON_OUT and p not in injured.get(team, []):
-                injured.setdefault(team, []).append(p)
-
-    log.info("RotoWire MLB injury loaded: %d entries", sum(len(v) for v in injured.values()))
-    return injured
-
+injured      = {}
+text         = r.text.lower()
+out_keywords = [“ruled out”, “will not play”, “is out”, “has been ruled out”,
+“out (”, “60-day il”, “15-day il”, “10-day il”]
+skip_kw      = [“questionable”, “probable”, “available”, “good to go”, “day-to-day”]
+for full_team, players in IMPACT_PLAYERS.items():
+for player in players:
+if player in text:
+idx     = text.find(player)
+context = text[max(0, idx - 80):idx + 200]
+if any(s in context for s in skip_kw):
+continue
+if any(s in context for s in out_keywords):
+injured.setdefault(full_team, []).append(player)
+for team, players in IMPACT_PLAYERS.items():
+for p in players:
+if p in SEASON_OUT and p not in injured.get(team, []):
+injured.setdefault(team, []).append(p)
+log.info(“RotoWire MLB injury loaded: %d entries”, sum(len(v) for v in injured.values()))
+return injured
 except Exception as e:
-    log.warning("RotoWire failed: %s, using SEASON_OUT fallback", e)
-    fallback = {}
-    for team, players in IMPACT_PLAYERS.items():
-        out = [p for p in players if p in SEASON_OUT]
-        if out:
-            fallback[team] = out
-    return fallback
-```
+log.warning(“RotoWire failed: %s, using SEASON_OUT fallback”, e)
+fallback = {}
+for team, players in IMPACT_PLAYERS.items():
+out = [p for p in players if p in SEASON_OUT]
+if out:
+fallback[team] = out
+return fallback
 
 def load_history():
 if not GITHUB_TOKEN:
@@ -416,12 +380,10 @@ def get_missing(team):
 
 h_missing = get_missing(home)
 a_missing = get_missing(away)
-
 for p, status in h_missing:
     penalty = (SUPERSTAR_PENALTY if p in SUPERSTARS else STAR_PENALTY) if status == "out" else LIMITED_PENALTY
     h_stat["off"] -= penalty * 0.6
     h_stat["def"] += penalty * 0.4
-
 for p, status in a_missing:
     penalty = (SUPERSTAR_PENALTY if p in SUPERSTARS else STAR_PENALTY) if status == "out" else LIMITED_PENALTY
     a_stat["off"] -= penalty * 0.6
@@ -432,7 +394,7 @@ a_expected = (a_stat["off"] + h_stat["def"]) / 2 + a_base.get("form", 0.0)
 margin     = (h_expected - a_expected) + HOME_ADVANTAGE
 
 def fmt(lst):
-    return ["%s(%s)" % (p.capitalize(), "傷" if s == "out" else "限") for p, s in lst]
+    return ["%s(%s)" % (p.capitalize(), "\u50b7" if s == "out" else "\u9650") for p, s in lst]
 
 return margin, fmt(h_missing), fmt(a_missing)
 ```
@@ -527,7 +489,7 @@ is_official_run = (now_utc.hour == 22)
 log.info("Official run: %s (UTC hour: %d)", is_official_run, now_utc.hour)
 
 live_ratings = fetch_team_stats()
-data_source  = "ESPN即時" if live_ratings else "靜態備用"
+data_source  = "ESPN" if live_ratings else "fallback"
 injuries     = get_injury_report()
 games        = fetch_odds()
 history      = load_history()
@@ -562,11 +524,11 @@ for g in games:
     if consensus_total:
         diff = model_total - consensus_total
         if diff > 0.5:
-            ou_note = "OU: 模型偏大分 (%.1f vs 市場 %.1f) 偏Over" % (model_total, consensus_total)
+            ou_note = "OU: model %.1f vs market %.1f -> Over" % (model_total, consensus_total)
         elif diff < -0.5:
-            ou_note = "OU: 模型偏小分 (%.1f vs 市場 %.1f) 偏Under" % (model_total, consensus_total)
+            ou_note = "OU: model %.1f vs market %.1f -> Under" % (model_total, consensus_total)
         else:
-            ou_note = "OU: 模型 %.1f vs 市場 %.1f (無明顯偏向)" % (model_total, consensus_total)
+            ou_note = "OU: model %.1f vs market %.1f (neutral)" % (model_total, consensus_total)
 
     for book in bookmakers:
         for market in book.get("markets", []):
@@ -604,23 +566,23 @@ for g in games:
                 stake = kelly_stake(prob, price, BANKROLL)
 
                 if edge > 0.12:
-                    tier = "💎 頂級"
+                    tier = "\U0001f48e TOP"
                 elif edge > 0.09:
-                    tier = "🔥 強力"
+                    tier = "\U0001f525 STRONG"
                 else:
-                    tier = "⭐ 穩定"
+                    tier = "\u2b50 SOLID"
 
                 bet_cn        = TEAM_CN.get(name, name)
                 away_cn       = TEAM_CN.get(away, away)
                 home_cn       = TEAM_CN.get(home, home)
-                missing_str   = "狀況: " + ", ".join(missing) if missing else "陣容完整"
-                consensus_str = "讓分共識: %+.1f" % consensus
+                missing_str   = "\u72c0\u6cc1: " + ", ".join(missing) if missing else "\u9663\u5bb9\u5b8c\u6574"
+                consensus_str = "\u8b93\u5206\u5171\u8b58: %+.1f" % consensus
 
                 msg = (
                     "**[%s] %s @ %s** (%s)\n"
-                    "投注: `%s %+.1f` @ **%.2f** (%s)\n"
+                    "\u6295\u6ce8: `%s %+.1f` @ **%.2f** (%s)\n"
                     "> %s | %s\n"
-                    "> 勝率: %.1f%% | Edge: %+.1f%% | Kelly建議: $%.1f\n"
+                    "> \u52dd\u7387: %.1f%% | Edge: %+.1f%% | Kelly: $%.1f\n"
                     "> %s\n"
                 ) % (
                     tier, away_cn, home_cn,
@@ -657,10 +619,9 @@ for g in games:
 
 total_rec, wins, win_rate, profit = calc_performance(history)
 perf_msg = (
-    "\n📊 **歷史績效報告** (僅統計💎頂級)\n"
-    "總推薦: %d 場 | 已結算: %d 場\n"
-    "勝率: %.1f%% | 損益: %+.1f 元\n"
-    "（以每場 Kelly 建議金額計算）\n"
+    "\n\U0001f4ca **Record** (\U0001f48e TOP only)\n"
+    "Total: %d | Settled: %d\n"
+    "Win rate: %.1f%% | P&L: %+.1f\n"
 ) % (len(history), total_rec, win_rate, profit)
 
 total_picks = sum(len(v) for v in daily_picks.values())
@@ -669,20 +630,20 @@ avg_edge    = (
     if total_picks else 0
 )
 
-output = "⚾ MLB V101.0 | 更新: %s | 資料: %s | 推薦: %d 場 | 平均Edge: %+.1f%%\n" % (
+output = "\u26be MLB V101.0 | %s | %s | picks: %d | avg edge: %+.1f%%\n" % (
     now_tw.strftime("%m/%d %H:%M"), data_source, total_picks, avg_edge * 100
 )
 
 if is_official_run:
-    output += "📌 正式記錄版本\n"
+    output += "\U0001f4cc official run\n"
 else:
-    output += "🔧 測試版本（不寫入回測）\n"
+    output += "\U0001f527 test run (not saving)\n"
 
 if not daily_picks:
-    output += "\n今日無符合條件之推薦。\n"
+    output += "\nNo picks today.\n"
 else:
     for date in sorted(daily_picks):
-        label = "📅 今日賽事" if date == today_s else ("⏭ 預告 %s" % date)
+        label = "\U0001f4c5 Today" if date == today_s else ("\u23ed Preview %s" % date)
         output += "\n%s\n" % label
         for p in sorted(daily_picks[date].values(), key=lambda x: x["edge"], reverse=True):
             output += p["msg"]
@@ -692,7 +653,7 @@ output += perf_msg
 
 if is_official_run:
     save_history(history)
-    log.info("History saved (official run, top tier only)")
+    log.info("History saved (official run)")
 else:
     log.info("History NOT saved (test run)")
 
