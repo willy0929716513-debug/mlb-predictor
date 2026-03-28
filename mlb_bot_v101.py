@@ -122,6 +122,39 @@ SLUG = {
 }
 SHORT = {v: k.upper() for k, v in SLUG.items()}
 
+CN = {
+    "New York Yankees":      "\u6d0b\u57fa",
+    "Los Angeles Dodgers":   "\u9053\u5947",
+    "Atlanta Braves":        "\u52c7\u58eb",
+    "Houston Astros":        "\u592a\u7a7a\u4eba",
+    "Baltimore Orioles":     "\u91d1\u9db6",
+    "Philadelphia Phillies": "\u8cbb\u57ce\u4eba",
+    "Texas Rangers":         "\u904a\u9a0e\u5175",
+    "Arizona Diamondbacks":  "\u97ff\u5c3e\u86c7",
+    "Minnesota Twins":       "\u96d9\u57ce",
+    "Seattle Mariners":      "\u6c34\u624b",
+    "Milwaukee Brewers":     "\u91c0\u9152\u4eba",
+    "Chicago Cubs":          "\u5c0f\u718a",
+    "San Francisco Giants":  "\u5de8\u4eba",
+    "Boston Red Sox":        "\u7d05\u896a",
+    "New York Mets":         "\u5927\u90fd\u6703",
+    "Toronto Blue Jays":     "\u85cd\u9ce5",
+    "Cleveland Guardians":   "\u5b88\u8b77\u8005",
+    "Tampa Bay Rays":        "\u5149\u82b3",
+    "St. Louis Cardinals":   "\u7d05\u96c0",
+    "San Diego Padres":      "\u6559\u58eb",
+    "Detroit Tigers":        "\u8001\u864e",
+    "Kansas City Royals":    "\u7687\u5bb6",
+    "Pittsburgh Pirates":    "\u6d77\u76dc",
+    "Cincinnati Reds":       "\u7d05\u4eba",
+    "Colorado Rockies":      "\u6d1b\u78f4",
+    "Oakland Athletics":     "\u904b\u52d5\u5bb6",
+    "Los Angeles Angels":    "\u5929\u4f7f",
+    "Miami Marlins":         "\u99ac\u6797\u9b5a",
+    "Washington Nationals":  "\u570b\u6c11",
+    "Chicago White Sox":     "\u767d\u896a",
+}
+
 
 def norm(name):
     if not name: return name
@@ -469,23 +502,29 @@ def run():
 
                     miss  = (hm if name==home else am)+(am if name==home else hm)
                     stake = kelly(prob,price)
-                    tier  = "[TOP]" if edge>0.12 else ("[STRONG]" if edge>0.09 else "[SOLID]")
-                    bl    = SHORT.get(name,name)
-                    al    = SHORT.get(away,away)
-                    hl    = SHORT.get(home,home)
-                    ms    = "IL:"+",".join(miss) if miss else "full"
-                    cs    = "con:%+.1f"%cl
+                    tier  = "\U0001f48e \u9802\u7d1a" if edge>0.12 else ("\U0001f525 \u5f37\u529b" if edge>0.09 else "\u2b50 \u7a69\u5b9a")
+                    acn   = CN.get(away,  SHORT.get(away,  away))
+                    hcn   = CN.get(home,  SHORT.get(home,  home))
+                    bcn   = CN.get(name,  SHORT.get(name,  name))
+                    ms    = "\u50b7\u5175: "+", ".join(miss) if miss else "\u9663\u5bb9\u6b63\u5e38"
+                    ou_line = ("\n> %s"%ou) if ou else ""
 
-                    msg = ("**%s %s@%s** (%s)\n"
-                           "SP: %s vs %s\n"
-                           "Bet:`%s %+.1f`@**%.2f**(%s)\n"
-                           ">%s|%s\n"
-                           ">Win:%.1f%%|Edge:%+.1f%%|Kelly:$%.1f\n"
-                           ">%s\n") % (
-                        tier, al, hl, ctw.strftime("%m/%d %H:%M"),
+                    msg = (
+                        "\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\n"
+                        "**%s  %s\uff06 @ \uff06%s**\n"
+                        "\U0001f550 %s\n"
+                        "\u26be \u5148\u767c: %s \u2014 %s\n"
+                        "\U0001f4b0 \u5c0f\u8349: `%s %+.1f` @ **%.2f** (%s)\n"
+                        "> \u5171\u8b58\u7dda: %+.1f | %s\n"
+                        "> \u52dd\u7387: **%.1f%%** | Edge: **%+.1f%%** | Kelly: $%.1f%s\n"
+                    ) % (
+                        tier, acn, hcn,
+                        ctw.strftime("%m/%d %H:%M"),
                         a_sp_str, h_sp_str,
-                        bl, line, price, book.get("title","?"),
-                        ms, cs, prob*100, edge*100, stake, ou)
+                        bcn, line, price, book.get("title","?"),
+                        cl, ms,
+                        prob*100, edge*100, stake, ou_line
+                    )
 
                     ex=picks[gdate].get(gid)
                     if ex is None or edge>ex["edge"]:
@@ -506,22 +545,33 @@ def run():
     tp = sum(len(v) for v in picks.values())
     ae = sum(p["edge"] for d in picks.values() for p in d.values())/tp if tp else 0
 
-    out  = "MLB V102|%s|%s|pitchers:%s|picks:%d|edge:%+.1f%%\n" % (
-        now_tw.strftime("%m/%d %H:%M"), src,
-        "YES" if pitchers else "NO", tp, ae*100)
-    out += "official\n" if official else "test(not saving)\n"
+    out  = (
+        "\u26be **MLB V102 \u5206\u6790\u5831\u544a**\n"
+        "\U0001f550 %s | \u8cc7\u6599: %s | \u5148\u767c: %s\n"
+        "%s\n"
+    ) % (
+        now_tw.strftime("%m/%d %H:%M"),
+        src,
+        "\u5df2\u53d6\u5f97" if pitchers else "\u672a\u53d6\u5f97",
+        "\U0001f4cc \u6b63\u5f0f\u8a18\u9304\u7248\u672c" if official else "\U0001f527 \u6e2c\u8a66\u7248\u672c\uff08\u4e0d\u5beb\u5165\u56de\u6e2c\uff09"
+    )
 
     if not picks:
-        out += "No picks today.\n"
+        out += "\n\u4eca\u65e5\u7121\u7b26\u5408\u689d\u4ef6\u4e4b\u63a8\u85a6\u3002\n"
     else:
         for date in sorted(picks):
-            out += "\n%s\n" % ("Today" if date==today else "Preview "+date)
+            label = "\U0001f4c5 \u4eca\u65e5\u8cfb\u4e8b" if date==today else ("\u23ed \u9810\u544a %s"%date)
+            cnt   = len(picks[date])
+            out  += "\n**%s**\uff08%d \u5834\uff09\n" % (label, cnt)
             for p in sorted(picks[date].values(), key=lambda x: x["edge"], reverse=True):
                 out += p["msg"]
-            out += "-"*30+"\n"
 
-    out += "\n[TOP record] total:%d settled:%d winrate:%.1f%% PnL:%+.1f\n" % (
-        len(hist), tr, wr, pnl)
+    out += (
+        "\n\u2550"*20+"\n"
+        "\U0001f4ca **\u6b77\u53f2\u7e3e\u6548** (\U0001f48e \u9802\u7d1a\u5c08\u7528)\n"
+        "\u63a8\u85a6: %d \u5834 | \u5df2\u7d50\u7b97: %d \u5834 | "
+        "\u52dd\u7387: **%.1f%%** | \u640d\u76ca: **%+.1f \u5143**\n"
+    ) % (len(hist), tr, wr, pnl)
 
     if official:
         save_hist(hist)
