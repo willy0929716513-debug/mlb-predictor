@@ -514,7 +514,7 @@ def run():
                         "**%s  %s\uff06 @ \uff06%s**\n"
                         "\U0001f550 %s\n"
                         "\u26be \u5148\u767c: %s \u2014 %s\n"
-                        "\U0001f4b0 \u5c0f\u8349: `%s %+.1f` @ **%.2f** (%s)\n"
+                        "\U0001f4b0 \u4eca\u65e5\u63a8\u85a6: `%s %+.1f` @ **%.2f** (%s)\n"
                         "> \u5171\u8b58\u7dda: %+.1f | %s\n"
                         "> \u52dd\u7387: **%.1f%%** | Edge: **%+.1f%%** | Kelly: $%.1f%s\n"
                     ) % (
@@ -566,8 +566,8 @@ def run():
             for p in sorted(picks[date].values(), key=lambda x: x["edge"], reverse=True):
                 out += p["msg"]
 
+    out += "\u2550"*20+"\n"
     out += (
-        "\n\u2550"*20+"\n"
         "\U0001f4ca **\u6b77\u53f2\u7e3e\u6548** (\U0001f48e \u9802\u7d1a\u5c08\u7528)\n"
         "\u63a8\u85a6: %d \u5834 | \u5df2\u7d50\u7b97: %d \u5834 | "
         "\u52dd\u7387: **%.1f%%** | \u640d\u76ca: **%+.1f \u5143**\n"
