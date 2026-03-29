@@ -55,38 +55,38 @@ SS  = {"ohtani","judge","freeman","acuna","tatis","ramirez","harper",
 SS_PEN=1.2; ST_PEN=0.8; LT_PEN=0.4
 
 BASE = {
-    "Los Angeles Dodgers":   {"off":5.4,"def":3.3},
-    "New York Yankees":      {"off":5.1,"def":3.6},
-    "Atlanta Braves":        {"off":5.0,"def":3.5},
-    "Philadelphia Phillies": {"off":4.9,"def":3.7},
-    "New York Mets":         {"off":4.8,"def":3.8},
-    "San Francisco Giants":  {"off":4.8,"def":3.8},
-    "Baltimore Orioles":     {"off":4.7,"def":3.8},
-    "Houston Astros":        {"off":4.7,"def":3.9},
-    "Cleveland Guardians":   {"off":4.5,"def":3.8},
-    "Kansas City Royals":    {"off":4.5,"def":4.0},
-    "Detroit Tigers":        {"off":4.4,"def":3.9},
-    "Seattle Mariners":      {"off":4.4,"def":3.8},
-    "Texas Rangers":         {"off":4.6,"def":4.0},
-    "Arizona Diamondbacks":  {"off":4.6,"def":4.0},
-    "San Diego Padres":      {"off":4.5,"def":3.9},
-    "Chicago Cubs":          {"off":4.5,"def":4.0},
-    "Milwaukee Brewers":     {"off":4.4,"def":3.9},
-    "Boston Red Sox":        {"off":4.5,"def":4.1},
-    "Toronto Blue Jays":     {"off":4.4,"def":4.1},
-    "Pittsburgh Pirates":    {"off":4.2,"def":4.0},
-    "Cincinnati Reds":       {"off":4.3,"def":4.2},
-    "Tampa Bay Rays":        {"off":4.3,"def":3.9},
-    "St. Louis Cardinals":   {"off":4.1,"def":4.3},
-    "Minnesota Twins":       {"off":4.3,"def":4.2},
-    "Oakland Athletics":     {"off":4.2,"def":4.3},
-    "Washington Nationals":  {"off":4.0,"def":4.4},
-    "Colorado Rockies":      {"off":4.4,"def":5.2},
-    "Los Angeles Angels":    {"off":4.1,"def":4.5},
-    "Miami Marlins":         {"off":3.8,"def":4.4},
-    "Chicago White Sox":     {"off":3.7,"def":4.9},
+    "Los Angeles Dodgers":   {"off":4.8,"def":3.6},
+    "New York Yankees":      {"off":4.6,"def":3.8},
+    "Atlanta Braves":        {"off":4.5,"def":3.7},
+    "Philadelphia Phillies": {"off":4.4,"def":3.8},
+    "New York Mets":         {"off":4.4,"def":3.9},
+    "San Francisco Giants":  {"off":4.3,"def":3.9},
+    "Baltimore Orioles":     {"off":4.3,"def":3.9},
+    "Houston Astros":        {"off":4.3,"def":4.0},
+    "Cleveland Guardians":   {"off":4.1,"def":3.8},
+    "Kansas City Royals":    {"off":4.2,"def":4.0},
+    "Detroit Tigers":        {"off":4.0,"def":3.9},
+    "Seattle Mariners":      {"off":4.0,"def":3.8},
+    "Texas Rangers":         {"off":4.2,"def":4.0},
+    "Arizona Diamondbacks":  {"off":4.2,"def":4.0},
+    "San Diego Padres":      {"off":4.1,"def":3.9},
+    "Chicago Cubs":          {"off":4.1,"def":4.0},
+    "Milwaukee Brewers":     {"off":4.0,"def":3.9},
+    "Boston Red Sox":        {"off":4.1,"def":4.1},
+    "Toronto Blue Jays":     {"off":4.0,"def":4.1},
+    "Pittsburgh Pirates":    {"off":3.8,"def":4.0},
+    "Cincinnati Reds":       {"off":3.9,"def":4.2},
+    "Tampa Bay Rays":        {"off":3.9,"def":3.9},
+    "St. Louis Cardinals":   {"off":3.7,"def":4.3},
+    "Minnesota Twins":       {"off":3.9,"def":4.2},
+    "Oakland Athletics":     {"off":3.8,"def":4.3},
+    "Washington Nationals":  {"off":3.6,"def":4.4},
+    "Colorado Rockies":      {"off":4.0,"def":4.8},
+    "Los Angeles Angels":    {"off":3.7,"def":4.5},
+    "Miami Marlins":         {"off":3.5,"def":4.4},
+    "Chicago White Sox":     {"off":3.3,"def":4.8},
 }
-DEF_RATING = {"off":4.3,"def":4.3}
+DEF_RATING = {"off":4.0,"def":4.2}
 
 # Pitcher ERA tiers - used to adjust expected runs
 # era_adj: runs above/below league average (4.30) per game
@@ -392,16 +392,22 @@ def predict_margin(home, away, inj, ratings, pitchers):
     return margin, fmt(hm), fmt(am), h_pitcher, a_pitcher
 
 
-def predict_total(home, away, ratings, pitchers):
+def predict_total(home, away, ratings, pitchers, market_total=None):
     h = ratings.get(home, BASE.get(home, DEF_RATING))
     a = ratings.get(away, BASE.get(away, DEF_RATING))
     h_pitcher = pitchers.get(home, "")
     a_pitcher = pitchers.get(away, "")
-    h_adj = pitcher_era_adj(h_pitcher)
-    a_adj = pitcher_era_adj(a_pitcher)
-    h_exp = (h["off"] + a["def"]) / 2 - a_adj
-    a_exp = (a["off"] + h["def"]) / 2 - h_adj
-    return round((h_exp + a_exp) * 0.98, 1)
+    h_adj = pitcher_era_adj(h_pitcher)  # home SP quality -> affects away runs
+    a_adj = pitcher_era_adj(a_pitcher)  # away SP quality -> affects home runs
+    # home runs = home offense vs away pitching
+    h_exp = h["off"] - a_adj
+    # away runs = away offense vs home pitching
+    a_exp = a["off"] - h_adj
+    model_total = round(h_exp + a_exp, 1)
+    # blend with market total to correct systematic bias
+    if market_total:
+        return round(model_total * 0.40 + market_total * 0.60, 1)
+    return model_total
 
 
 def consensus_line(books, team):
@@ -479,14 +485,15 @@ def run():
         picks.setdefault(gdate,{})
 
         margin,hm,am,h_sp,a_sp = predict_margin(home,away,inj,ratings,pitchers)
-        mt = predict_total(home,away,ratings,pitchers)
         ct = consensus_total(books)
+        mt = predict_total(home,away,ratings,pitchers,ct)
         ou = ""
         if ct:
-            d=mt-ct
-            if d>0.5: ou="OU: model %.1f vs mkt %.1f -> OVER"%(mt,ct)
-            elif d<-0.5: ou="OU: model %.1f vs mkt %.1f -> UNDER"%(mt,ct)
-            else: ou="OU: model %.1f vs mkt %.1f (neutral)"%(mt,ct)
+            pure = predict_total(home,away,ratings,pitchers)
+            d = pure - ct
+            if d > 0.5:   ou = "大分偏向 OVER (純模型%.1f / 市場%.1f)"%(pure,ct)
+            elif d < -0.5: ou = "小分偏向 UNDER (純模型%.1f / 市場%.1f)"%(pure,ct)
+            else:          ou = "大小分中性 (純模型%.1f / 市場%.1f)"%(pure,ct)
 
         # Pitcher display
         h_sp_era = PITCHER_ERA.get(h_sp, None)
