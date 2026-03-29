@@ -534,7 +534,7 @@ def run():
                         eh=hist.get(gid)
                         if eh is None or edge>eh.get("edge",0):
                             hist[gid]={"date":gdate,
-                                       "bet":"%s %+.1f"%(bl,line),
+                                       "bet":"%s %+.1f"%(bcn,line),
                                        "sp":"%s vs %s"%(a_sp_str,h_sp_str),
                                        "book":book.get("title","?"),
                                        "price":price,"prob":round(prob,4),
