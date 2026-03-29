@@ -457,8 +457,8 @@ def run():
 
     now_utc=datetime.utcnow(); now_tw=now_utc+timedelta(hours=8)
     today=now_tw.strftime("%Y-%m-%d")
-    official=(now_utc.hour==22)
-    log.info("Official run: %s (UTC hour: %d)", official, now_utc.hour)
+    official=(0 <= now_tw.hour < 7)
+    log.info("Official run: %s (TW hour: %d)", official, now_tw.hour)
 
     ratings  = fetch_stats()
     src      = "ESPN" if ratings else "fallback"
