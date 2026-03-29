@@ -1,14 +1,14 @@
 # ============================================================
-# MLB_V103 — 完整修正版
+# MLB_V104 — 完整修正版
 # ============================================================
-import requests, os, random, logging, json, math
+import requests, os, logging, json, math, time
 from datetime import datetime, timedelta
 
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
 )
-log = logging.getLogger("MLB_V103")
+log = logging.getLogger("MLB_V104")
 
 # ── 環境變數 ────────────────────────────────────────────────
 ODDS_API_KEY = os.getenv("ODDS_API_KEY", "")
@@ -16,20 +16,20 @@ WEBHOOK      = os.getenv("DISCORD_WEBHOOK", "")
 GH_TOKEN     = os.getenv("GH_TOKEN", "")
 
 # ── 超參數 ──────────────────────────────────────────────────
-SIMS     = 50_000
-EDGE_MIN = 0.06
-MOD_W    = 0.25   # 模型權重
-MKT_W    = 0.75   # 市場權重
-TOT_MOD  = 0.40   # 大小分模型混合比例（可調）
-TOT_MKT  = 0.60   # 大小分市場混合比例
-STD      = 1.6
-HA       = 0.10
-MIN_P    = 1.30
-MAX_P    = 2.80
-LIMIT    = 1900
-BANK     = 1000.0
-KELLY    = 0.15
-HIST_TTL = 90     # 歷史記錄保留天數
+EDGE_MIN    = 0.06
+MOD_W       = 0.25
+MKT_W       = 0.75
+TOT_MOD     = 0.40
+TOT_MKT     = 0.60
+STD         = 1.6
+HA          = 0.10
+MIN_P       = 1.30
+MAX_P       = 2.80
+LIMIT       = 1900
+BANK        = 1000.0
+KELLY       = 0.15
+HIST_TTL    = 90
+OFFICIAL_H  = (0, 10)   # 台灣時間 0~9 點視為正式模式（涵蓋賽前分析時段）
 
 # ── 名單 ────────────────────────────────────────────────────
 ROSTER = {
@@ -111,29 +111,25 @@ BASE = {
 }
 DEF_RATING = {"off":4.0,"def":4.2}
 
+# 注意：ohtani 在 PITCHER_ERA 中保留，但 fetch_probable_pitchers
+# 會從 ESPN 實際抓取，若 Ohtani 本季不投球就不會命中此表
 PITCHER_ERA = {
-    # Aces
     "cole":3.90,"fried":3.10,"wheeler":3.00,"skubal":2.80,"sale":3.20,
     "degrom":2.95,"ohtani":3.10,"burnes":3.30,"castillo":3.40,"webb":3.20,
     "musgrove":3.60,"skenes":3.00,"glasnow":3.10,"ragans":3.40,"woodruff":3.50,
     "gallen":3.50,"mcclanahan":3.30,"bieber":3.50,
-    # Mid rotation
     "bibee":3.70,"peralta":3.60,"berrios":3.80,"gausman":3.70,"eovaldi":3.90,
     "steele":3.80,"imanaga":3.60,"burns":3.50,"hgreene":3.80,"nola":3.70,
     "cease":3.90,"flaherty":3.90,"gray":4.00,"rasmussen":4.00,"mikolas":4.30,
     "woo":3.80,"bradish":3.70,"gilbert":3.80,"liberatore":4.50,"cavalli":4.60,
     "garrett":4.20,"mahle":4.10,"peterson":4.20,"keller":4.10,"javier":4.30,
     "detmers":4.40,"lorenzen":4.50,"wacha":4.40,"vasquez":4.50,"cantillo":4.60,
-    # 2026 young starters
     "horton":4.20,"singer":4.30,"burke":4.80,"patrick":4.50,"springs":4.40,
     "mcgreevy":4.60,"boyle":4.30,"bradley":4.50,"warren":4.70,"rodriguez":4.20,
     "lopez":4.40,"perez":4.60,
-    # Back rotation / fallback
     "freeland":4.80,"smith":4.90,"soriano":4.40,"kurtz":4.50,"manoah":4.60,
     "arodriguez":4.50,
 }
-# 修正：原版 cole ERA 寫成 2.90，但 2026 賽季 Cole 傷勢未復，
-# 同時已列在 OUT，此處調整為較保守的 3.90 以免誤用
 LEAGUE_AVG_ERA = 4.30
 
 SLUG = {
@@ -183,40 +179,50 @@ CN = {
     "Chicago White Sox":     "白襪",
 }
 
-# ── 工具函數 ────────────────────────────────────────────────
+# ── 隊名標準化 ───────────────────────────────────────────────
+
+# 預先建立大寫縮寫 -> 全名的查表（避免每次呼叫重建）
+_SLUG_UPPER = {k.upper(): v for k, v in SLUG.items()}
+_FULL_LOWER = {v.lower(): v for v in SHORT}  # 全名小寫 -> 正式全名
 
 def norm(name: str) -> str:
     """
     將隊名字串標準化為 ROSTER 全名。
-    修正：原版用 'in' 做子字串比對，短縮寫容易誤匹配。
-    現在優先完整匹配，再做縮寫查表，最後才做子字串。
+    優先順序：
+      1. 直接完整命中（如 "New York Yankees"）
+      2. 縮寫查表（如 "NYY", "nyy"）
+      3. 全名小寫完整比對
+      4. 子字串模糊比對（最後手段，有誤匹配風險）
     """
     if not name:
         return name
     n = name.strip()
 
-    # 1. 完整名稱直接命中
+    # 1. 直接命中已知全名
     if n in SHORT:
         return n
 
-    # 2. 縮寫查表（如 "NYY", "LAD"）
-    upper = n.upper()
-    if upper in SLUG:             # e.g. "nyy" -> full name
-        return SLUG[upper.lower()]
-    slug_up = {k.upper(): v for k, v in SLUG.items()}
-    if upper in slug_up:
-        return slug_up[upper]
+    # 2. 縮寫查表（大小寫不敏感）
+    candidate = _SLUG_UPPER.get(n.upper())
+    if candidate:
+        return candidate
 
-    # 3. 子字串模糊匹配（最後手段）
+    # 3. 全名小寫完整比對
+    candidate = _FULL_LOWER.get(n.lower())
+    if candidate:
+        return candidate
+
+    # 4. 子字串模糊比對（只在前三關都失敗時）
     n_low = n.lower()
-    for full in SHORT:
-        if n_low == full.lower():
+    for full_low, full in _FULL_LOWER.items():
+        if n_low in full_low:
             return full
-    for full in SHORT:
-        if n_low in full.lower() or full.lower() in n_low:
-            return full
+
+    log.debug("norm() 無法識別隊名: %r", name)
     return name
 
+
+# ── 基礎 HTTP ────────────────────────────────────────────────
 
 def safe_get(url, headers=None, params=None, retries=3, timeout=15):
     for i in range(1, retries + 1):
@@ -239,8 +245,9 @@ def safe_get(url, headers=None, params=None, retries=3, timeout=15):
 def fetch_probable_pitchers() -> dict:
     """
     從 ESPN scoreboard 抓今日先發投手。
+    修正：移除 athletes 作為 fallback（會抓到野手），
+    改為只信任 probables 字段，找不到就跳過該隊。
     回傳 {隊伍全名: 投手姓氏小寫}
-    改進：加入備援 URL；修正 probables 路徑判斷。
     """
     today = datetime.utcnow().strftime("%Y%m%d")
     urls = [
@@ -252,7 +259,6 @@ def fetch_probable_pitchers() -> dict:
         data = safe_get(url, params={"dates": today})
         if data:
             break
-
     if not data:
         log.warning("ESPN scoreboard 全部失敗，無先發資料")
         return {}
@@ -265,16 +271,19 @@ def fetch_probable_pitchers() -> dict:
                     team_name = norm(team.get("team", {}).get("displayName", ""))
                     if not team_name:
                         continue
-                    # ESPN 有時把 probables 放在 "probables" 或 "athletes" 裡
-                    sources = team.get("probables") or team.get("athletes", [])
-                    for prob in sources:
-                        athlete = prob.get("athlete", prob)   # 相容兩種結構
+                    # 只使用 probables，不使用 athletes（athletes 包含全隊球員）
+                    probables = team.get("probables", [])
+                    if not probables:
+                        log.debug("無先發資料: %s", team_name)
+                        continue
+                    for prob in probables:
+                        athlete = prob.get("athlete", {})
                         pitcher = athlete.get("displayName", "")
                         if pitcher:
                             last = pitcher.split()[-1].lower()
                             team_pitcher[team_name] = last
                             log.info("先發: %s → %s", team_name, last)
-                            break   # 每隊只取第一位
+                            break  # 每隊只取第一位
     except Exception as e:
         log.warning("投手解析錯誤: %s", e)
 
@@ -284,15 +293,14 @@ def fetch_probable_pitchers() -> dict:
 
 def pitcher_era_adj(pitcher_last: str) -> float:
     """
-    回傳與聯盟平均的失分差（每場）。
-    負值 = 比平均好 = 壓低對手得分。
+    回傳與聯盟平均的失分差（每場約 6 局）。
+    負值 = 投手優於平均 = 壓低對手得分。
     """
     if not pitcher_last:
         return 0.0
     era = PITCHER_ERA.get(pitcher_last.lower())
     if era is None:
         return 0.0
-    # 每局失分差 × 預期投球局數(6局)
     return round((era - LEAGUE_AVG_ERA) / 9 * 6, 3)
 
 
@@ -309,7 +317,7 @@ def fetch_stats() -> dict:
         if data:
             break
     if not data:
-        log.warning("ESPN standings 失敗，使用 fallback"); return {}
+        log.warning("ESPN standings 失敗，使用靜態 BASE"); return {}
 
     def val(s):
         for k in ("value", "displayValue", "summary"):
@@ -364,8 +372,8 @@ def fetch_stats() -> dict:
 
 def get_injuries() -> dict:
     """
-    修正：移除雙重加入 OUT 集合的冗餘邏輯。
-    現在 OUT 固定傷兵直接合併進結果，不重複判斷。
+    爬取 RotoWire 傷兵資訊，並強制合併 OUT 固定集合。
+    inj[team] 是該隊確定無法出賽的球員 list。
     """
     inj: dict = {}
 
@@ -377,7 +385,6 @@ def get_injuries() -> dict:
         )
         r.raise_for_status()
         text = r.text.lower()
-
         out_kw  = ["ruled out","will not play","is out","60-day il","15-day il","10-day il"]
         skip_kw = ["questionable","probable","available","day-to-day"]
 
@@ -395,7 +402,7 @@ def get_injuries() -> dict:
     except Exception as e:
         log.warning("RotoWire 失敗: %s", e)
 
-    # 固定 OUT 集合強制加入（不重複）
+    # 固定 OUT 集合強制加入（去重）
     for team, players in ROSTER.items():
         existing = set(inj.get(team, []))
         for p in players:
@@ -410,7 +417,7 @@ def get_injuries() -> dict:
 # ── 歷史紀錄 ────────────────────────────────────────────────
 
 def _purge_old(hist: dict) -> dict:
-    """清除超過 HIST_TTL 天的歷史記錄，避免 Gist 無限膨脹。"""
+    """清除超過 HIST_TTL 天的歷史記錄。"""
     cutoff = (datetime.utcnow() - timedelta(days=HIST_TTL)).strftime("%Y-%m-%d")
     return {k: v for k, v in hist.items() if v.get("date", "9999") >= cutoff}
 
@@ -432,7 +439,6 @@ def load_hist() -> dict:
 
 
 def save_hist(hist: dict, retries: int = 3) -> None:
-    """修正：加入重試機制，避免單次網路閃斷導致歷史遺失。"""
     if not GH_TOKEN:
         return
     hist = _purge_old(hist)
@@ -460,7 +466,7 @@ def save_hist(hist: dict, retries: int = 3) -> None:
                     "https://api.github.com/gists",
                     headers=h, json=pl, timeout=10,
                 ).raise_for_status()
-            log.info("歷史儲存成功 (第 %d 次嘗試)", attempt)
+            log.info("歷史儲存成功 (第 %d 次)", attempt)
             return
         except Exception as e:
             log.warning("儲存失敗 %d/%d: %s", attempt, retries, e)
@@ -487,10 +493,6 @@ def calc_perf(hist: dict):
 # ── 賠率與機率 ───────────────────────────────────────────────
 
 def kelly(prob: float, price: float) -> float:
-    """
-    修正：確保 b > 0 且 prob 在安全範圍才計算，
-    避免 price ≤ 1 或 prob 極端值造成異常。
-    """
     b = price - 1
     if b <= 0:
         return 0.0
@@ -499,14 +501,10 @@ def kelly(prob: float, price: float) -> float:
 
 
 def win_prob_from_margin(margin: float) -> float:
-    """用誤差函數將分差轉換為勝率（常態分佈假設）。"""
     return round(0.5 + 0.5 * math.erf(margin / (STD * math.sqrt(2))), 4)
 
 
 def consensus_ml(books: list, team: str) -> float | None:
-    """
-    修正：拆開巢狀理解式，提升可讀性與正確性。
-    """
     prices = []
     for b in books:
         for m in b.get("markets", []):
@@ -535,14 +533,13 @@ def consensus_total(books: list) -> float | None:
 def _get_missing(team: str, inj: dict) -> list:
     """
     回傳 [(player, status, team), ...]
-    修正：原版對「自己隊」的傷兵懲罰邏輯正確，
-    但整個函數邏輯被 predict_margin 呼叫時容易混淆，
-    抽出獨立函式讓呼叫側更清晰。
+    修正：il 集合直接從 inj 取，OUT 判斷與 il 合併，
+    避免雙重懲罰（因為 get_injuries 已把 OUT 加入 inj）。
     """
     il = {p.lower() for p in inj.get(team, [])}
     result = []
     for p in ROSTER.get(team, []):
-        if p in OUT or p in il:
+        if p in il:                  # 包含 OUT（已由 get_injuries 加入）
             result.append((p, "out", team))
         elif p in LTD:
             result.append((p, "ltd", team))
@@ -551,15 +548,16 @@ def _get_missing(team: str, inj: dict) -> list:
 
 def predict_margin(home: str, away: str, inj: dict, ratings: dict, pitchers: dict):
     """
-    預測主隊分差。正值 = 主隊勝。
-    修正：傷兵懲罰現在透過 _get_missing 統一計算，邏輯更清晰。
+    預測主隊分差（正值 = 主隊勝）。
+    修正：form 統一從 ratings/BASE 取，語意一致；
+    hb/ab 不再被 hs/as_ 共用，確保獨立計算。
     """
-    hb = dict(ratings.get(home, BASE.get(home, DEF_RATING)))
-    ab = dict(ratings.get(away, BASE.get(away, DEF_RATING)))
-
-    # 深複製，避免修改原始資料
-    hs = {"off": hb["off"], "def": hb["def"]}
-    as_ = {"off": ab["off"], "def": ab["def"]}
+    src_h = ratings.get(home, BASE.get(home, DEF_RATING))
+    src_a = ratings.get(away, BASE.get(away, DEF_RATING))
+    hs  = {"off": src_h["off"], "def": src_h["def"]}
+    as_ = {"off": src_a["off"], "def": src_a["def"]}
+    h_form = src_h.get("form", 0.0)
+    a_form = src_a.get("form", 0.0)
 
     hm = _get_missing(home, inj)
     am = _get_missing(away, inj)
@@ -576,24 +574,18 @@ def predict_margin(home: str, away: str, inj: dict, ratings: dict, pitchers: dic
 
     h_pitcher   = pitchers.get(home, "")
     a_pitcher   = pitchers.get(away, "")
-    h_pitch_adj = pitcher_era_adj(h_pitcher)   # 主場投手 → 壓制客隊
-    a_pitch_adj = pitcher_era_adj(a_pitcher)   # 客場投手 → 壓制主隊
+    h_pitch_adj = pitcher_era_adj(h_pitcher)   # 主場投手壓制客隊
+    a_pitch_adj = pitcher_era_adj(a_pitcher)   # 客場投手壓制主隊
 
-    # 預期得分：自身進攻 vs 對手防守，再調整對方先發
-    he = (hs["off"] + as_["def"]) / 2 + hb.get("form", 0.0) - a_pitch_adj
-    ae = (as_["off"] + hs["def"]) / 2 + ab.get("form", 0.0) - h_pitch_adj
+    he = (hs["off"] + as_["def"]) / 2 + h_form - a_pitch_adj
+    ae = (as_["off"] + hs["def"]) / 2 + a_form - h_pitch_adj
     margin = (he - ae) + HA
 
     def fmt(lst):
         return [
-            "%s %s(%s)" % (
-                CN.get(t, t[:3]),
-                p.upper(),
-                "OUT" if s == "out" else "LTD",
-            )
+            "%s %s(%s)" % (CN.get(t, t[:3]), p.upper(), "OUT" if s == "out" else "LTD")
             for p, s, t in lst
         ]
-
     return margin, fmt(hm), fmt(am), h_pitcher, a_pitcher
 
 
@@ -603,10 +595,8 @@ def predict_total(
 ) -> float:
     h = ratings.get(home, BASE.get(home, DEF_RATING))
     a = ratings.get(away, BASE.get(away, DEF_RATING))
-    h_pitcher = pitchers.get(home, "")
-    a_pitcher = pitchers.get(away, "")
-    h_adj = pitcher_era_adj(h_pitcher)
-    a_adj = pitcher_era_adj(a_pitcher)
+    h_adj = pitcher_era_adj(pitchers.get(home, ""))
+    a_adj = pitcher_era_adj(pitchers.get(away, ""))
     h_exp = h["off"] - a_adj
     a_exp = a["off"] - h_adj
     model_total = round(h_exp + a_exp, 1)
@@ -618,6 +608,9 @@ def predict_total(
 # ── Odds API ────────────────────────────────────────────────
 
 def fetch_odds() -> list:
+    """
+    修正：確認回傳值為 list，若 API 回傳 dict（錯誤訊息）則視為失敗。
+    """
     data = safe_get(
         "https://api.the-odds-api.com/v4/sports/baseball_mlb/odds/",
         params={
@@ -627,8 +620,11 @@ def fetch_odds() -> list:
             "oddsFormat": "decimal",
         },
     )
-    if not data:
-        log.error("Odds API 失敗")
+    if not isinstance(data, list):
+        if isinstance(data, dict):
+            log.error("Odds API 回傳錯誤: %s", data.get("message", data))
+        else:
+            log.error("Odds API 失敗，無回傳資料")
         return []
     log.info("Odds: %d 場比賽", len(data))
     return data
@@ -637,10 +633,13 @@ def fetch_odds() -> list:
 # ── Discord ─────────────────────────────────────────────────
 
 def send(content: str) -> None:
-    """修正：改用 list 累積再 join，避免大量字串串接的效能問題。"""
+    """
+    修正：每次 chunk 之間加入 sleep(0.6)，
+    避免觸發 Discord Webhook 速率限制（429）。
+    """
     lines  = content.split("\n")
     chunks: list[str] = []
-    buf: list[str]    = []
+    buf:    list[str] = []
     size = 0
 
     for line in lines:
@@ -663,6 +662,8 @@ def send(content: str) -> None:
             r.raise_for_status()
         except Exception as e:
             log.error("Discord chunk %d 傳送失敗: %s", i, e)
+        if total > 1:
+            time.sleep(0.6)   # 避免 Discord 429
 
 
 # ── 主程式 ──────────────────────────────────────────────────
@@ -671,10 +672,11 @@ def run() -> None:
     if not all([ODDS_API_KEY, WEBHOOK]):
         log.error("缺少環境變數 ODDS_API_KEY 或 DISCORD_WEBHOOK"); return
 
-    now_utc = datetime.utcnow()
-    now_tw  = now_utc + timedelta(hours=8)
-    today   = now_tw.strftime("%Y-%m-%d")
-    official = (0 <= now_tw.hour < 7)
+    now_utc  = datetime.utcnow()
+    now_tw   = now_utc + timedelta(hours=8)
+    today    = now_tw.strftime("%Y-%m-%d")
+    # 修正：擴大正式模式時間窗口到 10 點，確保賽前分析都能寫入歷史
+    official = OFFICIAL_H[0] <= now_tw.hour < OFFICIAL_H[1]
     log.info("正式模式: %s (台灣時間 %02d:%02d)", official, now_tw.hour, now_tw.minute)
 
     ratings  = fetch_stats()
@@ -700,13 +702,16 @@ def run() -> None:
         gdate = ctw.strftime("%Y-%m-%d")
         home  = norm(g.get("home_team", ""))
         away  = norm(g.get("away_team", ""))
+        if not home or not away:
+            log.warning("無法識別隊名: %s / %s", g.get("home_team"), g.get("away_team"))
+            continue
+
         gid   = "%s@%s_%s" % (away, home, gdate)
         books = g.get("bookmakers", [])
         picks.setdefault(gdate, {})
 
         margin, hm, am, h_sp, a_sp = predict_margin(home, away, inj, ratings, pitchers)
         ct = consensus_total(books)
-        mt = predict_total(home, away, ratings, pitchers, ct)
         ou = ""
         if ct:
             pure = predict_total(home, away, ratings, pitchers)
@@ -746,20 +751,21 @@ def run() -> None:
                         continue
 
                     con_price = consensus_ml(books, name) or price
-                    miss      = (hm if is_home else am) + (am if is_home else hm)
                     stake     = kelly(prob, price)
+
+                    # 修正：只顯示推薦隊伍自己的傷兵，不顯示對手
+                    own_miss = hm if is_home else am
+                    ms = "傷兵: " + ", ".join(own_miss) if own_miss else "陣容正常"
 
                     if   edge > 0.10: tier = "💎 頂級"
                     elif edge > 0.07: tier = "🔥 強力"
                     else:             tier = "⭐ 穩定"
 
-                    acn  = CN.get(away, SHORT.get(away, away))
-                    hcn  = CN.get(home, SHORT.get(home, home))
-                    bcn  = CN.get(name, SHORT.get(name, name))
-                    ms   = "傷兵: " + ", ".join(miss) if miss else "陣容正常"
+                    acn     = CN.get(away, SHORT.get(away, away))
+                    hcn     = CN.get(home, SHORT.get(home, home))
+                    bcn     = CN.get(name, SHORT.get(name, name))
                     ou_line = ("\n> %s" % ou) if ou else ""
 
-                    # 改用 list join 組裝訊息
                     msg = "\n".join([
                         "—" * 15,
                         "**%s  %s @ %s**" % (tier, acn, hcn),
@@ -768,47 +774,45 @@ def run() -> None:
                         "💰 今日推薦: `%s 獨贏` @ **%.2f** (%s)" % (bcn, price, book.get("title","?")),
                         "> 共識賠率: %.2f | %s" % (con_price, ms),
                         "> 勝率: **%.1f%%** | Edge: **%+.1f%%** | Kelly: $%.1f%s" % (
-                            prob * 100, edge * 100, stake, ou_line
-                        ),
+                            prob * 100, edge * 100, stake, ou_line),
                     ]) + "\n"
 
-                    ex = picks[gdate].get(gid + "_" + name)
+                    key = gid + "_" + name
+                    ex  = picks[gdate].get(key)
                     if ex is None or edge > ex["edge"]:
-                        picks[gdate][gid + "_" + name] = {
+                        picks[gdate][key] = {
                             "edge": edge, "prob": prob, "price": price,
                             "kelly_stake": stake, "msg": msg,
                         }
 
                     if edge > 0.10 and official and gdate == today:
-                        hkey = gid + "_" + name
-                        eh   = hist.get(hkey)
+                        eh = hist.get(key)
                         if eh is None or edge > eh.get("edge", 0):
-                            hist[hkey] = {
-                                "date":         gdate,
-                                "bet":          "%s 獨贏" % bcn,
-                                "sp":           "%s vs %s" % (a_sp_str, h_sp_str),
-                                "book":         book.get("title", "?"),
-                                "price":        price,
-                                "prob":         round(prob, 4),
-                                "edge":         round(edge, 4),
-                                "kelly_stake":  stake,
-                                "result":       eh.get("result", "pending") if eh else "pending",
+                            hist[key] = {
+                                "date":        gdate,
+                                "bet":         "%s 獨贏" % bcn,
+                                "sp":          "%s vs %s" % (a_sp_str, h_sp_str),
+                                "book":        book.get("title", "?"),
+                                "price":       price,
+                                "prob":        round(prob, 4),
+                                "edge":        round(edge, 4),
+                                "kelly_stake": stake,
+                                "result":      eh.get("result", "pending") if eh else "pending",
                             }
 
     tr, w, wr, pnl = calc_perf(hist)
     tp = sum(len(v) for v in picks.values())
-    ae = (
+    avg_edge = (
         sum(p["edge"] for d in picks.values() for p in d.values()) / tp
         if tp else 0
     )
 
-    # 組裝主訊息（list join）
     lines = [
-        "⚾ **MLB V103 分析報告**",
-        "🕐 %s | 資料: %s | 先發: %s" % (
-            now_tw.strftime("%m/%d %H:%M"),
-            src,
+        "⚾ **MLB V104 分析報告**",
+        "🕐 %s | 資料: %s | 先發: %s | 平均Edge: %+.1f%%" % (
+            now_tw.strftime("%m/%d %H:%M"), src,
             "已取得" if pitchers else "未取得",
+            avg_edge * 100,   # 修正：avg_edge 現在實際顯示於報告中
         ),
         "📌 正式記錄版本" if official else "🔧 測試版本（不寫入回測）",
         "",
@@ -828,15 +832,13 @@ def run() -> None:
         "═" * 20,
         "📊 **歷史績效** (💎 頂級專用)",
         "推薦: %d 場 | 已結算: %d 場 | 勝率: **%.1f%%** | 損益: **%+.1f 元**" % (
-            len(hist), tr, wr, pnl
-        ),
+            len(hist), tr, wr, pnl),
     ]
 
     out = "\n".join(lines)
-
     if official:
         save_hist(hist)
-    log.info("傳送至 Discord，長度: %d", len(out))
+    log.info("傳送至 Discord，長度: %d 字元，%d 推薦", len(out), tp)
     send(out)
     log.info("完成")
 
