@@ -8,10 +8,10 @@ ODDS_API_KEY = os.getenv("ODDS_API_KEY", "")
 WEBHOOK      = os.getenv("DISCORD_WEBHOOK", "")
 GH_TOKEN     = os.getenv("GH_TOKEN", "")
 
-SIMS=50000; EDGE_MIN=0.06; MOD_W=0.35; MKT_W=0.65
-STD=1.8; HA=0.15; MAX_RL=2.5; MIN_RL=0.5
+SIMS=50000; EDGE_MIN=0.08; MOD_W=0.25; MKT_W=0.75
+STD=2.2; HA=0.10; MAX_RL=2.5; MIN_RL=0.5
 MIN_P=1.75; MAX_P=2.15; LIMIT=1900
-BANK=1000.0; KELLY=0.20
+BANK=1000.0; KELLY=0.15
 
 ROSTER = {
     "New York Yankees":      ["fried","cole","judge","goldschmidt"],
@@ -91,19 +91,32 @@ DEF_RATING = {"off":4.3,"def":4.3}
 # Pitcher ERA tiers - used to adjust expected runs
 # era_adj: runs above/below league average (4.30) per game
 PITCHER_ERA = {
+    # Aces
     "cole":       2.90, "fried":      3.10, "wheeler":    3.00,
     "skubal":     2.80, "sale":       3.20, "degrom":     2.95,
     "ohtani":     3.10, "burnes":     3.30, "castillo":   3.40,
-    "gallen":     3.50, "webb":       3.20, "musgrove":   3.60,
-    "mcclanahan": 3.30, "bieber":     3.50, "bibee":      3.70,
-    "skenes":     3.00, "ragans":     3.40, "woodruff":   3.50,
-    "peralta":    3.60, "berrios":    3.80, "gausman":    3.70,
-    "eovaldi":    3.90, "steele":     3.80, "imanaga":    3.60,
-    "freeland":   4.80, "liberatore": 4.50, "cavalli":    4.60,
-    "burns":      3.50, "hgreene":    3.80, "gallen":     3.50,
-    "mcclanahan": 3.30, "rasmussen":  4.00, "garrett":    4.20,
-    "mikolas":    4.30, "gray":       4.00, "wcontreras": 4.50,
-    "smith":      4.80, "kurtz":      4.50, "soriano":    4.40,
+    "webb":       3.20, "musgrove":   3.60, "skenes":     3.00,
+    "glasnow":    3.10, "ragans":     3.40, "woodruff":   3.50,
+    "gallen":     3.50, "mcclanahan": 3.30, "bieber":     3.50,
+    # Mid rotation
+    "bibee":      3.70, "peralta":    3.60, "berrios":    3.80,
+    "gausman":    3.70, "eovaldi":    3.90, "steele":     3.80,
+    "imanaga":    3.60, "burns":      3.50, "hgreene":    3.80,
+    "nola":       3.70, "cease":      3.90, "flaherty":   3.90,
+    "gray":       4.00, "rasmussen":  4.00, "mikolas":    4.30,
+    "woo":        3.80, "bradish":    3.70, "gilbert":    3.80,
+    "liberatore": 4.50, "cavalli":    4.60, "garrett":    4.20,
+    "mahle":      4.10, "peterson":   4.20, "keller":     4.10,
+    "javier":     4.30, "detmers":    4.40, "lorenzen":   4.50,
+    "wacha":      4.40, "vasquez":    4.50, "cantillo":   4.60,
+    # 2026 new/young starters
+    "horton":     4.20, "singer":     4.30, "burke":      4.80,
+    "patrick":    4.50, "springs":    4.40, "mcgreevy":   4.60,
+    "boyle":      4.30, "bradley":    4.50, "warren":     4.70,
+    "rodriguez":  4.20, "lopez":      4.40, "perez":      4.60,
+    # Back rotation / fallback
+    "freeland":   4.80, "smith":      4.90, "soriano":    4.40,
+    "kurtz":      4.50, "manoah":     4.60, "arodriguez": 4.50,
 }
 LEAGUE_AVG_ERA = 4.30
 
@@ -353,31 +366,29 @@ def predict_margin(home, away, inj, ratings, pitchers):
         il = [p.lower() for p in inj.get(team,[])]
         res = []
         for p in ROSTER.get(team,[]):
-            if p in OUT or any(p in x for x in il): res.append((p,"out"))
-            elif p in LTD: res.append((p,"ltd"))
+            if p in OUT or any(p in x for x in il): res.append((p,"out",team))
+            elif p in LTD: res.append((p,"ltd",team))
         return res
 
     hm, am = missing(home), missing(away)
-    for p,s in hm:
+    for p,s,t in hm:
         pen=(SS_PEN if p in SS else ST_PEN) if s=="out" else LT_PEN
         hs["off"]-=pen*0.6; hs["def"]+=pen*0.4
-    for p,s in am:
+    for p,s,t in am:
         pen=(SS_PEN if p in SS else ST_PEN) if s=="out" else LT_PEN
         as_["off"]-=pen*0.6; as_["def"]+=pen*0.4
 
-    # Pitcher adjustment
-    # home pitcher faces away batters -> affects away expected runs
-    # away pitcher faces home batters -> affects home expected runs
     h_pitcher = pitchers.get(home, "")
     a_pitcher = pitchers.get(away, "")
-    h_pitch_adj = pitcher_era_adj(h_pitcher)  # negative = good pitcher = fewer runs for away
-    a_pitch_adj = pitcher_era_adj(a_pitcher)  # negative = good pitcher = fewer runs for home
+    h_pitch_adj = pitcher_era_adj(h_pitcher)
+    a_pitch_adj = pitcher_era_adj(a_pitcher)
 
     he = (hs["off"] + as_["def"]) / 2 + hb.get("form",0.0) - a_pitch_adj
     ae = (as_["off"] + hs["def"]) / 2 + ab.get("form",0.0) - h_pitch_adj
     margin = (he - ae) + HA
 
-    fmt = lambda lst: ["%s(%s)"%(p.upper(),"OUT" if s=="out" else "LTD") for p,s in lst]
+    def fmt(lst):
+        return ["%s %s(%s)"%(CN.get(t,t[:3]),p.upper(),"OUT" if s=="out" else "LTD") for p,s,t in lst]
     return margin, fmt(hm), fmt(am), h_pitcher, a_pitcher
 
 
