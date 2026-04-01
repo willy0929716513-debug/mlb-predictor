@@ -1,169 +1,151 @@
-# ============================================================
-# MLB_V104  (修正版：2026 MLB 賽季)
-# 主要修改：
-#  1. PITCHER_ERA 補入 2026 賽季先發投手
-#  2. ROSTER / OUT / LTD / SS 更新至 2026
-#  3. BASE 攻守評分依 2025 成績調整
-#  4. edge 改為用純 model_prob 計算，避免 blended 壓縮問題
-#  5. best_price 改取最佳賠率（max），consensus 仍取平均
-#  6. official 時間窗口調整（台灣時間 0~14 點視為當日正式推薦）
-#  7. 歷史記錄擴展至所有等級（edge >= EDGE_MIN）
-#  8. Kelly 加入最大下注上限保護
-#  9. fetch_probable_pitchers 增加備援解析路徑
-# 10. f-string 取代 % 格式化，提升可讀性與穩定性
-# ============================================================
-import requests, os, random, logging, json, math
+import requests, os, logging, json, math
 from datetime import datetime, timedelta
 
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
 )
-log = logging.getLogger("MLB_V104")
+log = logging.getLogger("MLB_V105")
 
 ODDS_API_KEY = os.getenv("ODDS_API_KEY", "")
 WEBHOOK      = os.getenv("DISCORD_WEBHOOK", "")
 GH_TOKEN     = os.getenv("GH_TOKEN", "")
 
-# ── 核心參數 ──────────────────────────────────────────────────
-EDGE_MIN  = 0.06    # 最低 edge 閾值
-MOD_W     = 0.25    # 模型權重（win prob blend 用）
-MKT_W     = 0.75    # 市場權重
-TOT_MOD   = 0.40    # 大小分模型權重
-TOT_MKT   = 0.60    # 大小分市場權重
-STD       = 1.6     # 得分差標準差（用於勝率轉換）
-HA        = 0.12    # 主場優勢（得分差，MLB 歷史約 0.10~0.15）
-MIN_P     = 1.30    # 最低賠率過濾
-MAX_P     = 2.80    # 最高賠率過濾
-LIMIT     = 1900    # Discord 每則訊息字元上限
-BANK      = 1000.0  # 賭注基準金額
-KELLY     = 0.15    # Kelly 係數（分數 Kelly）
-KELLY_MAX = 35.0    # 單筆最高下注上限（元）
-HIST_TTL  = 90      # 歷史記錄保留天數
+EDGE_MIN  = 0.09
+MOD_W     = 0.20
+MKT_W     = 0.80
+TOT_MOD   = 0.35
+TOT_MKT   = 0.65
+STD       = 1.6
+HA        = 0.10
+MIN_P     = 1.30
+MAX_P     = 2.55
+LIMIT     = 1900
+BANK      = 1000.0
+KELLY     = 0.15
+KELLY_MAX = 25.0
+HIST_TTL  = 90
 
-# ── 球員名單（2026 賽季更新）────────────────────────────────
 ROSTER = {
-    "New York Yankees":      ["cole","judge","goldschmidt","cabrera","volpe"],
-    "Los Angeles Dodgers":   ["ohtani","freeman","betts","sasaki","buehler"],
-    "Atlanta Braves":        ["sale","acuna","olson","riley","sorokin"],
-    "Houston Astros":        ["brown","pena","abreu","paredes","blanco"],
-    "Baltimore Orioles":     ["burnes","henderson","rutschman","alonso","hall"],
-    "Philadelphia Phillies": ["wheeler","nola","harper","schwarber","stott"],
-    "Texas Rangers":         ["eovaldi","seager","carter","garcia","taveras"],
-    "Arizona Diamondbacks":  ["kelly","gallen","marte","carroll","moreno"],
-    "Minnesota Twins":       ["buxton","lewis","keaschall","ryan","wallner"],
-    "Seattle Mariners":      ["castillo","raleigh","rodriguez","arozarena","france"],
-    "Milwaukee Brewers":     ["harrison","contreras","chourio","yelich","adames"],
-    "Chicago Cubs":          ["steele","bregman","crow","suzuki","busch"],
+    "New York Yankees":      ["fried","judge","goldschmidt","cabrera","volpe"],
+    "Los Angeles Dodgers":   ["yamamoto","ohtani","freeman","betts","sasaki"],
+    "Atlanta Braves":        ["sale","acuna","olson","riley","harris"],
+    "Houston Astros":        ["brown","pena","abreu","paredes","diaz"],
+    "Baltimore Orioles":     ["rogers","henderson","rutschman","alonso","holliday"],
+    "Philadelphia Phillies": ["sanchez","wheeler","nola","harper","schwarber"],
+    "Texas Rangers":         ["eovaldi","degrom","seager","carter","garcia"],
+    "Arizona Diamondbacks":  ["gallen","kelly","marte","carroll","moreno"],
+    "Minnesota Twins":       ["ryan","buxton","lewis","miranda","wallner"],
+    "Seattle Mariners":      ["gilbert","woo","kirby","castillo","raleigh"],
+    "Milwaukee Brewers":     ["misiorowski","contreras","chourio","yelich","adames"],
+    "Chicago Cubs":          ["boyd","steele","imanaga","bregman","suzuki"],
     "San Francisco Giants":  ["webb","devers","adames","arraez","bailey"],
-    "Boston Red Sox":        ["anthony","duran","wcontreras","mayer","casas"],
-    "New York Mets":         ["holmes","lindor","soto","bichette","vientos"],
-    "Toronto Blue Jays":     ["berrios","bieber","guerrero","santander","varsho"],
-    "Cleveland Guardians":   ["bibee","ramirez","kwan","naylor","freeman"],
-    "Tampa Bay Rays":        ["martinez","aranda","caminero","palacios","brujan"],
-    "St. Louis Cardinals":   ["leahy","wetherholt","winn","gorman","donovan"],
-    "San Diego Padres":      ["musgrove","tatis","machado","merrill","king"],
-    "Detroit Tigers":        ["verlander","skubal","torkelson","carpenter","jung"],
+    "Boston Red Sox":        ["crochet","duran","wcontreras","mayer","casas"],
+    "New York Mets":         ["peralta","holmes","lindor","soto","bichette"],
+    "Toronto Blue Jays":     ["gausman","berrios","bieber","guerrero","santander"],
+    "Cleveland Guardians":   ["bibee","williams_g","ramirez","kwan","naylor"],
+    "Tampa Bay Rays":        ["rasmussen","aranda","caminero","palacios","brujan"],
+    "St. Louis Cardinals":   ["liberatore","wetherholt","winn","gorman","donovan"],
+    "San Diego Padres":      ["pivetta","musgrove","tatis","machado","merrill"],
+    "Detroit Tigers":        ["skubal","verlander","torkelson","carpenter","jung"],
     "Kansas City Royals":    ["ragans","witt","pasquantino","perez","melendez"],
     "Pittsburgh Pirates":    ["skenes","chandler","hayes","triolo","davis"],
-    "Cincinnati Reds":       ["burns","hgreene","delacruz","suarez","candelario"],
+    "Cincinnati Reds":       ["abbott","burns","hgreene","delacruz","suarez"],
     "Colorado Rockies":      ["freeland","tovar","doyle","beck","grichuk"],
-    "Oakland Athletics":     ["kurtz","jwilson","rooker","soderstrom","langeliers"],
-    "Los Angeles Angels":    ["soriano","trout","neto","schanuel","manoah"],
-    "Miami Marlins":         ["paddack","stowers","edwards","caissie","leblanc"],
+    "Oakland Athletics":     ["severino","kurtz","jwilson","rooker","soderstrom"],
+    "Los Angeles Angels":    ["soriano","kikuchi","trout","neto","schanuel"],
+    "Miami Marlins":         ["alcantara","paddack","stowers","edwards","caissie"],
     "Washington Nationals":  ["cavalli","wood","garcia","crews","young"],
-    "Chicago White Sox":     ["martin","montgomery","teel","benintendi","anderson"],
+    "Chicago White Sox":     ["smith_s","martin","montgomery","teel","benintendi"],
 }
 
-# ── 傷兵名單（2026 賽季初，定期更新）──────────────────────
-OUT = frozenset({"santander","pjones","mccullers","cole","acuna"})
-LTD = frozenset({"trout","buxton","degrom","steele","skubal"})
+OUT = frozenset({
+    "cole","acuna","degrom","wheeler","casas","houck","teel",
+    "jobe","hader","manoah","rendon","lopez_p","holliday","westburg",
+})
 
-# ── 超級球星集合（傷病懲罰加重）────────────────────────────
+LTD = frozenset({
+    "trout","buxton","steele","skubal","riley","berrios","eflin",
+})
+
 SS = frozenset({
     "ohtani","judge","freeman","acuna","tatis","ramirez","harper",
     "guerrero","trout","cole","wheeler","skubal","sale","fried",
     "lindor","soto","betts","seager","witt","degrom","skenes",
-    "verlander","rutschman","henderson","burnes","castillo","sasaki",
+    "verlander","rutschman","henderson","crochet","castillo","sasaki",
+    "yamamoto","peralta","ragans","gilbert","bibee","sanchez","brown",
 })
 
-SS_PEN = 1.2
-ST_PEN = 0.8
-LT_PEN = 0.4
+SS_PEN      = 1.2
+ST_PEN      = 0.8
+LT_PEN_SS   = 0.8
+LT_PEN_NORM = 0.4
 
-# ── 各隊基礎攻守評分（依 2025 賽季成績調整）────────────────
 BASE = {
-    "Los Angeles Dodgers":   {"off": 5.0, "def": 3.5},
-    "New York Yankees":      {"off": 4.7, "def": 3.7},
-    "Atlanta Braves":        {"off": 4.5, "def": 3.7},
-    "Philadelphia Phillies": {"off": 4.5, "def": 3.7},
-    "New York Mets":         {"off": 4.4, "def": 3.8},
-    "Cleveland Guardians":   {"off": 4.3, "def": 3.7},
-    "Kansas City Royals":    {"off": 4.3, "def": 3.9},
-    "Detroit Tigers":        {"off": 4.2, "def": 3.8},
-    "Houston Astros":        {"off": 4.2, "def": 3.9},
-    "Baltimore Orioles":     {"off": 4.2, "def": 3.9},
-    "Seattle Mariners":      {"off": 4.1, "def": 3.7},
-    "San Francisco Giants":  {"off": 4.1, "def": 3.9},
-    "Texas Rangers":         {"off": 4.1, "def": 4.0},
-    "Arizona Diamondbacks":  {"off": 4.1, "def": 4.0},
-    "San Diego Padres":      {"off": 4.1, "def": 3.8},
-    "Milwaukee Brewers":     {"off": 4.0, "def": 3.9},
-    "Chicago Cubs":          {"off": 4.0, "def": 4.0},
-    "Boston Red Sox":        {"off": 4.0, "def": 4.1},
-    "Toronto Blue Jays":     {"off": 4.0, "def": 4.0},
-    "Tampa Bay Rays":        {"off": 3.9, "def": 3.9},
-    "Minnesota Twins":       {"off": 3.9, "def": 4.1},
-    "Pittsburgh Pirates":    {"off": 3.9, "def": 4.0},
-    "Cincinnati Reds":       {"off": 3.9, "def": 4.1},
-    "St. Louis Cardinals":   {"off": 3.8, "def": 4.2},
-    "Oakland Athletics":     {"off": 3.7, "def": 4.2},
-    "Washington Nationals":  {"off": 3.7, "def": 4.3},
-    "Los Angeles Angels":    {"off": 3.7, "def": 4.4},
-    "Colorado Rockies":      {"off": 4.0, "def": 4.8},
-    "Miami Marlins":         {"off": 3.6, "def": 4.3},
-    "Chicago White Sox":     {"off": 3.4, "def": 4.7},
+    "Los Angeles Dodgers":   {"off": 5.04, "def": 4.16},
+    "New York Yankees":      {"off": 4.73, "def": 4.22},
+    "New York Mets":         {"off": 4.74, "def": 4.25},
+    "Seattle Mariners":      {"off": 4.51, "def": 4.08},
+    "Atlanta Braves":        {"off": 4.70, "def": 4.27},
+    "Toronto Blue Jays":     {"off": 4.64, "def": 4.36},
+    "Philadelphia Phillies": {"off": 4.63, "def": 4.40},
+    "Texas Rangers":         {"off": 4.59, "def": 4.39},
+    "Boston Red Sox":        {"off": 4.49, "def": 4.30},
+    "Milwaukee Brewers":     {"off": 4.56, "def": 4.36},
+    "Detroit Tigers":        {"off": 4.42, "def": 4.25},
+    "Baltimore Orioles":     {"off": 4.71, "def": 4.60},
+    "Chicago Cubs":          {"off": 4.60, "def": 4.44},
+    "Houston Astros":        {"off": 4.63, "def": 4.55},
+    "Pittsburgh Pirates":    {"off": 4.42, "def": 4.35},
+    "Tampa Bay Rays":        {"off": 4.36, "def": 4.35},
+    "Kansas City Royals":    {"off": 4.53, "def": 4.57},
+    "Arizona Diamondbacks":  {"off": 4.55, "def": 4.57},
+    "San Francisco Giants":  {"off": 4.31, "def": 4.35},
+    "Minnesota Twins":       {"off": 4.45, "def": 4.55},
+    "Cincinnati Reds":       {"off": 4.47, "def": 4.68},
+    "Miami Marlins":         {"off": 4.30, "def": 4.52},
+    "San Diego Padres":      {"off": 4.39, "def": 4.56},
+    "Oakland Athletics":     {"off": 4.61, "def": 4.81},
+    "Cleveland Guardians":   {"off": 4.28, "def": 4.60},
+    "St. Louis Cardinals":   {"off": 4.31, "def": 4.63},
+    "Los Angeles Angels":    {"off": 4.33, "def": 4.74},
+    "Washington Nationals":  {"off": 4.29, "def": 4.87},
+    "Chicago White Sox":     {"off": 4.23, "def": 5.01},
+    "Colorado Rockies":      {"off": 4.48, "def": 5.50},
 }
-DEF_RATING = {"off": 4.0, "def": 4.2}
+DEF_RATING = {"off": 4.40, "def": 4.50}
 
-# ── 投手 ERA 字典（2026 賽季，含開幕系列先發）───────────────
-# 格式：姓氏小寫 -> 預估 ERA
+LEAGUE_AVG_ERA = 4.20
+
 PITCHER_ERA = {
-    # ── 頂級王牌 ──────────────────────────────────────────
-    "ohtani":    3.00, "sasaki":    2.90, "skubal":    2.80,
-    "skenes":    2.95, "degrom":    2.95, "sale":      3.10,
-    "wheeler":   3.00, "burnes":    3.20, "webb":      3.20,
-    "fried":     3.10, "cole":      3.85, "castillo":  3.30,
-    "musgrove":  3.50, "gallen":    3.50, "burns":     3.50,
-    "ragans":    3.40, "mcclanahan":3.30, "bieber":    3.40,
-    # ── 穩定先發 ──────────────────────────────────────────
-    "verlander": 3.80, "bibee":     3.60, "peralta":   3.60,
-    "berrios":   3.80, "gausman":   3.70, "eovaldi":   3.80,
-    "steele":    3.75, "imanaga":   3.55, "hgreene":   3.70,
-    "nola":      3.70, "flaherty":  3.85, "woodruff":  3.40,
-    "gilbert":   3.75, "woo":       3.70, "bradish":   3.65,
-    "kelly":     4.00, "soroka":    4.20, "harrison":  4.10,
-    "paddack":   4.30, "martin":    4.60, "martinez":  4.40,
-    "messick":   4.70, "holmes":    4.00, "leahy":     4.80,
-    # ── 中段先發 ──────────────────────────────────────────
-    "gray":      3.95, "rasmussen": 3.95, "mikolas":   4.20,
-    "liberatore":4.40, "cavalli":   4.50, "garrett":   4.10,
-    "peterson":  4.20, "keller":    4.00, "javier":    4.20,
-    "detmers":   4.40, "lorenzen":  4.40, "wacha":     4.30,
-    "vasquez":   4.40, "horton":    4.10, "singer":    4.20,
-    "rodriguez": 4.10, "wetherholt":4.50, "winn":      4.30,
-    "ryan":      4.00, "brown":     4.20, "hall":      4.30,
-    "blanco":    4.40, "burke":     4.70, "springs":   4.30,
-    "mcgreevy":  4.50, "boyle":     4.20, "bradley":   4.40,
-    "warren":    4.60, "lopez":     4.30, "perez":     4.50,
-    # ── 弱勢先發 ──────────────────────────────────────────
-    "freeland":  4.75, "smith":     4.85, "soriano":   4.30,
-    "kurtz":     4.40, "manoah":    4.50, "buehler":   4.20,
-    "leiter":    4.60, "crochet":   3.70, "cease":     3.80,
+    "skenes":      1.96, "skubal":      3.08, "yamamoto":    2.49,
+    "crochet":     2.59, "sanchez":     2.50, "sale":        2.58,
+    "mcclanahan":  3.10, "fried":       3.10, "rasmussen":   2.76,
+    "gilbert":     3.44, "webb":        3.20, "ragans":      3.40,
+    "castillo":    3.30, "peralta":     3.40, "pivetta":     2.87,
+    "woo":         3.50, "kirby":       3.50, "bibee":       4.24,
+    "williams_g":  3.80, "eovaldi":     3.80, "gausman":     3.59,
+    "ryan":        3.42, "brown":       2.43, "rogers":      2.50,
+    "misiorowski": 4.36, "boyd":        3.21, "liberatore":  4.21,
+    "abbott":      3.42, "cavalli":     4.25, "gallen":      4.00,
+    "verlander":   3.80, "severino":    4.54, "burns":       3.50,
+    "freeland":    4.75, "alcantara":   5.36, "smith_s":     3.81,
+    "imanaga":     3.55, "taillon":     4.40, "steele":      3.75,
+    "soriano":     3.93, "kikuchi":     4.20, "degrom":      3.50,
+    "chandler":    4.00, "holmes":      4.00, "buehler":     4.20,
+    "sasaki":      2.90, "bello":       4.10, "berrios":     3.80,
+    "bieber":      3.40, "cease":       3.80, "flaherty":    3.85,
+    "nola":        3.70, "musgrove":    3.50, "king_m":      3.90,
+    "paddack":     4.30, "wood":        4.20, "javier":      4.20,
+    "horton":      4.10, "martin":      4.60, "keller":      4.00,
+    "springs":     4.30, "winn":        4.30, "wetherholt":  4.50,
+    "mikolas":     4.20, "bradish":     3.65, "ohtani":      3.00,
+    "pfaadt":      4.10, "kelly":       4.00, "mize":        4.30,
+    "pallante":    4.60, "senga":       3.60, "williamson":  4.60,
+    "fedde":       4.60, "junk":        5.10, "marquez":     4.90,
+    "poulin":      5.30, "painter":     4.80,
 }
-LEAGUE_AVG_ERA = 4.25  # 2025 聯盟平均 ERA（微調）
 
-# ── 隊名對照表 ────────────────────────────────────────────────
 SLUG = {
     "nyy": "New York Yankees",    "lad": "Los Angeles Dodgers",
     "atl": "Atlanta Braves",      "hou": "Houston Astros",
@@ -184,30 +166,40 @@ SLUG = {
 SHORT = {v: k.upper() for k, v in SLUG.items()}
 
 CN = {
-    "New York Yankees":      "洋基",  "Los Angeles Dodgers":  "道奇",
-    "Atlanta Braves":        "勇士",  "Houston Astros":       "太空人",
-    "Baltimore Orioles":     "金鶯",  "Philadelphia Phillies":"費城人",
-    "Texas Rangers":         "遊騎兵","Arizona Diamondbacks":  "響尾蛇",
-    "Minnesota Twins":       "雙城",  "Seattle Mariners":     "水手",
-    "Milwaukee Brewers":     "釀酒人","Chicago Cubs":         "小熊",
-    "San Francisco Giants":  "巨人",  "Boston Red Sox":       "紅襪",
-    "New York Mets":         "大都會","Toronto Blue Jays":    "藍鳥",
-    "Cleveland Guardians":   "守護者","Tampa Bay Rays":       "光芒",
-    "St. Louis Cardinals":   "紅雀",  "San Diego Padres":     "教士",
-    "Detroit Tigers":        "老虎",  "Kansas City Royals":   "皇家",
-    "Pittsburgh Pirates":    "海盜",  "Cincinnati Reds":      "紅人",
-    "Colorado Rockies":      "落磯",  "Oakland Athletics":    "運動家",
-    "Los Angeles Angels":    "天使",  "Miami Marlins":        "馬林魚",
-    "Washington Nationals":  "國民",  "Chicago White Sox":    "白襪",
+    "New York Yankees":      "\u6d0b\u57fa",
+    "Los Angeles Dodgers":   "\u9053\u5947",
+    "Atlanta Braves":        "\u52c7\u58eb",
+    "Houston Astros":        "\u592a\u7a7a\u4eba",
+    "Baltimore Orioles":     "\u91d1\u9db6",
+    "Philadelphia Phillies": "\u8cbb\u57ce\u4eba",
+    "Texas Rangers":         "\u904a\u9a0e\u5175",
+    "Arizona Diamondbacks":  "\u97ff\u5c3e\u86c7",
+    "Minnesota Twins":       "\u96d9\u57ce",
+    "Seattle Mariners":      "\u6c34\u624b",
+    "Milwaukee Brewers":     "\u91c0\u9152\u4eba",
+    "Chicago Cubs":          "\u5c0f\u718a",
+    "San Francisco Giants":  "\u5de8\u4eba",
+    "Boston Red Sox":        "\u7d05\u896a",
+    "New York Mets":         "\u5927\u90fd\u6703",
+    "Toronto Blue Jays":     "\u85cd\u9ce5",
+    "Cleveland Guardians":   "\u5b88\u8b77\u8005",
+    "Tampa Bay Rays":        "\u5149\u82b3",
+    "St. Louis Cardinals":   "\u7d05\u96c0",
+    "San Diego Padres":      "\u6559\u58eb",
+    "Detroit Tigers":        "\u8001\u864e",
+    "Kansas City Royals":    "\u7687\u5bb6",
+    "Pittsburgh Pirates":    "\u6d77\u76dc",
+    "Cincinnati Reds":       "\u7d05\u4eba",
+    "Colorado Rockies":      "\u6d1b\u78f4",
+    "Oakland Athletics":     "\u904b\u52d5\u5bb6",
+    "Los Angeles Angels":    "\u5929\u4f7f",
+    "Miami Marlins":         "\u99ac\u6797\u9b5a",
+    "Washington Nationals":  "\u570b\u6c11",
+    "Chicago White Sox":     "\u767d\u896a",
 }
 
 
-# ═══════════════════════════════════════════════════════════════
-# 工具函數
-# ═══════════════════════════════════════════════════════════════
-
-def norm(name: str) -> str:
-    """將各種隊名寫法標準化為完整英文隊名。"""
+def norm(name):
     if not name:
         return name
     n = name.strip()
@@ -228,7 +220,6 @@ def norm(name: str) -> str:
 
 
 def safe_get(url, headers=None, params=None, retries=3, timeout=15):
-    """帶重試的 HTTP GET，回傳 JSON 或 None。"""
     for i in range(1, retries + 1):
         try:
             r = requests.get(url, headers=headers, params=params, timeout=timeout)
@@ -244,15 +235,28 @@ def safe_get(url, headers=None, params=None, retries=3, timeout=15):
     return None
 
 
-# ═══════════════════════════════════════════════════════════════
-# 資料獲取：先發投手
-# ═══════════════════════════════════════════════════════════════
+def _extract_pitcher_last(team_obj):
+    for prob in team_obj.get("probables", []):
+        athlete = prob.get("athlete", prob)
+        name = athlete.get("displayName") or athlete.get("fullName", "")
+        if name:
+            return name.strip().split()[-1].lower()
+    for ath in team_obj.get("athletes", []):
+        inner = ath.get("athlete", ath)
+        pos   = (inner.get("position", {}) or {}).get("abbreviation", "")
+        role  = ath.get("role", "")
+        if pos.upper() in ("SP", "P") or "start" in role.lower():
+            name = inner.get("displayName") or inner.get("fullName", "")
+            if name:
+                return name.strip().split()[-1].lower()
+    for s in team_obj.get("starters", []):
+        name = s.get("displayName") or s.get("fullName", "")
+        if name:
+            return name.strip().split()[-1].lower()
+    return ""
 
-def fetch_probable_pitchers() -> dict:
-    """
-    從 ESPN scoreboard 抓取當日先發投手。
-    增加多層備援路徑解析，避免 API 結構變動導致失敗。
-    """
+
+def fetch_probable_pitchers():
     today = datetime.utcnow().strftime("%Y%m%d")
     urls = [
         "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard",
@@ -266,7 +270,6 @@ def fetch_probable_pitchers() -> dict:
     if not data:
         log.warning("ESPN scoreboard failed")
         return {}
-
     team_pitcher = {}
     try:
         for event in data.get("events", []):
@@ -275,56 +278,27 @@ def fetch_probable_pitchers() -> dict:
                     team_name = norm(team.get("team", {}).get("displayName", ""))
                     if not team_name:
                         continue
-                    pitcher_last = _extract_pitcher_last(team)
-                    if pitcher_last:
-                        team_pitcher[team_name] = pitcher_last
-                        log.info("SP: %s -> %s", team_name, pitcher_last)
+                    last = _extract_pitcher_last(team)
+                    if last:
+                        team_pitcher[team_name] = last
+                        log.info("SP: %s -> %s", team_name, last)
     except Exception as e:
         log.warning("Pitcher parse error: %s", e)
-
     log.info("Probable pitchers: %d teams", len(team_pitcher))
     return team_pitcher
 
 
-def _extract_pitcher_last(team_obj: dict) -> str:
-    """
-    從 competitor 物件中嘗試多條路徑抽取先發投手姓氏。
-    路徑1: team.probables[0].athlete.displayName
-    路徑2: team.athletes（role=starter 或 position=SP）
-    路徑3: team.starters[0].fullName
-    """
-    # 路徑 1：probables
-    for prob in team_obj.get("probables", []):
-        athlete = prob.get("athlete", prob)
-        name = athlete.get("displayName") or athlete.get("fullName", "")
-        if name:
-            return name.strip().split()[-1].lower()
-
-    # 路徑 2：athletes 裡找 starter
-    for ath in team_obj.get("athletes", []):
-        inner = ath.get("athlete", ath)
-        pos = (inner.get("position", {}) or {}).get("abbreviation", "")
-        role = ath.get("role", "")
-        if pos.upper() in ("SP", "P") or "start" in role.lower():
-            name = inner.get("displayName") or inner.get("fullName", "")
-            if name:
-                return name.strip().split()[-1].lower()
-
-    # 路徑 3：starters 陣列
-    for s in team_obj.get("starters", []):
-        name = s.get("displayName") or s.get("fullName", "")
-        if name:
-            return name.strip().split()[-1].lower()
-
-    return ""
+def pitcher_era_adj(pitcher_last):
+    if not pitcher_last:
+        return 0.0
+    era = PITCHER_ERA.get(pitcher_last.lower())
+    if era is None:
+        era = LEAGUE_AVG_ERA + 0.50
+        log.debug("Unknown pitcher %s, using conservative ERA %.2f", pitcher_last, era)
+    return round((era - LEAGUE_AVG_ERA) / 9 * 6, 3)
 
 
-# ═══════════════════════════════════════════════════════════════
-# 資料獲取：ESPN 積分榜 -> 攻守評分
-# ═══════════════════════════════════════════════════════════════
-
-def fetch_stats() -> dict:
-    """從 ESPN standings 計算各隊攻守評分，失敗時回傳空字典（使用 BASE）。"""
+def fetch_stats():
     urls = [
         "https://site.api.espn.com/apis/v2/sports/baseball/mlb/standings",
         "https://site.web.api.espn.com/apis/v2/sports/baseball/mlb/standings",
@@ -364,37 +338,32 @@ def fetch_stats() -> dict:
                 w = st.get("wins",   st.get("W", st.get("w", 0)))
                 l = st.get("losses", st.get("L", st.get("l", 0)))
                 t = w + l
-                if t == 0:
+                base = BASE.get(full, DEF_RATING)
+                if t < 5:
+                    ratings[full] = {"off": base["off"], "def": base["def"], "form": 0.0}
                     continue
-                wp  = w / t
-                rs  = st.get("pointsFor",     st.get("RS", st.get("runsScored",  0)))
-                ra  = st.get("pointsAgainst", st.get("RA", st.get("runsAllowed", 0)))
+                rs = st.get("pointsFor",     st.get("RS", st.get("runsScored",  0)))
+                ra = st.get("pointsAgainst", st.get("RA", st.get("runsAllowed", 0)))
+                wp = w / t
                 if rs > 10 and ra > 10:
-                    off = round(min(rs / t, 5.5), 2)
+                    off = round(min(rs / t, 5.8), 2)
                     df  = round(max(ra / t, 3.0), 2)
                 else:
-                    # 賽季初場次不足，用勝率估算
-                    base = BASE.get(full, DEF_RATING)
-                    off  = round(min(base["off"] + (wp - 0.5) * 0.5, 5.5), 2)
-                    df   = round(max(base["def"] - (wp - 0.5) * 0.5, 3.0), 2)
+                    off = round(min(base["off"] + (wp - 0.5) * 0.5, 5.8), 2)
+                    df  = round(max(base["def"] - (wp - 0.5) * 0.5, 3.0), 2)
+                alpha = min(t / 30, 0.5)
                 ratings[full] = {
-                    "off":  off,
-                    "def":  df,
-                    "form": round((wp - 0.5) * 0.3, 3),
+                    "off":  round(off * alpha + base["off"] * (1 - alpha), 2),
+                    "def":  round(df  * alpha + base["def"] * (1 - alpha), 2),
+                    "form": round((wp - 0.5) * 0.2, 3),
                 }
     except Exception as e:
         log.warning("ESPN standings parse error: %s", e)
-
     log.info("ESPN ratings: %d teams", len(ratings))
     return ratings
 
 
-# ═══════════════════════════════════════════════════════════════
-# 資料獲取：傷兵報告
-# ═══════════════════════════════════════════════════════════════
-
-def get_injuries() -> dict:
-    """從 RotoWire 抓取傷兵資訊，並合併靜態 OUT 集合。"""
+def get_injuries():
     inj = {}
     try:
         r = requests.get(
@@ -404,8 +373,8 @@ def get_injuries() -> dict:
         )
         r.raise_for_status()
         text = r.text.lower()
-        out_kw  = ["ruled out", "will not play", "is out", "60-day il", "15-day il", "10-day il"]
-        skip_kw = ["questionable", "probable", "available", "day-to-day"]
+        out_kw  = ["ruled out","will not play","is out","60-day il","15-day il","10-day il"]
+        skip_kw = ["questionable","probable","available"]
         for team, players in ROSTER.items():
             for p in players:
                 if p not in text:
@@ -418,29 +387,22 @@ def get_injuries() -> dict:
                     inj.setdefault(team, []).append(p)
     except Exception as e:
         log.warning("RotoWire failed: %s", e)
-
-    # 靜態 OUT 集合補充
     for team, players in ROSTER.items():
         existing = set(inj.get(team, []))
         for p in players:
             if p in OUT and p not in existing:
                 inj.setdefault(team, []).append(p)
                 existing.add(p)
-
-    log.info("Injuries: %d players total", sum(len(v) for v in inj.values()))
+    log.info("Injuries: %d total", sum(len(v) for v in inj.values()))
     return inj
 
 
-# ═══════════════════════════════════════════════════════════════
-# 歷史記錄管理
-# ═══════════════════════════════════════════════════════════════
-
-def _purge_old(hist: dict) -> dict:
+def _purge_old(hist):
     cutoff = (datetime.utcnow() - timedelta(days=HIST_TTL)).strftime("%Y-%m-%d")
     return {k: v for k, v in hist.items() if v.get("date", "9999") >= cutoff}
 
 
-def load_hist() -> dict:
+def load_hist():
     if not GH_TOKEN:
         return {}
     h = {"Authorization": "token " + GH_TOKEN}
@@ -456,34 +418,27 @@ def load_hist() -> dict:
     return {}
 
 
-def save_hist(hist: dict, retries: int = 3):
+def save_hist(hist, retries=3):
     if not GH_TOKEN:
         return
     hist = _purge_old(hist)
     h    = {"Authorization": "token " + GH_TOKEN, "Content-Type": "application/json"}
     body = json.dumps(hist, ensure_ascii=False, indent=2)
     gists = safe_get("https://api.github.com/gists", headers=h)
-    gid  = next(
+    gid   = next(
         (g["id"] for g in (gists or []) if g.get("description") == "mlb_bot_history"),
         None,
     )
-    pl = {
-        "description": "mlb_bot_history",
-        "public": False,
-        "files": {"history.json": {"content": body}},
-    }
+    pl = {"description": "mlb_bot_history", "public": False,
+          "files": {"history.json": {"content": body}}}
     for attempt in range(1, retries + 1):
         try:
             if gid:
-                requests.patch(
-                    f"https://api.github.com/gists/{gid}",
-                    headers=h, json=pl, timeout=10,
-                ).raise_for_status()
+                requests.patch("https://api.github.com/gists/" + gid,
+                               headers=h, json=pl, timeout=10).raise_for_status()
             else:
-                requests.post(
-                    "https://api.github.com/gists",
-                    headers=h, json=pl, timeout=10,
-                ).raise_for_status()
+                requests.post("https://api.github.com/gists",
+                              headers=h, json=pl, timeout=10).raise_for_status()
             log.info("History saved (attempt %d)", attempt)
             return
         except Exception as e:
@@ -491,44 +446,46 @@ def save_hist(hist: dict, retries: int = 3):
     log.error("History save all failed")
 
 
-def calc_perf(hist: dict) -> tuple:
+def calc_perf(hist):
     total = win = 0
     profit = 0.0
     for r in hist.values():
         if r.get("result") not in ("win", "loss"):
             continue
-        total  += 1
-        stake   = r.get("kelly_stake", 10.0)
+        total += 1
+        stake = r.get("kelly_stake", 10.0)
         if r["result"] == "win":
             win    += 1
             profit += stake * (r.get("price", 1.9) - 1)
         else:
             profit -= stake
-    wr = win / total * 100 if total else 0.0
-    return total, win, wr, profit
+    return total, win, (win / total * 100 if total else 0.0), profit
 
 
-# ═══════════════════════════════════════════════════════════════
-# 核心計算
-# ═══════════════════════════════════════════════════════════════
-
-def kelly(prob: float, price: float) -> float:
-    """分數 Kelly 公式，加上最大下注上限保護。"""
+def kelly(prob, price):
     b = price - 1
     if b <= 0:
         return 0.0
     k = max(0.0, (b * prob - (1 - prob)) / b) * KELLY
-    stake = round(BANK * k, 1)
-    return min(stake, KELLY_MAX)
+    return min(round(BANK * k, 1), KELLY_MAX)
 
 
-def win_prob_from_margin(margin: float) -> float:
-    """將得分差 margin 轉換為勝率（正態 CDF）。"""
+def win_prob_from_margin(margin):
     return round(0.5 + 0.5 * math.erf(margin / (STD * math.sqrt(2))), 4)
 
 
-def best_price(books: list, team: str) -> float | None:
-    """取所有博彩公司對指定隊伍最高的賠率（對下注者最有利）。"""
+def total_confidence(pure_model, market):
+    if market is None:
+        return 1.0
+    gap = abs(pure_model - market)
+    if gap <= 1.5:   return 1.00
+    elif gap <= 2.5: return 0.85
+    elif gap <= 3.5: return 0.65
+    elif gap <= 5.0: return 0.45
+    else:            return 0.30
+
+
+def best_price(books, team):
     prices = []
     for b in books:
         for m in b.get("markets", []):
@@ -542,8 +499,7 @@ def best_price(books: list, team: str) -> float | None:
     return max(prices, key=lambda x: x[0])
 
 
-def consensus_ml(books: list, team: str) -> float | None:
-    """取所有博彩公司對指定隊伍賠率的平均值（共識賠率）。"""
+def consensus_ml(books, team):
     prices = []
     for b in books:
         for m in b.get("markets", []):
@@ -555,8 +511,7 @@ def consensus_ml(books: list, team: str) -> float | None:
     return round(sum(prices) / len(prices), 3) if prices else None
 
 
-def consensus_total(books: list) -> float | None:
-    """取所有博彩公司大小分盤口的平均值。"""
+def consensus_total(books):
     pts = []
     for b in books:
         for m in b.get("markets", []):
@@ -568,24 +523,8 @@ def consensus_total(books: list) -> float | None:
     return sum(pts) / len(pts) if pts else None
 
 
-def pitcher_era_adj(pitcher_last: str) -> float:
-    """
-    計算投手 ERA 對得分的調整量。
-    ERA 高於聯盟平均 → 對手得分增加（正值）
-    ERA 低於聯盟平均 → 對手得分減少（負值）
-    """
-    if not pitcher_last:
-        return 0.0
-    era = PITCHER_ERA.get(pitcher_last.lower())
-    if era is None:
-        log.debug("Unknown pitcher ERA: %s (using 0 adj)", pitcher_last)
-        return 0.0
-    return round((era - LEAGUE_AVG_ERA) / 9 * 6, 3)
-
-
-def _get_missing(team: str, inj: dict) -> list:
-    """回傳球隊中傷缺球員清單，含狀態標記。"""
-    il     = {p.lower() for p in inj.get(team, [])}
+def _get_missing(team, inj):
+    il = {p.lower() for p in inj.get(team, [])}
     result = []
     for p in ROSTER.get(team, []):
         if p in OUT or p in il:
@@ -595,82 +534,59 @@ def _get_missing(team: str, inj: dict) -> list:
     return result
 
 
-def predict_margin(
-    home: str, away: str,
-    inj: dict, ratings: dict, pitchers: dict,
-) -> tuple:
-    """
-    預測主客隊得分差（主隊視角，正數=主隊領先）。
-    回傳: (margin, home_missing_fmt, away_missing_fmt, home_sp, away_sp)
-    """
-    hb  = ratings.get(home, BASE.get(home, DEF_RATING))
-    ab  = ratings.get(away, BASE.get(away, DEF_RATING))
-    hs  = {"off": hb["off"], "def": hb["def"]}
-    as_ = {"off": ab["off"], "def": ab["def"]}
+def _apply_penalty(rating, missing):
+    r = {"off": rating["off"], "def": rating["def"]}
+    for p, s, t in missing:
+        if s == "out":
+            pen = SS_PEN if p in SS else ST_PEN
+        else:
+            pen = LT_PEN_SS if p in SS else LT_PEN_NORM
+        r["off"] -= pen * 0.6
+        r["def"] += pen * 0.4
+    return r
 
-    hm  = _get_missing(home, inj)
-    am  = _get_missing(away, inj)
 
-    for p, s, t in hm:
-        pen = (SS_PEN if p in SS else ST_PEN) if s == "out" else LT_PEN
-        hs["off"] -= pen * 0.6
-        hs["def"] += pen * 0.4
-
-    for p, s, t in am:
-        pen = (SS_PEN if p in SS else ST_PEN) if s == "out" else LT_PEN
-        as_["off"] -= pen * 0.6
-        as_["def"] += pen * 0.4
-
+def predict_margin(home, away, inj, ratings, pitchers):
+    hb = ratings.get(home, BASE.get(home, DEF_RATING))
+    ab = ratings.get(away, BASE.get(away, DEF_RATING))
+    hm = _get_missing(home, inj)
+    am = _get_missing(away, inj)
+    hs  = _apply_penalty(hb, hm)
+    as_ = _apply_penalty(ab, am)
     h_sp        = pitchers.get(home, "")
     a_sp        = pitchers.get(away, "")
-    h_pitch_adj = pitcher_era_adj(h_sp)   # 主隊投手 ERA 調整（影響客隊得分）
-    a_pitch_adj = pitcher_era_adj(a_sp)   # 客隊投手 ERA 調整（影響主隊得分）
-
-    # 預期得分：攻撃力 + 對方守備力的平均，加上近期狀態修正，減去對方投手影響
+    h_pitch_adj = pitcher_era_adj(h_sp)
+    a_pitch_adj = pitcher_era_adj(a_sp)
     h_exp  = (hs["off"] + as_["def"]) / 2 + hb.get("form", 0.0) - a_pitch_adj
     a_exp  = (as_["off"] + hs["def"]) / 2 + ab.get("form", 0.0) - h_pitch_adj
     margin = (h_exp - a_exp) + HA
 
     def fmt(lst):
         return [
-            f"{CN.get(t, t[:3])} {p.upper()}({'OUT' if s == 'out' else 'LTD'})"
+            "%s %s(%s)" % (CN.get(t, t[:3]), p.upper(), "OUT" if s == "out" else "LTD")
             for p, s, t in lst
         ]
-
     return margin, fmt(hm), fmt(am), h_sp, a_sp
 
 
-def predict_total(
-    home: str, away: str,
-    ratings: dict, pitchers: dict,
-    market_total: float | None = None,
-) -> float:
-    """預測大小分，混合模型值與市場值。"""
+def predict_total(home, away, ratings, pitchers, market_total=None):
     h     = ratings.get(home, BASE.get(home, DEF_RATING))
     a     = ratings.get(away, BASE.get(away, DEF_RATING))
     h_adj = pitcher_era_adj(pitchers.get(home, ""))
     a_adj = pitcher_era_adj(pitchers.get(away, ""))
     h_exp = h["off"] - a_adj
     a_exp = a["off"] - h_adj
-    model_total = round(h_exp + a_exp, 1)
+    pure  = round(h_exp + a_exp, 1)
     if market_total:
-        return round(model_total * TOT_MOD + market_total * TOT_MKT, 1)
-    return model_total
+        return round(pure * TOT_MOD + market_total * TOT_MKT, 1), pure
+    return pure, pure
 
 
-# ═══════════════════════════════════════════════════════════════
-# 賠率獲取
-# ═══════════════════════════════════════════════════════════════
-
-def fetch_odds() -> list:
+def fetch_odds():
     data = safe_get(
         "https://api.the-odds-api.com/v4/sports/baseball_mlb/odds/",
-        params={
-            "apiKey":     ODDS_API_KEY,
-            "regions":    "us",
-            "markets":    "h2h,totals",
-            "oddsFormat": "decimal",
-        },
+        params={"apiKey": ODDS_API_KEY, "regions": "us",
+                "markets": "h2h,totals", "oddsFormat": "decimal"},
     )
     if not data:
         log.error("Odds API failed")
@@ -679,31 +595,25 @@ def fetch_odds() -> list:
     return data
 
 
-# ═══════════════════════════════════════════════════════════════
-# Discord 發送
-# ═══════════════════════════════════════════════════════════════
-
-def send(content: str):
-    """將長訊息切分後依序發送至 Discord Webhook。"""
-    lines  = content.split("\n")
+def send(content):
+    lines = content.split("\n")
     chunks = []
-    buf    = []
-    size   = 0
+    buf = []
+    size = 0
     for line in lines:
         addition = len(line) + 1
         if size + addition > LIMIT and buf:
             chunks.append("\n".join(buf))
-            buf  = [line]
+            buf = [line]
             size = addition
         else:
             buf.append(line)
             size += addition
     if buf:
         chunks.append("\n".join(buf))
-
     total = len(chunks)
     for i, part in enumerate(chunks, 1):
-        label = f"({i}/{total})\n{part}" if total > 1 else part
+        label = "(%d/%d)\n%s" % (i, total, part) if total > 1 else part
         try:
             r = requests.post(WEBHOOK, json={"content": label}, timeout=10)
             r.raise_for_status()
@@ -711,38 +621,29 @@ def send(content: str):
             log.error("Discord chunk %d failed: %s", i, e)
 
 
-# ═══════════════════════════════════════════════════════════════
-# 主程式
-# ═══════════════════════════════════════════════════════════════
-
 def run():
     if not all([ODDS_API_KEY, WEBHOOK]):
-        log.error("Missing ODDS_API_KEY or DISCORD_WEBHOOK")
+        log.error("Missing env vars")
         return
 
     now_utc  = datetime.utcnow()
     now_tw   = now_utc + timedelta(hours=8)
     today    = now_tw.strftime("%Y-%m-%d")
-
-    # 台灣時間 0~14 點視為當日正式推薦（涵蓋早盤到午間）
-    official = (0 <= now_tw.hour < 14)
+    official = (0 <= now_tw.hour < 7)
     log.info("Official: %s (TW %02d:%02d)", official, now_tw.hour, now_tw.minute)
 
     ratings  = fetch_stats()
-    src      = "ESPN" if ratings else "BASE預設值"
+    src      = "ESPN" if ratings else "BASE"
     inj      = get_injuries()
     pitchers = fetch_probable_pitchers()
     games    = fetch_odds()
     hist     = load_hist()
-
     if not games:
-        log.error("No games data, aborting")
         return
 
     picks = {}
 
     for g in games:
-        # ── 時間解析 ─────────────────────────────────────────
         try:
             cut = datetime.strptime(g["commence_time"], "%Y-%m-%dT%H:%M:%SZ")
             ctw = cut + timedelta(hours=8)
@@ -756,98 +657,83 @@ def run():
         away  = norm(g.get("away_team", ""))
         if not home or not away:
             continue
-        gid   = f"{away}@{home}_{gdate}"
+        gid   = "%s@%s_%s" % (away, home, gdate)
         books = g.get("bookmakers", [])
         picks.setdefault(gdate, {})
 
-        # ── 模型計算 ─────────────────────────────────────────
         margin, hm, am, h_sp, a_sp = predict_margin(home, away, inj, ratings, pitchers)
-        ct  = consensus_total(books)
-        mt  = predict_total(home, away, ratings, pitchers, ct)
+        ct             = consensus_total(books)
+        blended_t, pure_t = predict_total(home, away, ratings, pitchers, ct)
+        conf           = total_confidence(pure_t, ct)
 
-        # 大小分傾向
-        ou  = ""
+        ou = ""
         if ct:
-            pure = predict_total(home, away, ratings, pitchers)
-            diff = pure - ct
-            if   diff >  1.5:
-                ou = f"大分偏向 OVER  (純模型{pure:.1f} / 市場{ct:.1f})"
-            elif diff < -1.5:
-                ou = f"小分偏向 UNDER (純模型{pure:.1f} / 市場{ct:.1f})"
-            else:
-                ou = f"大小分中性     (純模型{pure:.1f} / 市場{ct:.1f})"
+            diff = pure_t - ct
+            if   diff >  1.5: ou = "\u5927\u5206\u504f\u5411 OVER  (\u7d14\u6a21\u578b%.1f / \u5e02\u5834%.1f)" % (pure_t, ct)
+            elif diff < -1.5: ou = "\u5c0f\u5206\u504f\u5411 UNDER (\u7d14\u6a21\u578b%.1f / \u5e02\u5834%.1f)" % (pure_t, ct)
+            else:             ou = "\u5927\u5c0f\u5206\u4e2d\u6027     (\u7d14\u6a21\u578b%.1f / \u5e02\u5834%.1f)" % (pure_t, ct)
 
-        # 先發投手展示字串
-        h_era = PITCHER_ERA.get(h_sp) if h_sp else None
-        a_era = PITCHER_ERA.get(a_sp) if a_sp else None
-        h_sp_str = (f"{h_sp.upper()}(ERA{h_era:.2f})" if h_sp and h_era
+        h_era    = PITCHER_ERA.get(h_sp) if h_sp else None
+        a_era    = PITCHER_ERA.get(a_sp) if a_sp else None
+        h_sp_str = ("%s(ERA%.2f)" % (h_sp.upper(), h_era) if h_sp and h_era
                     else (h_sp.upper() if h_sp else "TBD"))
-        a_sp_str = (f"{a_sp.upper()}(ERA{a_era:.2f})" if a_sp and a_era
+        a_sp_str = ("%s(ERA%.2f)" % (a_sp.upper(), a_era) if a_sp and a_era
                     else (a_sp.upper() if a_sp else "TBD"))
 
-        # ── 遍歷博彩公司，尋找有價值的賭注 ─────────────────
-        # 先計算兩隊的最佳賠率（最高賠率對應最優 book）
-        h_best_price, h_best_book = best_price(books, home)
-        a_best_price, a_best_book = best_price(books, away)
+        con_h = consensus_ml(books, home)
+        con_a = consensus_ml(books, away)
 
-        for (team, bp, bbook) in [
-            (home, h_best_price, h_best_book),
-            (away, a_best_price, a_best_book),
-        ]:
+        for team, is_home in [(home, True), (away, False)]:
+            bp, bbook = best_price(books, team)
             if not bp or not (MIN_P < bp <= MAX_P):
                 continue
 
-            is_home    = (team == home)
             raw_margin = margin if is_home else -margin
-
-            # 純模型勝率
             model_prob = win_prob_from_margin(raw_margin)
-
-            # 計算無水分市場機率（no-vig），用共識賠率計算
-            con_h = consensus_ml(books, home)
-            con_a = consensus_ml(books, away)
-            if con_h and con_a:
-                inv_sum     = 1 / con_h + 1 / con_a
-                no_vig_prob = round((1 / (con_h if is_home else con_a)) / inv_sum, 4)
-            else:
-                no_vig_prob = 1 / bp
-
-            # ★ 關鍵修正：edge 使用純 model_prob 與市場機率的差值
-            #    避免 blended prob 因含市場成分而低估 edge
             raw_mkt_prob = 1 / bp
-            edge         = model_prob - raw_mkt_prob
+
+            # no-vig market prob
+            con_team  = con_h if is_home else con_a
+            con_other = con_a if is_home else con_h
+            if con_team and con_other:
+                inv_sum     = 1 / con_team + 1 / con_other
+                no_vig_prob = round((1 / con_team) / inv_sum, 4)
+            else:
+                no_vig_prob = raw_mkt_prob
+
+            # edge = model vs raw market (true edge including vig)
+            edge = (model_prob - raw_mkt_prob) * conf
             if edge < EDGE_MIN:
                 continue
 
-            # 下注用機率：混合模型與市場無水分機率
+            # bet prob = blend for kelly sizing only
             bet_prob = min(max(model_prob * MOD_W + no_vig_prob * MKT_W, 0.01), 0.99)
+            stake    = kelly(bet_prob, bp)
 
-            con_price = con_h if is_home else con_a
-            miss      = (hm if is_home else am) + (am if is_home else hm)
-            stake     = kelly(bet_prob, bp)
-
-            # 等級判定
-            if   edge > 0.10: tier = "💎 頂級"
-            elif edge > 0.07: tier = "🔥 強力"
-            else:             tier = "⭐ 穩定"
+            if   edge > 0.10: tier = "\U0001f48e \u9802\u7d1a"
+            elif edge > 0.07: tier = "\U0001f525 \u5f37\u529b"
+            else:             tier = "\u2b50 \u7a69\u5b9a"
 
             acn   = CN.get(away, SHORT.get(away, away))
             hcn   = CN.get(home, SHORT.get(home, home))
             bcn   = CN.get(team, SHORT.get(team, team))
-            ms    = "傷兵: " + ", ".join(miss) if miss else "陣容正常"
-            ou_ln = f"\n> {ou}" if ou else ""
+            ms    = "\u50b7\u5175: " + ", ".join(
+                (hm if is_home else am) + (am if is_home else hm)
+            ) if (hm or am) else "\u9663\u5bb9\u6b63\u5e38"
+            ou_ln = ("\n> %s" % ou) if ou else ""
 
             msg = "\n".join([
-                "—" * 15,
-                f"**{tier}  {acn} @ {hcn}**",
-                f"🕐 {ctw.strftime('%m/%d %H:%M')}",
-                f"⚾ 先發: {a_sp_str} — {h_sp_str}",
-                f"💰 今日推薦: `{bcn} 獨贏` @ **{bp:.2f}** ({bbook})",
-                f"> 共識賠率: {con_price:.2f} | {ms}",
-                f"> 勝率: **{model_prob*100:.1f}%** | Edge: **{edge*100:+.1f}%** | Kelly: ${stake:.1f}{ou_ln}",
+                "\u2014" * 15,
+                "**%s  %s @ %s**" % (tier, acn, hcn),
+                "\U0001f550 %s" % ctw.strftime("%m/%d %H:%M"),
+                "\u26be \u5148\u767c: %s \u2014 %s" % (a_sp_str, h_sp_str),
+                "\U0001f4b0 \u4eca\u65e5\u63a8\u85a6: `%s \u72ec\u8d0f` @ **%.2f** (%s)" % (bcn, bp, bbook),
+                "> \u5171\u8b58\u8ce0\u7387: %.2f | %s" % (con_team or bp, ms),
+                "> \u52dd\u7387: **%.1f%%** | Edge: **%+.1f%%** | Kelly: $%.1f%s" % (
+                    model_prob * 100, edge * 100, stake, ou_ln),
             ]) + "\n"
 
-            key = f"{gid}_{team}"
+            key = "%s_%s" % (gid, team)
             ex  = picks[gdate].get(key)
             if ex is None or edge > ex["edge"]:
                 picks[gdate][key] = {
@@ -855,53 +741,51 @@ def run():
                     "kelly_stake": stake, "msg": msg,
                 }
 
-            # ★ 修正：所有等級（edge >= EDGE_MIN）都寫入歷史，不限頂級
             if official and gdate == today:
                 eh = hist.get(key)
                 if eh is None or edge > eh.get("edge", 0):
                     hist[key] = {
                         "date":        gdate,
                         "tier":        tier,
-                        "bet":         f"{bcn} 獨贏",
-                        "sp":          f"{a_sp_str} vs {h_sp_str}",
+                        "bet":         "%s \u72ec\u8d0f" % bcn,
+                        "sp":          "%s vs %s" % (a_sp_str, h_sp_str),
                         "book":        bbook,
                         "price":       bp,
                         "model_prob":  round(model_prob, 4),
-                        "bet_prob":    round(bet_prob, 4),
                         "edge":        round(edge, 4),
                         "kelly_stake": stake,
                         "result":      eh.get("result", "pending") if eh else "pending",
                     }
 
-    # ── 績效統計 ──────────────────────────────────────────────
     tr, w, wr, pnl = calc_perf(hist)
     tp = sum(len(v) for v in picks.values())
-    ae = (sum(p["edge"] for d in picks.values() for p in d.values()) / tp
-          if tp else 0)
+    ae = sum(p["edge"] for d in picks.values() for p in d.values()) / tp if tp else 0
 
-    # ── 組裝輸出訊息 ──────────────────────────────────────────
     lines = [
-        "⚾ **MLB V104 分析報告**",
-        f"🕐 {now_tw.strftime('%m/%d %H:%M')} | 資料: {src} | 先發: {'已取得' if pitchers else '未取得'}",
-        "📌 正式記錄版本" if official else "🔧 測試版本（不寫入回測）",
+        "\u26be **MLB V105 \u5206\u6790\u5831\u544a**",
+        "\U0001f550 %s | \u8cc7\u6599: %s | \u5148\u767c: %s" % (
+            now_tw.strftime("%m/%d %H:%M"), src,
+            "\u5df2\u53d6\u5f97" if pitchers else "\u672a\u53d6\u5f97"),
+        "\U0001f4cc \u6b63\u5f0f\u8a18\u9304\u7248\u672c" if official else "\U0001f527 \u6e2c\u8a66\u7248\u672c\uff08\u4e0d\u5beb\u5165\u56de\u6e2c\uff09",
         "",
     ]
 
     if not picks:
-        lines.append("今日無符合條件之推薦。")
+        lines.append("\u4eca\u65e5\u7121\u7b26\u5408\u689d\u4ef6\u4e4b\u63a8\u85a6\u3002")
     else:
         for date in sorted(picks):
-            label = "📅 今日賭事" if date == today else f"⏭ 預告 {date}"
+            label = "\U0001f4c5 \u4eca\u65e5\u8cfb\u4e8b" if date == today else "\u23ed \u9810\u544a %s" % date
             cnt   = len(picks[date])
-            lines.append(f"**{label}**（{cnt} 場）")
+            lines.append("**%s**\uff08%d \u5834\uff09" % (label, cnt))
             for p in sorted(picks[date].values(), key=lambda x: x["edge"], reverse=True):
                 lines.append(p["msg"])
 
     lines += [
-        "═" * 20,
-        "📊 **歷史績效**（所有等級）",
-        f"推薦: {len(hist)} 場 | 已結算: {tr} 場 | 勝率: **{wr:.1f}%** | 損益: **{pnl:+.1f} 元**",
-        f"本日場次: {tp} | 平均 Edge: {ae*100:.1f}%",
+        "\u2550" * 20,
+        "\U0001f4ca **\u6b77\u53f2\u7e3e\u6548**",
+        "\u63a8\u85a6: %d \u5834 | \u5df2\u7d50\u7b97: %d \u5834 | \u52dd\u7387: **%.1f%%** | \u640d\u76ca: **%+.1f \u5143**" % (
+            len(hist), tr, wr, pnl),
+        "\u672c\u65e5: %d \u5834 | \u5e73\u5747Edge: **%.1f%%**" % (tp, ae * 100),
     ]
 
     out = "\n".join(lines)
