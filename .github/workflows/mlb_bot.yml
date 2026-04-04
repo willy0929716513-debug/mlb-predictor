@@ -8,6 +8,8 @@ on:
 jobs:
   run-bot:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -25,4 +27,4 @@ jobs:
           ODDS_API_KEY:    ${{ secrets.ODDS_API_KEY }}
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           GH_TOKEN:        ${{ secrets.GH_TOKEN }}
-        run: python mlb_bot_v101.py
+        run: python mlb_bot_v105.py
