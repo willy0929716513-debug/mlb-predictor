@@ -1,21 +1,21 @@
 import os, re, json, math, logging, datetime, requests
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-log = logging.getLogger("MLB_V107")
+log = logging.getLogger("MLB_V108")
 
 ODDS_API_KEY    = os.getenv("ODDS_API_KEY", "")
 DISCORD_WEBHOOK = os.getenv("DISCORD_WEBHOOK", "")
 GH_TOKEN        = os.getenv("GH_TOKEN", "")
 
-EDGE_MIN   = 0.10
+EDGE_MIN   = 0.08   # 降低門檻 (原0.10) 避免沒推薦
 MOD_W      = 0.18
 MKT_W      = 0.82
 TOT_MOD    = 0.28
 TOT_MKT    = 0.72
 STD        = 1.45
 HA         = 0.07
-MIN_P      = 1.40
-MAX_P      = 2.35
+MIN_P      = 1.35   # 略放寬 (原1.40)
+MAX_P      = 2.50   # 略放寬 (原2.35)
 BANK       = 1000.0
 KELLY      = 0.12
 KELLY_MAX  = 150.0
@@ -57,7 +57,7 @@ PITCHER_ERA = {
     "wood":        4.20, "musgrove":    3.50, "king_m":      3.90,
     "bieber":      3.40, "castillo":    3.30, "nola":        3.70,
     "flaherty":    3.85, "ohtani":      3.00, "sasaki":      2.90,
-    "mcclanahan":  3.10, "burnes":      3.20, "ragans":      3.40,
+    "mcclanahan":  3.10, "burnes":      3.20,
     "verlander":   3.80, "kirby":       3.50, "bello":       4.10,
     "berrios":     3.80, "junk":        5.10, "fedde":       4.60,
     "poulin":      5.30, "painter":     4.80, "mahle":       4.20,
@@ -84,21 +84,21 @@ BASE = {
 DEF_BASE = (4.40, 4.50)
 
 CN = {
-    "dodgers":      "\u9053\u5947",     "yankees":      "\u6d0b\u57fa",
-    "mets":         "\u5927\u90fd\u6703","braves":       "\u52c7\u58eb",
-    "phillies":     "\u8cbb\u57ce\u4eba","mariners":     "\u6c34\u624b",
-    "brewers":      "\u91c0\u9152\u4eba","pirates":      "\u6d77\u76dc",
-    "blue jays":    "\u85cd\u9ce5",     "tigers":       "\u8001\u864e",
-    "red sox":      "\u7d05\u896a",     "astros":       "\u592a\u7a7a\u4eba",
-    "rangers":      "\u904a\u9a0e\u5175","cubs":         "\u5c0f\u718a",
-    "orioles":      "\u91d1\u9db6",     "royals":       "\u7687\u5bb6",
-    "rays":         "\u5149\u82b3",     "diamondbacks": "\u97ff\u5c3e\u86c7",
-    "reds":         "\u7d05\u4eba",     "padres":       "\u6559\u58eb",
-    "guardians":    "\u5b88\u8b77\u8005","marlins":      "\u99ac\u6797\u9b5a",
-    "giants":       "\u5de8\u4eba",     "twins":        "\u96d9\u57ce",
-    "athletics":    "\u904b\u52d5\u5bb6","cardinals":    "\u7d05\u96c0",
-    "angels":       "\u5929\u4f7f",     "white sox":    "\u767d\u896a",
-    "nationals":    "\u570b\u6c11",     "rockies":      "\u6d1b\u78f4",
+    "dodgers":      "道奇",     "yankees":      "洋基",
+    "mets":         "大都會",   "braves":       "勇士",
+    "phillies":     "費城人",   "mariners":     "水手",
+    "brewers":      "釀酒人",   "pirates":      "海盜",
+    "blue jays":    "藍鳥",     "tigers":       "老虎",
+    "red sox":      "紅襪",     "astros":       "太空人",
+    "rangers":      "遊騎兵",   "cubs":         "小熊",
+    "orioles":      "金鶯",     "royals":       "皇家",
+    "rays":         "光芒",     "diamondbacks": "響尾蛇",
+    "reds":         "紅人",     "padres":       "教士",
+    "guardians":    "守護者",   "marlins":      "馬林魚",
+    "giants":       "巨人",     "twins":        "雙城",
+    "athletics":    "運動家",   "cardinals":    "紅雀",
+    "angels":       "天使",     "white sox":    "白襪",
+    "nationals":    "國民",     "rockies":      "落磯",
 }
 
 TEAM_ALIAS = {
@@ -134,6 +134,18 @@ TEAM_ALIAS = {
     "colorado rockies":"rockies",
 }
 
+# MLB Stats API team id -> short name mapping
+MLB_TEAM_ID = {
+    108:"angels",109:"diamondbacks",110:"orioles",111:"red sox",
+    112:"cubs",113:"reds",114:"guardians",115:"rockies",
+    116:"tigers",117:"astros",118:"royals",119:"dodgers",
+    120:"nationals",121:"mets",133:"athletics",134:"pirates",
+    135:"padres",136:"mariners",137:"giants",138:"cardinals",
+    139:"rays",140:"rangers",141:"blue jays",142:"twins",
+    143:"phillies",144:"braves",145:"white sox",146:"marlins",
+    147:"yankees",158:"brewers",
+}
+
 OUT = {
     "athletics":    ["hoglund"],
     "orioles":      ["westburg","bautista"],
@@ -165,15 +177,6 @@ LTD = {
     "twins":        [("festa","B"),("adams_t","B"),("buxton","A")],
 }
 
-SS_TIER = {
-    "skubal":"S","yamamoto":"S","glasnow":"S","fried":"S","burns":"S",
-    "gilbert":"S","alcantara":"S","crochet":"S","brown":"S","senga":"S",
-    "gausman":"A","cease":"A","webb":"A","skenes":"A","peralta":"A",
-    "sanchez":"A","ragans":"A","woo":"A","sale":"A","leiter":"A",
-    "gallen":"A","rasmussen":"A","lugo":"A","valdez":"A","elder":"A",
-    "trout":"S","ohtani":"S","judge":"S","freeman":"S","acuna":"S",
-    "verlander":"S","mcclanahan":"S","castillo":"A","sasaki":"S",
-}
 LT_PEN = {"S":0.9,"A":0.7,"B":0.4}
 
 
@@ -182,9 +185,9 @@ def norm_team(name):
     return TEAM_ALIAS.get(n, n)
 
 
-def safe_get(url, params=None, timeout=12):
+def safe_get(url, params=None, headers=None, timeout=12):
     try:
-        r = requests.get(url, params=params, timeout=timeout)
+        r = requests.get(url, params=params, headers=headers, timeout=timeout)
         r.raise_for_status()
         return r.json()
     except Exception as e:
@@ -221,10 +224,10 @@ def injury_penalty(team):
 
 def pitcher_confidence(pitcher_key):
     if not pitcher_key:
-        return 0.55
+        return 0.60   # 提高未知投手基礎信心 (原0.55)
     era = PITCHER_ERA.get(pitcher_key.lower().strip())
     if era is None:
-        return 0.55
+        return 0.60
     if era <= 2.5:   return 1.0
     elif era <= 3.2: return 0.92
     elif era <= 4.0: return 0.82
@@ -285,36 +288,66 @@ def kelly_stake(edge, prob, price, conf=1.0):
 
 
 def _name_to_key(full_name):
+    """Convert 'Tarik Skubal' -> 'skubal'"""
     if not full_name:
         return None
     parts = full_name.strip().split()
     return parts[-1].lower() if len(parts) >= 2 else full_name.lower()
 
 
+# ─────────────────────────────────────────────
+# ★ 核心修復：用 MLB Stats API teamId 精準匹配
+# ─────────────────────────────────────────────
 def fetch_probable_pitchers():
+    """
+    回傳格式: { (home_norm, away_norm): {home_pitcher, away_pitcher, ...}, ... }
+    以球隊名稱 tuple 作為 key，讓後面比對更容易。
+    """
     today = datetime.date.today().isoformat()
     url = "https://statsapi.mlb.com/api/v1/schedule"
     params = {
         "sportId": 1, "date": today,
         "hydrate": "probablePitcher(note),team",
-        "fields": "dates,games,gamePk,teams,home,away,probablePitcher,fullName,id",
+        "fields": "dates,games,gamePk,teams,home,away,probablePitcher,fullName,id,team,name",
     }
     data = safe_get(url, params=params)
     result = {}
     if not data:
         return result
+
     for date_entry in data.get("dates", []):
         for game in date_entry.get("games", []):
-            gid = str(game.get("gamePk", ""))
-            home_p = game.get("teams",{}).get("home",{}).get("probablePitcher",{}).get("fullName")
-            away_p = game.get("teams",{}).get("away",{}).get("probablePitcher",{}).get("fullName")
-            result[gid] = {
+            home_data = game.get("teams", {}).get("home", {})
+            away_data = game.get("teams", {}).get("away", {})
+
+            # 用 teamId 查短名
+            home_tid = home_data.get("team", {}).get("id")
+            away_tid = away_data.get("team", {}).get("id")
+            home_short = MLB_TEAM_ID.get(home_tid)
+            away_short = MLB_TEAM_ID.get(away_tid)
+
+            # 備用：用球隊全名轉換
+            if not home_short:
+                home_short = norm_team(home_data.get("team", {}).get("name", ""))
+            if not away_short:
+                away_short = norm_team(away_data.get("team", {}).get("name", ""))
+
+            home_p = home_data.get("probablePitcher", {}).get("fullName")
+            away_p = away_data.get("probablePitcher", {}).get("fullName")
+
+            info = {
                 "home_pitcher": _name_to_key(home_p),
                 "away_pitcher": _name_to_key(away_p),
                 "home_name":    home_p or "TBD",
                 "away_name":    away_p or "TBD",
             }
-    log.info("Pitchers: %d games", len(result))
+
+            if home_short and away_short:
+                result[(home_short, away_short)] = info
+                log.info("Pitcher match: %s vs %s | HP=%s AP=%s",
+                         home_short, away_short, info["home_pitcher"], info["away_pitcher"])
+
+    log.info("Pitchers: %d games resolved", len(result))
     return result
 
 
@@ -342,18 +375,15 @@ def load_hist():
     if not GH_TOKEN:
         return []
     h = {"Authorization": "token " + GH_TOKEN}
-    gists = safe_get("https://api.github.com/gists", params=None)
-    if not gists:
-        gists = []
-        try:
-            r = requests.get("https://api.github.com/gists", headers=h, timeout=15)
-            r.raise_for_status()
-            gists = r.json()
-        except Exception as e:
-            log.warning("load_hist: %s", e)
-            return []
+    try:
+        r = requests.get("https://api.github.com/gists", headers=h, timeout=15)
+        r.raise_for_status()
+        gists = r.json()
+    except Exception as e:
+        log.warning("load_hist: %s", e)
+        return []
     for g in gists:
-        if g.get("description") == "mlb_bot_v107_history":
+        if g.get("description") == "mlb_bot_v108_history":
             try:
                 raw_url = list(g["files"].values())[0]["raw_url"]
                 r2 = requests.get(raw_url, timeout=15)
@@ -377,8 +407,8 @@ def save_hist(records):
     except Exception as e:
         log.warning("save_hist list: %s", e)
         return
-    gid = next((g["id"] for g in gists if g.get("description") == "mlb_bot_v107_history"), None)
-    pl = {"description":"mlb_bot_v107_history","public":False,
+    gid = next((g["id"] for g in gists if g.get("description") == "mlb_bot_v108_history"), None)
+    pl = {"description":"mlb_bot_v108_history","public":False,
           "files":{"history.json":{"content":body}}}
     for attempt in range(1, 4):
         try:
@@ -437,6 +467,7 @@ def run():
 
     hist      = load_hist()
     odds_data = fetch_odds()
+    # ★ pitchers 現在是 {(home, away): info} dict
     pitchers  = fetch_probable_pitchers()
 
     if not odds_data:
@@ -467,34 +498,13 @@ def run():
             log.debug("Skip unknown teams: %s vs %s", home, away)
             continue
 
-        # match pitcher by game id from MLB Stats API
-        game_id = str(game.get("id",""))
-        sp_info = {}
-        # MLB Stats API uses numeric gamePk, try to match by team names
-        for gid, info in pitchers.items():
-            pass  # we'll do a looser match below
+        # ★ 核心修復：直接用 (home, away) tuple 查投手
+        sp_info = pitchers.get((home, away), {})
+        home_sp = sp_info.get("home_pitcher")
+        away_sp = sp_info.get("away_pitcher")
+        if not sp_info:
+            log.debug("No pitcher info for %s vs %s", home, away)
 
-        home_sp = None
-        away_sp = None
-        for gid, info in pitchers.items():
-            pass
-
-        # simpler: match via odds API game id directly if possible
-        # fallback: iterate pitchers and match home/away team name
-        for gid, info in pitchers.items():
-            pass
-
-        # Best approach: match by bookmaker game id
-        # Since MLB Stats API gamePk != Odds API id, match by team name embedded in odds game
-        home_sp = None
-        away_sp = None
-        for gid, info in pitchers.items():
-            # Try to match - we can't directly, so just use all pitchers info
-            # and rely on ESPN scoreboard data instead
-            pass
-
-        # Use ESPN scoreboard as primary pitcher source (more reliable match)
-        # fallback: None (will use conservative penalty)
         bookmakers = game.get("bookmakers", [])
         if not bookmakers:
             continue
@@ -551,8 +561,6 @@ def run():
 
         conf = pred["conf_factor"]
 
-        # ★ FIXED: edge = model_prob - raw_market_prob (直接比較，不用blend)
-        # blend only used for Kelly sizing
         h_raw_mkt = 1/home_price
         a_raw_mkt = 1/away_price
 
@@ -574,7 +582,7 @@ def run():
                 continue
             if bp < MIN_P or bp > MAX_P:
                 continue
-            if blend_p < 0.50:
+            if blend_p < 0.48:   # 略放寬 (原0.50)
                 continue
 
             stake = kelly_stake(edge, blend_p, bp, conf=conf)
@@ -582,37 +590,37 @@ def run():
                 continue
 
             if edge >= 0.16 and conf >= 0.88:
-                tier = "\U0001f48e \u9802\u7d1a"
+                tier = "💎 頂級"
             elif edge >= 0.13 and conf >= 0.80:
-                tier = "\U0001f525 \u5f37\u529b"
+                tier = "🔥 強力"
             else:
-                tier = "\u2b50 \u7a69\u5b9a"
+                tier = "⭐ 穩定"
 
             opp    = away if side == "home" else home
             bcn    = CN.get(team, team)
             acn    = CN.get(away, away)
             hcn    = CN.get(home, home)
-            h_sp_n = home_sp or "TBD"
-            a_sp_n = away_sp or "TBD"
+            h_sp_n = sp_info.get("home_name", "TBD") if sp_info else "TBD"
+            a_sp_n = sp_info.get("away_name", "TBD") if sp_info else "TBD"
 
             h_sp_era = PITCHER_ERA.get((home_sp or "").lower())
             a_sp_era = PITCHER_ERA.get((away_sp or "").lower())
-            h_sp_str = "%s(ERA%.2f)"%(h_sp_n.upper(),h_sp_era) if h_sp_era else h_sp_n.upper()
-            a_sp_str = "%s(ERA%.2f)"%(a_sp_n.upper(),a_sp_era) if a_sp_era else a_sp_n.upper()
+            h_sp_str = "%s(ERA%.2f)"%(h_sp_n,h_sp_era) if h_sp_era is not None else h_sp_n
+            a_sp_str = "%s(ERA%.2f)"%(a_sp_n,a_sp_era) if a_sp_era is not None else a_sp_n
 
-            cf_note = " \u26a0\ufe0f\u4fe1\u5fc3%.0f%%"%( conf*100) if conf < 0.85 else ""
+            cf_note = " ⚠️信心%.0f%%"%(conf*100) if conf < 0.85 else ""
             ou_diff = pred["model_total"] - market_total
-            if   ou_diff >  1.5: ou = "OVER\u504f\u5411(%.1f/%.1f)"%(pred["model_total"],market_total)
-            elif ou_diff < -1.5: ou = "UNDER\u504f\u5411(%.1f/%.1f)"%(pred["model_total"],market_total)
-            else:                ou = "\u5927\u5c0f\u5206\u4e2d\u6027(%.1f/%.1f)"%(pred["model_total"],market_total)
+            if   ou_diff >  1.5: ou = "OVER偏向(%.1f/%.1f)"%(pred["model_total"],market_total)
+            elif ou_diff < -1.5: ou = "UNDER偏向(%.1f/%.1f)"%(pred["model_total"],market_total)
+            else:                ou = "大小分中性(%.1f/%.1f)"%(pred["model_total"],market_total)
 
             msg = "\n".join([
-                "\u2014"*15,
+                "—"*15,
                 "**%s  %s @ %s**" % (tier, acn, hcn),
-                "\U0001f550 %s" % game_time_str,
-                "\u26be \u5148\u767c: %s \u2014 %s" % (a_sp_str, h_sp_str),
-                "\U0001f4b0 \u63a8\u85a6: `%s \u72ec\u8d0f` @ **%.2f** (%s)" % (bcn, bp, bk),
-                "> \u5171\u8b58\u8ce0\u7387: %.2f | \u5e02\u5834\u52dd\u7387: %.1f%% | \u6a21\u578b\u52dd\u7387: %.1f%%" % (con_p, mkt_p*100, model_p*100),
+                "🕐 %s" % game_time_str,
+                "⚾ 先發: %s — %s" % (a_sp_str, h_sp_str),
+                "💰 推薦: `%s 獨贏` @ **%.2f** (%s)" % (bcn, bp, bk),
+                "> 共識賠率: %.2f | 市場勝率: %.1f%% | 模型勝率: %.1f%%" % (con_p, mkt_p*100, model_p*100),
                 "> Edge: **%+.1f%%**%s | Kelly: $%.1f" % (edge*100, cf_note, stake),
                 "> %s" % ou,
             ]) + "\n"
@@ -632,36 +640,90 @@ def run():
                     "result": None, "pnl": None,
                 })
 
-    tier_order = {"\U0001f48e \u9802\u7d1a":0,"\U0001f525 \u5f37\u529b":1,"\u2b50 \u7a69\u5b9a":2}
+    tier_order = {"💎 頂級":0,"🔥 強力":1,"⭐ 穩定":2}
     picks.sort(key=lambda x: (tier_order.get(x["tier"],9), -x["edge"]))
 
     total_settled, wins, wr, pnl = calc_perf(hist)
 
     now_str = now_tw.strftime("%m/%d %H:%M")
+    pitcher_status = "✅已取得" if pitchers else "❌未取得"
     lines = [
-        "\u26be **MLB V107 \u5206\u6790\u5831\u544a**",
-        "\U0001f550 %s | \u5148\u767c: %s" % (now_str, "\u2705\u5df2\u53d6\u5f97" if pitchers else "\u274c\u672a\u53d6\u5f97"),
-        "\U0001f4cc \u6b63\u5f0f\u8a18\u9304\u7248\u672c" if official else "\U0001f527 \u6e2c\u8a66\u7248\u672c",
-        "\U0001f4ca \u6b77\u53f2: %d\u52dd/%d\u5834 (%.1f%%) | \u640d\u76ca: %+.0f\u5143" % (wins, total_settled, wr, pnl),
+        "⚾ **MLB V108 分析報告**",
+        "🕐 %s | 先發: %s" % (now_str, pitcher_status),
+        "📌 正式記錄版本" if official else "🔧 測試版本",
+        "📊 歷史: %d勝/%d場 (%.1f%%) | 損益: %+.0f元" % (wins, total_settled, wr, pnl),
         "",
     ]
 
     if not picks:
-        lines.append("\u4eca\u65e5\u7121\u7b26\u5408\u689d\u4ef6\u4e4b\u63a8\u85a6\u3002")
+        # 診斷資訊：顯示今日場次與 edge 情況
+        lines.append("今日無符合條件之推薦。")
+        lines.append("")
+        lines.append("📋 **診斷：今日場次 edge 概況**")
+        diag_lines = []
+        for game in odds_data:
+            if game.get("sport_key") != "baseball_mlb":
+                continue
+            home = norm_team(game.get("home_team",""))
+            away = norm_team(game.get("away_team",""))
+            if home not in BASE or away not in BASE:
+                continue
+            sp_info = pitchers.get((home, away), {})
+            home_sp = sp_info.get("home_pitcher")
+            away_sp = sp_info.get("away_pitcher")
+            bookmakers = game.get("bookmakers", [])
+            if not bookmakers:
+                continue
+            home_price = None
+            away_price = None
+            market_total = 8.5
+            for bm in bookmakers:
+                for mkt in bm.get("markets", []):
+                    if mkt.get("key") == "h2h":
+                        for outcome in mkt.get("outcomes", []):
+                            t = norm_team(outcome.get("name",""))
+                            p = outcome.get("price", 0)
+                            if t == home and (home_price is None or p > home_price):
+                                home_price = p
+                            if t == away and (away_price is None or p > away_price):
+                                away_price = p
+                    if mkt.get("key") == "totals":
+                        for outcome in mkt.get("outcomes", []):
+                            if outcome.get("name") in ("Over","Under"):
+                                try: market_total = float(outcome.get("point", 8.5))
+                                except: pass
+            if not home_price or not away_price:
+                continue
+            pred = predict(home, away, home_sp, away_sp, market_total=market_total)
+            conf = pred["conf_factor"]
+            h_edge = (pred["home_win_prob"] - 1/home_price) * conf
+            a_edge = (pred["away_win_prob"] - 1/away_price) * conf
+            best_edge = max(h_edge, a_edge)
+            best_side = CN.get(home,home) if h_edge >= a_edge else CN.get(away,away)
+            best_price = home_price if h_edge >= a_edge else away_price
+            hn = CN.get(home,home)
+            an = CN.get(away,away)
+            diag_lines.append(
+                "`%s@%s` Edge=%+.1f%% P=%.2f conf=%.0f%% SP:%s/%s" % (
+                    an, hn, best_edge*100, best_price, conf*100,
+                    home_sp or "?", away_sp or "?"
+                )
+            )
+        for dl in sorted(diag_lines, key=lambda x: -float(x.split("Edge=")[1].split("%")[0])):
+            lines.append(dl)
     else:
-        lines.append("**\u4eca\u65e5\u63a8\u85a6 %d \u5834**" % len(picks))
-        lines.append("\u2014"*15)
+        lines.append("**今日推薦 %d 場**" % len(picks))
+        lines.append("—"*15)
         for p in picks:
             lines.append(p["msg"])
 
     lines += [
-        "\u2550"*20,
-        "\U0001f527 **V107 \u6838\u5fc3\u6539\u9032**",
-        "\u2022 Edge = (\u6a21\u578b\u52dd\u7387 \u2212 \u5e02\u5834\u96b1\u542b\u52dd\u7387) x \u4fe1\u5fc3\u4fc2\u6578",
-        "\u2022 \u4fe1\u5fc3\u4fc2\u6578 = \u5927\u5c0f\u5206\u6298\u6263 x \u6295\u624b\u4fe1\u5fc3\u6307\u6570",
-        "\u2022 Kelly\u4e0b\u6ce8\u7528\u6df7\u5408\u6a5f\u7387\uff0c\u4e0a\u9650$150",
-        "\u2022 MLB Stats API \u53d6\u5f97\u5148\u767c\u6295\u624b\uff08\u6bd4ESPN\u66f4\u6e96\u78ba\uff09",
-        "\u2022 EDGE_MIN=10%\uff0cMAX_P=2.35\uff0c\u6df7\u5408\u52dd\u7387>50%",
+        "═"*20,
+        "🔧 **V108 核心改進**",
+        "• 投手比對：MLB teamId → 短名精準匹配（修復主要 bug）",
+        "• EDGE_MIN 8%（原10%）、MAX_P 2.50（原2.35）",
+        "• 無推薦時顯示診斷 edge 表",
+        "• 未知投手基礎信心 60%（原55%）",
     ]
 
     out = "\n".join(lines)
