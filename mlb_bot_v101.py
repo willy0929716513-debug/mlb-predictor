@@ -1,7 +1,7 @@
 import os, re, json, math, logging, datetime, requests
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-log = logging.getLogger("MLB_V109")
+log = logging.getLogger("MLB_V110")
 
 ODDS_API_KEY    = os.getenv("ODDS_API_KEY", "")
 DISCORD_WEBHOOK = os.getenv("DISCORD_WEBHOOK", "")
@@ -397,8 +397,8 @@ def fetch_yesterdays_results():
 
 def update_results(hist, results):
     """
-    將昨日比賽結果回填到 hist 紀錄中，自動計算 pnl。
-    只更新 result=null 且 date=昨日 的紀錄。
+    回填昨日比賽結果，只記 W/L，不算 pnl。
+    用 home/away 精準比對，避免隊名重複誤填。
     """
     yesterday = (datetime.date.today() - datetime.timedelta(days=1)).isoformat()
     updated = 0
@@ -407,21 +407,22 @@ def update_results(hist, results):
             continue
         if rec.get("date") != yesterday:
             continue
-        team  = rec.get("team")
-        stake = rec.get("stake", 0) or 0
-        price = rec.get("price", 1) or 1
+        team = rec.get("team")
+        rec_home = rec.get("home")
+        rec_away = rec.get("away")
         for r in results:
-            # 比對：推薦的隊是否參與這場比賽
-            if team in (r["home"], r["away"]):
-                if r["winner"] == team:
-                    rec["result"] = "W"
-                    rec["pnl"]    = round(stake * (price - 1), 2)
-                else:
-                    rec["result"] = "L"
-                    rec["pnl"]    = round(-stake, 2)
-                updated += 1
-                log.info("Updated: %s %s pnl=%.2f", team, rec["result"], rec["pnl"])
-                break
+            # 精準比對：home/away 都要符合
+            if rec_home and rec_away:
+                if r["home"] != rec_home or r["away"] != rec_away:
+                    continue
+            else:
+                # 舊格式相容：只比對 team
+                if team not in (r["home"], r["away"]):
+                    continue
+            rec["result"] = "W" if r["winner"] == team else "L"
+            updated += 1
+            log.info("Updated: %s %s", team, rec["result"])
+            break
     log.info("Results updated: %d records", updated)
     return hist
 
@@ -543,9 +544,8 @@ def fetch_odds():
 def calc_perf(hist):
     settled = [r for r in hist if r.get("result") in ("W","L")]
     wins    = sum(1 for r in settled if r["result"] == "W")
-    pnl     = sum(r.get("pnl", 0) or 0 for r in settled)
     wr      = wins / len(settled) * 100 if settled else 0.0
-    return len(settled), wins, wr, pnl
+    return len(settled), wins, wr
 
 
 def send(content):
@@ -737,25 +737,33 @@ def run():
             })
 
             if official:
-                today_records.append({
-                    "date": today_str, "team": team, "opp": opp,
-                    "price": bp, "stake": stake,
-                    "edge": round(edge,4), "conf": round(conf,3),
-                    "result": None, "pnl": None,
-                })
+                # ★ 用 game_key 去重：同一場只記一筆
+                game_key = tuple(sorted([home, away])) + (today_str,)
+                if not any(r.get("_key") == str(game_key) for r in today_records):
+                    today_records.append({
+                        "date":     today_str,
+                        "team":     team,       # 推薦的隊
+                        "home":     home,       # 主場（方便回填）
+                        "away":     away,       # 客場（方便回填）
+                        "price":    bp,
+                        "edge":     round(edge, 4),
+                        "conf":     round(conf, 3),
+                        "result":   None,
+                        "_key":     str(game_key),  # 去重用，存檔後可忽略
+                    })
 
     tier_order = {"💎 頂級":0,"🔥 強力":1,"⭐ 穩定":2}
     picks.sort(key=lambda x: (tier_order.get(x["tier"],9), -x["edge"]))
 
-    total_settled, wins, wr, pnl = calc_perf(hist)
+    total_settled, wins, wr = calc_perf(hist)
     now_str = now_tw.strftime("%m/%d %H:%M")
     pitcher_status = "✅已取得" if pitchers else "❌未取得"
 
     lines = [
-        "⚾ **MLB V109 分析報告**",
+        "⚾ **MLB V110 分析報告**",
         "🕐 %s | 先發: %s" % (now_str, pitcher_status),
         "📌 正式記錄版本" if official else "🔧 測試版本",
-        "📊 歷史: %d勝/%d場 (%.1f%%) | 損益: %+.0f元" % (wins, total_settled, wr, pnl),
+        "📊 歷史: %d勝/%d場 (%.1f%%)" % (wins, total_settled, wr),
         "",
     ]
 
@@ -817,11 +825,12 @@ def run():
 
     lines += [
         "═"*20,
-        "🔧 **V109 核心修正**",
-        "• ★ Gist 統一為 'mlb_bot_history'，向下相容 V107/V108",
-        "• ★ 自動回填昨日比賽結果（W/L/PnL），歷史統計正式生效",
-        "• ★ ERA 0.00 投手全部修正（alcantara→4.20, schlittler→4.50 等）",
-        "• 投手比對：MLB teamId 精準匹配（承自 V108）",
+        "🔧 **V110 核心修正**",
+        "• ★ 每場只記一筆（game_key 去重，不再出現重複）",
+        "• ★ 只記 W/L，移除 stake/pnl 欄位",
+        "• ★ 用 home/away 精準回填結果，避免誤填",
+        "• Gist 統一為 'mlb_bot_history'（承自 V109）",
+        "• ERA 0.00 全部修正（承自 V109）",
     ]
 
     out = "\n".join(lines)
