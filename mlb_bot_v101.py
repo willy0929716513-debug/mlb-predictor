@@ -614,9 +614,13 @@ def run():
         try:
             game_utc      = datetime.datetime.fromisoformat(commence.replace("Z","+00:00"))
             game_tw       = game_utc + datetime.timedelta(hours=8)
-            game_time_str = game_tw.strftime("%m/%d %H:%M")
+            game_date_str = game_tw.strftime("%Y-%m-%d")
+            game_time_str = game_tw.strftime("%H:%M")
+            game_dt       = game_tw
         except Exception:
+            game_date_str = today_str
             game_time_str = commence[:16]
+            game_dt       = datetime.datetime.min
 
         home = norm_team(game.get("home_team",""))
         away = norm_team(game.get("away_team",""))
@@ -719,9 +723,8 @@ def run():
             else:                ou = "大小分中性(%.1f/%.1f)"%(pred["model_total"],market_total)
 
             msg = "\n".join([
-                "—"*15,
                 "**%s  %s @ %s**" % (tier, acn, hcn),
-                "🕐 %s" % game_time_str,
+                "🕐 %s (台灣時間)" % game_time_str,
                 "⚾ 先發: %s — %s" % (a_sp_str, h_sp_str),
                 "💰 推薦: `%s 獨贏` @ **%.2f** (%s)" % (bcn, bp, bk),
                 "> 共識賠率: %.2f | 市場勝率: %.1f%% | 模型勝率: %.1f%%" % (con_p, mkt_p*100, model_p*100),
@@ -733,7 +736,9 @@ def run():
                 "msg": msg, "tier": tier, "team": team, "opp": opp,
                 "side": side, "price": bp, "blend_p": blend_p,
                 "edge": edge, "conf": conf, "stake": stake,
+                "game_date": game_date_str,
                 "game_time": game_time_str,
+                "game_dt":   game_dt,
             })
 
             if official:
@@ -752,16 +757,17 @@ def run():
                         "_key":     str(game_key),  # 去重用，存檔後可忽略
                     })
 
+    # 按日期+時間排序
     tier_order = {"💎 頂級":0,"🔥 強力":1,"⭐ 穩定":2}
-    picks.sort(key=lambda x: (tier_order.get(x["tier"],9), -x["edge"]))
+    picks.sort(key=lambda x: (x["game_date"], x["game_dt"], tier_order.get(x["tier"],9), -x["edge"]))
 
     total_settled, wins, wr = calc_perf(hist)
     now_str = now_tw.strftime("%m/%d %H:%M")
     pitcher_status = "✅已取得" if pitchers else "❌未取得"
 
     lines = [
-        "⚾ **MLB V110 分析報告**",
-        "🕐 %s | 先發: %s" % (now_str, pitcher_status),
+        "⚾ **MLB V111 分析報告**",
+        "🕐 產生時間: %s (台灣時間) | 先發: %s" % (now_str, pitcher_status),
         "📌 正式記錄版本" if official else "🔧 測試版本",
         "📊 歷史: %d勝/%d場 (%.1f%%)" % (wins, total_settled, wr),
         "",
@@ -807,11 +813,11 @@ def run():
             h_e   = (pred["home_win_prob"] - 1/hp) * conf
             a_e   = (pred["away_win_prob"] - 1/ap) * conf
             be    = max(h_e, a_e)
-            bp    = hp if h_e >= a_e else ap
+            bp_d  = hp if h_e >= a_e else ap
             diag_lines.append(
                 "`%s@%s` Edge=%+.1f%% P=%.2f conf=%.0f%% SP:%s/%s" % (
                     CN.get(away,away), CN.get(home,home),
-                    be*100, bp, conf*100,
+                    be*100, bp_d, conf*100,
                     home_sp or "?", away_sp or "?"
                 )
             )
@@ -819,18 +825,30 @@ def run():
             lines.append(dl)
     else:
         lines.append("**今日推薦 %d 場**" % len(picks))
-        lines.append("—"*15)
-        for p in picks:
-            lines.append(p["msg"])
+
+        # ★ 按日期分組輸出
+        from itertools import groupby
+        for date_key, group in groupby(picks, key=lambda x: x["game_date"]):
+            # 日期標題，格式：📅 04/09（週三）
+            try:
+                d = datetime.datetime.strptime(date_key, "%Y-%m-%d")
+                weekday_cn = ["一","二","三","四","五","六","日"][d.weekday()]
+                date_label = d.strftime("%m/%d") + "（週%s）" % weekday_cn
+            except Exception:
+                date_label = date_key
+            lines.append("")
+            lines.append("📅 **%s**" % date_label)
+            lines.append("—"*15)
+            for p in group:
+                lines.append(p["msg"])
 
     lines += [
         "═"*20,
-        "🔧 **V110 核心修正**",
-        "• ★ 每場只記一筆（game_key 去重，不再出現重複）",
-        "• ★ 只記 W/L，移除 stake/pnl 欄位",
-        "• ★ 用 home/away 精準回填結果，避免誤填",
-        "• Gist 統一為 'mlb_bot_history'（承自 V109）",
-        "• ERA 0.00 全部修正（承自 V109）",
+        "🔧 **V111 核心修正**",
+        "• ★ 推薦按日期分組顯示（📅 04/09 週三）",
+        "• ★ 開賽時間全部為台灣時間，只顯示 HH:MM",
+        "• 每場只記一筆、只記 W/L（承自 V110）",
+        "• Gist 統一 'mlb_bot_history'、ERA 修正（承自 V109）",
     ]
 
     out = "\n".join(lines)
