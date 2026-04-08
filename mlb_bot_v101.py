@@ -1,7 +1,7 @@
 import os, re, json, math, logging, datetime, requests
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-log = logging.getLogger("MLB_V110")
+log = logging.getLogger("MLB_V112")
 
 ODDS_API_KEY    = os.getenv("ODDS_API_KEY", "")
 DISCORD_WEBHOOK = os.getenv("DISCORD_WEBHOOK", "")
@@ -287,12 +287,18 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, season_games=0):
     }
 
 
-def kelly_stake(edge, prob, price, conf=1.0):
+def kelly_stake(edge, model_p, price, conf=1.0):
+    """
+    Kelly 用模型勝率（model_p）計算，才有意義。
+    blend_p 太接近市場勝率，raw_k 會趨近 0。
+    """
     if edge <= 0 or price <= 1.0:
         return 0.0
     b = price - 1.0
-    q = 1.0 - prob
-    raw_k = (b * prob - q) / b
+    q = 1.0 - model_p
+    raw_k = (b * model_p - q) / b
+    if raw_k <= 0:
+        return 0.0
     dyn_k = max(0.05, min(0.18, KELLY * conf))
     stake = dyn_k * raw_k * BANK
     return round(max(0.0, min(KELLY_MAX, stake)), 1)
@@ -691,6 +697,9 @@ def run():
         h_blend   = MOD_W * h_model + MKT_W * h_mkt_nv
         a_blend   = MOD_W * a_model + MKT_W * a_mkt_nv
 
+        # 同一場比賽只取最高 edge 的那一隊（去重用）
+        seen_games = set()  # (home, away) 已處理的場次
+
         for side, team, bp, bk, edge, blend_p, model_p, mkt_p, con_p in [
             ("home", home, home_price, home_book, h_edge, h_blend, h_model, h_raw_mkt, con_h),
             ("away", away, away_price, away_book, a_edge, a_blend, a_model, a_raw_mkt, con_a),
@@ -698,7 +707,8 @@ def run():
             if edge < EDGE_MIN:             continue
             if bp < MIN_P or bp > MAX_P:    continue
             if blend_p < 0.48:              continue
-            stake = kelly_stake(edge, blend_p, bp, conf=conf)
+            # ★ Kelly 改用 model_p
+            stake = kelly_stake(edge, model_p, bp, conf=conf)
             if stake < KELLY_MIN:           continue
 
             if edge >= 0.16 and conf >= 0.88:   tier = "💎 頂級"
@@ -732,29 +742,44 @@ def run():
                 "> %s" % ou,
             ]) + "\n"
 
-            picks.append({
-                "msg": msg, "tier": tier, "team": team, "opp": opp,
-                "side": side, "price": bp, "blend_p": blend_p,
-                "edge": edge, "conf": conf, "stake": stake,
-                "game_date": game_date_str,
-                "game_time": game_time_str,
-                "game_dt":   game_dt,
-            })
+            # ★ picks 去重：同一場(home,away)只保留 edge 最高的
+            game_key = (home, away)
+            existing = next((i for i,p in enumerate(picks) if (p["home"],p["away"]) == game_key), None)
+            if existing is not None:
+                if edge > picks[existing]["edge"]:
+                    picks[existing] = {
+                        "msg": msg, "tier": tier, "team": team, "opp": opp,
+                        "side": side, "price": bp, "blend_p": blend_p,
+                        "edge": edge, "conf": conf, "stake": stake,
+                        "home": home, "away": away,
+                        "game_date": game_date_str,
+                        "game_time": game_time_str,
+                        "game_dt":   game_dt,
+                    }
+            else:
+                picks.append({
+                    "msg": msg, "tier": tier, "team": team, "opp": opp,
+                    "side": side, "price": bp, "blend_p": blend_p,
+                    "edge": edge, "conf": conf, "stake": stake,
+                    "home": home, "away": away,
+                    "game_date": game_date_str,
+                    "game_time": game_time_str,
+                    "game_dt":   game_dt,
+                })
 
             if official:
-                # ★ 用 game_key 去重：同一場只記一筆
-                game_key = tuple(sorted([home, away])) + (today_str,)
-                if not any(r.get("_key") == str(game_key) for r in today_records):
+                # 去重：同一場只記一筆
+                rec_key = (home, away)
+                if not any((r.get("home"), r.get("away")) == rec_key for r in today_records):
                     today_records.append({
-                        "date":     today_str,
-                        "team":     team,       # 推薦的隊
-                        "home":     home,       # 主場（方便回填）
-                        "away":     away,       # 客場（方便回填）
-                        "price":    bp,
-                        "edge":     round(edge, 4),
-                        "conf":     round(conf, 3),
-                        "result":   None,
-                        "_key":     str(game_key),  # 去重用，存檔後可忽略
+                        "date":   today_str,
+                        "team":   team,
+                        "home":   home,
+                        "away":   away,
+                        "price":  bp,
+                        "edge":   round(edge, 4),
+                        "conf":   round(conf, 3),
+                        "result": None,
                     })
 
     # 按日期+時間排序
@@ -766,7 +791,7 @@ def run():
     pitcher_status = "✅已取得" if pitchers else "❌未取得"
 
     lines = [
-        "⚾ **MLB V111 分析報告**",
+        "⚾ **MLB V112 分析報告**",
         "🕐 產生時間: %s (台灣時間) | 先發: %s" % (now_str, pitcher_status),
         "📌 正式記錄版本" if official else "🔧 測試版本",
         "📊 歷史: %d勝/%d場 (%.1f%%)" % (wins, total_settled, wr),
@@ -844,11 +869,11 @@ def run():
 
     lines += [
         "═"*20,
-        "🔧 **V111 核心修正**",
-        "• ★ 推薦按日期分組顯示（📅 04/09 週三）",
-        "• ★ 開賽時間全部為台灣時間，只顯示 HH:MM",
-        "• 每場只記一筆、只記 W/L（承自 V110）",
-        "• Gist 統一 'mlb_bot_history'、ERA 修正（承自 V109）",
+        "🔧 **V112 核心修正**",
+        "• ★ Kelly 改用模型勝率計算（原 blend_p 導致金額過小）",
+        "• ★ 同場去重：picks 只保留 edge 最高的那隊",
+        "• 日期分組、台灣時間顯示（承自 V111）",
+        "• 每場只記一筆 W/L、Gist 統一（承自 V110/V109）",
     ]
 
     out = "\n".join(lines)
