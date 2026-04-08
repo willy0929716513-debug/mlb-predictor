@@ -1,7 +1,7 @@
 import os, re, json, math, logging, datetime, requests
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-log = logging.getLogger("MLB_V112")
+log = logging.getLogger("MLB_V113")
 
 ODDS_API_KEY    = os.getenv("ODDS_API_KEY", "")
 DISCORD_WEBHOOK = os.getenv("DISCORD_WEBHOOK", "")
@@ -585,19 +585,15 @@ def run():
     now_tw    = datetime.datetime.utcnow() + datetime.timedelta(hours=8)
     today_str = now_tw.strftime("%Y-%m-%d")
     log.info("TW time: %s", now_tw.strftime("%Y-%m-%d %H:%M"))
-    official  = (0 <= now_tw.hour < 14)
+    # ★ 正式記錄時段：台灣時間 00:00–07:00
+    official  = (0 <= now_tw.hour < 7)
 
     if not ODDS_API_KEY:
         log.error("ODDS_API_KEY not set")
         return
 
-    # ★ 流程：載入 → 回填昨日結果 → 取今日資料 → 分析 → 儲存
+    # 載入歷史（W/L 由使用者自行填入 gist，程式只讀不回填）
     hist = load_hist()
-
-    # 自動回填昨日結果
-    yesterday_results = fetch_yesterdays_results()
-    if yesterday_results:
-        hist = update_results(hist, yesterday_results)
 
     odds_data = fetch_odds()
     pitchers  = fetch_probable_pitchers()
@@ -791,9 +787,9 @@ def run():
     pitcher_status = "✅已取得" if pitchers else "❌未取得"
 
     lines = [
-        "⚾ **MLB V112 分析報告**",
+        "⚾ **MLB V113 分析報告**",
         "🕐 產生時間: %s (台灣時間) | 先發: %s" % (now_str, pitcher_status),
-        "📌 正式記錄版本" if official else "🔧 測試版本",
+        "📌 正式記錄 (00–07時)" if official else "🔧 測試模式 (不寫gist)",
         "📊 歷史: %d勝/%d場 (%.1f%%)" % (wins, total_settled, wr),
         "",
     ]
@@ -869,20 +865,20 @@ def run():
 
     lines += [
         "═"*20,
-        "🔧 **V112 核心修正**",
-        "• ★ Kelly 改用模型勝率計算（原 blend_p 導致金額過小）",
-        "• ★ 同場去重：picks 只保留 edge 最高的那隊",
+        "🔧 **V113 核心修正**",
+        "• ★ W/L 改為手動填入 gist，程式不自動回填",
+        "• ★ 正式記錄時段：台灣時間 00:00–07:00",
+        "• Kelly 用模型勝率、同場去重（承自 V112）",
         "• 日期分組、台灣時間顯示（承自 V111）",
-        "• 每場只記一筆 W/L、Gist 統一（承自 V110/V109）",
     ]
 
     out = "\n".join(lines)
-    if official:
+    # ★ 只有台灣時間 00:00–07:00 才寫入 gist
+    if official and today_records:
         save_hist(hist + today_records)
+        log.info("Gist updated with %d new records", len(today_records))
     else:
-        # 測試版也儲存已回填的結果（不加今日推薦）
-        if yesterday_results:
-            save_hist(hist)
+        log.info("Non-official window or no picks, gist not updated")
     log.info("Sending %d chars", len(out))
     send(out)
     log.info("Done")
