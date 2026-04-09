@@ -241,8 +241,7 @@ def _player_tier(last_name):
 
 def fetch_injury_list():
     """
-    從 MLB Stats API 抓取所有隊伍的 IL 名單。
-    填入 _DYN_OUT（60日 IL / 永久 IL）和 _DYN_LTD（7日/10日/15日 IL）。
+    從 MLB Stats API 分別抓 7/10/15日 IL（LTD）和 60日 IL（OUT）。
     失敗時靜默降級，使用靜態 OUT/LTD。
     """
     global _DYN_OUT, _DYN_LTD
@@ -250,57 +249,63 @@ def fetch_injury_list():
     dyn_ltd = {}
     season = datetime.date.today().year
 
+    # rosterType → 是否完全缺陣
+    IL_TYPES = [
+        ("7Day",  False),   # 7日 IL  → LTD
+        ("10Day", False),   # 10日 IL → LTD
+        ("15Day", False),   # 15日 IL → LTD
+        ("60Day", True),    # 60日 IL → OUT（較嚴重）
+    ]
+
     for team_id, team_short in MLB_TEAM_ID.items():
-        data = safe_get(
-            "https://statsapi.mlb.com/api/v1/teams/%d/roster" % team_id,
-            params={"rosterType": "injuredList", "season": season,
-                    "fields": "roster,person,fullName,status,description"},
-            timeout=10,
-        )
-        if not data:
-            continue
+        out_set = set()
+        ltd_set = {}  # last_key -> tier
 
-        out_list = []
-        ltd_list = []
-
-        for player in data.get("roster", []):
-            full_name = player.get("person", {}).get("fullName", "")
-            status    = player.get("status", {}).get("description", "")
-            if not full_name:
+        for roster_type, is_out in IL_TYPES:
+            data = safe_get(
+                "https://statsapi.mlb.com/api/v1/teams/%d/roster" % team_id,
+                params={"rosterType": roster_type, "season": season,
+                        "fields": "roster,person,fullName"},
+                timeout=10,
+            )
+            if not data:
                 continue
 
-            parts     = full_name.strip().split()
-            last_key  = parts[-1].lower() if parts else full_name.lower()
-            # 處理 Jr./Sr./III 等後綴
-            if last_key in ("jr.","sr.","ii","iii","iv") and len(parts) >= 2:
-                last_key = parts[-2].lower()
+            for player in data.get("roster", []):
+                full_name = player.get("person", {}).get("fullName", "")
+                if not full_name:
+                    continue
+                parts    = full_name.strip().split()
+                last_key = parts[-1].lower() if parts else full_name.lower()
+                if last_key in ("jr.","sr.","ii","iii","iv") and len(parts) >= 2:
+                    last_key = parts[-2].lower()
 
-            # 60日 IL 或永久 IL → OUT（完全缺陣）
-            if any(x in status for x in ("60-Day","Restricted","Paternity","Bereavement","Suspended")):
-                out_list.append(last_key)
-            else:
-                # 7/10/15日 IL → LTD（限制出賽）
-                tier = _player_tier(last_key)
-                ltd_list.append((last_key, tier))
+                if is_out:
+                    out_set.add(last_key)
+                    ltd_set.pop(last_key, None)  # 已在 OUT，從 LTD 移除
+                else:
+                    if last_key not in out_set:
+                        tier = _player_tier(last_key)
+                        ltd_set[last_key] = tier
 
-        if out_list:
-            dyn_out[team_short] = out_list
-        if ltd_list:
-            dyn_ltd[team_short] = ltd_list
+        if out_set:
+            dyn_out[team_short] = list(out_set)
+        if ltd_set:
+            dyn_ltd[team_short] = list(ltd_set.items())
 
-        log.debug("IL %s: out=%d ltd=%d", team_short, len(out_list), len(ltd_list))
+        log.debug("IL %s: out=%d ltd=%d", team_short, len(out_set), len(ltd_set))
 
     total_out = sum(len(v) for v in dyn_out.values())
     total_ltd = sum(len(v) for v in dyn_ltd.values())
     log.info("IL fetched: %d OUT, %d LTD across %d teams",
-             total_out, total_ltd, len(dyn_out) + len(dyn_ltd))
+             total_out, total_ltd, len(set(list(dyn_out)+list(dyn_ltd))))
 
     if total_out + total_ltd > 0:
         _DYN_OUT = dyn_out
         _DYN_LTD = dyn_ltd
         return True
     else:
-        log.warning("IL fetch returned empty, falling back to static OUT/LTD")
+        log.warning("IL fetch empty, falling back to static OUT/LTD")
         return False
 
 
