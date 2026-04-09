@@ -328,41 +328,7 @@ def fetch_espn_ratings():
 # ══════════════════════════════════════════════
 
 def fetch_injury_list():
-    global _DYN_OUT, _DYN_LTD
-    dyn_out, dyn_ltd = {}, {}
-    season = datetime.date.today().year
-
-    def get_set(team_id, rtype):
-        data = safe_get(
-            "https://statsapi.mlb.com/api/v1/teams/%d/roster" % team_id,
-            params={"rosterType": rtype, "season": season,
-                    "fields": "roster,person,fullName"},
-            timeout=10,
-        )
-        result = {}
-        if not data: return result
-        for p in data.get("roster", []):
-            k = _name_to_key(p.get("person",{}).get("fullName",""))
-            if k: result[k] = True
-        return result
-
-    for team_id, short in MLB_TEAM_ID.items():
-        all_il  = get_set(team_id, "injuredList")
-        il_60   = get_set(team_id, "60DayInjuredList")
-        out_list = list(il_60.keys())
-        ltd_list = [(k, _player_tier(k)) for k in all_il if k not in il_60]
-        if out_list: dyn_out[short] = out_list
-        if ltd_list: dyn_ltd[short] = ltd_list
-
-    total_out = sum(len(v) for v in dyn_out.values())
-    total_ltd = sum(len(v) for v in dyn_ltd.values())
-    log.info("MLB IL: %d OUT, %d LTD", total_out, total_ltd)
-
-    if total_out + total_ltd > 0:
-        _DYN_OUT, _DYN_LTD = dyn_out, dyn_ltd
-        return "mlb_api"
-
-    # fallback: RotoWire
+    """傷兵來源：RotoWire → 靜態名單（MLB API IL 端點不可靠，跳過）"""
     return _fetch_rotowire()
 
 
@@ -589,22 +555,26 @@ def predict(home, away, home_sp, away_sp, market_total=8.5):
     ar = get_rating(away)
     h_sp_adj = era_adj(home_sp)
     a_sp_adj = era_adj(away_sp)
-    # 加入 form（近況）
     h_expected = hr["off"] + a_sp_adj + HA + hr.get("form", 0.0)
     a_expected = ar["off"] + h_sp_adj        + ar.get("form", 0.0)
     h_expected -= injury_penalty(home) * 0.4
     a_expected -= injury_penalty(away) * 0.4
     h_expected = max(2.5, h_expected)
     a_expected = max(2.5, a_expected)
-    margin       = h_expected - a_expected
-    model_win_p  = win_prob_from_margin(margin)
-    model_total  = h_expected + a_expected
-    conf = total_confidence(model_total, market_total)
+    margin      = h_expected - a_expected
+    model_win_p = win_prob_from_margin(margin)
+    pure_total  = h_expected + a_expected
+    # ★ 融合市場大小分：避免模型總分與市場差距過大
+    # 純模型偏低（王牌投手時），70%市場 + 30%模型修正
+    TOT_MKT = 0.70; TOT_MOD = 0.30
+    model_total = round(pure_total * TOT_MOD + market_total * TOT_MKT, 2)
+    conf = total_confidence(pure_total, market_total)  # 信心仍用純模型與市場差距
     conf *= (pitcher_confidence(home_sp) * pitcher_confidence(away_sp)) ** 0.5
     return {
         "home_win_prob": round(model_win_p, 4),
         "away_win_prob": round(1 - model_win_p, 4),
-        "model_total":   round(model_total, 2),
+        "model_total":   model_total,
+        "pure_total":    round(pure_total, 2),
         "conf_factor":   round(max(0.40, min(1.0, conf)), 3),
         "h_expected":    round(h_expected, 2),
         "a_expected":    round(a_expected, 2),
@@ -825,11 +795,11 @@ def run():
     now_str = now_tw.strftime("%m/%d %H:%M")
     espn_str = "✅ESPN" if espn_ok else "⚠️BASE"
     il_icons = {"mlb_api":"✅MLB-IL","rotowire":"⚠️RotoWire","static":"❌靜態"}
-    il_str   = il_icons.get(il_src, il_src)
+    il_str   = {"rotowire":"✅RotoWire","static":"⚠️靜態"}.get(il_src, il_src)
     sp_str   = "✅已取得" if pitchers else "❌未取得"
 
     lines = [
-        "⚾ **MLB V115 分析報告**",
+        "⚾ **MLB V116 分析報告**",
         "🕐 %s (台灣時間) | 實力:%s 傷兵:%s 先發:%s" % (now_str, espn_str, il_str, sp_str),
         "📌 正式記錄 (00–07時)" if official else "🔧 測試模式 (不寫gist)",
         "📊 歷史: %d勝/%d場 (%.1f%%)" % (wins, total_settled, wr),
@@ -890,7 +860,7 @@ def run():
 
     lines += [
         "═"*20,
-        "🔧 **V115 核心整合**",
+        "🔧 **V116 核心修正**",
         "• ★ ESPN 即時戰績動態調整隊伍實力（BASE 融合）",
         "• ★ 傷兵三層：MLB-IL API → RotoWire → 靜態名單",
         "• ★ 推薦顯示傷兵人數",
