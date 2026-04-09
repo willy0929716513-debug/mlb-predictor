@@ -1,7 +1,7 @@
 import os, re, json, math, logging, datetime, requests
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-log = logging.getLogger("MLB_V113")
+log = logging.getLogger("MLB_V114")
 
 ODDS_API_KEY    = os.getenv("ODDS_API_KEY", "")
 DISCORD_WEBHOOK = os.getenv("DISCORD_WEBHOOK", "")
@@ -186,6 +186,10 @@ LTD = {
 
 LT_PEN = {"S":0.9,"A":0.7,"B":0.4}
 
+# 動態傷兵資料（由 fetch_injury_list() 填入，覆蓋靜態 OUT/LTD）
+_DYN_OUT = {}   # { team_short: [player_last, ...] }
+_DYN_LTD = {}   # { team_short: [(player_last, tier), ...] }
+
 
 # ══════════════════════════════════════════════
 # 工具函數
@@ -204,6 +208,100 @@ def safe_get(url, params=None, headers=None, timeout=12):
     except Exception as e:
         log.warning("safe_get %s: %s", url, e)
         return None
+
+
+# ══════════════════════════════════════════════
+# ★ 自動抓 MLB IL 傷兵名單
+# ══════════════════════════════════════════════
+
+# 關鍵球員名單：出現在 IL 時給予較高懲罰
+KEY_PLAYERS = {
+    # S tier：明星野手/頂級投手
+    "trout","judge","ohtani","freeman","acuna","soto","tatis",
+    "devers","betts","rodriguez_j","witt","henderson","rutschman",
+    "skubal","yamamoto","glasnow","fried","burns","gilbert",
+    "crochet","skenes","castillo","burnes","mcclanahan",
+    # A tier：重要主力
+    "riley","seager","machado","lindor","turner_t","springer",
+    "gausman","cease","webb","sale","nola","flaherty",
+    "verlander","kirby","bieber","ragans","gallen",
+}
+
+def _player_tier(last_name):
+    """根據球員姓氏判斷重要度 tier"""
+    k = last_name.lower()
+    if k in KEY_PLAYERS:
+        # 投手給 S，野手給 A（粗略分）
+        return "S" if k in {"skubal","yamamoto","glasnow","fried","burns","gilbert",
+                             "crochet","skenes","castillo","burnes","mcclanahan",
+                             "gausman","cease","webb","sale","nola","flaherty",
+                             "verlander","kirby","bieber","ragans","gallen"} else "A"
+    return "B"  # 一般球員
+
+
+def fetch_injury_list():
+    """
+    從 MLB Stats API 抓取所有隊伍的 IL 名單。
+    填入 _DYN_OUT（60日 IL / 永久 IL）和 _DYN_LTD（7日/10日/15日 IL）。
+    失敗時靜默降級，使用靜態 OUT/LTD。
+    """
+    global _DYN_OUT, _DYN_LTD
+    dyn_out = {}
+    dyn_ltd = {}
+    season = datetime.date.today().year
+
+    for team_id, team_short in MLB_TEAM_ID.items():
+        data = safe_get(
+            "https://statsapi.mlb.com/api/v1/teams/%d/roster" % team_id,
+            params={"rosterType": "injuredList", "season": season,
+                    "fields": "roster,person,fullName,status,description"},
+            timeout=10,
+        )
+        if not data:
+            continue
+
+        out_list = []
+        ltd_list = []
+
+        for player in data.get("roster", []):
+            full_name = player.get("person", {}).get("fullName", "")
+            status    = player.get("status", {}).get("description", "")
+            if not full_name:
+                continue
+
+            parts     = full_name.strip().split()
+            last_key  = parts[-1].lower() if parts else full_name.lower()
+            # 處理 Jr./Sr./III 等後綴
+            if last_key in ("jr.","sr.","ii","iii","iv") and len(parts) >= 2:
+                last_key = parts[-2].lower()
+
+            # 60日 IL 或永久 IL → OUT（完全缺陣）
+            if any(x in status for x in ("60-Day","Restricted","Paternity","Bereavement","Suspended")):
+                out_list.append(last_key)
+            else:
+                # 7/10/15日 IL → LTD（限制出賽）
+                tier = _player_tier(last_key)
+                ltd_list.append((last_key, tier))
+
+        if out_list:
+            dyn_out[team_short] = out_list
+        if ltd_list:
+            dyn_ltd[team_short] = ltd_list
+
+        log.debug("IL %s: out=%d ltd=%d", team_short, len(out_list), len(ltd_list))
+
+    total_out = sum(len(v) for v in dyn_out.values())
+    total_ltd = sum(len(v) for v in dyn_ltd.values())
+    log.info("IL fetched: %d OUT, %d LTD across %d teams",
+             total_out, total_ltd, len(dyn_out) + len(dyn_ltd))
+
+    if total_out + total_ltd > 0:
+        _DYN_OUT = dyn_out
+        _DYN_LTD = dyn_ltd
+        return True
+    else:
+        log.warning("IL fetch returned empty, falling back to static OUT/LTD")
+        return False
 
 
 def norm_cdf(x):
@@ -225,10 +323,13 @@ def era_adj(pitcher_key):
 
 def injury_penalty(team):
     t = team.lower()
+    # 優先用動態 IL 資料，若為空則用靜態 OUT/LTD
+    out_list = _DYN_OUT.get(t) if _DYN_OUT else OUT.get(t, [])
+    ltd_list = _DYN_LTD.get(t) if _DYN_LTD else LTD.get(t, [])
     penalty = 0.0
-    for _ in OUT.get(t, []):
+    for _ in out_list:
         penalty += 0.05
-    for _, tier in LTD.get(t, []):
+    for _, tier in ltd_list:
         penalty += LT_PEN.get(tier, 0.4) * 0.15
     return round(min(penalty, 1.2), 3)
 
@@ -595,6 +696,9 @@ def run():
     # 載入歷史（W/L 由使用者自行填入 gist，程式只讀不回填）
     hist = load_hist()
 
+    # ★ 抓取 IL 傷兵名單
+    il_ok = fetch_injury_list()
+
     odds_data = fetch_odds()
     pitchers  = fetch_probable_pitchers()
 
@@ -785,10 +889,11 @@ def run():
     total_settled, wins, wr = calc_perf(hist)
     now_str = now_tw.strftime("%m/%d %H:%M")
     pitcher_status = "✅已取得" if pitchers else "❌未取得"
+    il_status = "✅動態IL" if il_ok else "⚠️靜態IL"
 
     lines = [
-        "⚾ **MLB V113 分析報告**",
-        "🕐 產生時間: %s (台灣時間) | 先發: %s" % (now_str, pitcher_status),
+        "⚾ **MLB V114 分析報告**",
+        "🕐 產生時間: %s (台灣時間) | 先發: %s | 傷兵: %s" % (now_str, pitcher_status, il_status),
         "📌 正式記錄 (00–07時)" if official else "🔧 測試模式 (不寫gist)",
         "📊 歷史: %d勝/%d場 (%.1f%%)" % (wins, total_settled, wr),
         "",
@@ -865,11 +970,12 @@ def run():
 
     lines += [
         "═"*20,
-        "🔧 **V113 核心修正**",
-        "• ★ W/L 改為手動填入 gist，程式不自動回填",
-        "• ★ 正式記錄時段：台灣時間 00:00–07:00",
-        "• Kelly 用模型勝率、同場去重（承自 V112）",
-        "• 日期分組、台灣時間顯示（承自 V111）",
+        "🔧 **V114 核心新增**",
+        "• ★ 自動抓 MLB IL 傷兵名單（所有30隊）",
+        "• ★ 60日IL/永久IL → OUT懲罰；10/15日IL → LTD懲罰",
+        "• ★ 關鍵球員自動判斷 S/A/B tier",
+        "• ★ API失敗時自動降級用靜態名單",
+        "• 報告標頭顯示傷兵資料來源狀態",
     ]
 
     out = "\n".join(lines)
