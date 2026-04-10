@@ -1,7 +1,7 @@
 import os, json, math, logging, datetime, requests
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-log = logging.getLogger("MLB_V118")
+log = logging.getLogger("MLB_V121")
 
 ODDS_API_KEY    = os.getenv("ODDS_API_KEY", "")
 DISCORD_WEBHOOK = os.getenv("DISCORD_WEBHOOK", "")
@@ -334,12 +334,12 @@ def build_recent_era_cache(pitchers_dict):
     cache = {}
     seen  = set()
     for (home, away), info in pitchers_dict.items():
-        for key in [info.get("home_pitcher"), info.get("away_pitcher")]:
+        for key, full in [(info.get("home_pitcher"), info.get("home_name")),
+                          (info.get("away_pitcher"), info.get("away_name"))]:
             if not key or key in seen: continue
+            if not full or full == "TBD": continue
             seen.add(key)
             # 用 fullName 搜尋 playerId
-            full = info.get("home_name") if key == info.get("home_pitcher") else info.get("away_name")
-            if not full or full == "TBD": continue
             data = safe_get(
                 "https://statsapi.mlb.com/api/v1/people/search",
                 params={"names": full, "sportId": 1},
@@ -776,7 +776,8 @@ def run():
     odds_data = fetch_odds()
     if not odds_data: log.error("No odds data"); return
 
-    season_games = sum(1 for r in hist if r.get("date","") >= "2026-03-25")
+    season_start = "%d-03-25" % datetime.date.today().year
+    season_games = sum(1 for r in hist if r.get("date","") >= season_start)
     picks, today_records = [], []
 
     for game in odds_data:
@@ -788,7 +789,7 @@ def run():
             game_date_str = game_tw.strftime("%Y-%m-%d")
             game_time_str = game_tw.strftime("%H:%M")
             game_dt       = game_tw
-        except:
+        except Exception:
             game_date_str = today_str; game_time_str = commence[:16]; game_dt = None
 
         home = norm_team(game.get("home_team",""))
@@ -818,11 +819,12 @@ def run():
                     for o in mkt.get("outcomes",[]):
                         if o.get("name") in ("Over","Under"):
                             try: market_total=float(o.get("point",8.5))
-                            except: pass
+                            except (ValueError, TypeError): pass
         if home_price is None or away_price is None: continue
 
         con_h = round(sum(con_h_prices)/len(con_h_prices),3) if con_h_prices else home_price
         con_a = round(sum(con_a_prices)/len(con_a_prices),3) if con_a_prices else away_price
+        if con_h <= 0 or con_a <= 0: continue  # guard: 防止除以零
 
         pred = predict(home,away,home_sp,away_sp,market_total=market_total,game_dt=game_dt)
 
@@ -831,22 +833,27 @@ def run():
         a_mkt_nv = round((1/con_a)/inv_sum,4)
         conf     = pred["conf_factor"]
         h_model  = pred["home_win_prob"]; a_model = pred["away_win_prob"]
-        h_edge   = (h_model-1/home_price)*conf; a_edge = (a_model-1/away_price)*conf
+        # ★ 使用原始 edge（未乘 conf），避免信心雙重懲罰：
+        #   conf 門檻比較時乘一次，kelly_stake 內部 dyn_k 也乘一次，共兩次→過度縮水
+        #   修正：raw_edge 作為比較和顯示基準，conf 只在 kelly_stake 中套用
+        h_raw_edge = h_model - 1/home_price
+        a_raw_edge = a_model - 1/away_price
         h_blend  = MOD_W*h_model+MKT_W*h_mkt_nv; a_blend = MOD_W*a_model+MKT_W*a_mkt_nv
 
-        for side,team,bp,bk,edge,blend_p,model_p,mkt_p,con_p in [
-            ("home",home,home_price,home_book,h_edge,h_blend,h_model,1/home_price,con_h),
-            ("away",away,away_price,away_book,a_edge,a_blend,a_model,1/away_price,con_a),
+        for side,team,bp,bk,raw_edge,blend_p,model_p,mkt_p,con_p in [
+            ("home",home,home_price,home_book,h_raw_edge,h_blend,h_model,1/home_price,con_h),
+            ("away",away,away_price,away_book,a_raw_edge,a_blend,a_model,1/away_price,con_a),
         ]:
-            if edge<EDGE_MIN or bp<MIN_P or bp>MAX_P or blend_p<0.48: continue
+            # conf 在門檻比較時乘一次（作為風險過濾）
+            if raw_edge*conf<EDGE_MIN or bp<MIN_P or bp>MAX_P or blend_p<0.48: continue
             # ★ 最低信心門檻 0.60，避免低信心場次產生誤導性推薦
             if conf < 0.60: continue
-            stake = kelly_stake(edge,model_p,bp,conf=conf)
+            stake = kelly_stake(raw_edge,model_p,bp,conf=conf)
             if stake<KELLY_MIN: continue
 
-            if edge>=0.16 and conf>=0.88:   tier="💎 頂級"
-            elif edge>=0.13 and conf>=0.80: tier="🔥 強力"
-            else:                           tier="⭐ 穩定"
+            if raw_edge>=0.18 and conf>=0.88:   tier="💎 頂級"
+            elif raw_edge>=0.15 and conf>=0.80: tier="🔥 強力"
+            else:                               tier="⭐ 穩定"
 
             opp=away if side=="home" else home
             bcn=CN.get(team,team); acn=CN.get(away,away); hcn=CN.get(home,home)
@@ -881,20 +888,20 @@ def run():
                 "⚾ 先發: %s — %s"%(a_sp_str,h_sp_str),
                 "💰 推薦: `%s 獨贏` @ **%.2f** (%s)"%(bcn,bp,bk),
                 "> 共識賠率: %.2f | 市場勝率: %.1f%% | 模型勝率: %.1f%%"%(con_p,mkt_p*100,model_p*100),
-                "> Edge: **%+.1f%%**%s | Kelly: $%.1f"%(edge*100,cf_note,stake),
+                "> Edge: **%+.1f%%**%s | Kelly: $%.1f"%(raw_edge*100,cf_note,stake),
                 "> %s%s"%(ou,inj_str),
             ])+"\n"
 
             gk=(home,away)
             ex=next((i for i,p in enumerate(picks) if (p["home"],p["away"])==gk),None)
             if ex is not None:
-                if edge>picks[ex]["edge"]:
+                if raw_edge>picks[ex]["edge"]:
                     picks[ex]={"msg":msg,"tier":tier,"team":team,"opp":opp,"home":home,"away":away,
-                               "edge":edge,"conf":conf,"stake":stake,"game_date":game_date_str,
+                               "edge":raw_edge,"conf":conf,"stake":stake,"game_date":game_date_str,
                                "game_time":game_time_str,"game_dt":game_dt}
             else:
                 picks.append({"msg":msg,"tier":tier,"team":team,"opp":opp,"home":home,"away":away,
-                              "edge":edge,"conf":conf,"stake":stake,"game_date":game_date_str,
+                              "edge":raw_edge,"conf":conf,"stake":stake,"game_date":game_date_str,
                               "game_time":game_time_str,"game_dt":game_dt})
             if official:
                 # ★ 只記錄台灣時間當天的比賽
@@ -903,7 +910,7 @@ def run():
                 rk=(home,away)
                 if not any((r.get("home"),r.get("away"))==rk for r in today_records):
                     today_records.append({"date":today_str,"team":team,"home":home,"away":away,
-                                          "price":bp,"edge":round(edge,4),"conf":round(conf,3),"result":None})
+                                          "price":bp,"edge":round(raw_edge,4),"conf":round(conf,3),"result":None})
 
     tier_order={"💎 頂級":0,"🔥 強力":1,"⭐ 穩定":2}
     picks.sort(key=lambda x:(x["game_date"],x.get("game_dt") or datetime.datetime.min,
@@ -917,7 +924,7 @@ def run():
     era_str  = "✅近期ERA(%d)"%len(_RECENT_ERA) if _RECENT_ERA else "⚠️賽季ERA"
 
     lines=[
-        "⚾ **MLB V120 分析報告**",
+        "⚾ **MLB V121 分析報告**",
         "🕐 %s | %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str),
         "📌 正式記錄 (00–07時)" if official else "🔧 測試模式 (不寫gist)",
         "📊 歷史: %d勝/%d場 (%.1f%%)"%(wins,total_settled,wr),
@@ -945,11 +952,12 @@ def run():
                         for o in mkt.get("outcomes",[]):
                             if o.get("name") in ("Over","Under"):
                                 try: mt=float(o.get("point",8.5))
-                                except: pass
+                                except (ValueError, TypeError): pass
             if not hp or not ap: continue
             pr=predict(h,a,hp_k,ap_k,market_total=mt)
             cf=pr["conf_factor"]
-            he=(pr["home_win_prob"]-1/hp)*cf; ae=(pr["away_win_prob"]-1/ap)*cf
+            # 診斷顯示原始 edge（與主流程一致）
+            he=pr["home_win_prob"]-1/hp; ae=pr["away_win_prob"]-1/ap
             be=max(he,ae); bp2=hp if he>=ae else ap
             diag.append("`%s@%s` Edge=%+.1f%% P=%.2f conf=%.0f%% SP:%s/%s"%(
                 CN.get(a,a),CN.get(h,h),be*100,bp2,cf*100,hp_k or "?",ap_k or "?"))
@@ -961,18 +969,21 @@ def run():
             try:
                 d=datetime.datetime.strptime(dk,"%Y-%m-%d")
                 dlabel=d.strftime("%m/%d")+"（週%s）"%["一","二","三","四","五","六","日"][d.weekday()]
-            except: dlabel=dk
+            except Exception: dlabel=dk
             lines+=[""," 📅 **%s**"%dlabel,"—"*15]
             for p in group: lines.append(p["msg"])
 
     lines+=[
-        "═"*20,"🔧 **V119 修正**",
+        "═"*20,"🔧 **V121 修正**",
         "• ① 投手近期3場ERA融合（65%近期+35%賽季）",
         "• ② 球場係數 Park Factor（30隊）",
         "• ③ 牛棚品質（各隊牛棚ERA影響後段）",
         "• ④ 天氣影響（需設定WEATHER_API_KEY）",
         "• ⑤ 動態主場優勢+動態STD（隨ESPN form調整）",
-        "• ⑥ 球星缺陣/傷疑顯示（承自V117）",
+        "• ⑥ 球星缺陣/傷疑顯示",
+        "• ⑦ [V121] 修正信心雙重懲罰：Edge顯示原始模型值，conf只在Kelly中套用一次",
+        "• ⑧ [V121] 修正空賠率防崩（inv_sum零值防護）",
+        "• ⑨ [V121] 修正bare except、季度起始日動態計算",
     ]
 
     out="\n".join(lines)
