@@ -897,6 +897,9 @@ def run():
                               "edge":edge,"conf":conf,"stake":stake,"game_date":game_date_str,
                               "game_time":game_time_str,"game_dt":game_dt})
             if official:
+                # ★ 只記錄台灣時間當天的比賽
+                if game_date_str != today_str:
+                    continue
                 rk=(home,away)
                 if not any((r.get("home"),r.get("away"))==rk for r in today_records):
                     today_records.append({"date":today_str,"team":team,"home":home,"away":away,
@@ -914,7 +917,7 @@ def run():
     era_str  = "✅近期ERA(%d)"%len(_RECENT_ERA) if _RECENT_ERA else "⚠️賽季ERA"
 
     lines=[
-        "⚾ **MLB V119 分析報告**",
+        "⚾ **MLB V120 分析報告**",
         "🕐 %s | %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str),
         "📌 正式記錄 (00–07時)" if official else "🔧 測試模式 (不寫gist)",
         "📊 歷史: %d勝/%d場 (%.1f%%)"%(wins,total_settled,wr),
