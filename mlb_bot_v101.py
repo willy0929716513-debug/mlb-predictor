@@ -319,7 +319,15 @@ def _fetch_recent_era(pitcher_id, last_n=3):
     if not recent: return None
     total_er = sum(float(s.get("stat",{}).get("earnedRuns","0") or 0) for s in recent)
     total_ip = sum(float(s.get("stat",{}).get("inningsPitched","0") or 0) for s in recent)
-    return round(total_er / total_ip * 9, 2) if total_ip >= 3 else None
+    if total_ip < 3: return None
+    era = round(total_er / total_ip * 9, 2)
+    # ★ 近期 ERA 0.00 或極低（< 0.50）代表樣本太少或開季第一場被完封
+    # 用聯盟平均替代，避免模型誤判為超級王牌
+    if era < 0.50:
+        log.debug("Recent ERA %.2f too low for %s, clamping to league avg", era, pitcher_id)
+        return None  # 回傳 None 讓 get_pitcher_era 改用賽季 ERA
+    # 上限：近期 ERA > 12 通常是短暫崩盤，限制到 10 避免過度懲罰
+    return min(era, 10.0)
 
 def build_recent_era_cache(pitchers_dict):
     global _RECENT_ERA
@@ -691,9 +699,10 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
     a_exp = max(2.5, a_exp)
     margin = h_exp - a_exp
 
-    # ⑧ 動態 STD（季初不確定性高）
     dyn_std = STD + max(0, (10-games)/10) * 0.15
     model_win_p = win_prob_from_margin(margin, dyn_std)
+    # ★ 勝率上限 90%：現實中單場勝率不會超過此值
+    model_win_p = min(model_win_p, 0.90)
 
     pure_total  = h_exp + a_exp
     model_total = round(pure_total*0.30 + market_total*0.70, 2)
@@ -830,6 +839,8 @@ def run():
             ("away",away,away_price,away_book,a_edge,a_blend,a_model,1/away_price,con_a),
         ]:
             if edge<EDGE_MIN or bp<MIN_P or bp>MAX_P or blend_p<0.48: continue
+            # ★ 最低信心門檻 0.60，避免低信心場次產生誤導性推薦
+            if conf < 0.60: continue
             stake = kelly_stake(edge,model_p,bp,conf=conf)
             if stake<KELLY_MIN: continue
 
@@ -903,7 +914,7 @@ def run():
     era_str  = "✅近期ERA(%d)"%len(_RECENT_ERA) if _RECENT_ERA else "⚠️賽季ERA"
 
     lines=[
-        "⚾ **MLB V118 分析報告**",
+        "⚾ **MLB V119 分析報告**",
         "🕐 %s | %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str),
         "📌 正式記錄 (00–07時)" if official else "🔧 測試模式 (不寫gist)",
         "📊 歷史: %d勝/%d場 (%.1f%%)"%(wins,total_settled,wr),
@@ -952,7 +963,7 @@ def run():
             for p in group: lines.append(p["msg"])
 
     lines+=[
-        "═"*20,"🔧 **V118 模型全面升級**",
+        "═"*20,"🔧 **V119 修正**",
         "• ① 投手近期3場ERA融合（65%近期+35%賽季）",
         "• ② 球場係數 Park Factor（30隊）",
         "• ③ 牛棚品質（各隊牛棚ERA影響後段）",
