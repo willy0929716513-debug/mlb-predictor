@@ -1,7 +1,7 @@
 import os, json, math, logging, datetime, requests
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-log = logging.getLogger("MLB_V122")
+log = logging.getLogger("MLB_V123")
 
 ODDS_API_KEY    = os.getenv("ODDS_API_KEY", "")
 DISCORD_WEBHOOK = os.getenv("DISCORD_WEBHOOK", "")
@@ -995,7 +995,7 @@ def run():
 
         msg_lines=[
             "**%s  %s @ %s**"%(tier,acn,hcn),
-            "🕐 %s (台灣時間)%s%s"%(game_time_str,pf_note,mkt_tag),
+            "🕐 %s %s (台灣時間)%s%s"%(game_date_str[5:].replace("-","/"),game_time_str,pf_note,mkt_tag),
             "⚾ 先發: %s — %s"%(a_sp_str,h_sp_str),
             "💰 推薦: %s"%bet_desc,
             stats_ln,
@@ -1023,8 +1023,11 @@ def run():
                                       "bet_type":btype,"result":None})
 
     tier_order={"💎 頂級":0,"🔥 強力":1,"⭐ 穩定":2}
-    picks.sort(key=lambda x:(x["game_date"],x.get("game_dt") or datetime.datetime.min,
-                              tier_order.get(x["tier"],9),-x["edge"]))
+    # ★ 依推薦強度全局排序：tier → score（edge×conf）→ 日期時間
+    picks.sort(key=lambda x:(tier_order.get(x["tier"],9),
+                              -x.get("score", x.get("edge",0)),
+                              x["game_date"],
+                              x.get("game_dt") or datetime.datetime.min))
 
     total_settled,wins,wr=calc_perf(hist)
     now_str  = now_tw.strftime("%m/%d %H:%M")
@@ -1034,7 +1037,7 @@ def run():
     era_str  = "✅近期ERA(%d)"%len(_RECENT_ERA) if _RECENT_ERA else "⚠️賽季ERA"
 
     lines=[
-        "⚾ **MLB V122 分析報告**",
+        "⚾ **MLB V123 分析報告**",
         "🕐 %s | %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str),
         "📌 正式記錄 (00–07時)" if official else "🔧 測試模式 (不寫gist)",
         "📊 歷史: %d勝/%d場 (%.1f%%)"%(wins,total_settled,wr),
@@ -1092,18 +1095,11 @@ def run():
                 CN.get(a,a),CN.get(h,h),best_lbl,be*100,bp2,cf*100,hp_k or "?",ap_k or "?"))
         for d in sorted(diag,key=lambda x:-float(x.split("Edge=")[1].split("%")[0])): lines.append(d)
     else:
-        lines.append("**今日推薦 %d 場**"%len(picks))
-        from itertools import groupby
-        for dk,group in groupby(picks,key=lambda x:x["game_date"]):
-            try:
-                d=datetime.datetime.strptime(dk,"%Y-%m-%d")
-                dlabel=d.strftime("%m/%d")+"（週%s）"%["一","二","三","四","五","六","日"][d.weekday()]
-            except Exception: dlabel=dk
-            lines+=[""," 📅 **%s**"%dlabel,"—"*15]
-            for p in group: lines.append(p["msg"])
+        lines.append("**推薦 %d 場（💎強→⭐弱 排序）**"%len(picks))
+        for p in picks: lines.append(p["msg"])
 
     lines+=[
-        "═"*20,"🔧 **V122 更新**",
+        "═"*20,"🔧 **V123 更新**",
         "• ① 投手近期3場ERA融合（65%近期+35%賽季）",
         "• ② 球場係數 Park Factor（30隊）",
         "• ③ 牛棚品質（各隊牛棚ERA影響後段）",
@@ -1115,6 +1111,8 @@ def run():
         "• ⑨ [V122] ★ 新增讓分概率模型（Gaussian margin distribution）",
         "• ⑩ [V122] ★ 新增大小分概率模型（TOTAL_STD=2.10）",
         "• ⑪ [V122] 診斷顯示各市場最優edge類型 [ML/RL/TOT]",
+        "• ⑫ [V123] ★ 推薦依強度全局排序（💎→🔥→⭐，同級再按 score 降序）",
+        "• ⑬ [V123] 時間行加入日期（MM/DD HH:MM），移除日期分組標題",
     ]
 
     out="\n".join(lines)
