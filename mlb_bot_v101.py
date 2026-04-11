@@ -1,7 +1,7 @@
 import os, json, math, logging, datetime, requests
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-log = logging.getLogger("MLB_V123")
+log = logging.getLogger("MLB_V124")
 
 ODDS_API_KEY    = os.getenv("ODDS_API_KEY", "")
 DISCORD_WEBHOOK = os.getenv("DISCORD_WEBHOOK", "")
@@ -541,7 +541,7 @@ def fetch_odds():
     if not ODDS_API_KEY: log.error("ODDS_API_KEY not set"); return []
     data = safe_get(
         "https://api.the-odds-api.com/v4/sports/baseball_mlb/odds/",
-        params={"apiKey":ODDS_API_KEY,"regions":"us","markets":"h2h,spreads,totals",
+        params={"apiKey":ODDS_API_KEY,"regions":"us","markets":"h2h,spreads,alternate_spreads,totals",
                 "oddsFormat":"decimal","dateFormat":"iso"},
     )
     if not data: return []
@@ -816,11 +816,10 @@ def run():
 
         # ── 收集所有市場最優/共識賠率 ──────────────────────────
         home_price=away_price=home_book=away_book=None
-        rl_h_price=rl_a_price=rl_h_book=rl_a_book=None
+        rl_lines={}  # {spread_size: {h_price,h_book,h_all,a_price,a_book,a_all,h_pts}}
         over_price=under_price=over_book=under_book=None
         market_total=8.5
         con_h_prices=[]; con_a_prices=[]
-        con_rl_h=[]; con_rl_a=[]
         con_over=[]; con_under=[]
         for bm in bms:
             bk_name=bm.get("title","?")
@@ -835,15 +834,23 @@ def run():
                         elif t==away:
                             con_a_prices.append(p)
                             if away_price is None or p>away_price: away_price=p; away_book=bk_name
-                elif mk=="spreads":
+                elif mk in ("spreads","alternate_spreads"):
                     for o in mkt.get("outcomes",[]):
                         t=norm_team(o.get("name","")); p=o.get("price",0)
+                        try: pts=float(o.get("point",0))
+                        except (ValueError,TypeError): continue
+                        if p<=0 or pts==0: continue
+                        s=round(abs(pts),1)
+                        if s not in rl_lines:
+                            rl_lines[s]={"h_price":None,"h_book":None,"h_all":[],
+                                         "a_price":None,"a_book":None,"a_all":[],"h_pts":None}
+                        e=rl_lines[s]
                         if t==home:
-                            con_rl_h.append(p)
-                            if rl_h_price is None or p>rl_h_price: rl_h_price=p; rl_h_book=bk_name
+                            e["h_pts"]=pts; e["h_all"].append(p)
+                            if e["h_price"] is None or p>e["h_price"]: e["h_price"]=p; e["h_book"]=bk_name
                         elif t==away:
-                            con_rl_a.append(p)
-                            if rl_a_price is None or p>rl_a_price: rl_a_price=p; rl_a_book=bk_name
+                            e["a_all"].append(p)
+                            if e["a_price"] is None or p>e["a_price"]: e["a_price"]=p; e["a_book"]=bk_name
                 elif mk=="totals":
                     for o in mkt.get("outcomes",[]):
                         pt=o.get("point"); p=o.get("price",0); nm=o.get("name","")
@@ -862,8 +869,6 @@ def run():
         con_a = round(sum(con_a_prices)/len(con_a_prices),3) if con_a_prices else away_price
         if con_h <= 0 or con_a <= 0: continue  # guard: 防止除以零
 
-        con_rl_h_p = round(sum(con_rl_h)/len(con_rl_h),3) if con_rl_h else rl_h_price
-        con_rl_a_p = round(sum(con_rl_a)/len(con_rl_a),3) if con_rl_a else rl_a_price
         con_ov_p   = round(sum(con_over)/len(con_over),3) if con_over else over_price
         con_un_p   = round(sum(con_under)/len(con_under),3) if con_under else under_price
 
@@ -878,30 +883,51 @@ def run():
         h_mkt_nv = round((1/con_h)/inv_sum,4); a_mkt_nv = round((1/con_a)/inv_sum,4)
         h_blend  = MOD_W*h_model+MKT_W*h_mkt_nv; a_blend = MOD_W*a_model+MKT_W*a_mkt_nv
 
-        # ── ★ 讓分概率（-1.5/+1.5 Run Line）──────────────────
-        p_h_rl = runline_prob(margin, 1.5, dyn_std)
-        p_a_rl = 1.0 - p_h_rl
-
         # ── ★ 大小分概率（Over/Under）────────────────────────
         p_over  = over_prob(pred["pure_total"], market_total)
         p_under = 1.0 - p_over
 
         # ── ★ 建立所有候選注單並選最優 ──────────────────────
-        # (bet_type, side_key, team_key, best_price, book, model_p,
-        #  edge_min, blend_p/None, con_p, conf_mult)
         BET_ML="獨贏"; BET_RL="讓分"; BET_TOT="大小分"
         candidates=[]
-        if home_price: candidates.append((BET_ML,"home",home,home_price,home_book,h_model,EDGE_MIN,h_blend,con_h,1.00))
-        if away_price: candidates.append((BET_ML,"away",away,away_price,away_book,a_model,EDGE_MIN,a_blend,con_a,1.00))
-        if rl_h_price and con_rl_h_p: candidates.append((BET_RL,"rl_h",home,rl_h_price,rl_h_book,p_h_rl,EDGE_MIN_RL,None,con_rl_h_p,0.90))
-        if rl_a_price and con_rl_a_p: candidates.append((BET_RL,"rl_a",away,rl_a_price,rl_a_book,p_a_rl,EDGE_MIN_RL,None,con_rl_a_p,0.90))
-        if over_price and con_ov_p:   candidates.append((BET_TOT,"over","over",over_price,over_book,p_over,EDGE_MIN_TOT,None,con_ov_p,0.88))
-        if under_price and con_un_p:  candidates.append((BET_TOT,"under","under",under_price,under_book,p_under,EDGE_MIN_TOT,None,con_un_p,0.88))
+        if home_price: candidates.append({"btype":BET_ML,"bside":"home","bteam":home,"bp":home_price,
+            "bk":home_book,"model_p":h_model,"edge_min":EDGE_MIN,"blend_p":h_blend,"con_p":con_h,
+            "conf_mult":1.00,"label":"獨贏","rl_inv":None,"rl_s":None})
+        if away_price: candidates.append({"btype":BET_ML,"bside":"away","bteam":away,"bp":away_price,
+            "bk":away_book,"model_p":a_model,"edge_min":EDGE_MIN,"blend_p":a_blend,"con_p":con_a,
+            "conf_mult":1.00,"label":"獨贏","rl_inv":None,"rl_s":None})
+        # RL candidates：每個讓分數（1.5/2.5/…）都產生主客兩個候選
+        for s,e in sorted(rl_lines.items()):
+            hp=e["h_price"]; ap=e["a_price"]
+            if hp is None or ap is None or hp<=0 or ap<=0: continue
+            ch=round(sum(e["h_all"])/len(e["h_all"]),3) if e["h_all"] else hp
+            ca=round(sum(e["a_all"])/len(e["a_all"]),3) if e["a_all"] else ap
+            h_pts=e.get("h_pts") or -s
+            if h_pts<=0:  # home team gives points (-s)
+                p_h=runline_prob(margin,s,dyn_std); h_lbl="-%g"%s; a_lbl="+%g"%s
+            else:         # home team receives points (+s)
+                p_h=runline_prob(margin,-s,dyn_std); h_lbl="+%g"%s; a_lbl="-%g"%s
+            p_a=1.0-p_h
+            rl_inv_val=(1/ch+1/ca) if (ch>0 and ca>0) else 1.0
+            candidates.append({"btype":BET_RL,"bside":"rl_h","bteam":home,"bp":hp,"bk":e["h_book"],
+                "model_p":p_h,"edge_min":EDGE_MIN_RL,"blend_p":None,"con_p":ch,
+                "conf_mult":0.90,"label":h_lbl,"rl_inv":rl_inv_val,"rl_s":s})
+            candidates.append({"btype":BET_RL,"bside":"rl_a","bteam":away,"bp":ap,"bk":e["a_book"],
+                "model_p":p_a,"edge_min":EDGE_MIN_RL,"blend_p":None,"con_p":ca,
+                "conf_mult":0.90,"label":a_lbl,"rl_inv":rl_inv_val,"rl_s":s})
+        if over_price and con_ov_p:   candidates.append({"btype":BET_TOT,"bside":"over","bteam":"over","bp":over_price,
+            "bk":over_book,"model_p":p_over,"edge_min":EDGE_MIN_TOT,"blend_p":None,"con_p":con_ov_p,
+            "conf_mult":0.88,"label":"OVER","rl_inv":None,"rl_s":None})
+        if under_price and con_un_p:  candidates.append({"btype":BET_TOT,"bside":"under","bteam":"under","bp":under_price,
+            "bk":under_book,"model_p":p_under,"edge_min":EDGE_MIN_TOT,"blend_p":None,"con_p":con_un_p,
+            "conf_mult":0.88,"label":"UNDER","rl_inv":None,"rl_s":None})
 
         best_pick=None
-        for btype,bside,bteam,bp,bk,model_p,edge_min,blend_p,con_p,conf_mult in candidates:
+        for c in candidates:
+            btype=c["btype"]; bp=c["bp"]; con_p=c["con_p"]; model_p=c["model_p"]
+            blend_p=c["blend_p"]; edge_min=c["edge_min"]
             if bp is None or bp<=0 or con_p is None or con_p<=0: continue
-            bet_conf = conf*conf_mult
+            bet_conf = conf*c["conf_mult"]
             raw_edge = model_p - 1/bp
             if raw_edge*bet_conf<edge_min: continue
             if bp<MIN_P or bp>MAX_P: continue
@@ -912,10 +938,7 @@ def run():
             if stake<KELLY_MIN: continue
             score=raw_edge*bet_conf
             if best_pick is None or score>best_pick["score"]:
-                best_pick={"btype":btype,"bside":bside,"bteam":bteam,
-                           "bp":bp,"bk":bk,"model_p":model_p,
-                           "raw_edge":raw_edge,"bet_conf":bet_conf,
-                           "con_p":con_p,"stake":stake,"score":score}
+                best_pick={**c,"raw_edge":raw_edge,"bet_conf":bet_conf,"stake":stake,"score":score}
 
         if best_pick is None: continue
 
@@ -958,12 +981,12 @@ def run():
             mkt_tag=""
         elif btype==BET_RL:
             bcn=CN.get(bteam,bteam)
-            pts_str="-1.5" if bside=="rl_h" else "+1.5"
-            rl_inv=(1/con_rl_h_p+1/con_rl_a_p) if (con_rl_h_p and con_rl_a_p) else 1.0
-            mkt_rl_p=(1/con_p)/rl_inv if rl_inv>0 else 1/con_p
+            pts_str=best_pick["label"]   # e.g. "-1.5", "+2.5"
+            rl_inv_val=best_pick.get("rl_inv") or 1.0
+            mkt_rl_p=(1/con_p)/rl_inv_val if rl_inv_val>0 else 1/con_p
             bet_desc="`%s 讓分(%s)` @ **%.2f** (%s)"%(bcn,pts_str,bp,bk)
             stats_ln="> 共識賠率: %.2f | 讓分勝率: %.1f%% | 市場隱含: %.1f%%"%(con_p,model_p*100,mkt_rl_p*100)
-            mkt_tag=" [讓分]"
+            mkt_tag=" [讓分%s]"%pts_str
         else:  # BET_TOT
             ov_un="OVER" if bside=="over" else "UNDER"
             tot_inv=(1/con_ov_p+1/con_un_p) if (con_ov_p and con_un_p) else 1.0
@@ -1037,7 +1060,7 @@ def run():
     era_str  = "✅近期ERA(%d)"%len(_RECENT_ERA) if _RECENT_ERA else "⚠️賽季ERA"
 
     lines=[
-        "⚾ **MLB V123 分析報告**",
+        "⚾ **MLB V124 分析報告**",
         "🕐 %s | %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str),
         "📌 正式記錄 (00–07時)" if official else "🔧 測試模式 (不寫gist)",
         "📊 歷史: %d勝/%d場 (%.1f%%)"%(wins,total_settled,wr),
@@ -1099,7 +1122,7 @@ def run():
         for p in picks: lines.append(p["msg"])
 
     lines+=[
-        "═"*20,"🔧 **V123 更新**",
+        "═"*20,"🔧 **V124 更新**",
         "• ① 投手近期3場ERA融合（65%近期+35%賽季）",
         "• ② 球場係數 Park Factor（30隊）",
         "• ③ 牛棚品質（各隊牛棚ERA影響後段）",
@@ -1107,12 +1130,14 @@ def run():
         "• ⑤ 動態主場優勢+動態STD（隨ESPN form調整）",
         "• ⑥ 球星缺陣/傷疑顯示",
         "• ⑦ [V121] Edge顯示修正：原始模型值，conf只在Kelly中套用一次",
-        "• ⑧ [V122] ★ 三市場選優：獨贏/讓分(-1.5)/大小分自動選最高edge",
+        "• ⑧ [V122] ★ 三市場選優：獨贏/讓分/大小分自動選最高edge",
         "• ⑨ [V122] ★ 新增讓分概率模型（Gaussian margin distribution）",
         "• ⑩ [V122] ★ 新增大小分概率模型（TOTAL_STD=2.10）",
         "• ⑪ [V122] 診斷顯示各市場最優edge類型 [ML/RL/TOT]",
         "• ⑫ [V123] ★ 推薦依強度全局排序（💎→🔥→⭐，同級再按 score 降序）",
         "• ⑬ [V123] 時間行加入日期（MM/DD HH:MM），移除日期分組標題",
+        "• ⑭ [V124] ★ 讓分支援多讓分數（1.5/2.5/3.5等）via alternate_spreads API",
+        "• ⑮ [V124] 讓分注單標籤動態顯示實際讓分數，如 讓分(-2.5) [讓分-2.5]",
     ]
 
     out="\n".join(lines)
