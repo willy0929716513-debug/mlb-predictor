@@ -541,7 +541,7 @@ def fetch_odds():
     if not ODDS_API_KEY: log.error("ODDS_API_KEY not set"); return []
     data = safe_get(
         "https://api.the-odds-api.com/v4/sports/baseball_mlb/odds/",
-        params={"apiKey":ODDS_API_KEY,"regions":"us","markets":"h2h,spreads,alternate_spreads,totals",
+        params={"apiKey":ODDS_API_KEY,"regions":"us","markets":"h2h,spreads,totals",
                 "oddsFormat":"decimal","dateFormat":"iso"},
     )
     if not data: return []
@@ -1136,8 +1136,8 @@ def run():
         "• ⑪ [V122] 診斷顯示各市場最優edge類型 [ML/RL/TOT]",
         "• ⑫ [V123] ★ 推薦依強度全局排序（💎→🔥→⭐，同級再按 score 降序）",
         "• ⑬ [V123] 時間行加入日期（MM/DD HH:MM），移除日期分組標題",
-        "• ⑭ [V124] ★ 讓分支援多讓分數（1.5/2.5/3.5等）via alternate_spreads API",
-        "• ⑮ [V124] 讓分注單標籤動態顯示實際讓分數，如 讓分(-2.5) [讓分-2.5]",
+        "• ⑭ [V124] ★ 讓分架構升級：rl_lines dict 按讓分數分組，自動選最優讓分線",
+        "• ⑮ [V124] 讓分注單標籤動態顯示實際讓分數，如 讓分(-1.5) [讓分-1.5]",
     ]
 
     out="\n".join(lines)
