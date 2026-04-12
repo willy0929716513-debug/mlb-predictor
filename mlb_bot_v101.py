@@ -1,7 +1,7 @@
 import os, json, math, logging, datetime, requests
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-log = logging.getLogger("MLB_V124")
+log = logging.getLogger("MLB_V125")
 
 ODDS_API_KEY    = os.getenv("ODDS_API_KEY", "")
 DISCORD_WEBHOOK = os.getenv("DISCORD_WEBHOOK", "")
@@ -65,9 +65,9 @@ PITCHER_ERA = {
     "gallen":4.00,"rodriguez_e":4.20,"soroka":4.00,"rasmussen":2.76,
     "boyle":3.18,"hancock":3.50,"rogers_t":2.50,"eovaldi":3.80,"springs":4.30,
     "ashcraft":2.25,"mlodzinski":4.36,"soriano_j":3.93,"detmers":2.38,
-    "freeland":4.75,"misiorowski":4.36,"bradley_t":0.87,"liberatore":4.21,
-    "severino":4.54,"cavalli":4.25,"boyd":3.21,"horton":4.10,"abbott":3.42,
-    "burke_s":3.60,"smith_s":3.81,"pfaadt":4.10,"weathers":4.50,
+    "freeland":4.75,"misiorowski":4.36,"bradley_t":3.88,"bradley":3.88,
+    "liberatore":4.21,"severino":4.54,"cavalli":4.25,"boyd":3.21,"horton":4.10,
+    "abbott":3.42,"burke_s":3.60,"smith_s":3.81,"pfaadt":4.10,"weathers":4.50,
     "williamson":4.60,"chandler":4.00,"mize":4.30,"pallante":4.60,
     "mikolas":4.20,"marquez":4.90,"flexen":4.90,"taillon":4.40,"voth":4.80,
     "adon":4.60,"kolek":4.50,"crawford_k":4.20,"sandoval_p":4.00,
@@ -79,8 +79,14 @@ PITCHER_ERA = {
     "fedde":4.60,"poulin":5.30,"painter":4.80,"mahle":4.20,"burns_c":3.50,
     "civale":4.50,"gray_j":3.95,"lauer":4.40,"kikuchi":4.20,"degrom":3.50,
     "holmes":4.00,"buehler":4.20,"williams_g":3.80,"varland":4.60,
-    "martin_c":4.60,"sears":4.50,"cortes":4.30,"houser":4.80,"lynch":4.70,
+    "martin_c":4.60,"sears":4.50,"cortes":4.30,"houser":4.60,"lynch":4.70,
     "cox":4.80,"feltner":5.20,"hudson":5.00,"small":4.70,"wesneski":4.40,
+    # ── 2026 新增 / 修正 ──────────────────────────
+    "povich":4.10,"woodruff":4.20,"littell":4.60,"cameron":4.60,
+    "scherzer":4.30,"taylor":4.90,"lyles":5.10,"hendricks":4.70,
+    "stroman":4.20,"alexander":4.40,"lorenzen":4.80,"cobb":4.50,
+    "montgomery":4.10,"snell":3.60,"means":4.30,"bass":4.80,
+    "irvin":4.60,"urquidy":4.70,"bradish":3.80,"suarez":4.50,
 }
 
 # ── BASE 隊伍實力 ──────────────────────────────
@@ -442,10 +448,22 @@ def fetch_espn_ratings():
                     off_e = round(min(base["off"]+(wp-0.5)*0.5, 5.8), 2)
                     def_e = round(max(base["def"]-(wp-0.5)*0.5, 3.0), 2)
                 alpha = min(t/30, ESPN_ALPHA_MAX)
+                # L10 近期形態（若 ESPN 有提供）
+                try:
+                    l10w = int(st.get("last10Wins", st.get("L10W", st.get("vsLast10Wins", 0))) or 0)
+                    l10l = int(st.get("last10Losses", st.get("L10L", st.get("vsLast10Losses", 0))) or 0)
+                    l10 = l10w + l10l
+                    if l10 >= 8:
+                        l10_wp = l10w / l10
+                        form = round((wp-0.5)*0.10 + (l10_wp-0.5)*0.25, 3)
+                    else:
+                        form = round((wp-0.5)*0.20, 3)
+                except Exception:
+                    form = round((wp-0.5)*0.20, 3)
                 ratings[short] = {
                     "off":  round(off_e*alpha + base["off"]*(1-alpha), 2),
                     "def":  round(def_e*alpha + base["def"]*(1-alpha), 2),
-                    "form": round((wp-0.5)*0.2, 3),
+                    "form": form,
                     "games": t,
                 }
     except Exception as e:
@@ -632,13 +650,31 @@ def get_pitcher_era(key):
     if not key: return LEAGUE_ERA + 0.60
     k = key.lower().strip()
     recent = _RECENT_ERA.get(k)
-    season = PITCHER_ERA.get(k)
+    season = PITCHER_ERA.get(k, None)
     if recent is not None and season is not None:
-        return round(recent*SP_RECENT_W + season*SP_SEASON_W, 2)
-    return recent if recent is not None else (season if season is not None else LEAGUE_ERA+0.60)
+        # 小樣本偏差修正：極低/極高 ERA 加重賽季權重
+        if recent < 1.50:
+            w_r, w_s = 0.40, 0.60   # 極低→降低近期比重，避免過度樂觀
+        elif recent > 7.00:
+            w_r, w_s = 0.50, 0.50   # 極高→各半，避免過度悲觀
+        else:
+            w_r, w_s = SP_RECENT_W, SP_SEASON_W
+        return round(recent * w_r + season * w_s, 2)
+    if recent is not None:
+        # 無賽季ERA：向聯盟平均回歸（防止小樣本過度依賴）
+        if recent < 1.50:
+            return round(recent * 0.45 + LEAGUE_ERA * 0.55, 2)  # 極低→強烈回歸
+        elif recent > 7.00:
+            return round(recent * 0.50 + LEAGUE_ERA * 0.50, 2)  # 極高→回歸
+        return round(recent * 0.65 + LEAGUE_ERA * 0.35, 2)      # 正常→輕度回歸
+    return season if season is not None else LEAGUE_ERA + 0.60
 
 def era_adj(key):
-    return round((get_pitcher_era(key) - LEAGUE_ERA) * 0.35, 3)
+    era = get_pitcher_era(key)
+    delta = era - LEAGUE_ERA
+    # 非線性：差距越大影響越顯著（|delta|^1.08），最大 ±2.0
+    scaled = math.copysign(min(abs(delta) ** 1.08, 2.0) * 0.34, delta)
+    return round(scaled, 3)
 
 def bullpen_adj(team):
     era = BULLPEN_ERA.get(team.lower(), LEAGUE_BULL_ERA)
@@ -711,6 +747,9 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
     model_total = round(pure_total*0.30 + market_total*0.70, 2)
     conf = total_confidence(pure_total, market_total)
     conf *= (pitcher_confidence(home_sp) * pitcher_confidence(away_sp)) ** 0.5
+    # TBD 先發：缺乏先發資訊大幅降低信心
+    if not home_sp: conf *= 0.86
+    if not away_sp: conf *= 0.86
 
     return {
         "home_win_prob": round(model_win_p, 4),
@@ -872,11 +911,15 @@ def run():
         con_ov_p   = round(sum(con_over)/len(con_over),3) if con_over else over_price
         con_un_p   = round(sum(con_under)/len(con_under),3) if con_under else under_price
 
+        # ★ 書商數量信心乘數：書商越多，市場共識越可靠
+        n_bks = len(bms)
+        book_conf = 1.00 if n_bks >= 10 else (0.95 if n_bks >= 6 else 0.90)
+
         pred    = predict(home,away,home_sp,away_sp,market_total=market_total,game_dt=game_dt)
         margin  = pred["margin"]
         dyn_std = pred["dyn_std"]
         h_model = pred["home_win_prob"]; a_model = pred["away_win_prob"]
-        conf    = pred["conf_factor"]
+        conf    = pred["conf_factor"] * book_conf
 
         # 獨贏市場混合概率（用於 blend 過濾）
         inv_sum  = 1/con_h + 1/con_a
@@ -900,6 +943,8 @@ def run():
         for s,e in sorted(rl_lines.items()):
             hp=e["h_price"]; ap=e["a_price"]
             if hp is None or ap is None or hp<=0 or ap<=0: continue
+            # ★ 至少 3 家書商才採用讓分市場（流動性不足不推薦）
+            if len(e["h_all"]) < 3 or len(e["a_all"]) < 3: continue
             ch=round(sum(e["h_all"])/len(e["h_all"]),3) if e["h_all"] else hp
             ca=round(sum(e["a_all"])/len(e["a_all"]),3) if e["a_all"] else ap
             h_pts=e.get("h_pts") or -s
@@ -915,12 +960,15 @@ def run():
             candidates.append({"btype":BET_RL,"bside":"rl_a","bteam":away,"bp":ap,"bk":e["a_book"],
                 "model_p":p_a,"edge_min":EDGE_MIN_RL,"blend_p":None,"con_p":ca,
                 "conf_mult":0.90,"label":a_lbl,"rl_inv":rl_inv_val,"rl_s":s})
-        if over_price and con_ov_p:   candidates.append({"btype":BET_TOT,"bside":"over","bteam":"over","bp":over_price,
-            "bk":over_book,"model_p":p_over,"edge_min":EDGE_MIN_TOT,"blend_p":None,"con_p":con_ov_p,
-            "conf_mult":0.88,"label":"OVER","rl_inv":None,"rl_s":None})
-        if under_price and con_un_p:  candidates.append({"btype":BET_TOT,"bside":"under","bteam":"under","bp":under_price,
-            "bk":under_book,"model_p":p_under,"edge_min":EDGE_MIN_TOT,"blend_p":None,"con_p":con_un_p,
-            "conf_mult":0.88,"label":"UNDER","rl_inv":None,"rl_s":None})
+        # ★ 大小分：至少 3 家書商才採用
+        if over_price and con_ov_p and len(con_over)>=3:
+            candidates.append({"btype":BET_TOT,"bside":"over","bteam":"over","bp":over_price,
+                "bk":over_book,"model_p":p_over,"edge_min":EDGE_MIN_TOT,"blend_p":None,"con_p":con_ov_p,
+                "conf_mult":0.88,"label":"OVER","rl_inv":None,"rl_s":None})
+        if under_price and con_un_p and len(con_under)>=3:
+            candidates.append({"btype":BET_TOT,"bside":"under","bteam":"under","bp":under_price,
+                "bk":under_book,"model_p":p_under,"edge_min":EDGE_MIN_TOT,"blend_p":None,"con_p":con_un_p,
+                "conf_mult":0.88,"label":"UNDER","rl_inv":None,"rl_s":None})
 
         best_pick=None
         for c in candidates:
@@ -1060,7 +1108,7 @@ def run():
     era_str  = "✅近期ERA(%d)"%len(_RECENT_ERA) if _RECENT_ERA else "⚠️賽季ERA"
 
     lines=[
-        "⚾ **MLB V124 分析報告**",
+        "⚾ **MLB V125 分析報告**",
         "🕐 %s | %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str),
         "📌 正式記錄 (00–07時)" if official else "🔧 測試模式 (不寫gist)",
         "📊 歷史: %d勝/%d場 (%.1f%%)"%(wins,total_settled,wr),
@@ -1138,6 +1186,13 @@ def run():
         "• ⑬ [V123] 時間行加入日期（MM/DD HH:MM），移除日期分組標題",
         "• ⑭ [V124] ★ 讓分架構升級：rl_lines dict 按讓分數分組，自動選最優讓分線",
         "• ⑮ [V124] 讓分注單標籤動態顯示實際讓分數，如 讓分(-1.5) [讓分-1.5]",
+        "• ⑯ [V125] ★ 近期ERA小樣本回歸：ERA<1.50時降低近期比重，避免3場過度樂觀",
+        "• ⑰ [V125] ★ 非線性ERA調整：|delta|^1.08，頂尖/弱投手影響更顯著",
+        "• ⑱ [V125] TBD先發雙重懲罰：信心×0.86（×兩次若雙方皆TBD）",
+        "• ⑲ [V125] 書商數量信心乘數：<6家×0.90、6-9家×0.95、≥10家×1.00",
+        "• ⑳ [V125] RL/TOT流動性門檻：至少3家書商報價才納入候選",
+        "• ㉑ [V125] ESPN L10近期勝率融合（若API提供）：L10佔60%+全季佔40%",
+        "• ㉒ [V125] 新增/修正2026賽季投手ERA資料（povich/woodruff/bradley等）",
     ]
 
     out="\n".join(lines)
