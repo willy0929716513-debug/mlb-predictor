@@ -1,7 +1,7 @@
 import os, json, math, logging, datetime, requests
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-log = logging.getLogger("MLB_V125")
+log = logging.getLogger("MLB_V126")
 
 ODDS_API_KEY    = os.getenv("ODDS_API_KEY", "")
 DISCORD_WEBHOOK = os.getenv("DISCORD_WEBHOOK", "")
@@ -53,6 +53,7 @@ BULLPEN_ERA = {
     "marlins":4.40,"rockies":4.85,
 }
 LEAGUE_BULL_ERA = 3.95
+LEAGUE_DEF_AVG  = 4.45   # MLB 平均每場失分（用於防守品質調整）
 
 # ── 投手賽季 ERA ──────────────────────────────
 PITCHER_ERA = {
@@ -734,6 +735,16 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
         wf = fetch_weather(home, game_dt)
         h_exp *= wf; a_exp *= wf
 
+    # ⑧ ★ 球隊防守品質（ESPN 實際失分率 vs 聯盟均值）
+    # 防守好的主隊→客隊得分減少；防守差的主隊→客隊得分增加
+    if hr.get("games", 0) >= 5:
+        a_exp -= (LEAGUE_DEF_AVG - hr.get("def", LEAGUE_DEF_AVG)) * 0.08
+    if ar.get("games", 0) >= 5:
+        h_exp -= (LEAGUE_DEF_AVG - ar.get("def", LEAGUE_DEF_AVG)) * 0.08
+
+    # ⑨ ★ 客隊近期狀態對進攻的影響（熱門客隊客場也能多得分）
+    a_exp += ar.get("form", 0.0) * 0.15
+
     h_exp = max(2.5, h_exp)
     a_exp = max(2.5, a_exp)
     margin = h_exp - a_exp
@@ -1014,7 +1025,9 @@ def run():
         a_tag=("(近期ERA%.2f)"%a_era if away_sp in _RECENT_ERA else "(ERA%.2f)"%a_era) if away_sp else ""
         h_sp_str=h_sp_n+h_tag; a_sp_str=a_sp_n+a_tag
 
-        cf_note=" ⚠️信心%.0f%%"%(bet_conf*100) if bet_conf<0.85 else ""
+        stability = model_p * bet_conf
+        stab_str  = "%.0f%%" % (stability * 100)
+        warn_note = " ⚠️" if bet_conf < 0.75 else ""
         pf_note=" 🏟️PF%.2f"%pred["park_factor"] if abs(pred["park_factor"]-1.0)>0.05 else ""
         ou_diff=pred["model_total"]-market_total
         if   ou_diff>1.5:  ou_str="OVER偏向(%.1f/%.1f)"%(pred["model_total"],market_total)
@@ -1070,7 +1083,7 @@ def run():
             "⚾ 先發: %s — %s"%(a_sp_str,h_sp_str),
             "💰 推薦: %s"%bet_desc,
             stats_ln,
-            "> Edge: **%+.1f%%**%s | Kelly: $%.1f"%(raw_edge*100,cf_note,stake),
+            "> Edge: **%+.1f%%** | 穩定%s%s | Kelly: $%.1f"%(raw_edge*100,stab_str,warn_note,stake),
         ]
         if last_line: msg_lines.append(last_line)
         msg="\n".join(msg_lines)+"\n"
@@ -1106,7 +1119,7 @@ def run():
     era_str  = "✅近期ERA(%d)"%len(_RECENT_ERA) if _RECENT_ERA else "⚠️賽季ERA"
 
     lines=[
-        "⚾ **MLB V125 分析報告**",
+        "⚾ **MLB V126 分析報告**",
         "🕐 %s | %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str),
         "📌 正式記錄 (00–07時)" if official else "🔧 測試模式 (不寫gist)",
         "📊 歷史: %d勝/%d場 (%.1f%%)"%(wins,total_settled,wr),
@@ -1174,6 +1187,9 @@ def run():
         "• 三市場自動選優（獨贏/讓分/大小分）| 依強度全局排序",
         "• [V125] ERA小樣本回歸 | 非線性ERA調整 | TBD先發懲罰",
         "• [V125] 書商數量信心乘數 | RL/TOT最低3家書商門檻",
+        "• [V126] ★ 球隊防守品質納入模型（ESPN失分率，≥5場才套用）",
+        "• [V126] ★ 客隊近期狀態影響客場進攻（form×0.15）",
+        "• [V126] Edge行改為穩定%顯示（勝率×信心），信心<75%標⚠️",
     ]
 
     out="\n".join(lines)
