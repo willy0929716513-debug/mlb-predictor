@@ -1,7 +1,7 @@
 import os, json, math, logging, datetime, requests
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-log = logging.getLogger("MLB_V127")
+log = logging.getLogger("MLB_V128")
 
 ODDS_API_KEY    = os.getenv("ODDS_API_KEY", "")
 DISCORD_WEBHOOK = os.getenv("DISCORD_WEBHOOK", "")
@@ -264,6 +264,8 @@ _DYN_LTD      = {}
 _ESPN_RATINGS = {}
 _RECENT_ERA   = {}
 _WEATHER_CACHE= {}
+_SCORING_FORM = {}   # {team: recent_runs_per_game} 最近10場得分均值
+_B2B_TEAMS    = set() # 昨天有出賽的球隊（連續出賽疲勞）
 
 
 # ══════════════════════════════════════════════
@@ -349,6 +351,74 @@ def _fetch_recent_era(pitcher_id, last_n=3):
         return None  # 回傳 None 讓 get_pitcher_era 改用賽季 ERA
     # 上限：近期 ERA > 12 通常是短暫崩盤，限制到 10 避免過度懲罰
     return min(era, 10.0)
+
+def fetch_b2b_teams():
+    """找出昨天有出賽的球隊（今天連續出賽者）"""
+    global _B2B_TEAMS
+    yesterday = (datetime.date.today() - datetime.timedelta(days=1)).isoformat()
+    data = safe_get(
+        "https://statsapi.mlb.com/api/v1/schedule",
+        params={"sportId":1,"date":yesterday,"gameType":"R",
+                "fields":"dates,games,teams,home,away,team,id,name,status,detailedState"},
+        timeout=10,
+    )
+    if not data: return
+    b2b = set()
+    for de in data.get("dates",[]):
+        for game in de.get("games",[]):
+            status = game.get("status",{}).get("detailedState","")
+            if "Final" not in status and "Completed" not in status: continue
+            hd = game.get("teams",{}).get("home",{})
+            ad = game.get("teams",{}).get("away",{})
+            hn = MLB_TEAM_ID.get(hd.get("team",{}).get("id")) or norm_team(hd.get("team",{}).get("name",""))
+            an = MLB_TEAM_ID.get(ad.get("team",{}).get("id")) or norm_team(ad.get("team",{}).get("name",""))
+            if hn: b2b.add(hn)
+            if an: b2b.add(an)
+    _B2B_TEAMS = b2b
+    log.info("B2B teams: %s", sorted(b2b))
+
+def fetch_recent_scoring():
+    """最近14天完賽場次，計算各隊近10場每場得分均值"""
+    global _SCORING_FORM
+    start     = (datetime.date.today() - datetime.timedelta(days=14)).isoformat()
+    yesterday = (datetime.date.today() - datetime.timedelta(days=1)).isoformat()
+    data = safe_get(
+        "https://statsapi.mlb.com/api/v1/schedule",
+        params={"sportId":1,"startDate":start,"endDate":yesterday,
+                "hydrate":"linescore","gameType":"R",
+                "fields":"dates,games,teams,home,away,team,id,name,score,status,detailedState,linescore,runs"},
+        timeout=15,
+    )
+    if not data: return
+    team_runs = {}  # {team: [runs_list]} 最早→最晚
+    for de in data.get("dates",[]):
+        for game in de.get("games",[]):
+            status = game.get("status",{}).get("detailedState","")
+            if "Final" not in status and "Completed" not in status: continue
+            hd = game.get("teams",{}).get("home",{})
+            ad = game.get("teams",{}).get("away",{})
+            hn = MLB_TEAM_ID.get(hd.get("team",{}).get("id")) or norm_team(hd.get("team",{}).get("name",""))
+            an = MLB_TEAM_ID.get(ad.get("team",{}).get("id")) or norm_team(ad.get("team",{}).get("name",""))
+            # 嘗試從 teams.home/away.score 取分，再 fallback 到 linescore
+            h_runs = hd.get("score")
+            a_runs = ad.get("score")
+            if h_runs is None:
+                ls = game.get("linescore",{})
+                h_runs = ls.get("teams",{}).get("home",{}).get("runs")
+                a_runs = ls.get("teams",{}).get("away",{}).get("runs")
+            if h_runs is None: continue
+            try:
+                if hn: team_runs.setdefault(hn,[]).append(float(h_runs))
+                if an: team_runs.setdefault(an,[]).append(float(a_runs))
+            except (TypeError, ValueError):
+                continue
+    form = {}
+    for team, runs_list in team_runs.items():
+        last10 = runs_list[-10:]   # 取最近10場
+        if len(last10) >= 5:       # 至少5場才有統計意義
+            form[team] = round(sum(last10)/len(last10), 2)
+    _SCORING_FORM = form
+    log.info("Scoring form cached: %d teams", len(form))
 
 def build_recent_era_cache(pitchers_dict):
     global _RECENT_ERA
@@ -759,6 +829,17 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
     # ⑨ ★ 客隊近期狀態對進攻的影響（熱門客隊客場也能多得分）
     a_exp += ar.get("form", 0.0) * 0.15
 
+    # ⑩ ★ 近期得分形態（最近10場均值 vs ESPN整季均值）
+    # 近期打線火熱/低迷 → 調整期望得分（權重20%）
+    if home in _SCORING_FORM and _SCORING_FORM[home] > 0:
+        h_exp += (_SCORING_FORM[home] - hr["off"]) * 0.20
+    if away in _SCORING_FORM and _SCORING_FORM[away] > 0:
+        a_exp += (_SCORING_FORM[away] - ar["off"]) * 0.20
+
+    # ⑪ ★ 連續出賽疲勞（昨天出賽 → 今天體力稍遜 -0.06 runs）
+    if home in _B2B_TEAMS: h_exp -= 0.06
+    if away in _B2B_TEAMS: a_exp -= 0.06
+
     h_exp = max(2.5, h_exp)
     a_exp = max(2.5, a_exp)
     margin = h_exp - a_exp
@@ -851,6 +932,10 @@ def run():
     if pitchers:
         try: build_recent_era_cache(pitchers)
         except Exception as e: log.warning("Recent ERA failed: %s", e)
+    try: fetch_b2b_teams()
+    except Exception as e: log.warning("B2B teams failed: %s", e)
+    try: fetch_recent_scoring()
+    except Exception as e: log.warning("Recent scoring failed: %s", e)
     odds_data = fetch_odds()
     if not odds_data: log.error("No odds data"); return
 
@@ -945,6 +1030,11 @@ def run():
         n_bks = len(bms)
         book_conf = 1.00 if n_bks >= 10 else (0.95 if n_bks >= 6 else 0.90)
 
+        # ★ 市場 vig 信心：vig（書商抽水）越低 → 市場定價越有效率 → 信心越高
+        vig = (1.0/con_h + 1.0/con_a) - 1.0
+        vig_conf = 1.00 if vig < 0.04 else (0.95 if vig < 0.06 else 0.90)
+        book_conf = round(min(book_conf * vig_conf, 1.0), 3)
+
         pred    = predict(home,away,home_sp,away_sp,market_total=market_total,game_dt=game_dt)
         margin  = pred["margin"]
         dyn_std = pred["dyn_std"]
@@ -1010,7 +1100,7 @@ def run():
             if raw_edge*bet_conf<edge_min: continue
             if bp<MIN_P or bp>MAX_P: continue
             if btype==BET_ML and (blend_p is None or blend_p<0.48): continue
-            if btype!=BET_ML and model_p<0.40: continue
+            if btype!=BET_ML and model_p<0.45: continue
             if bet_conf<0.60: continue
             stake=kelly_stake(raw_edge,model_p,bp,conf=bet_conf)
             if stake<KELLY_MIN: continue
@@ -1096,12 +1186,14 @@ def run():
         else:
             last_line=None
 
+        score_str = "> 預測得分: %s **%.1f** — **%.1f** %s"%(acn,pred["a_expected"],pred["h_expected"],hcn)
         msg_lines=[
             "**%s  %s @ %s**"%(tier,acn,hcn),
             "🕐 %s %s (台灣時間)%s%s"%(game_date_str[5:].replace("-","/"),game_time_str,pf_note,mkt_tag),
             "⚾ 先發: %s — %s"%(a_sp_str,h_sp_str),
             "💰 推薦: %s"%bet_desc,
             stats_ln,
+            score_str,
             "> Edge: **%+.1f%%** | 穩定%s%s | Kelly: $%.1f"%(raw_edge*100,stab_str,warn_note,stake),
         ]
         if last_line: msg_lines.append(last_line)
@@ -1136,10 +1228,12 @@ def run():
     il_str   = {"rotowire":"✅RotoWire","static":"⚠️靜態"}.get(il_src,il_src)
     sp_str   = "✅已取得" if pitchers else "❌未取得"
     era_str  = "✅近期ERA(%d)"%len(_RECENT_ERA) if _RECENT_ERA else "⚠️賽季ERA"
+    scr_str  = "✅得分形態(%d)"%len(_SCORING_FORM) if _SCORING_FORM else "⚠️無得分形態"
+    b2b_str  = "✅B2B(%d)"%len(_B2B_TEAMS) if _B2B_TEAMS else "—B2B"
 
     lines=[
-        "⚾ **MLB V127 分析報告**",
-        "🕐 %s | %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str),
+        "⚾ **MLB V128 分析報告**",
+        "🕐 %s | %s %s %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str,scr_str,b2b_str),
         "📌 正式記錄 (00–07時)" if official else "🔧 測試模式 (不寫gist)",
         "📊 歷史: %d勝/%d場 (%.1f%%)"%(wins,total_settled,wr),
         "",
@@ -1200,20 +1294,15 @@ def run():
         for p in picks: lines.append(p["msg"])
 
     lines+=[
-        "═"*20,"🔧 **MLB V125 模型功能**",
-        "• 投手近期ERA融合 | 球場PF | 牛棚ERA | 動態主場優勢",
-        "• 球星傷兵顯示 | ESPN即時戰績 | 天氣調整（選用）",
-        "• 三市場自動選優（獨贏/讓分/大小分）| 依強度全局排序",
-        "• [V125] ERA小樣本回歸 | 非線性ERA調整 | TBD先發懲罰",
-        "• [V125] 書商數量信心乘數 | RL/TOT最低3家書商門檻",
-        "• [V126] ★ 球隊防守品質納入模型（ESPN失分率，≥5場才套用）",
-        "• [V126] ★ 客隊近期狀態影響客場進攻（form×0.15）",
-        "• [V126] Edge行改為穩定%顯示（勝率×信心），信心<75%標⚠️",
-        "• [V127] ★ 修正IP局數解析Bug（6.2局=6⅔，非6.2）ERA更精確",
-        "• [V127] ★ 傷兵OUT懲罰改為分級：S=0.28/A=0.16/B=0.06（原本全0.05）",
-        "• [V127] 早賽季信心上限0.85（<5場ESPN數據不可靠）",
-        "• [V127] 自動略過已開打≥30分鐘的比賽",
-        "• [V127] BANK/KELLY/KELLY_MAX/KELLY_MIN 支援環境變數設定",
+        "═"*20,"🔧 **MLB V128 模型功能**",
+        "• 投手近期ERA融合 | 球場PF | 牛棚ERA | 動態主場優勢 | 球隊防守品質",
+        "• 球星傷兵分級懲罰 | ESPN即時戰績 | 天氣調整（選用）| 早賽季信心上限",
+        "• 三市場自動選優（獨贏/讓分/大小分）| 穩定性排序 | 書商數量×vig雙重信心",
+        "• [V128] ★ 近期10場得分形態 → 調整主客進攻預期（×0.20）",
+        "• [V128] ★ 連續出賽疲勞偵測（B2B隊伍 -0.06 runs）",
+        "• [V128] ★ 市場vig信心乘數（vig<4%=1.0 / <6%=0.95 / ≥6%=0.90）",
+        "• [V128] ★ 訊息顯示模型預測比分（客 X.X — X.X 主）",
+        "• [V128] ★ RL/TOT最低模型勝率從40%提升至45%（減少低信心注單）",
     ]
 
     out="\n".join(lines)
