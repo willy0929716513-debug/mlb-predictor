@@ -1081,10 +1081,12 @@ def run():
             if best_pick["score"]>picks[ex].get("score",0):
                 picks[ex]={"msg":msg,"tier":tier,"team":str(bteam),"home":home,"away":away,
                            "edge":raw_edge,"conf":bet_conf,"stake":stake,"score":best_pick["score"],
+                           "model_p":model_p,
                            "game_date":game_date_str,"game_time":game_time_str,"game_dt":game_dt}
         else:
             picks.append({"msg":msg,"tier":tier,"team":str(bteam),"home":home,"away":away,
                           "edge":raw_edge,"conf":bet_conf,"stake":stake,"score":best_pick["score"],
+                          "model_p":model_p,
                           "game_date":game_date_str,"game_time":game_time_str,"game_dt":game_dt})
         if official and game_date_str==today_str:
             rk=(home,away)
@@ -1093,12 +1095,9 @@ def run():
                                       "price":bp,"edge":round(raw_edge,4),"conf":round(bet_conf,3),
                                       "bet_type":btype,"result":None})
 
-    tier_order={"💎 頂級":0,"🔥 強力":1,"⭐ 穩定":2}
-    # ★ 依推薦強度全局排序：tier → score（edge×conf）→ 日期時間
-    picks.sort(key=lambda x:(tier_order.get(x["tier"],9),
-                              -x.get("score", x.get("edge",0)),
-                              x["game_date"],
-                              x.get("game_dt") or datetime.datetime.min))
+    # ★ 依模型勝率由高到低排序，同勝率再按 score（edge×conf）降序
+    picks.sort(key=lambda x:(-x.get("model_p", 0),
+                              -x.get("score", x.get("edge",0))))
 
     total_settled,wins,wr=calc_perf(hist)
     now_str  = now_tw.strftime("%m/%d %H:%M")
@@ -1166,7 +1165,7 @@ def run():
                 CN.get(a,a),CN.get(h,h),best_lbl,be*100,bp2,cf*100,hp_k or "?",ap_k or "?"))
         for d in sorted(diag,key=lambda x:-float(x.split("Edge=")[1].split("%")[0])): lines.append(d)
     else:
-        lines.append("**推薦 %d 場（💎強→⭐弱 排序）**"%len(picks))
+        lines.append("**推薦 %d 場（勝率高→低 排序）**"%len(picks))
         for p in picks: lines.append(p["msg"])
 
     lines+=[
