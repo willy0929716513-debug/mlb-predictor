@@ -1,7 +1,7 @@
 import os, json, math, logging, datetime, requests
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-log = logging.getLogger("MLB_V126")
+log = logging.getLogger("MLB_V127")
 
 ODDS_API_KEY    = os.getenv("ODDS_API_KEY", "")
 DISCORD_WEBHOOK = os.getenv("DISCORD_WEBHOOK", "")
@@ -20,10 +20,10 @@ TOTAL_STD      = 2.10   # 兩隊合計得分標準差（比勝負差距大）
 STD            = 1.45
 MIN_P          = 1.35
 MAX_P          = 2.50
-BANK           = 1000.0
-KELLY          = 0.12
-KELLY_MAX      = 150.0
-KELLY_MIN      = 5.0
+BANK           = float(os.getenv("BANK",      "1000"))
+KELLY          = float(os.getenv("KELLY_FRAC", "0.12"))
+KELLY_MAX      = float(os.getenv("KELLY_MAX",  "150"))
+KELLY_MIN      = float(os.getenv("KELLY_MIN",  "5"))
 LEAGUE_ERA     = 4.20
 HIST_TTL       = 90
 GAP1, GAP2, GAP3 = 1.5, 2.5, 3.5
@@ -313,6 +313,17 @@ def get_star_injuries(team):
 # ★ 投手近期 ERA
 # ══════════════════════════════════════════════
 
+def _parse_ip(ip_str):
+    """MLB API 局數格式：'6.2' = 6 又 2/3 局（不是 6.2 小數）"""
+    try:
+        s = str(ip_str or "0").strip()
+        if "." in s:
+            whole, frac = s.split(".", 1)
+            return int(whole) + int(frac) / 3.0
+        return float(s)
+    except (ValueError, TypeError):
+        return 0.0
+
 def _fetch_recent_era(pitcher_id, last_n=3):
     data = safe_get(
         "https://statsapi.mlb.com/api/v1/people/%d/stats" % pitcher_id,
@@ -324,11 +335,11 @@ def _fetch_recent_era(pitcher_id, last_n=3):
     if not data: return None
     splits = []
     for s in data.get("stats",[]): splits = s.get("splits",[]); break
-    starts = [s for s in splits if float(s.get("stat",{}).get("inningsPitched","0") or 0) >= 3.0]
+    starts = [s for s in splits if _parse_ip(s.get("stat",{}).get("inningsPitched","0")) >= 3.0]
     recent = starts[-last_n:] if len(starts) >= last_n else starts
     if not recent: return None
     total_er = sum(float(s.get("stat",{}).get("earnedRuns","0") or 0) for s in recent)
-    total_ip = sum(float(s.get("stat",{}).get("inningsPitched","0") or 0) for s in recent)
+    total_ip = sum(_parse_ip(s.get("stat",{}).get("inningsPitched","0")) for s in recent)
     if total_ip < 3: return None
     era = round(total_er / total_ip * 9, 2)
     # ★ 近期 ERA 0.00 或極低（< 0.50）代表樣本太少或開季第一場被完封
@@ -641,11 +652,14 @@ def get_rating(team):
 def injury_penalty(team):
     t = team.lower()
     penalty = 0.0
-    for _ in _DYN_OUT.get(t,[]): penalty += 0.05
-    for item in _DYN_LTD.get(t,[]):
-        tier = item[1] if isinstance(item,tuple) else "B"
-        penalty += LT_PEN.get(tier,0.4) * 0.15
-    return round(min(penalty, 1.2), 3)
+    # OUT 懲罰依球員等級：S=王牌先發/明星野手，A=主力，B=一般
+    _OUT_PEN = {"S": 0.28, "A": 0.16, "B": 0.06}
+    for p in _DYN_OUT.get(t, []):
+        penalty += _OUT_PEN.get(_player_tier(p), 0.06)
+    for item in _DYN_LTD.get(t, []):
+        tier = item[1] if isinstance(item, tuple) else "B"
+        penalty += LT_PEN.get(tier, 0.4) * 0.15
+    return round(min(penalty, 1.5), 3)
 
 def get_pitcher_era(key):
     if not key: return LEAGUE_ERA + 0.60
@@ -761,6 +775,8 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
     # TBD 先發：缺乏先發資訊大幅降低信心
     if not home_sp: conf *= 0.86
     if not away_sp: conf *= 0.86
+    # 早賽季（<5 場）：ESPN 數據不可靠，限制信心上限
+    if games < 5: conf = min(conf, 0.85)
 
     return {
         "home_win_prob": round(model_win_p, 4),
@@ -851,6 +867,9 @@ def run():
             game_date_str = game_tw.strftime("%Y-%m-%d")
             game_time_str = game_tw.strftime("%H:%M")
             game_dt       = game_tw
+            # 跳過已開打超過 30 分鐘的比賽
+            now_utc = datetime.datetime.now(datetime.timezone.utc)
+            if game_utc < now_utc - datetime.timedelta(minutes=30): continue
         except Exception:
             game_date_str = today_str; game_time_str = commence[:16]; game_dt = None
 
@@ -1119,7 +1138,7 @@ def run():
     era_str  = "✅近期ERA(%d)"%len(_RECENT_ERA) if _RECENT_ERA else "⚠️賽季ERA"
 
     lines=[
-        "⚾ **MLB V126 分析報告**",
+        "⚾ **MLB V127 分析報告**",
         "🕐 %s | %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str),
         "📌 正式記錄 (00–07時)" if official else "🔧 測試模式 (不寫gist)",
         "📊 歷史: %d勝/%d場 (%.1f%%)"%(wins,total_settled,wr),
@@ -1190,6 +1209,11 @@ def run():
         "• [V126] ★ 球隊防守品質納入模型（ESPN失分率，≥5場才套用）",
         "• [V126] ★ 客隊近期狀態影響客場進攻（form×0.15）",
         "• [V126] Edge行改為穩定%顯示（勝率×信心），信心<75%標⚠️",
+        "• [V127] ★ 修正IP局數解析Bug（6.2局=6⅔，非6.2）ERA更精確",
+        "• [V127] ★ 傷兵OUT懲罰改為分級：S=0.28/A=0.16/B=0.06（原本全0.05）",
+        "• [V127] 早賽季信心上限0.85（<5場ESPN數據不可靠）",
+        "• [V127] 自動略過已開打≥30分鐘的比賽",
+        "• [V127] BANK/KELLY/KELLY_MAX/KELLY_MIN 支援環境變數設定",
     ]
 
     out="\n".join(lines)
