@@ -1095,9 +1095,8 @@ def run():
                                       "price":bp,"edge":round(raw_edge,4),"conf":round(bet_conf,3),
                                       "bet_type":btype,"result":None})
 
-    # ★ 依模型勝率由高到低排序，同勝率再按 score（edge×conf）降序
-    picks.sort(key=lambda x:(-x.get("model_p", 0),
-                              -x.get("score", x.get("edge",0))))
+    # ★ 依穩定性排序：model_p × bet_conf（勝率高且信心高 → 最穩定）
+    picks.sort(key=lambda x:(-(x.get("model_p",0) * x.get("conf",0))))
 
     total_settled,wins,wr=calc_perf(hist)
     now_str  = now_tw.strftime("%m/%d %H:%M")
@@ -1165,7 +1164,7 @@ def run():
                 CN.get(a,a),CN.get(h,h),best_lbl,be*100,bp2,cf*100,hp_k or "?",ap_k or "?"))
         for d in sorted(diag,key=lambda x:-float(x.split("Edge=")[1].split("%")[0])): lines.append(d)
     else:
-        lines.append("**推薦 %d 場（勝率高→低 排序）**"%len(picks))
+        lines.append("**推薦 %d 場（穩定性高→低 排序）**"%len(picks))
         for p in picks: lines.append(p["msg"])
 
     lines+=[
