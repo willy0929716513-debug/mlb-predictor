@@ -941,6 +941,8 @@ def run():
 
     season_start = "%d-03-25" % datetime.date.today().year
     season_games = sum(1 for r in hist if r.get("date","") >= season_start)
+    # 已寫入 Gist 的今日場次（避免重複推薦）
+    hist_today = {(r.get("home"), r.get("away")) for r in hist if r.get("date") == today_str}
     picks, today_records = [], []
 
     for game in odds_data:
@@ -1109,6 +1111,9 @@ def run():
                 best_pick={**c,"raw_edge":raw_edge,"bet_conf":bet_conf,"stake":stake,"score":score}
 
         if best_pick is None: continue
+
+        # 已寫入 Gist → 跳過，避免同一場比賽重複出現在報告中
+        if (home, away) in hist_today: continue
 
         # ── 解包最優注單 ──────────────────────────────────────
         btype    = best_pick["btype"]
