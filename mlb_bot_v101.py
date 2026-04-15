@@ -876,6 +876,7 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
 
     # ⑫ ★ 系列賽動能：近3天同一對陣的連勝/連敗
     # 連敗隊：進攻 -0.12、信心 ×0.93（打線低迷、投手輪轉劣勢）
+    series_conf_mult = 1.0
     series_key  = tuple(sorted([home, away]))
     series_hist = _SERIES_MOMENTUM.get(series_key, [])
     if len(series_hist) >= 2:
@@ -887,11 +888,11 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
         a_series_w = len(series_hist) - h_series_w
         if h_series_w == 0:    # home 隊系列賽全輸 → 動能不利主場
             h_exp  -= 0.12
-            conf   *= 0.93
+            series_conf_mult = 0.93
             log.debug("Series: %s swept so far (%d games)", home, len(series_hist))
         elif a_series_w == 0:  # away 隊系列賽全輸 → 動能不利客場
             a_exp  -= 0.12
-            conf   *= 0.93
+            series_conf_mult = 0.93
             log.debug("Series: %s swept so far (%d games)", away, len(series_hist))
 
     h_exp = max(2.5, h_exp)
@@ -910,6 +911,8 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
     # TBD 先發：缺乏先發資訊大幅降低信心
     if not home_sp: conf *= 0.86
     if not away_sp: conf *= 0.86
+    # 系列賽連敗信心折扣
+    conf *= series_conf_mult
     # 早賽季（<5 場）：ESPN 數據不可靠，限制信心上限
     if games < 5: conf = min(conf, 0.85)
 
