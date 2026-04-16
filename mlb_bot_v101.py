@@ -975,12 +975,12 @@ def send(content):
 # ══════════════════════════════════════════════
 
 def build_parlay_msg(picks):
-    """從已排序的推薦中選最穩的幾場組串關，輸出 2串1 / 3串1"""
-    # 串關門檻：信心 ≥ 0.75 且 模型勝率 ≥ 0.58
-    cands = [p for p in picks
-             if p.get("conf", 0) >= 0.75 and p.get("model_p", 0) >= 0.58]
-    if len(cands) < 2:
+    """從當日推薦中選最穩的幾場組串關，輸出 2串1 / 3串1（有推薦就一定顯示）"""
+    if len(picks) < 2:
         return []
+
+    # 已按穩定性排序，直接取前幾場
+    cands = picks
 
     def leg_label(p):
         bcn   = p.get("bteam_cn", p.get("team","?"))
