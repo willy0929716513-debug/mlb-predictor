@@ -1411,6 +1411,18 @@ def run():
         lines.append("**推薦 %d 場（穩定性高→低 排序）**"%len(picks))
         for p in picks: lines.append(p["msg"])
         lines += build_parlay_msg(picks)
+        # 預計收益彙總
+        total_stake = sum(p.get("stake", 0) for p in picks)
+        total_ev    = sum(
+            p.get("stake", 0) * (p.get("model_p", 0) * p.get("bp", 1) - 1)
+            for p in picks
+        )
+        roi = (total_ev / total_stake * 100) if total_stake > 0 else 0.0
+        lines.append("")
+        lines.append(
+            "💵 **今日預計**：投入 $%.1f | 期望盈利 **%+.1f$** | ROI **%+.1f%%**"
+            % (total_stake, total_ev, roi)
+        )
 
     lines+=[
         "═"*20,"🔧 **MLB V129 模型功能**",
