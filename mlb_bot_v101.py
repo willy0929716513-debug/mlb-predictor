@@ -978,7 +978,7 @@ def run():
     now_tw    = datetime.datetime.utcnow() + datetime.timedelta(hours=8)
     today_str = now_tw.strftime("%Y-%m-%d")
     log.info("TW time: %s", now_tw.strftime("%Y-%m-%d %H:%M"))
-    official = (0 <= now_tw.hour < 7)
+    official = (now_tw.hour >= 23 or now_tw.hour < 7)  # 23:30排程 + 深夜補跑皆為正式
 
     if not ODDS_API_KEY: log.error("ODDS_API_KEY not set"); return
 
@@ -1000,8 +1000,8 @@ def run():
 
     season_start = "%d-03-25" % datetime.date.today().year
     season_games = sum(1 for r in hist if r.get("date","") >= season_start)
-    # 已寫入 Gist 的今日場次（避免重複推薦）
-    hist_today = {(r.get("home"), r.get("away")) for r in hist if r.get("date") == today_str}
+    # 已寫入 Gist 的場次集合（以比賽台灣日期 + 主客隊為 key，避免重複推薦）
+    hist_game_keys = {(r.get("home"), r.get("away"), r.get("date")) for r in hist}
     picks, today_records = [], []
 
     for game in odds_data:
@@ -1172,7 +1172,7 @@ def run():
         if best_pick is None: continue
 
         # 已寫入 Gist → 跳過，避免同一場比賽重複出現在報告中
-        if (home, away) in hist_today: continue
+        if (home, away, game_date_str) in hist_game_keys: continue
 
         # ── 解包最優注單 ──────────────────────────────────────
         btype    = best_pick["btype"]
@@ -1276,10 +1276,10 @@ def run():
                           "edge":raw_edge,"conf":bet_conf,"stake":stake,"score":best_pick["score"],
                           "model_p":model_p,
                           "game_date":game_date_str,"game_time":game_time_str,"game_dt":game_dt})
-        if official and game_date_str==today_str:
-            rk=(home,away)
-            if not any((r.get("home"),r.get("away"))==rk for r in today_records):
-                today_records.append({"date":today_str,"team":str(bteam),"home":home,"away":away,
+        if official:
+            rk=(home,away,game_date_str)
+            if not any((r.get("home"),r.get("away"),r.get("date"))==rk for r in today_records):
+                today_records.append({"date":game_date_str,"team":str(bteam),"home":home,"away":away,
                                       "price":bp,"edge":round(raw_edge,4),"conf":round(bet_conf,3),
                                       "bet_type":btype,"result":None})
 
