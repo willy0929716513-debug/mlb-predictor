@@ -971,6 +971,57 @@ def send(content):
 
 
 # ══════════════════════════════════════════════
+# 串關推薦
+# ══════════════════════════════════════════════
+
+def build_parlay_msg(picks):
+    """從已排序的推薦中選最穩的幾場組串關，輸出 2串1 / 3串1"""
+    # 串關門檻：信心 ≥ 0.75 且 模型勝率 ≥ 0.58
+    cands = [p for p in picks
+             if p.get("conf", 0) >= 0.75 and p.get("model_p", 0) >= 0.58]
+    if len(cands) < 2:
+        return []
+
+    def leg_label(p):
+        bcn   = p.get("bteam_cn", p.get("team","?"))
+        btype = p.get("btype","獨贏")
+        lbl   = p.get("label","")
+        if btype == "獨贏":   return "%s獨贏" % bcn
+        if btype == "讓分":   return "%s讓分%s" % (bcn, lbl)
+        if btype == "大小分": return "%.s%s" % (lbl, "大分" if lbl=="OVER" else "小分")
+        return "%s%s" % (bcn, lbl)
+
+    lines = ["", "━"*20,
+             "🎰 **串關推薦**（精選最穩場次，風險較高請控制金額）"]
+
+    for n in [2, 3]:
+        if len(cands) < n:
+            break
+        sel = cands[:n]
+        combined_p    = 1.0
+        combined_odds = 1.0
+        for p in sel:
+            combined_p    *= p["model_p"]
+            combined_odds *= p["bp"]
+        parlay_edge = combined_p - 1.0 / combined_odds
+        # 串關 Kelly：用一半折扣率，上限 KELLY_MAX×0.5
+        if parlay_edge > 0 and combined_odds > 1.0:
+            b     = combined_odds - 1.0
+            raw_k = (b * combined_p - (1 - combined_p)) / b
+            stake = round(max(0.0, min(KELLY_MAX * 0.5, KELLY * 0.5 * raw_k * BANK)), 1)
+        else:
+            stake = 0.0
+        legs_str = " × ".join(leg_label(p) for p in sel)
+        lines.append("**%d串1**  %s" % (n, legs_str))
+        lines.append(
+            "> 組合賠率: **%.2f** | 勝率: **%.1f%%** | Edge: %+.1f%% | Kelly: $%.1f"
+            % (combined_odds, combined_p * 100, parlay_edge * 100, stake)
+        )
+
+    return lines
+
+
+# ══════════════════════════════════════════════
 # 主流程
 # ══════════════════════════════════════════════
 
@@ -1269,12 +1320,14 @@ def run():
             if best_pick["score"]>picks[ex].get("score",0):
                 picks[ex]={"msg":msg,"tier":tier,"team":str(bteam),"home":home,"away":away,
                            "edge":raw_edge,"conf":bet_conf,"stake":stake,"score":best_pick["score"],
-                           "model_p":model_p,
+                           "model_p":model_p,"bp":bp,"btype":btype,
+                           "label":best_pick.get("label",""),"bteam_cn":CN.get(bteam,bteam),
                            "game_date":game_date_str,"game_time":game_time_str,"game_dt":game_dt}
         else:
             picks.append({"msg":msg,"tier":tier,"team":str(bteam),"home":home,"away":away,
                           "edge":raw_edge,"conf":bet_conf,"stake":stake,"score":best_pick["score"],
-                          "model_p":model_p,
+                          "model_p":model_p,"bp":bp,"btype":btype,
+                          "label":best_pick.get("label",""),"bteam_cn":CN.get(bteam,bteam),
                           "game_date":game_date_str,"game_time":game_time_str,"game_dt":game_dt})
         if official:
             rk=(home,away,game_date_str)
@@ -1357,6 +1410,7 @@ def run():
     else:
         lines.append("**推薦 %d 場（穩定性高→低 排序）**"%len(picks))
         for p in picks: lines.append(p["msg"])
+        lines += build_parlay_msg(picks)
 
     lines+=[
         "═"*20,"🔧 **MLB V129 模型功能**",
