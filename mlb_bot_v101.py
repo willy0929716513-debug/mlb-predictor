@@ -19,7 +19,7 @@ MKT_W          = 0.82
 TOTAL_STD      = 2.30   # 兩隊合計得分標準差（比勝負差距大）
 STD            = 1.65
 MIN_P          = 1.35
-MAX_P          = 2.50
+MAX_P          = 2.75
 BANK           = float(os.getenv("BANK",      "1000"))
 KELLY          = float(os.getenv("KELLY_FRAC", "0.12"))
 KELLY_MAX      = float(os.getenv("KELLY_MAX",  "150"))
@@ -1175,8 +1175,8 @@ def run():
         for s,e in sorted(rl_lines.items()):
             hp=e["h_price"]; ap=e["a_price"]
             if hp is None or ap is None or hp<=0 or ap<=0: continue
-            # ★ 至少 3 家書商才採用讓分市場（流動性不足不推薦）
-            if len(e["h_all"]) < 3 or len(e["a_all"]) < 3: continue
+            # ★ 至少 2 家書商才採用讓分市場（流動性不足不推薦）
+            if len(e["h_all"]) < 2 or len(e["a_all"]) < 2: continue
             ch=round(sum(e["h_all"])/len(e["h_all"]),3) if e["h_all"] else hp
             ca=round(sum(e["a_all"])/len(e["a_all"]),3) if e["a_all"] else ap
             h_pts=e.get("h_pts") or -s
@@ -1192,12 +1192,12 @@ def run():
             candidates.append({"btype":BET_RL,"bside":"rl_a","bteam":away,"bp":ap,"bk":e["a_book"],
                 "model_p":p_a,"edge_min":EDGE_MIN_RL,"blend_p":None,"con_p":ca,
                 "conf_mult":0.90,"label":a_lbl,"rl_inv":rl_inv_val,"rl_s":s})
-        # ★ 大小分：至少 3 家書商才採用
-        if over_price and con_ov_p and len(con_over)>=3:
+        # ★ 大小分：至少 2 家書商才採用
+        if over_price and con_ov_p and len(con_over)>=2:
             candidates.append({"btype":BET_TOT,"bside":"over","bteam":"over","bp":over_price,
                 "bk":over_book,"model_p":p_over,"edge_min":EDGE_MIN_TOT,"blend_p":None,"con_p":con_ov_p,
                 "conf_mult":0.88,"label":"OVER","rl_inv":None,"rl_s":None})
-        if under_price and con_un_p and len(con_under)>=3:
+        if under_price and con_un_p and len(con_under)>=2:
             candidates.append({"btype":BET_TOT,"bside":"under","bteam":"under","bp":under_price,
                 "bk":under_book,"model_p":p_under,"edge_min":EDGE_MIN_TOT,"blend_p":None,"con_p":con_un_p,
                 "conf_mult":0.88,"label":"UNDER","rl_inv":None,"rl_s":None})
