@@ -950,6 +950,18 @@ def calc_perf(hist):
     wins = sum(1 for r in settled if r["result"]=="W")
     return len(settled), wins, wins/len(settled)*100 if settled else 0.0
 
+def calc_pnl(hist):
+    """計算有記錄 stake 的已結算注單累積損益"""
+    total_in = total_pnl = 0.0
+    for r in hist:
+        if r.get("result") not in ("W","L"): continue
+        stake = r.get("stake")
+        if not stake: continue
+        price = r.get("price", 0)
+        total_in  += stake
+        total_pnl += stake * (price - 1) if r["result"] == "W" else -stake
+    return round(total_in, 1), round(total_pnl, 1)
+
 
 # ══════════════════════════════════════════════
 # Discord
@@ -968,57 +980,6 @@ def send(content):
         label = "(%d/%d)\n%s"%(i,total,chunk) if total>1 else chunk
         try: requests.post(DISCORD_WEBHOOK, json={"content":label}, timeout=10).raise_for_status()
         except Exception as e: log.error("Discord %d: %s", i, e)
-
-
-# ══════════════════════════════════════════════
-# 串關推薦
-# ══════════════════════════════════════════════
-
-def build_parlay_msg(picks):
-    """從當日推薦中選最穩的幾場組串關，輸出 2串1 / 3串1（有推薦就一定顯示）"""
-    if len(picks) < 2:
-        return []
-
-    # 已按穩定性排序，直接取前幾場
-    cands = picks
-
-    def leg_label(p):
-        bcn   = p.get("bteam_cn", p.get("team","?"))
-        btype = p.get("btype","獨贏")
-        lbl   = p.get("label","")
-        if btype == "獨贏":   return "%s獨贏" % bcn
-        if btype == "讓分":   return "%s讓分%s" % (bcn, lbl)
-        if btype == "大小分": return "%.s%s" % (lbl, "大分" if lbl=="OVER" else "小分")
-        return "%s%s" % (bcn, lbl)
-
-    lines = ["", "━"*20,
-             "🎰 **串關推薦**（精選最穩場次，風險較高請控制金額）"]
-
-    for n in [2, 3]:
-        if len(cands) < n:
-            break
-        sel = cands[:n]
-        combined_p    = 1.0
-        combined_odds = 1.0
-        for p in sel:
-            combined_p    *= p["model_p"]
-            combined_odds *= p["bp"]
-        parlay_edge = combined_p - 1.0 / combined_odds
-        # 串關 Kelly：用一半折扣率，上限 KELLY_MAX×0.5
-        if parlay_edge > 0 and combined_odds > 1.0:
-            b     = combined_odds - 1.0
-            raw_k = (b * combined_p - (1 - combined_p)) / b
-            stake = round(max(0.0, min(KELLY_MAX * 0.5, KELLY * 0.5 * raw_k * BANK)), 1)
-        else:
-            stake = 0.0
-        legs_str = " × ".join(leg_label(p) for p in sel)
-        lines.append("**%d串1**  %s" % (n, legs_str))
-        lines.append(
-            "> 組合賠率: **%.2f** | 勝率: **%.1f%%** | Edge: %+.1f%% | Kelly: $%.1f"
-            % (combined_odds, combined_p * 100, parlay_edge * 100, stake)
-        )
-
-    return lines
 
 
 # ══════════════════════════════════════════════
@@ -1334,12 +1295,13 @@ def run():
             if not any((r.get("home"),r.get("away"),r.get("date"))==rk for r in today_records):
                 today_records.append({"date":game_date_str,"team":str(bteam),"home":home,"away":away,
                                       "price":bp,"edge":round(raw_edge,4),"conf":round(bet_conf,3),
-                                      "bet_type":btype,"result":None})
+                                      "stake":stake,"bet_type":btype,"result":None})
 
     # ★ 依穩定性排序：model_p × bet_conf（勝率高且信心高 → 最穩定）
     picks.sort(key=lambda x:(-(x.get("model_p",0) * x.get("conf",0))))
 
     total_settled,wins,wr=calc_perf(hist)
+    total_in, total_pnl = calc_pnl(hist)
     now_str  = now_tw.strftime("%m/%d %H:%M")
     espn_str = "✅ESPN" if espn_ok else "⚠️BASE"
     il_str   = {"rotowire":"✅RotoWire","static":"⚠️靜態"}.get(il_src,il_src)
@@ -1349,11 +1311,15 @@ def run():
     b2b_str  = "✅B2B(%d)"%len(_B2B_TEAMS) if _B2B_TEAMS else "—B2B"
     ser_str  = "✅系列賽(%d)"%len(_SERIES_MOMENTUM) if _SERIES_MOMENTUM else "⚠️無系列賽"
 
+    roi_str = "%+.1f%%" % (total_pnl/total_in*100) if total_in > 0 else "N/A"
+    pnl_str = "**%+.1f$**" % total_pnl if total_in > 0 else "尚無結算資料"
+
     lines=[
         "⚾ **MLB V129 分析報告**",
         "🕐 %s | %s %s %s %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str,scr_str,b2b_str,ser_str),
         "📌 正式記錄 (00–07時)" if official else "🔧 測試模式 (不寫gist)",
         "📊 歷史: %d勝/%d場 (%.1f%%)"%(wins,total_settled,wr),
+        "💰 累計損益: 投入 $%.1f | 損益 %s | ROI %s"%(total_in, pnl_str, roi_str),
         "",
     ]
 
@@ -1410,19 +1376,6 @@ def run():
     else:
         lines.append("**推薦 %d 場（穩定性高→低 排序）**"%len(picks))
         for p in picks: lines.append(p["msg"])
-        lines += build_parlay_msg(picks)
-        # 預計收益彙總
-        total_stake = sum(p.get("stake", 0) for p in picks)
-        total_ev    = sum(
-            p.get("stake", 0) * (p.get("model_p", 0) * p.get("bp", 1) - 1)
-            for p in picks
-        )
-        roi = (total_ev / total_stake * 100) if total_stake > 0 else 0.0
-        lines.append("")
-        lines.append(
-            "💵 **今日預計**：投入 $%.1f | 期望盈利 **%+.1f$** | ROI **%+.1f%%**"
-            % (total_stake, total_ev, roi)
-        )
 
     lines+=[
         "═"*20,"🔧 **MLB V129 模型功能**",
