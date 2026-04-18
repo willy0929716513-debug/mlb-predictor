@@ -1229,8 +1229,15 @@ def run():
         h_sp_n = sp_info.get("home_name","TBD") if sp_info else "TBD"
         a_sp_n = sp_info.get("away_name","TBD") if sp_info else "TBD"
         h_era=get_pitcher_era(home_sp); a_era=get_pitcher_era(away_sp)
-        h_tag=("(近期ERA%.2f)"%h_era if home_sp in _RECENT_ERA else "(ERA%.2f)"%h_era) if home_sp else ""
-        a_tag=("(近期ERA%.2f)"%a_era if away_sp in _RECENT_ERA else "(ERA%.2f)"%a_era) if away_sp else ""
+        h_whip=_RECENT_WHIP.get(home_sp.lower().strip()) if home_sp else None
+        a_whip=_RECENT_WHIP.get(away_sp.lower().strip()) if away_sp else None
+        def _sp_tag(sp, era, whip, in_recent):
+            if not sp: return ""
+            whip_s = "/WHIP%.2f"%whip if whip is not None else ""
+            prefix = "近期ERA" if in_recent else "ERA"
+            return "(%s%.2f%s)"%(prefix, era, whip_s)
+        h_tag=_sp_tag(home_sp, h_era, h_whip, home_sp in _RECENT_ERA)
+        a_tag=_sp_tag(away_sp, a_era, a_whip, away_sp in _RECENT_ERA)
         h_sp_str=h_sp_n+h_tag; a_sp_str=a_sp_n+a_tag
 
         stability = model_p * bet_conf
