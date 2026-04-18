@@ -901,8 +901,8 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
 
     dyn_std = STD + max(0, (10-games)/10) * 0.15
     model_win_p = win_prob_from_margin(margin, dyn_std)
-    # ★ 勝率上限 90%：現實中單場勝率不會超過此值
-    model_win_p = min(model_win_p, 0.90)
+    # ★ 勝率上限 72%：MLB單場勝率現實上限（職棒強隊對弱隊約65-68%）
+    model_win_p = min(model_win_p, 0.72)
 
     pure_total  = h_exp + a_exp
     model_total = round(pure_total*0.30 + market_total*0.70, 2)
@@ -1172,7 +1172,7 @@ def run():
             raw_edge = model_p - 1/bp
             if raw_edge*bet_conf<edge_min: continue
             if bp<MIN_P or bp>MAX_P: continue
-            if btype==BET_ML and (blend_p is None or blend_p<0.48): continue
+            if btype==BET_ML and (blend_p is None or blend_p<0.52): continue
             if btype!=BET_ML and model_p<0.55: continue
             if bet_conf<0.60: continue
             stake=kelly_stake(raw_edge,model_p,bp,conf=bet_conf)
@@ -1315,7 +1315,7 @@ def run():
     pnl_str = "**%+.1f$**" % total_pnl if total_in > 0 else "尚無結算資料"
 
     lines=[
-        "⚾ **MLB V129 分析報告**",
+        "⚾ **MLB V130 分析報告**",
         "🕐 %s | %s %s %s %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str,scr_str,b2b_str,ser_str),
         "📌 正式記錄 (00–07時)" if official else "🔧 測試模式 (不寫gist)",
         "📊 歷史: %d勝/%d場 (%.1f%%)"%(wins,total_settled,wr),
@@ -1386,6 +1386,7 @@ def run():
         "• [V129] ★ STD 1.45→1.65 / TOTAL_STD 2.10→2.30（修正讓分機率過度樂觀）",
         "• [V129] ★ 系列賽動能：連敗隊進攻-0.12/信心×0.93（如太空人連輸水手）",
         "• [V129] ★ RL edge門檻 0.10→0.12，RL/TOT最低勝率 0.45→0.55",
+        "• [V130] ★ 模型勝率上限 90%→72%（MLB現實校準），blend_p門檻 0.48→0.52（避免重壓大冷門）",
     ]
 
     out="\n".join(lines)
