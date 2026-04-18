@@ -1142,8 +1142,10 @@ def run():
             ca=round(sum(e["a_all"])/len(e["a_all"]),3) if e["a_all"] else ap
             h_pts=e.get("h_pts") or -s
             if h_pts<=0:  # home team gives points (-s)
+                if margin < 0: continue  # ★ 反向讓分過濾：模型認為客場贏但市場讓主場，跳過
                 p_h=runline_prob(margin,s,dyn_std); h_lbl="-%g"%s; a_lbl="+%g"%s
             else:         # home team receives points (+s)
+                if margin > 0: continue  # ★ 反向讓分過濾：模型認為主場贏但市場讓客場，跳過
                 p_h=runline_prob(margin,-s,dyn_std); h_lbl="+%g"%s; a_lbl="-%g"%s
             p_h=max(0.10, min(0.88, p_h))  # RL勝率上限88%
             p_a=1.0-p_h
@@ -1175,7 +1177,7 @@ def run():
             if bp<MIN_P or bp>MAX_P: continue
             if btype==BET_ML and (blend_p is None or blend_p<0.52): continue
             if btype!=BET_ML and model_p<0.55: continue
-            if bet_conf<0.60: continue
+            if bet_conf<0.65: continue
             stake=kelly_stake(raw_edge,model_p,bp,conf=bet_conf)
             if stake<KELLY_MIN: continue
             score=raw_edge*bet_conf
@@ -1298,8 +1300,9 @@ def run():
                                       "price":bp,"edge":round(raw_edge,4),"conf":round(bet_conf,3),
                                       "stake":stake,"bet_type":btype,"result":None})
 
-    # ★ 依穩定性排序：model_p × bet_conf（勝率高且信心高 → 最穩定）
+    # ★ 依穩定性排序：model_p × bet_conf（勝率高且信心高 → 最穩定），最多保留6場
     picks.sort(key=lambda x:(-(x.get("model_p",0) * x.get("conf",0))))
+    picks = picks[:6]
 
     total_settled,wins,wr=calc_perf(hist)
     total_in, total_pnl = calc_pnl(hist)
