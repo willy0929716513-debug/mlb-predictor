@@ -901,8 +901,8 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
 
     dyn_std = STD + max(0, (10-games)/10) * 0.15
     model_win_p = win_prob_from_margin(margin, dyn_std)
-    # ★ 勝率上限 72%：MLB單場勝率現實上限（職棒強隊對弱隊約65-68%）
-    model_win_p = min(model_win_p, 0.72)
+    # ★ 勝率雙向上限 72%：MLB單場主/客都不超過72%（確保away team也被限制）
+    model_win_p = max(0.28, min(0.72, model_win_p))
 
     pure_total  = h_exp + a_exp
     model_total = round(pure_total*0.30 + market_total*0.70, 2)
@@ -1145,6 +1145,7 @@ def run():
                 p_h=runline_prob(margin,s,dyn_std); h_lbl="-%g"%s; a_lbl="+%g"%s
             else:         # home team receives points (+s)
                 p_h=runline_prob(margin,-s,dyn_std); h_lbl="+%g"%s; a_lbl="-%g"%s
+            p_h=max(0.10, min(0.88, p_h))  # RL勝率上限88%
             p_a=1.0-p_h
             rl_inv_val=(1/ch+1/ca) if (ch>0 and ca>0) else 1.0
             candidates.append({"btype":BET_RL,"bside":"rl_h","bteam":home,"bp":hp,"bk":e["h_book"],
