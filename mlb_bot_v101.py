@@ -263,6 +263,7 @@ _DYN_OUT      = {}
 _DYN_LTD      = {}
 _ESPN_RATINGS = {}
 _RECENT_ERA   = {}
+_RECENT_WHIP  = {}
 _WEATHER_CACHE= {}
 _SCORING_FORM    = {}   # {team: recent_runs_per_game} 最近10場得分均值
 _B2B_TEAMS       = set() # 昨天有出賽的球隊（連續出賽疲勞）
@@ -332,7 +333,7 @@ def _fetch_recent_era(pitcher_id, last_n=3):
         "https://statsapi.mlb.com/api/v1/people/%d/stats" % pitcher_id,
         params={"stats":"gameLog","group":"pitching",
                 "season":datetime.date.today().year,
-                "fields":"stats,splits,stat,inningsPitched,earnedRuns"},
+                "fields":"stats,splits,stat,inningsPitched,earnedRuns,hits,baseOnBalls"},
         timeout=10,
     )
     if not data: return None
@@ -345,13 +346,15 @@ def _fetch_recent_era(pitcher_id, last_n=3):
     total_ip = sum(_parse_ip(s.get("stat",{}).get("inningsPitched","0")) for s in recent)
     if total_ip < 3: return None
     era = round(total_er / total_ip * 9, 2)
-    # ★ 近期 ERA 0.00 或極低（< 0.50）代表樣本太少或開季第一場被完封
-    # 用聯盟平均替代，避免模型誤判為超級王牌
     if era < 0.50:
         log.debug("Recent ERA %.2f too low for %s, clamping to league avg", era, pitcher_id)
-        return None  # 回傳 None 讓 get_pitcher_era 改用賽季 ERA
-    # 上限：近期 ERA > 12 通常是短暫崩盤，限制到 10 避免過度懲罰
-    return min(era, 10.0)
+        return None
+    era = min(era, 10.0)
+    # 計算近期 WHIP
+    total_h  = sum(int(s.get("stat",{}).get("hits","0") or 0) for s in recent)
+    total_bb = sum(int(s.get("stat",{}).get("baseOnBalls","0") or 0) for s in recent)
+    whip = round((total_h + total_bb) / total_ip, 2)
+    return {"era": era, "whip": whip}
 
 def fetch_b2b_teams():
     """找出昨天有出賽的球隊（今天連續出賽者）"""
@@ -455,8 +458,8 @@ def fetch_series_momentum():
     log.info("Series momentum: %d matchups / %d games", len(momentum), count)
 
 def build_recent_era_cache(pitchers_dict):
-    global _RECENT_ERA
-    cache = {}
+    global _RECENT_ERA, _RECENT_WHIP
+    cache = {}; whip_cache = {}
     seen  = set()
     for (home, away), info in pitchers_dict.items():
         for key, full in [(info.get("home_pitcher"), info.get("home_name")),
@@ -464,7 +467,6 @@ def build_recent_era_cache(pitchers_dict):
             if not key or key in seen: continue
             if not full or full == "TBD": continue
             seen.add(key)
-            # 用 fullName 搜尋 playerId
             data = safe_get(
                 "https://statsapi.mlb.com/api/v1/people/search",
                 params={"names": full, "sportId": 1},
@@ -475,14 +477,16 @@ def build_recent_era_cache(pitchers_dict):
                 if _name_to_key(p.get("fullName","")) == key:
                     pid = p.get("id")
                     if pid:
-                        recent = _fetch_recent_era(pid)
-                        if recent is not None:
-                            cache[key] = recent
-                            log.info("Recent ERA %s: %.2f (season: %.2f)",
-                                     key, recent, PITCHER_ERA.get(key,4.80))
+                        result = _fetch_recent_era(pid)
+                        if result is not None:
+                            cache[key] = result["era"]
+                            whip_cache[key] = result["whip"]
+                            log.info("Recent ERA %s: %.2f  WHIP: %.2f",
+                                     key, result["era"], result["whip"])
                     break
-    _RECENT_ERA = cache
-    log.info("Recent ERA cached: %d pitchers", len(cache))
+    _RECENT_ERA  = cache
+    _RECENT_WHIP = whip_cache
+    log.info("Recent ERA/WHIP cached: %d pitchers", len(cache))
 
 
 # ══════════════════════════════════════════════
@@ -765,6 +769,19 @@ def injury_penalty(team):
         penalty += LT_PEN.get(tier, 0.4) * 0.15
     return round(min(penalty, 1.5), 3)
 
+def _whip_correction(era, key):
+    """若ERA偏低但WHIP偏高（可能在走運），將ERA向上修正；反之ERA低且WHIP也低則確認表現真實。"""
+    whip = _RECENT_WHIP.get(key)
+    if whip is None: return era
+    if era < 3.80 and whip > 1.30:
+        # 低ERA+高WHIP → 靠殘壘率走運，往上修正
+        correction = min((whip - 1.20) * 0.60, 0.80)
+        return round(era + correction, 2)
+    if era < 3.20 and whip < 1.10:
+        # 低ERA+低WHIP → 真正主宰，往下微調確認
+        return round(era - 0.10, 2)
+    return era
+
 def get_pitcher_era(key):
     if not key: return LEAGUE_ERA + 0.60
     k = key.lower().strip()
@@ -778,14 +795,17 @@ def get_pitcher_era(key):
             w_r, w_s = 0.50, 0.50   # 極高→各半，避免過度悲觀
         else:
             w_r, w_s = SP_RECENT_W, SP_SEASON_W
-        return round(recent * w_r + season * w_s, 2)
+        era = round(recent * w_r + season * w_s, 2)
+        return _whip_correction(era, k)
     if recent is not None:
         # 無賽季ERA：向聯盟平均回歸（防止小樣本過度依賴）
         if recent < 1.50:
-            return round(recent * 0.45 + LEAGUE_ERA * 0.55, 2)  # 極低→強烈回歸
+            era = round(recent * 0.45 + LEAGUE_ERA * 0.55, 2)
         elif recent > 7.00:
-            return round(recent * 0.50 + LEAGUE_ERA * 0.50, 2)  # 極高→回歸
-        return round(recent * 0.65 + LEAGUE_ERA * 0.35, 2)      # 正常→輕度回歸
+            era = round(recent * 0.50 + LEAGUE_ERA * 0.50, 2)
+        else:
+            era = round(recent * 0.65 + LEAGUE_ERA * 0.35, 2)
+        return _whip_correction(era, k)
     return season if season is not None else LEAGUE_ERA + 0.60
 
 def era_adj(key):
@@ -1391,6 +1411,7 @@ def run():
         "• [V129] ★ 系列賽動能：連敗隊進攻-0.12/信心×0.93（如太空人連輸水手）",
         "• [V129] ★ RL edge門檻 0.10→0.12，RL/TOT最低勝率 0.45→0.55",
         "• [V130] ★ 模型勝率上限 90%→72%（MLB現實校準），blend_p門檻 0.48→0.52（避免重壓大冷門）",
+        "• [V132] ★ 投手WHIP納入ERA校正：低ERA+高WHIP→往上修正（防走運），低ERA+低WHIP→確認真實強度",
     ]
 
     out="\n".join(lines)
