@@ -1355,13 +1355,22 @@ def run():
     ]
 
     if not picks:
-        lines.append("今日無符合條件之推薦。")
+        already = sum(1 for r in hist if r.get("date") == datetime.date.today().strftime("%Y-%m-%d") or
+                      r.get("date") == (datetime.date.today() + datetime.timedelta(days=1)).strftime("%Y-%m-%d"))
+        already_note = "（今日已記錄 %d 場）" % already if already else ""
+        lines.append("今日無新符合條件之推薦。%s" % already_note)
         lines.append(""); lines.append("📋 **診斷：今日場次 edge 概況**")
         diag=[]
         for game in odds_data:
             if game.get("sport_key")!="baseball_mlb": continue
             h=norm_team(game.get("home_team","")); a=norm_team(game.get("away_team",""))
             if h not in BASE or a not in BASE: continue
+            # 診斷也跳過已記錄場次
+            try:
+                _gut=datetime.datetime.fromisoformat(game.get("commence_time","").replace("Z","+00:00"))
+                _gds=(_gut+datetime.timedelta(hours=8)).strftime("%Y-%m-%d")
+                if (h, a, _gds) in hist_game_keys: continue
+            except Exception: pass
             si=pitchers.get((h,a),{}); hp_k=si.get("home_pitcher"); ap_k=si.get("away_pitcher")
             bms2=game.get("bookmakers",[]); hp=ap=rl_hp=rl_ap=ov_p=un_p=None; mt=8.5
             for bm in bms2:
