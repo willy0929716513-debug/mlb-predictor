@@ -1346,7 +1346,7 @@ def run():
     pnl_str = "**%+.1f$**" % total_pnl if total_in > 0 else "尚無結算資料"
 
     lines=[
-        "⚾ **MLB V130 分析報告**",
+        "⚾ **MLB V132 分析報告**",
         "🕐 %s | %s %s %s %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str,scr_str,b2b_str,ser_str),
         "📌 正式記錄 (00–07時)" if official else "🔧 測試模式 (不寫gist)",
         "📊 歷史: %d勝/%d場 (%.1f%%)"%(wins,total_settled,wr),
