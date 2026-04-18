@@ -1081,7 +1081,7 @@ def run():
                         elif t==away:
                             con_a_prices.append(p)
                             if away_price is None or p>away_price: away_price=p; away_book=bk_name
-                elif mk in ("spreads","alternate_spreads"):
+                elif mk == "spreads":  # 只用標準讓分線，不混 alternate_spreads
                     for o in mkt.get("outcomes",[]):
                         t=norm_team(o.get("name","")); p=o.get("price",0)
                         try: pts=float(o.get("point",0))
