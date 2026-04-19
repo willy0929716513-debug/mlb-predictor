@@ -1297,7 +1297,7 @@ def run():
             "💰 推薦: %s"%bet_desc,
             stats_ln,
             score_str,
-            "> Edge: **%+.1f%%** | 穩定%s%s | Kelly: $%.1f"%(raw_edge*100,stab_str,warn_note,stake),
+            "> Edge: **%+.1f%%** | 穩定%s%s | 推薦下注: $%.1f"%(raw_edge*100,stab_str,warn_note,stake),
         ]
         if last_line: msg_lines.append(last_line)
         msg="\n".join(msg_lines)+"\n"
