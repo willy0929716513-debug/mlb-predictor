@@ -42,11 +42,11 @@ PARK_FACTOR = {
     "diamondbacks":0.94,"marlins":0.94,"mariners":0.93,
 }
 
-# ── ★ 牛棚 ERA（2024 賽季）──
+# ── ★ 牛棚 ERA（2025 賽季）──
 BULLPEN_ERA = {
-    "dodgers":3.45,"phillies":3.52,"braves":3.58,"astros":3.61,"padres":3.63,
-    "guardians":3.65,"mariners":3.67,"yankees":3.70,"cubs":3.72,"mets":3.75,
-    "rangers":3.78,"brewers":3.80,"red sox":3.82,"blue jays":3.85,"giants":3.87,
+    "dodgers":3.45,"phillies":3.52,"braves":3.58,"astros":3.61,"padres":3.06,
+    "guardians":3.65,"mariners":3.72,"yankees":3.70,"cubs":3.72,"mets":3.75,
+    "rangers":3.78,"brewers":3.63,"red sox":3.82,"blue jays":3.85,"giants":3.87,
     "royals":3.90,"twins":3.92,"tigers":3.95,"orioles":3.97,"rays":3.98,
     "pirates":4.02,"diamondbacks":4.05,"cardinals":4.08,"reds":4.10,
     "athletics":4.15,"angels":4.20,"nationals":4.25,"white sox":4.35,
@@ -57,37 +57,38 @@ LEAGUE_DEF_AVG  = 4.45   # MLB 平均每場失分（用於防守品質調整）
 
 # ── 投手賽季 ERA ──────────────────────────────
 PITCHER_ERA = {
-    "skubal":3.10,"yamamoto":2.49,"glasnow":3.00,"fried":3.10,"gausman":3.59,
-    "schlittler":4.50,"sanchez":2.50,"skenes":1.96,"gilbert":3.44,"woo":3.50,
-    "alcantara":4.20,"burns":3.50,"crochet":2.59,"brown":2.43,"cease":3.80,
+    "skubal":2.21,"yamamoto":2.49,"glasnow":3.19,"fried":2.86,"gausman":3.59,
+    "schlittler":4.50,"sanchez":2.50,"skenes":1.96,"gilbert":3.44,"woo":2.94,
+    "alcantara":5.36,"burns":3.50,"crochet":2.59,"brown":2.43,"cease":3.80,
     "webb":3.20,"pivetta":2.87,"vasquez":4.40,"peralta":3.40,"senga":3.60,
-    "ryan":3.42,"bibee":4.24,"ragans":3.40,"lugo":1.59,"valdez":3.20,
+    "ryan":3.42,"bibee":4.24,"ragans":3.40,"lugo":1.59,"valdez":3.66,
     "leiter":2.45,"elder":4.20,"sale":2.58,"roupp":4.22,"mccullers":3.27,
-    "gallen":4.00,"rodriguez_e":4.20,"soroka":4.00,"rasmussen":2.76,
-    "boyle":3.18,"hancock":3.50,"rogers_t":2.50,"eovaldi":3.80,"springs":4.30,
-    "ashcraft":2.25,"mlodzinski":4.36,"soriano_j":3.93,"detmers":2.38,
-    "freeland":4.75,"misiorowski":4.36,"bradley_t":3.88,"bradley":3.88,
+    "gallen":4.83,"rodriguez_e":4.20,"soroka":4.00,"rasmussen":2.76,
+    "boyle":3.18,"hancock":3.50,"rogers_t":2.50,"eovaldi":1.73,"springs":4.11,
+    "ashcraft":2.25,"mlodzinski":4.36,"soriano_j":3.93,"detmers":3.96,
+    "freeland":4.75,"misiorowski":4.36,"bradley_t":4.11,"bradley":4.11,
     "liberatore":4.21,"severino":4.54,"cavalli":4.25,"boyd":3.21,"horton":4.10,
     "abbott":3.42,"burke_s":3.60,"smith_s":3.81,"pfaadt":4.10,"weathers":4.50,
     "williamson":4.60,"chandler":4.00,"mize":4.30,"pallante":4.60,
     "mikolas":4.20,"marquez":4.90,"flexen":4.90,"taillon":4.40,"voth":4.80,
     "adon":4.60,"kolek":4.50,"crawford_k":4.20,"sandoval_p":4.00,
-    "imanaga":3.55,"steele":3.75,"wetherholt":4.50,"winn":4.30,"keller":4.00,
+    "imanaga":3.73,"steele":4.76,"wetherholt":4.50,"winn":4.30,"keller":4.00,
     "pepiot":4.30,"blackburn":4.50,"javier":4.20,"paddack":4.30,"wood":4.20,
-    "musgrove":3.50,"king_m":3.90,"bieber":3.40,"castillo":3.30,"nola":3.70,
-    "flaherty":3.85,"ohtani":3.00,"sasaki":2.90,"mcclanahan":3.10,"burnes":3.20,
-    "verlander":3.80,"kirby":3.50,"bello":4.10,"berrios":3.80,"junk":5.10,
-    "fedde":4.60,"poulin":5.30,"painter":4.80,"mahle":4.20,"burns_c":3.50,
-    "civale":4.50,"gray_j":3.95,"lauer":4.40,"kikuchi":4.20,"degrom":3.50,
-    "holmes":4.00,"buehler":4.20,"williams_g":3.80,"varland":4.60,
+    "musgrove":3.50,"king_m":3.44,"bieber":3.40,"castillo":3.54,"nola":3.70,
+    "flaherty":3.85,"ohtani":3.00,"sasaki":2.90,"mcclanahan":3.10,"burnes":2.66,
+    "verlander":3.80,"kirby":4.21,"bello":3.35,"berrios":4.17,"junk":5.10,
+    "fedde":4.60,"poulin":5.30,"painter":5.26,"mahle":4.20,"burns_c":2.66,
+    "civale":4.50,"gray_j":3.95,"lauer":3.18,"kikuchi":3.99,"degrom":2.97,
+    "holmes":3.99,"buehler":4.20,"williams_g":3.80,"varland":4.60,
     "martin_c":4.60,"sears":4.50,"cortes":4.30,"houser":4.60,"lynch":4.70,
     "cox":4.80,"feltner":5.20,"hudson":5.00,"small":4.70,"wesneski":4.40,
-    # ── 2026 新增 / 修正 ──────────────────────────
-    "povich":4.10,"woodruff":4.20,"littell":4.60,"cameron":4.60,
-    "scherzer":4.30,"taylor":4.90,"lyles":5.10,"hendricks":4.70,
+    # ── 2025 新增 / 修正 ──────────────────────────
+    "povich":4.10,"woodruff":3.20,"littell":4.60,"cameron":4.60,
+    "scherzer":5.19,"taylor":4.90,"lyles":5.10,"hendricks":4.70,
     "stroman":4.20,"alexander":4.40,"lorenzen":4.80,"cobb":4.50,
-    "montgomery":4.10,"snell":3.60,"means":4.30,"bass":4.80,
+    "montgomery":4.10,"snell":2.41,"means":4.30,"bass":4.80,
     "irvin":4.60,"urquidy":4.70,"bradish":3.80,"suarez":4.50,
+    "gore":4.17,"nelson_r":3.39,
 }
 
 # ── BASE 隊伍實力 ──────────────────────────────
@@ -1345,7 +1346,7 @@ def run():
     pnl_str = "**%+.1f$**" % total_pnl if total_in > 0 else "尚無結算資料"
 
     lines=[
-        "⚾ **MLB V132 分析報告**",
+        "⚾ **MLB V133 分析報告**",
         "🕐 %s | %s %s %s %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str,scr_str,b2b_str,ser_str),
         "📌 正式記錄 (00–07時)" if official else "🔧 測試模式 (不寫gist)",
         "📊 歷史: %d勝/%d場 (%.1f%%)"%(wins,total_settled,wr),
@@ -1425,6 +1426,7 @@ def run():
         "• [V129] ★ RL edge門檻 0.10→0.12，RL/TOT最低勝率 0.45→0.55",
         "• [V130] ★ 模型勝率上限 90%→72%（MLB現實校準），blend_p門檻 0.48→0.52（避免重壓大冷門）",
         "• [V132] ★ 投手WHIP納入ERA校正：低ERA+高WHIP→往上修正（防走運），低ERA+低WHIP→確認真實強度",
+        "• [V133] ★ PITCHER_ERA / BULLPEN_ERA 更新至 2025 賽季最新數據（skubal 3.10→2.21，snell 3.60→2.41，burnes 3.20→2.66 等）",
     ]
 
     out="\n".join(lines)
