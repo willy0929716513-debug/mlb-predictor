@@ -1408,7 +1408,7 @@ def run():
         for p in picks: lines.append(p["msg"])
         # 今日投入與預期收益彙總
         day_stake = sum(p.get("stake", 0) for p in picks)
-        day_ev    = sum(p.get("stake", 0) * p.get("edge", 0) for p in picks)
+        day_ev    = sum(p.get("stake", 0) * (p.get("model_p", 0) * p.get("bp", 1) - 1) for p in picks)
         day_roi   = (day_ev / day_stake * 100) if day_stake > 0 else 0.0
         lines.append("")
         lines.append("💵 **今日預計**：投入 $%.1f | 期望盈利 **%+.1f$** | ROI **%+.1f%%**"
