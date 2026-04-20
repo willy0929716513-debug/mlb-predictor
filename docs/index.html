@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>MLB 每日推薦</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#0f172a"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="MLB推薦"/>
+  <link rel="apple-touch-icon" href="icon.svg"/>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background:#0f172a; color:#e2e8f0; font-family:'Segoe UI',sans-serif; }
+    .card { background:#1e293b; border:1px solid #334155; }
+    .tier-diamond { border-left:4px solid #a78bfa; }
+    .tier-fire    { border-left:4px solid #f97316; }
+    .tier-star    { border-left:4px solid #38bdf8; }
+    .badge { display:inline-block; padding:1px 8px; border-radius:9999px; font-size:0.72rem; font-weight:600; }
+    .badge-ml  { background:#1d4ed8; color:#bfdbfe; }
+    .badge-rl  { background:#7c3aed; color:#ede9fe; }
+    .badge-tot { background:#065f46; color:#a7f3d0; }
+    .stat-box { background:#0f172a; border-radius:0.5rem; padding:0.5rem 1rem; }
+  </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+
+<div class="max-w-2xl mx-auto">
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-white">⚾ MLB 每日推薦</h1>
+      <p id="gen-time" class="text-xs text-slate-400 mt-1"></p>
+    </div>
+    <button onclick="loadData()" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg text-slate-300">重新整理</button>
+  </div>
+
+  <!-- Stats row -->
+  <div class="grid grid-cols-3 gap-3 mb-6" id="stats-row">
+    <div class="stat-box text-center">
+      <div class="text-lg font-bold text-white" id="s-wr">—</div>
+      <div class="text-xs text-slate-400">勝率</div>
+    </div>
+    <div class="stat-box text-center">
+      <div class="text-lg font-bold" id="s-roi">—</div>
+      <div class="text-xs text-slate-400">ROI</div>
+    </div>
+    <div class="stat-box text-center">
+      <div class="text-lg font-bold text-white" id="s-record">—</div>
+      <div class="text-xs text-slate-400">歷史戰績</div>
+    </div>
+  </div>
+
+  <!-- Pick cards -->
+  <div id="picks-container">
+    <div class="text-center text-slate-400 py-12">載入中…</div>
+  </div>
+
+  <p class="text-center text-xs text-slate-600 mt-8">MLB V138 · 數據每日自動更新 · 僅供參考</p>
+</div>
+
+<script>
+const JSON_URL = "picks_latest.json";
+
+function tierClass(tier) {
+  if (tier.includes("💎")) return "tier-diamond";
+  if (tier.includes("🔥")) return "tier-fire";
+  return "tier-star";
+}
+function btypeBadge(btype) {
+  if (btype === "ml")  return '<span class="badge badge-ml">獨贏</span>';
+  if (btype === "rl")  return '<span class="badge badge-rl">讓分</span>';
+  if (btype === "tot") return '<span class="badge badge-tot">大小分</span>';
+  return "";
+}
+function spTag(name, era, whip) {
+  if (!name || name === "TBD") return "TBD";
+  let s = name;
+  if (era != null) s += ` ERA${era.toFixed(2)}`;
+  if (whip != null) s += `/WHIP${whip.toFixed(2)}`;
+  return s;
+}
+function pnlColor(val) {
+  if (val == null) return "text-slate-400";
+  return val >= 0 ? "text-emerald-400" : "text-rose-400";
+}
+
+function renderCard(p) {
+  const tc = tierClass(p.tier);
+  const badge = btypeBadge(p.btype);
+  const awayTag = spTag(p.away_sp, p.away_era, p.away_whip);
+  const homeTag = spTag(p.home_sp, p.home_era, p.home_whip);
+  const confBar = Math.round(p.conf);
+  const edgeStr = (p.edge >= 0 ? "+" : "") + p.edge.toFixed(1) + "%";
+  const pfNote  = p.park_factor ? `🏟️ PF${p.park_factor.toFixed(2)}` : "";
+
+  let scoreSection = "";
+  if (p.btype === "tot" && p.model_total != null) {
+    scoreSection = `
+      <div class="flex justify-between text-sm mt-2">
+        <span class="text-slate-400">模型總分</span>
+        <span class="font-semibold text-white">${p.model_total} <span class="text-slate-500 text-xs">/ 線 ${p.market_total}</span></span>
+      </div>`;
+  } else {
+    scoreSection = `
+      <div class="flex justify-between text-sm mt-2">
+        <span class="text-slate-400">預測得分</span>
+        <span class="font-semibold text-white">${p.away_cn} ${p.pred_away} — ${p.pred_home} ${p.home_cn}</span>
+      </div>`;
+  }
+
+  return `
+  <div class="card rounded-xl p-4 mb-4 ${tc}">
+    <div class="flex items-start justify-between">
+      <div>
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="text-base font-bold text-white">${p.tier}</span>
+          ${badge}
+          ${pfNote ? `<span class="text-xs text-amber-400">${pfNote}</span>` : ""}
+        </div>
+        <div class="text-lg font-semibold text-white mt-0.5">${p.away_cn} @ ${p.home_cn}</div>
+        <div class="text-xs text-slate-400">${p.game_date} ${p.game_time} (台灣時間)</div>
+      </div>
+      <div class="text-right">
+        <div class="text-xl font-bold text-emerald-400">$${p.stake}</div>
+        <div class="text-xs text-slate-400">建議下注</div>
+      </div>
+    </div>
+
+    <!-- Bet label -->
+    <div class="mt-3 bg-slate-800 rounded-lg px-3 py-2">
+      <span class="text-sm font-semibold text-white">${p.bet_label}</span>
+      <span class="ml-2 text-xs text-slate-400">共識: ${p.con_p ? p.con_p.toFixed(2) : "—"}</span>
+    </div>
+
+    <!-- SP row -->
+    <div class="mt-2 grid grid-cols-2 gap-1 text-xs text-slate-400">
+      <div>客隊先發: <span class="text-slate-300">${awayTag}</span></div>
+      <div>主隊先發: <span class="text-slate-300">${homeTag}</span></div>
+    </div>
+
+    ${scoreSection}
+
+    <!-- Edge / conf bar -->
+    <div class="mt-3 flex items-center gap-3">
+      <div class="flex-1">
+        <div class="flex justify-between text-xs text-slate-400 mb-1">
+          <span>信心 ${confBar}%</span>
+          <span>Edge ${edgeStr}</span>
+        </div>
+        <div class="h-1.5 bg-slate-700 rounded-full overflow-hidden">
+          <div class="h-full rounded-full ${confBar>=80?'bg-emerald-500':confBar>=70?'bg-amber-400':'bg-sky-400'}"
+               style="width:${confBar}%"></div>
+        </div>
+      </div>
+      <div class="text-xs text-slate-400">
+        模型 <span class="text-white font-medium">${p.model_p.toFixed(1)}%</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+async function loadData() {
+  const container = document.getElementById("picks-container");
+  try {
+    const res = await fetch(JSON_URL + "?t=" + Date.now());
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+
+    document.getElementById("gen-time").textContent = "更新於 " + data.generated_at;
+
+    const s = data.stats;
+    const wrEl  = document.getElementById("s-wr");
+    const roiEl = document.getElementById("s-roi");
+    const recEl = document.getElementById("s-record");
+    wrEl.textContent  = s.win_rate.toFixed(1) + "%";
+    roiEl.textContent = (s.roi != null ? (s.roi >= 0 ? "+" : "") + s.roi.toFixed(1) + "%" : "N/A");
+    roiEl.className   = "text-lg font-bold " + pnlColor(s.roi);
+    recEl.textContent = s.wins + "/" + s.settled;
+
+    if (!data.picks || data.picks.length === 0) {
+      container.innerHTML = '<div class="text-center text-slate-400 py-12">今日無符合條件之推薦</div>';
+      return;
+    }
+    container.innerHTML = data.picks.map(renderCard).join("");
+  } catch(e) {
+    container.innerHTML = `<div class="text-center text-rose-400 py-12">載入失敗：${e.message}</div>`;
+  }
+}
+
+loadData();
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js");
+}
+</script>
+</body>
+</html>
