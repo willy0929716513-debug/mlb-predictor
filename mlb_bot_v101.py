@@ -1,7 +1,7 @@
 import os, json, math, logging, datetime, requests
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-log = logging.getLogger("MLB_V122")
+log = logging.getLogger("MLB_V138")
 
 ODDS_API_KEY    = os.getenv("ODDS_API_KEY", "")
 DISCORD_WEBHOOK = os.getenv("DISCORD_WEBHOOK", "")
@@ -767,6 +767,65 @@ def send(content):
 
 
 # ══════════════════════════════════════════════
+def write_pages_json(picks, hist, now_tw):
+    """Write picks_latest.json to docs/ for GitHub Pages display."""
+    import datetime as _dt
+    total_settled, wins, wr = calc_perf(hist)
+    total_in, total_pnl     = calc_pnl(hist)
+    roi = round(total_pnl / total_in * 100, 1) if total_in > 0 else None
+
+    records = []
+    for p in picks:
+        records.append({
+            "tier":       p.get("tier",""),
+            "btype":      p.get("btype",""),
+            "away":       p.get("away",""),
+            "home":       p.get("home",""),
+            "away_cn":    p.get("away_cn",""),
+            "home_cn":    p.get("home_cn",""),
+            "bet_label":  p.get("bet_label",""),
+            "bk":         p.get("bk",""),
+            "bp":         round(p.get("bp",0),2),
+            "con_p":      p.get("con_p"),
+            "edge":       round(p.get("edge",0)*100,1),
+            "conf":       round(p.get("conf",0)*100,1),
+            "stake":      round(p.get("stake",0),1),
+            "model_p":    round(p.get("model_p",0)*100,1),
+            "away_sp":    p.get("away_sp_name","TBD"),
+            "home_sp":    p.get("home_sp_name","TBD"),
+            "away_era":   p.get("away_era"),
+            "home_era":   p.get("home_era"),
+            "away_whip":  p.get("away_whip"),
+            "home_whip":  p.get("home_whip"),
+            "pred_away":  p.get("pred_away"),
+            "pred_home":  p.get("pred_home"),
+            "model_total":p.get("model_total"),
+            "market_total":p.get("market_total"),
+            "park_factor":p.get("park_factor"),
+            "game_date":  p.get("game_date",""),
+            "game_time":  p.get("game_time",""),
+        })
+
+    payload = {
+        "generated_at": now_tw.strftime("%Y-%m-%d %H:%M") + " (台灣時間)",
+        "date":         now_tw.strftime("%Y-%m-%d"),
+        "stats": {
+            "settled":   total_settled,
+            "wins":      wins,
+            "win_rate":  round(wr, 1),
+            "total_in":  round(total_in, 1),
+            "total_pnl": round(total_pnl, 1),
+            "roi":       roi,
+        },
+        "picks": records,
+    }
+
+    os.makedirs("docs", exist_ok=True)
+    with open("docs/picks_latest.json", "w", encoding="utf-8") as f:
+        json.dump(payload, f, ensure_ascii=False, indent=2)
+    log.info("Wrote docs/picks_latest.json (%d picks)", len(records))
+
+
 # 主流程
 # ══════════════════════════════════════════════
 
@@ -1004,27 +1063,55 @@ def run():
         if last_line: msg_lines.append(last_line)
         msg="\n".join(msg_lines)+"\n"
 
+        # Build clean bet label for web display
+        if btype==BET_ML:
+            _web_label = "%s 獨贏 @ %.2f"%(CN.get(bteam,bteam),bp)
+        elif btype==BET_RL:
+            _web_label = "%s 讓分(%s) @ %.2f"%(CN.get(bteam,bteam),best_pick.get("label",""),bp)
+        else:
+            _ov_un="OVER" if bside=="over" else "UNDER"
+            _web_label = "%s %.1f @ %.2f"%(_ov_un,market_total,bp)
+
+        _pick_extra = {
+            "away_cn":acn,"home_cn":hcn,
+            "bet_label":_web_label,"bk":bk,"con_p":round(con_p,3),
+            "away_sp_name":a_sp_n,"home_sp_name":h_sp_n,
+            "away_era":round(a_era,2),"home_era":round(h_era,2),
+            "away_whip":round(a_whip,2) if a_whip else None,
+            "home_whip":round(h_whip,2) if h_whip else None,
+            "pred_away":round(a_disp,1),"pred_home":round(h_disp,1),
+            "model_total":round(pred["model_total"],1) if btype==BET_TOT else None,
+            "market_total":market_total if btype==BET_TOT else None,
+            "park_factor":round(pred["park_factor"],2) if abs(pred["park_factor"]-1.0)>0.05 else None,
+        }
+
+        _pick_base = {"msg":msg,"tier":tier,"team":str(bteam),"home":home,"away":away,
+                      "edge":raw_edge,"conf":bet_conf,"stake":stake,"score":best_pick["score"],
+                      "model_p":model_p,"bp":bp,"btype":btype,
+                      "label":best_pick.get("label",""),"bteam_cn":CN.get(bteam,bteam),
+                      "game_date":game_date_str,"game_time":game_time_str,"game_dt":game_dt,
+                      **_pick_extra}
+
         gk=(home,away)
         ex=next((i for i,p in enumerate(picks) if (p["home"],p["away"])==gk),None)
         if ex is not None:
             if best_pick["score"]>picks[ex].get("score",0):
-                picks[ex]={"msg":msg,"tier":tier,"team":str(bteam),"home":home,"away":away,
-                           "edge":raw_edge,"conf":bet_conf,"stake":stake,"score":best_pick["score"],
-                           "game_date":game_date_str,"game_time":game_time_str,"game_dt":game_dt}
+                picks[ex]=_pick_base
         else:
-            picks.append({"msg":msg,"tier":tier,"team":str(bteam),"home":home,"away":away,
-                          "edge":raw_edge,"conf":bet_conf,"stake":stake,"score":best_pick["score"],
-                          "game_date":game_date_str,"game_time":game_time_str,"game_dt":game_dt})
-        if official and game_date_str==today_str:
-            rk=(home,away)
-            if not any((r.get("home"),r.get("away"))==rk for r in today_records):
-                today_records.append({"date":today_str,"team":str(bteam),"home":home,"away":away,
+            picks.append(_pick_base)
+        if official:
+            rk=(home,away,game_date_str)
+            already_in_hist = rk in hist_game_keys
+            already_in_today = any((r.get("home"),r.get("away"),r.get("date"))==rk for r in today_records)
+            if not already_in_hist and not already_in_today:
+                today_records.append({"date":game_date_str,"team":str(bteam),"home":home,"away":away,
                                       "price":bp,"edge":round(raw_edge,4),"conf":round(bet_conf,3),
                                       "bet_type":btype,"result":None})
 
-    tier_order={"💎 頂級":0,"🔥 強力":1,"⭐ 穩定":2}
-    picks.sort(key=lambda x:(x["game_date"],x.get("game_dt") or datetime.datetime.min,
-                              tier_order.get(x["tier"],9),-x["edge"]))
+    # ★ 依穩定性排序：model_p × bet_conf（勝率高且信心高 → 最穩定），最多保留6場
+    picks.sort(key=lambda x:(-(x.get("model_p",0) * x.get("conf",0))))
+    picks = picks[:6]
+    write_pages_json(picks, hist, now_tw)
 
     total_settled,wins,wr=calc_perf(hist)
     now_str  = now_tw.strftime("%m/%d %H:%M")
@@ -1034,8 +1121,8 @@ def run():
     era_str  = "✅近期ERA(%d)"%len(_RECENT_ERA) if _RECENT_ERA else "⚠️賽季ERA"
 
     lines=[
-        "⚾ **MLB V122 分析報告**",
-        "🕐 %s | %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str),
+        "⚾ **MLB V138 分析報告**",
+        "🕐 %s | %s %s %s %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str,scr_str,b2b_str,ser_str),
         "📌 正式記錄 (00–07時)" if official else "🔧 測試模式 (不寫gist)",
         "📊 歷史: %d勝/%d場 (%.1f%%)"%(wins,total_settled,wr),
         "",
@@ -1103,18 +1190,10 @@ def run():
             for p in group: lines.append(p["msg"])
 
     lines+=[
-        "═"*20,"🔧 **V122 更新**",
-        "• ① 投手近期3場ERA融合（65%近期+35%賽季）",
-        "• ② 球場係數 Park Factor（30隊）",
-        "• ③ 牛棚品質（各隊牛棚ERA影響後段）",
-        "• ④ 天氣影響（需設定WEATHER_API_KEY）",
-        "• ⑤ 動態主場優勢+動態STD（隨ESPN form調整）",
-        "• ⑥ 球星缺陣/傷疑顯示",
-        "• ⑦ [V121] Edge顯示修正：原始模型值，conf只在Kelly中套用一次",
-        "• ⑧ [V122] ★ 三市場選優：獨贏/讓分(-1.5)/大小分自動選最高edge",
-        "• ⑨ [V122] ★ 新增讓分概率模型（Gaussian margin distribution）",
-        "• ⑩ [V122] ★ 新增大小分概率模型（TOTAL_STD=2.10）",
-        "• ⑪ [V122] 診斷顯示各市場最優edge類型 [ML/RL/TOT]",
+        "═"*20,"🔧 **MLB V138 模型功能**",
+        "• 多因子模型：ERA/WHIP/PF/牛棚/主客攻守/傷兵/疲勞/系列動能",
+        "• 三市場選優 | 書商數×vig信心 | 模型vs市場差距>15%自動跳過",
+        "• 屋頂球場跳過天氣 | 勝率上限65% | 信心下限50% | 防守調整±0.25上限",
     ]
 
     out="\n".join(lines)
