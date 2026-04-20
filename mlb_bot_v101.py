@@ -1,7 +1,7 @@
 import os, json, math, logging, datetime, requests
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-log = logging.getLogger("MLB_V138")
+log = logging.getLogger("MLB_V139")
 
 ODDS_API_KEY    = os.getenv("ODDS_API_KEY", "")
 DISCORD_WEBHOOK = os.getenv("DISCORD_WEBHOOK", "")
@@ -48,8 +48,10 @@ EARLY_CONF_CAP   = 0.85   # 早賽季信心上限
 CONF_FLOOR       = 0.50   # 信心絕對下限（過低信心的注單沒有推薦意義）
 MODEL_TOTAL_W    = 0.30   # 大小分模型混合權重
 MKT_TOTAL_W      = 0.70   # 大小分市場混合權重
-DIV_HARD         = 0.15   # 模型vs市場差距硬過濾門檻（直接跳過）
+DIV_HARD         = 0.18   # 模型vs市場差距硬過濾門檻（直接跳過）
 DIV_SOFT         = 0.10   # 模型vs市場差距軟懲罰起點
+OVER_BLEND_W     = 0.50   # 大小分機率計算：50%模型+50%市場（避免純模型虛高）
+TOT_MAX          = 2      # 每日大小分推薦上限（保留名額給ML/RL）
 
 # ── 有屋頂球場（天氣不影響得分）─────────────
 DOME_STADIUMS = {
@@ -1225,7 +1227,9 @@ def run():
         h_blend  = MOD_W*h_model+MKT_W*h_mkt_nv; a_blend = MOD_W*a_model+MKT_W*a_mkt_nv
 
         # ── ★ 大小分概率（Over/Under）────────────────────────
-        p_over  = over_prob(pred["pure_total"], market_total)
+        # 50%模型+50%市場混合，避免純模型預測值虛高導致edge失真
+        _ov_input = pred["pure_total"]*OVER_BLEND_W + market_total*(1-OVER_BLEND_W)
+        p_over  = over_prob(_ov_input, market_total)
         p_under = 1.0 - p_over
 
         # ── ★ 建立所有候選注單並選最優 ──────────────────────
@@ -1448,7 +1452,15 @@ def run():
 
     # ★ 依穩定性排序：model_p × bet_conf（勝率高且信心高 → 最穩定），最多保留6場
     picks.sort(key=lambda x:(-(x.get("model_p",0) * x.get("conf",0))))
-    picks = picks[:6]
+    # 大小分上限：最多 TOT_MAX 場，避免全部都是大小分
+    filtered, tot_count = [], 0
+    for p in picks:
+        if p.get("btype") == BET_TOT:
+            if tot_count >= TOT_MAX:
+                continue
+            tot_count += 1
+        filtered.append(p)
+    picks = filtered[:6]
     write_pages_json(picks, hist, now_tw)
 
     total_settled,wins,wr=calc_perf(hist)
@@ -1466,7 +1478,7 @@ def run():
     pnl_str = "**%+.1f$**" % total_pnl if total_in > 0 else "尚無結算資料"
 
     lines=[
-        "⚾ **MLB V138 分析報告**",
+        "⚾ **MLB V139 分析報告**",
         "🕐 %s | %s %s %s %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str,scr_str,b2b_str,ser_str),
         "📌 正式記錄 (00–07時)" if official else "🔧 測試模式 (不寫gist)",
         "📊 歷史: %d勝/%d場 (%.1f%%)"%(wins,total_settled,wr),
@@ -1518,7 +1530,7 @@ def run():
                 if rl_be*0.90>be: be=rl_be; bp2=rl_hp if rl_he>=rl_ae else rl_ap; best_lbl="RL"
             # 大小分 edge（比較時套用0.88信心折扣）
             if ov_p and un_p:
-                p_ov=over_prob(pr["pure_total"],mt)
+                p_ov=over_prob(pr["pure_total"]*OVER_BLEND_W+mt*(1-OVER_BLEND_W),mt)
                 tot_he=p_ov-1/ov_p; tot_ue=(1-p_ov)-1/un_p; tot_be=max(tot_he,tot_ue)
                 if tot_be*0.88>be: be=tot_be; bp2=ov_p if tot_he>=tot_ue else un_p; best_lbl="TOT"
             diag.append("`%s@%s` [%s] Edge=%+.1f%% P=%.2f conf=%.0f%% SP:%s/%s"%(
@@ -1536,10 +1548,11 @@ def run():
                      % (day_stake, day_ev, day_roi))
 
     lines+=[
-        "═"*20,"🔧 **MLB V138 模型功能**",
+        "═"*20,"🔧 **MLB V139 模型功能**",
         "• 多因子模型：ERA/WHIP/PF/牛棚/主客攻守/傷兵/疲勞/系列動能",
         "• 三市場選優 | 書商數×vig信心 | 模型vs市場差距>15%自動跳過",
         "• 屋頂球場跳過天氣 | 勝率上限65% | 信心下限50% | 防守調整±0.25上限",
+        "• 大小分上限2場/天 | 大小分edge混合50%市場修正 | ML差距門檻18%",
     ]
 
     out="\n".join(lines)
