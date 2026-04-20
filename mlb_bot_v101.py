@@ -1,6 +1,6 @@
 import os, json, math, logging, datetime, requests
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger("MLB_V139")
 
 ODDS_API_KEY    = os.getenv("ODDS_API_KEY", "")
@@ -1248,12 +1248,16 @@ def run():
             ch=round(sum(e["h_all"])/len(e["h_all"]),3) if e["h_all"] else hp
             ca=round(sum(e["a_all"])/len(e["a_all"]),3) if e["a_all"] else ap
             h_pts=e.get("h_pts") or -s
+            log.debug("RL %s@%s s=%.1f h_pts=%s margin=%.3f hp=%.2f ap=%.2f",home,away,s,h_pts,margin,hp,ap)
             if h_pts<=0:  # home team gives points (-s)
-                if margin < 0: continue  # ★ 反向讓分過濾：模型認為客場贏但市場讓主場，跳過
+                if margin < 0:
+                    log.debug("RL SKIP %s@%s anti-contrarian: h_pts<=0 margin=%.3f<0",home,away,margin); continue
                 p_h=runline_prob(margin,s,dyn_std); h_lbl="-%g"%s; a_lbl="+%g"%s
             else:         # home team receives points (+s)
-                if margin > 0: continue  # ★ 反向讓分過濾：模型認為主場贏但市場讓客場，跳過
+                if margin > 0:
+                    log.debug("RL SKIP %s@%s anti-contrarian: h_pts>0 margin=%.3f>0",home,away,margin); continue
                 p_h=runline_prob(margin,-s,dyn_std); h_lbl="+%g"%s; a_lbl="-%g"%s
+            log.debug("RL %s@%s p_h=%.3f p_a=%.3f",home,away,p_h,1-p_h)
             # ★ 對稱上限：兩邊最高75%（防止純模型極端值，保留真實edge）
             p_h=max(0.25, min(0.75, p_h))
             p_a=1.0-p_h
@@ -1278,23 +1282,31 @@ def run():
         for c in candidates:
             btype=c["btype"]; bp=c["bp"]; con_p=c["con_p"]; model_p=c["model_p"]
             blend_p=c["blend_p"]; edge_min=c["edge_min"]
-            if bp is None or bp<=0 or con_p is None or con_p<=0: continue
+            if bp is None or bp<=0 or con_p is None or con_p<=0:
+                log.debug("SKIP %s@%s %s bp=%s con_p=%s NULL",home,away,btype,bp,con_p); continue
             bet_conf = conf*c["conf_mult"]
             # ★ 模型 vs 市場差距過濾（獨贏專用）
             if btype==BET_ML:
                 mkt_p_val = c.get("mkt_p", model_p)
                 div = abs(model_p - mkt_p_val)
-                if div > DIV_HARD: continue
+                if div > DIV_HARD:
+                    log.debug("SKIP %s@%s ML div=%.3f>DIV_HARD",home,away,div); continue
                 if div > DIV_SOFT:
                     bet_conf *= max(0.75, 1.0 - (div - DIV_SOFT) * 5.0)
             raw_edge = model_p - 1/bp
-            if raw_edge*bet_conf<edge_min: continue
-            if bp<MIN_P or bp>MAX_P: continue
-            if btype==BET_ML and (blend_p is None or blend_p<0.52): continue
-            if btype!=BET_ML and model_p<0.55: continue
-            if bet_conf<0.65: continue
+            if raw_edge*bet_conf<edge_min:
+                log.debug("SKIP %s@%s %s re=%.3f bc=%.3f re*bc=%.3f<%.3f",home,away,btype,raw_edge,bet_conf,raw_edge*bet_conf,edge_min); continue
+            if bp<MIN_P or bp>MAX_P:
+                log.debug("SKIP %s@%s %s bp=%.2f out of [%.2f,%.2f]",home,away,btype,bp,MIN_P,MAX_P); continue
+            if btype==BET_ML and (blend_p is None or blend_p<0.52):
+                log.debug("SKIP %s@%s ML blend_p=%s",home,away,blend_p); continue
+            if btype!=BET_ML and model_p<0.55:
+                log.debug("SKIP %s@%s %s model_p=%.3f<0.55",home,away,btype,model_p); continue
+            if bet_conf<0.65:
+                log.debug("SKIP %s@%s %s bet_conf=%.3f<0.65",home,away,btype,bet_conf); continue
             stake=kelly_stake(raw_edge,model_p,bp,conf=bet_conf)
-            if stake<KELLY_MIN: continue
+            if stake<KELLY_MIN:
+                log.debug("SKIP %s@%s %s stake=%.1f<KELLY_MIN",home,away,btype,stake); continue
             score=raw_edge*bet_conf
             if best_pick is None or score>best_pick["score"]:
                 best_pick={**c,"raw_edge":raw_edge,"bet_conf":bet_conf,"stake":stake,"score":score}
