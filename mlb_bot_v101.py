@@ -1,6 +1,6 @@
 import os, json, math, logging, datetime, requests
 
-logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(levelname)s %(message)s")
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger("MLB_V139")
 
 ODDS_API_KEY    = os.getenv("ODDS_API_KEY", "")
@@ -12,7 +12,7 @@ GIST_DESC = "mlb_bot_history"
 
 # ── 模型參數 ──────────────────────────────────
 EDGE_MIN       = 0.08
-EDGE_MIN_RL    = 0.12   # 讓分（run line）需更大 edge，波動較高
+EDGE_MIN_RL    = 0.10   # 讓分（run line）直接比 raw_edge，不乘 bet_conf
 EDGE_MIN_TOT   = 0.08   # 大小分（totals）edge 門檻
 MOD_W          = 0.18
 MKT_W          = 0.82
@@ -1294,8 +1294,10 @@ def run():
                 if div > DIV_SOFT:
                     bet_conf *= max(0.75, 1.0 - (div - DIV_SOFT) * 5.0)
             raw_edge = model_p - 1/bp
-            if raw_edge*bet_conf<edge_min:
-                log.debug("SKIP %s@%s %s re=%.3f bc=%.3f re*bc=%.3f<%.3f",home,away,btype,raw_edge,bet_conf,raw_edge*bet_conf,edge_min); continue
+            # ML: edge*conf >= edge_min; RL/TOT: edge_min already higher, check raw_edge directly
+            edge_ok = (raw_edge*bet_conf >= edge_min) if btype==BET_ML else (raw_edge >= edge_min)
+            if not edge_ok:
+                log.debug("SKIP %s@%s %s re=%.3f bc=%.3f edge_ok=False thr=%.3f",home,away,btype,raw_edge,bet_conf,edge_min); continue
             if bp<MIN_P or bp>MAX_P:
                 log.debug("SKIP %s@%s %s bp=%.2f out of [%.2f,%.2f]",home,away,btype,bp,MIN_P,MAX_P); continue
             if btype==BET_ML and (blend_p is None or blend_p<0.52):
