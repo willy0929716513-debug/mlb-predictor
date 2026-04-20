@@ -1254,11 +1254,8 @@ def run():
             else:         # home team receives points (+s)
                 if margin > 0: continue  # ★ 反向讓分過濾：模型認為主場贏但市場讓客場，跳過
                 p_h=runline_prob(margin,-s,dyn_std); h_lbl="+%g"%s; a_lbl="-%g"%s
-            # ★ RL 模型-市場混合（40%模型+60%市場），防止純模型機率虛高
-            rl_inv = 1/hp + 1/ap
-            h_mkt_rl = (1/hp)/rl_inv if rl_inv>0 else 0.5
-            p_h = p_h*0.40 + h_mkt_rl*0.60
-            p_h=max(0.10, min(0.72, p_h))  # RL勝率上限72%（比ML更保守）
+            # ★ 對稱上限：兩邊最高75%（防止純模型極端值，保留真實edge）
+            p_h=max(0.25, min(0.75, p_h))
             p_a=1.0-p_h
             rl_inv_val=(1/ch+1/ca) if (ch>0 and ca>0) else 1.0
             candidates.append({"btype":BET_RL,"bside":"rl_h","bteam":home,"bp":hp,"bk":e["h_book"],
