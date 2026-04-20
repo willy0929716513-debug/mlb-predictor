@@ -1,7 +1,7 @@
 import os, json, math, logging, datetime, requests
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-log = logging.getLogger("MLB_V129")
+log = logging.getLogger("MLB_V136")
 
 ODDS_API_KEY    = os.getenv("ODDS_API_KEY", "")
 DISCORD_WEBHOOK = os.getenv("DISCORD_WEBHOOK", "")
@@ -31,10 +31,41 @@ ESPN_ALPHA_MAX = 0.65
 SP_RECENT_W    = 0.65   # 近期 ERA 權重
 SP_SEASON_W    = 0.35
 
-# ── ★ 球場係數（FanGraphs Park Factors 2024）──
+# ── 模型調整常數（集中管理，方便校準）────────
+HOME_ADV_BASE    = 0.07   # 主場基礎優勢（分）
+HOME_ADV_FORM    = 0.30   # 主場形態加成係數
+INJURY_MULT      = 0.40   # 傷兵懲罰對期望得分的乘數
+DEF_QUALITY_MULT = 0.08   # 防守品質調整係數
+DEF_QUALITY_CAP  = 0.25   # 防守調整上限（分），防止過度校正
+AWAY_FORM_MULT   = 0.15   # 客隊近期狀態影響係數
+RECENT_FORM_W    = 0.22   # 近期得分形態權重
+B2B_PENALTY      = 0.06   # 連場疲勞懲罰（分）
+SERIES_PEN       = 0.12   # 系列賽動能懲罰（分）
+SERIES_CONF_MULT = 0.93   # 系列賽連敗信心折扣
+MISSING_SP_MULT  = 0.86   # 缺先發信心折扣
+EARLY_GAMES      = 5      # 早賽季場次門檻
+EARLY_CONF_CAP   = 0.85   # 早賽季信心上限
+CONF_FLOOR       = 0.50   # 信心絕對下限（過低信心的注單沒有推薦意義）
+MODEL_TOTAL_W    = 0.30   # 大小分模型混合權重
+MKT_TOTAL_W      = 0.70   # 大小分市場混合權重
+DIV_HARD         = 0.15   # 模型vs市場差距硬過濾門檻（直接跳過）
+DIV_SOFT         = 0.10   # 模型vs市場差距軟懲罰起點
+
+# ── 有屋頂球場（天氣不影響得分）─────────────
+DOME_STADIUMS = {
+    "rays",          # Tropicana Field（固定屋頂）
+    "blue jays",     # Rogers Centre（可開合）
+    "astros",        # Minute Maid Park（可開合）
+    "mariners",      # T-Mobile Park（可開合）
+    "diamondbacks",  # Chase Field（可開合）
+    "brewers",       # American Family Field（可開合）
+    "marlins",       # loanDepot park（固定屋頂）
+}
+
+# ── ★ 球場係數（FanGraphs Park Factors 2024/2025）──
 PARK_FACTOR = {
     "rockies":1.30,"rangers":1.12,"red sox":1.10,"cubs":1.08,"reds":1.07,
-    "brewers":1.05,"phillies":1.04,"athletics":1.03,"blue jays":1.02,
+    "brewers":1.05,"phillies":1.04,"athletics":1.07,"blue jays":1.02,  # athletics→Sacramento Sutter Health Park
     "nationals":1.01,"cardinals":1.00,"astros":0.99,"dodgers":0.99,
     "angels":0.99,"tigers":0.98,"white sox":0.98,"twins":0.98,"mets":0.97,
     "braves":0.97,"orioles":0.97,"yankees":0.97,"giants":0.96,"pirates":0.96,
@@ -850,15 +881,15 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
     a_sp_adj = era_adj(away_sp)
 
     # ② 動態主場優勢
-    ha = 0.07 + hr.get("form", 0.0) * 0.3
+    ha = HOME_ADV_BASE + hr.get("form", 0.0) * HOME_ADV_FORM
 
     # ③ 基礎期望得分
     h_exp = hr["off"] + a_sp_adj + ha
     a_exp = ar["off"] + h_sp_adj
 
     # ④ 傷兵
-    h_exp -= injury_penalty(home) * 0.4
-    a_exp -= injury_penalty(away) * 0.4
+    h_exp -= injury_penalty(home) * INJURY_MULT
+    a_exp -= injury_penalty(away) * INJURY_MULT
 
     # ⑤ ★ 牛棚（對手牛棚好 → 己方後段得分降低）
     h_exp -= bullpen_adj(away)
@@ -869,51 +900,49 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
     h_exp *= pf
     a_exp *= pf
 
-    # ⑦ ★ 天氣（選用）
-    if game_dt and WEATHER_API_KEY:
+    # ⑦ ★ 天氣（選用，有屋頂球場略過）
+    if game_dt and WEATHER_API_KEY and home not in DOME_STADIUMS:
         wf = fetch_weather(home, game_dt)
         h_exp *= wf; a_exp *= wf
 
-    # ⑧ ★ 球隊防守品質（ESPN 實際失分率 vs 聯盟均值）
-    # 防守好的主隊→客隊得分減少；防守差的主隊→客隊得分增加
+    # ⑧ ★ 球隊防守品質（ESPN 實際失分率 vs 聯盟均值，加上限防過度校正）
     if hr.get("games", 0) >= 5:
-        a_exp -= (LEAGUE_DEF_AVG - hr.get("def", LEAGUE_DEF_AVG)) * 0.08
+        def_adj = (LEAGUE_DEF_AVG - hr.get("def", LEAGUE_DEF_AVG)) * DEF_QUALITY_MULT
+        a_exp -= max(-DEF_QUALITY_CAP, min(DEF_QUALITY_CAP, def_adj))
     if ar.get("games", 0) >= 5:
-        h_exp -= (LEAGUE_DEF_AVG - ar.get("def", LEAGUE_DEF_AVG)) * 0.08
+        def_adj = (LEAGUE_DEF_AVG - ar.get("def", LEAGUE_DEF_AVG)) * DEF_QUALITY_MULT
+        h_exp -= max(-DEF_QUALITY_CAP, min(DEF_QUALITY_CAP, def_adj))
 
-    # ⑨ ★ 客隊近期狀態對進攻的影響（熱門客隊客場也能多得分）
-    a_exp += ar.get("form", 0.0) * 0.15
+    # ⑨ ★ 客隊近期狀態對進攻的影響
+    a_exp += ar.get("form", 0.0) * AWAY_FORM_MULT
 
-    # ⑩ ★ 近期得分形態（最近10場均值 vs ESPN整季均值）
-    # 近期打線火熱/低迷 → 調整期望得分（權重20%）
+    # ⑩ ★ 近期得分形態（最近10場均值 vs ESPN整季均值，權重22%）
     if home in _SCORING_FORM and _SCORING_FORM[home] > 0:
-        h_exp += (_SCORING_FORM[home] - hr["off"]) * 0.20
+        h_exp += (_SCORING_FORM[home] - hr["off"]) * RECENT_FORM_W
     if away in _SCORING_FORM and _SCORING_FORM[away] > 0:
-        a_exp += (_SCORING_FORM[away] - ar["off"]) * 0.20
+        a_exp += (_SCORING_FORM[away] - ar["off"]) * RECENT_FORM_W
 
-    # ⑪ ★ 連續出賽疲勞（昨天出賽 → 今天體力稍遜 -0.06 runs）
-    if home in _B2B_TEAMS: h_exp -= 0.06
-    if away in _B2B_TEAMS: a_exp -= 0.06
+    # ⑪ ★ 連續出賽疲勞
+    if home in _B2B_TEAMS: h_exp -= B2B_PENALTY
+    if away in _B2B_TEAMS: a_exp -= B2B_PENALTY
 
-    # ⑫ ★ 系列賽動能：近3天同一對陣的連勝/連敗
-    # 連敗隊：進攻 -0.12、信心 ×0.93（打線低迷、投手輪轉劣勢）
+    # ⑫ ★ 系列賽動能：連敗隊進攻 -SERIES_PEN、信心 ×SERIES_CONF_MULT
     series_conf_mult = 1.0
     series_key  = tuple(sorted([home, away]))
     series_hist = _SERIES_MOMENTUM.get(series_key, [])
     if len(series_hist) >= 2:
-        # 從主場角度計算：home 隊在系列賽中贏了幾場
         h_series_w = sum(
             1 for (ht, hw) in series_hist
             if (ht == home and hw) or (ht != home and not hw)
         )
         a_series_w = len(series_hist) - h_series_w
-        if h_series_w == 0:    # home 隊系列賽全輸 → 動能不利主場
-            h_exp  -= 0.12
-            series_conf_mult = 0.93
+        if h_series_w == 0:
+            h_exp  -= SERIES_PEN
+            series_conf_mult = SERIES_CONF_MULT
             log.debug("Series: %s swept so far (%d games)", home, len(series_hist))
-        elif a_series_w == 0:  # away 隊系列賽全輸 → 動能不利客場
-            a_exp  -= 0.12
-            series_conf_mult = 0.93
+        elif a_series_w == 0:
+            a_exp  -= SERIES_PEN
+            series_conf_mult = SERIES_CONF_MULT
             log.debug("Series: %s swept so far (%d games)", away, len(series_hist))
 
     h_exp = max(2.5, h_exp)
@@ -922,32 +951,29 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
 
     dyn_std = STD + max(0, (10-games)/10) * 0.15
     model_win_p = win_prob_from_margin(margin, dyn_std)
-    # ★ 勝率雙向上限 65%：MLB單場主/客都不超過65%（實際賽季校準）
+    # ★ 勝率雙向上限 65%
     model_win_p = max(0.35, min(0.65, model_win_p))
 
     pure_total  = h_exp + a_exp
-    model_total = round(pure_total*0.30 + market_total*0.70, 2)
+    model_total = round(pure_total * MODEL_TOTAL_W + market_total * MKT_TOTAL_W, 2)
     conf = total_confidence(pure_total, market_total)
     conf *= (pitcher_confidence(home_sp) * pitcher_confidence(away_sp)) ** 0.5
-    # TBD 先發：缺乏先發資訊大幅降低信心
-    if not home_sp: conf *= 0.86
-    if not away_sp: conf *= 0.86
-    # 系列賽連敗信心折扣
+    if not home_sp: conf *= MISSING_SP_MULT
+    if not away_sp: conf *= MISSING_SP_MULT
     conf *= series_conf_mult
-    # 早賽季（<5 場）：ESPN 數據不可靠，限制信心上限
-    if games < 5: conf = min(conf, 0.85)
+    if games < EARLY_GAMES: conf = min(conf, EARLY_CONF_CAP)
 
     return {
         "home_win_prob": round(model_win_p, 4),
         "away_win_prob": round(1-model_win_p, 4),
         "model_total":   model_total,
         "pure_total":    round(pure_total, 2),
-        "conf_factor":   round(max(0.40, min(1.0, conf)), 3),
+        "conf_factor":   round(max(CONF_FLOOR, min(1.0, conf)), 3),
         "h_expected":    round(h_exp, 2),
         "a_expected":    round(a_exp, 2),
         "margin":        round(margin, 3),
         "park_factor":   pf,
-        "dyn_std":       round(dyn_std, 3),  # 供讓分概率計算使用
+        "dyn_std":       round(dyn_std, 3),
     }
 
 def runline_prob(margin, spread, dyn_std):
@@ -1197,9 +1223,9 @@ def run():
             if btype==BET_ML:
                 mkt_p_val = c.get("mkt_p", model_p)
                 div = abs(model_p - mkt_p_val)
-                if div > 0.15: continue              # 差距>15%：市場不認同，跳過
-                if div > 0.10:                       # 差距10-15%：軟懲罰降低信心
-                    bet_conf *= max(0.75, 1.0 - (div - 0.10) * 5.0)
+                if div > DIV_HARD: continue
+                if div > DIV_SOFT:
+                    bet_conf *= max(0.75, 1.0 - (div - DIV_SOFT) * 5.0)
             raw_edge = model_p - 1/bp
             if raw_edge*bet_conf<edge_min: continue
             if bp<MIN_P or bp>MAX_P: continue
@@ -1226,8 +1252,8 @@ def run():
         con_p    = best_pick["con_p"]
         stake    = best_pick["stake"]
 
-        if raw_edge>=0.18 and bet_conf>=0.88:   tier="💎 頂級"
-        elif raw_edge>=0.15 and bet_conf>=0.80: tier="🔥 強力"
+        if raw_edge>=0.15 and bet_conf>=0.85:   tier="💎 頂級"
+        elif raw_edge>=0.11 and bet_conf>=0.75: tier="🔥 強力"
         else:                                   tier="⭐ 穩定"
 
         acn=CN.get(away,away); hcn=CN.get(home,home)
@@ -1297,7 +1323,15 @@ def run():
         else:
             last_line=None
 
-        score_str = "> 預測得分: %s **%.1f** — **%.1f** %s"%(acn,pred["a_expected"],pred["h_expected"],hcn)
+        # 大小分注單：將預測得分按 model_total 比例縮放，與顯示的校正總分一致
+        if btype==BET_TOT and pred["pure_total"] > 0:
+            _scale = pred["model_total"] / pred["pure_total"]
+            h_disp = pred["h_expected"] * _scale
+            a_disp = pred["a_expected"] * _scale
+        else:
+            h_disp = pred["h_expected"]
+            a_disp = pred["a_expected"]
+        score_str = "> 預測得分: %s **%.1f** — **%.1f** %s"%(acn,a_disp,h_disp,hcn)
         msg_lines=[
             "**%s  %s @ %s**"%(tier,acn,hcn),
             "🕐 %s %s (台灣時間)%s%s"%(game_date_str[5:].replace("-","/"),game_time_str,pf_note,mkt_tag),
@@ -1353,7 +1387,7 @@ def run():
     pnl_str = "**%+.1f$**" % total_pnl if total_in > 0 else "尚無結算資料"
 
     lines=[
-        "⚾ **MLB V135 分析報告**",
+        "⚾ **MLB V136 分析報告**",
         "🕐 %s | %s %s %s %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str,scr_str,b2b_str,ser_str),
         "📌 正式記錄 (00–07時)" if official else "🔧 測試模式 (不寫gist)",
         "📊 歷史: %d勝/%d場 (%.1f%%)"%(wins,total_settled,wr),
@@ -1423,14 +1457,15 @@ def run():
                      % (day_stake, day_ev, day_roi))
 
     lines+=[
-        "═"*20,"🔧 **MLB V135 模型功能**",
+        "═"*20,"🔧 **MLB V136 模型功能**",
         "• 投手近期ERA/WHIP | 球場PF | 牛棚ERA | 主場優勢 | 球隊攻守實力",
         "• 傷兵懲罰 | ESPN即時戰績 | 近期得分形態 | 連戰疲勞 | 系列賽動能",
         "• 三市場選優（獨贏/讓分/大小分）| 書商數×vig信心 | 穩定性排序",
-        "• [V132] WHIP納入ERA校正（低ERA高WHIP→往上修正）",
-        "• [V133] PITCHER_ERA/BULLPEN_ERA 更新至2025賽季",
         "• [V134] 勝率上限65% | blend_p≥0.54 | 模型vs市場差距>15%跳過",
         "• [V135] 大小分改用model_total（70%市場混合）計算概率，預測更貼近市場",
+        "• [V136] 全面重構：20+常數具名化 | 屋頂球場跳過天氣 | 防守調整加±0.25上限",
+        "• [V136] 信心下限0.40→0.50 | 近期形態權重20%→22% | 運動家球場係數→薩克拉門托",
+        "• [V136] 大小分顯示分數改用校正後總分 | 等級門檻重新校準",
     ]
 
     out="\n".join(lines)
