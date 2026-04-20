@@ -1245,8 +1245,6 @@ def run():
         for s,e in sorted(rl_lines.items()):
             hp=e["h_price"]; ap=e["a_price"]
             if hp is None or ap is None or hp<=0 or ap<=0: continue
-            # ★ 至少 2 家書商才採用讓分市場（流動性不足不推薦）
-            if len(e["h_all"]) < 2 or len(e["a_all"]) < 2: continue
             ch=round(sum(e["h_all"])/len(e["h_all"]),3) if e["h_all"] else hp
             ca=round(sum(e["a_all"])/len(e["a_all"]),3) if e["a_all"] else ap
             h_pts=e.get("h_pts") or -s
@@ -1256,7 +1254,11 @@ def run():
             else:         # home team receives points (+s)
                 if margin > 0: continue  # ★ 反向讓分過濾：模型認為主場贏但市場讓客場，跳過
                 p_h=runline_prob(margin,-s,dyn_std); h_lbl="+%g"%s; a_lbl="-%g"%s
-            p_h=max(0.10, min(0.88, p_h))  # RL勝率上限88%
+            # ★ RL 模型-市場混合（40%模型+60%市場），防止純模型機率虛高
+            rl_inv = 1/hp + 1/ap
+            h_mkt_rl = (1/hp)/rl_inv if rl_inv>0 else 0.5
+            p_h = p_h*0.40 + h_mkt_rl*0.60
+            p_h=max(0.10, min(0.72, p_h))  # RL勝率上限72%（比ML更保守）
             p_a=1.0-p_h
             rl_inv_val=(1/ch+1/ca) if (ch>0 and ca>0) else 1.0
             candidates.append({"btype":BET_RL,"bside":"rl_h","bteam":home,"bp":hp,"bk":e["h_book"],
