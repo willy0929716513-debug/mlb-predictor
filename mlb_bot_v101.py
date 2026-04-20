@@ -13,7 +13,7 @@ GIST_DESC = "mlb_bot_history"
 # ── 模型參數 ──────────────────────────────────
 EDGE_MIN       = 0.08
 EDGE_MIN_RL    = 0.12   # 讓分（run line）需更大 edge，波動較高
-EDGE_MIN_TOT   = 0.07   # 大小分（totals）edge 門檻（model_total已混入70%市場，概率更保守）
+EDGE_MIN_TOT   = 0.08   # 大小分（totals）edge 門檻
 MOD_W          = 0.18
 MKT_W          = 0.82
 TOTAL_STD      = 2.30   # 兩隊合計得分標準差（比勝負差距大）
@@ -1167,7 +1167,7 @@ def run():
         h_blend  = MOD_W*h_model+MKT_W*h_mkt_nv; a_blend = MOD_W*a_model+MKT_W*a_mkt_nv
 
         # ── ★ 大小分概率（Over/Under）────────────────────────
-        p_over  = over_prob(pred["model_total"], market_total)
+        p_over  = over_prob(pred["pure_total"], market_total)
         p_under = 1.0 - p_over
 
         # ── ★ 建立所有候選注單並選最優 ──────────────────────
@@ -1229,7 +1229,7 @@ def run():
             raw_edge = model_p - 1/bp
             if raw_edge*bet_conf<edge_min: continue
             if bp<MIN_P or bp>MAX_P: continue
-            if btype==BET_ML and (blend_p is None or blend_p<0.54): continue
+            if btype==BET_ML and (blend_p is None or blend_p<0.52): continue
             if btype!=BET_ML and model_p<0.55: continue
             if bet_conf<0.65: continue
             stake=kelly_stake(raw_edge,model_p,bp,conf=bet_conf)
@@ -1387,7 +1387,7 @@ def run():
     pnl_str = "**%+.1f$**" % total_pnl if total_in > 0 else "尚無結算資料"
 
     lines=[
-        "⚾ **MLB V136 分析報告**",
+        "⚾ **MLB V137 分析報告**",
         "🕐 %s | %s %s %s %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str,scr_str,b2b_str,ser_str),
         "📌 正式記錄 (00–07時)" if official else "🔧 測試模式 (不寫gist)",
         "📊 歷史: %d勝/%d場 (%.1f%%)"%(wins,total_settled,wr),
@@ -1439,7 +1439,7 @@ def run():
                 if rl_be*0.90>be: be=rl_be; bp2=rl_hp if rl_he>=rl_ae else rl_ap; best_lbl="RL"
             # 大小分 edge（比較時套用0.88信心折扣）
             if ov_p and un_p:
-                p_ov=over_prob(pr["model_total"],mt)
+                p_ov=over_prob(pr["pure_total"],mt)
                 tot_he=p_ov-1/ov_p; tot_ue=(1-p_ov)-1/un_p; tot_be=max(tot_he,tot_ue)
                 if tot_be*0.88>be: be=tot_be; bp2=ov_p if tot_he>=tot_ue else un_p; best_lbl="TOT"
             diag.append("`%s@%s` [%s] Edge=%+.1f%% P=%.2f conf=%.0f%% SP:%s/%s"%(
@@ -1457,15 +1457,10 @@ def run():
                      % (day_stake, day_ev, day_roi))
 
     lines+=[
-        "═"*20,"🔧 **MLB V136 模型功能**",
-        "• 投手近期ERA/WHIP | 球場PF | 牛棚ERA | 主場優勢 | 球隊攻守實力",
-        "• 傷兵懲罰 | ESPN即時戰績 | 近期得分形態 | 連戰疲勞 | 系列賽動能",
-        "• 三市場選優（獨贏/讓分/大小分）| 書商數×vig信心 | 穩定性排序",
-        "• [V134] 勝率上限65% | blend_p≥0.54 | 模型vs市場差距>15%跳過",
-        "• [V135] 大小分改用model_total（70%市場混合）計算概率，預測更貼近市場",
-        "• [V136] 全面重構：20+常數具名化 | 屋頂球場跳過天氣 | 防守調整加±0.25上限",
-        "• [V136] 信心下限0.40→0.50 | 近期形態權重20%→22% | 運動家球場係數→薩克拉門托",
-        "• [V136] 大小分顯示分數改用校正後總分 | 等級門檻重新校準",
+        "═"*20,"🔧 **MLB V137 模型功能**",
+        "• 多因子模型：ERA/WHIP/PF/牛棚/主客攻守/傷兵/疲勞/系列動能",
+        "• 三市場選優 | 書商數×vig信心 | 模型vs市場差距>15%自動跳過",
+        "• 屋頂球場跳過天氣 | 勝率上限65% | 信心下限50% | 防守調整±0.25上限",
     ]
 
     out="\n".join(lines)
