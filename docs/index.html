@@ -4,6 +4,16 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>MLB 每日推薦</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#0f172a"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="MLB推薦"/>
+  <link rel="apple-touch-icon" href="icon.svg"/>
+
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body { background:#0f172a; color:#e2e8f0; font-family:'Segoe UI',sans-serif; }
@@ -184,6 +194,10 @@ async function loadData() {
 }
 
 loadData();
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js");
+}
 </script>
 </body>
 </html>
