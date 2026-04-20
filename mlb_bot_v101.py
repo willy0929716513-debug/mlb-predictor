@@ -922,8 +922,8 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
 
     dyn_std = STD + max(0, (10-games)/10) * 0.15
     model_win_p = win_prob_from_margin(margin, dyn_std)
-    # ★ 勝率雙向上限 72%：MLB單場主/客都不超過72%（確保away team也被限制）
-    model_win_p = max(0.28, min(0.72, model_win_p))
+    # ★ 勝率雙向上限 65%：MLB單場主/客都不超過65%（實際賽季校準）
+    model_win_p = max(0.35, min(0.65, model_win_p))
 
     pure_total  = h_exp + a_exp
     model_total = round(pure_total*0.30 + market_total*0.70, 2)
@@ -1149,10 +1149,10 @@ def run():
         candidates=[]
         if home_price: candidates.append({"btype":BET_ML,"bside":"home","bteam":home,"bp":home_price,
             "bk":home_book,"model_p":h_model,"edge_min":EDGE_MIN,"blend_p":h_blend,"con_p":con_h,
-            "conf_mult":1.00,"label":"獨贏","rl_inv":None,"rl_s":None})
+            "conf_mult":1.00,"label":"獨贏","rl_inv":None,"rl_s":None,"mkt_p":h_mkt_nv})
         if away_price: candidates.append({"btype":BET_ML,"bside":"away","bteam":away,"bp":away_price,
             "bk":away_book,"model_p":a_model,"edge_min":EDGE_MIN,"blend_p":a_blend,"con_p":con_a,
-            "conf_mult":1.00,"label":"獨贏","rl_inv":None,"rl_s":None})
+            "conf_mult":1.00,"label":"獨贏","rl_inv":None,"rl_s":None,"mkt_p":a_mkt_nv})
         # RL candidates：每個讓分數（1.5/2.5/…）都產生主客兩個候選
         for s,e in sorted(rl_lines.items()):
             hp=e["h_price"]; ap=e["a_price"]
@@ -1193,10 +1193,17 @@ def run():
             blend_p=c["blend_p"]; edge_min=c["edge_min"]
             if bp is None or bp<=0 or con_p is None or con_p<=0: continue
             bet_conf = conf*c["conf_mult"]
+            # ★ 模型 vs 市場差距過濾（獨贏專用）
+            if btype==BET_ML:
+                mkt_p_val = c.get("mkt_p", model_p)
+                div = abs(model_p - mkt_p_val)
+                if div > 0.15: continue              # 差距>15%：市場不認同，跳過
+                if div > 0.10:                       # 差距10-15%：軟懲罰降低信心
+                    bet_conf *= max(0.75, 1.0 - (div - 0.10) * 5.0)
             raw_edge = model_p - 1/bp
             if raw_edge*bet_conf<edge_min: continue
             if bp<MIN_P or bp>MAX_P: continue
-            if btype==BET_ML and (blend_p is None or blend_p<0.52): continue
+            if btype==BET_ML and (blend_p is None or blend_p<0.54): continue
             if btype!=BET_ML and model_p<0.55: continue
             if bet_conf<0.65: continue
             stake=kelly_stake(raw_edge,model_p,bp,conf=bet_conf)
@@ -1346,7 +1353,7 @@ def run():
     pnl_str = "**%+.1f$**" % total_pnl if total_in > 0 else "尚無結算資料"
 
     lines=[
-        "⚾ **MLB V133 分析報告**",
+        "⚾ **MLB V134 分析報告**",
         "🕐 %s | %s %s %s %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str,scr_str,b2b_str,ser_str),
         "📌 正式記錄 (00–07時)" if official else "🔧 測試模式 (不寫gist)",
         "📊 歷史: %d勝/%d場 (%.1f%%)"%(wins,total_settled,wr),
@@ -1427,6 +1434,9 @@ def run():
         "• [V130] ★ 模型勝率上限 90%→72%（MLB現實校準），blend_p門檻 0.48→0.52（避免重壓大冷門）",
         "• [V132] ★ 投手WHIP納入ERA校正：低ERA+高WHIP→往上修正（防走運），低ERA+低WHIP→確認真實強度",
         "• [V133] ★ PITCHER_ERA / BULLPEN_ERA 更新至 2025 賽季最新數據（skubal 3.10→2.21，snell 3.60→2.41，burnes 3.20→2.66 等）",
+        "• [V134] ★ 模型勝率上限 72%→65%（MLB現實校準，上限觸發太頻繁）",
+        "• [V134] ★ blend_p 門檻 0.52→0.54（要求市場至少微幅支持才下注）",
+        "• [V134] ★ 新增模型 vs 市場差距過濾：差距>15%直接跳過，10~15%信心軟懲罰",
     ]
 
     out="\n".join(lines)
