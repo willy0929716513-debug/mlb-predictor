@@ -17,13 +17,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body { background:#0f172a; color:#e2e8f0; font-family:'Segoe UI',sans-serif; }
-    #auth-overlay { position:fixed; inset:0; background:#0f172a; z-index:9999; display:flex; align-items:center; justify-content:center; }
-    #auth-box { background:#1e293b; border:1px solid #334155; border-radius:1rem; padding:2rem; width:min(90vw,360px); text-align:center; }
-    #auth-input { background:#0f172a; border:1px solid #475569; border-radius:0.5rem; color:#e2e8f0; padding:0.6rem 1rem; width:100%; font-size:1rem; outline:none; margin-top:1rem; }
-    #auth-input:focus { border-color:#38bdf8; }
-    #auth-btn { margin-top:1rem; width:100%; background:#0ea5e9; color:#fff; border:none; border-radius:0.5rem; padding:0.6rem 1rem; font-size:1rem; cursor:pointer; }
-    #auth-btn:hover { background:#0284c7; }
-    #auth-err { color:#f87171; font-size:0.8rem; margin-top:0.5rem; min-height:1.2em; }
     .card { background:#1e293b; border:1px solid #334155; }
     .tier-diamond { border-left:4px solid #a78bfa; }
     .tier-fire    { border-left:4px solid #f97316; }
@@ -36,18 +29,6 @@
   </style>
 </head>
 <body class="min-h-screen p-4 md:p-8">
-
-<!-- Password overlay -->
-<div id="auth-overlay">
-  <div id="auth-box">
-    <div class="text-2xl mb-1">⚾</div>
-    <div class="text-white font-bold text-lg">MLB 每日推薦</div>
-    <div class="text-slate-400 text-sm mt-1">請輸入密碼</div>
-    <input id="auth-input" type="password" placeholder="密碼" autocomplete="current-password"/>
-    <div id="auth-err"></div>
-    <button id="auth-btn" onclick="checkAuth()">進入</button>
-  </div>
-</div>
 
 <div class="max-w-2xl mx-auto">
   <!-- Header -->
@@ -84,33 +65,6 @@
 </div>
 
 <script>
-const PW_HASH = "73637fd0d0088f85f6cc49b91cb7a5977f14d45da9917aa929e97ce819d3ec7e";
-
-async function sha256(str) {
-  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
-  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join("");
-}
-
-async function checkAuth() {
-  const val = document.getElementById("auth-input").value;
-  const h = await sha256(val);
-  if (h === PW_HASH) {
-    document.getElementById("auth-overlay").style.display = "none";
-    loadData();
-  } else {
-    const err = document.getElementById("auth-err");
-    err.textContent = "密碼錯誤，請再試一次";
-    document.getElementById("auth-input").value = "";
-    document.getElementById("auth-input").focus();
-  }
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("auth-input").addEventListener("keydown", e => {
-    if (e.key === "Enter") checkAuth();
-  });
-});
-
 const JSON_URL = "picks_latest.json";
 
 function tierClass(tier) {
@@ -238,6 +192,8 @@ async function loadData() {
     container.innerHTML = `<div class="text-center text-rose-400 py-12">載入失敗：${e.message}</div>`;
   }
 }
+
+loadData();
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("sw.js");
