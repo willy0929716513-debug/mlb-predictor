@@ -95,7 +95,6 @@ async function checkAuth() {
   const val = document.getElementById("auth-input").value;
   const h = await sha256(val);
   if (h === PW_HASH) {
-    sessionStorage.setItem("mlb_auth","1");
     document.getElementById("auth-overlay").style.display = "none";
     loadData();
   } else {
@@ -110,10 +109,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("auth-input").addEventListener("keydown", e => {
     if (e.key === "Enter") checkAuth();
   });
-  if (sessionStorage.getItem("mlb_auth") === "1") {
-    document.getElementById("auth-overlay").style.display = "none";
-    loadData();
-  }
 });
 
 const JSON_URL = "picks_latest.json";
