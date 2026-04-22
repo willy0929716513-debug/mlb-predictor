@@ -14,6 +14,9 @@ GIST_DESC = "mlb_bot_history"
 EDGE_MIN       = 0.08
 EDGE_MIN_RL    = 0.10   # 讓分（run line）直接比 raw_edge，不乘 bet_conf
 EDGE_MIN_TOT   = 0.08   # 大小分（totals）edge 門檻
+MIN_MODEL_P_ML  = 0.55  # ML 模型勝率門檻
+MIN_MODEL_P_RL  = 0.65  # RL 門檻更高：預測分差需有足夠緩衝（≈2.1 run margin）
+MIN_MODEL_P_TOT = 0.60  # TOT 門檻：避免貼線的邊際大小分
 MOD_W          = 0.18
 MKT_W          = 0.82
 TOTAL_STD      = 2.30   # 兩隊合計得分標準差（比勝負差距大）
@@ -1012,6 +1015,94 @@ def calc_pnl(hist):
     return round(total_in, 1), round(total_pnl, 1)
 
 
+def settle_results(hist):
+    """Fetch ESPN final scores and mark pending history records W/L."""
+    pending = [r for r in hist if r.get("result") is None and r.get("date")]
+    if not pending:
+        return hist
+
+    # Group pending records by date
+    by_date = {}
+    for r in pending:
+        by_date.setdefault(r["date"], []).append(r)
+
+    changed = 0
+    for date_str, records in by_date.items():
+        date_compact = date_str.replace("-", "")
+        url = "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard"
+        data = safe_get(url, params={"dates": date_compact}, timeout=15)
+        if not data:
+            continue
+        # Build score map: (home_norm, away_norm) -> (home_score, away_score)
+        scores = {}
+        for ev in data.get("events", []):
+            comps = ev.get("competitions", [{}])[0]
+            if comps.get("status", {}).get("type", {}).get("completed") is not True:
+                continue
+            home_s = away_s = None
+            home_t = away_t = None
+            for c in comps.get("competitors", []):
+                t = norm_team(c.get("team", {}).get("displayName", "") or
+                              c.get("team", {}).get("name", ""))
+                sc = c.get("score")
+                try:
+                    sc = int(sc)
+                except (TypeError, ValueError):
+                    sc = None
+                if c.get("homeAway") == "home":
+                    home_t, home_s = t, sc
+                else:
+                    away_t, away_s = t, sc
+            if home_t and away_t and home_s is not None and away_s is not None:
+                scores[(home_t, away_t)] = (home_s, away_s)
+
+        for r in records:
+            key = (r.get("home"), r.get("away"))
+            if key not in scores:
+                continue
+            home_s, away_s = scores[key]
+            btype = r.get("bet_type", "獨贏")
+            team  = r.get("team", "")
+            label = r.get("label", "")   # e.g. "-1.5", "+1.5", "OVER", "UNDER"
+
+            if btype == "獨贏":
+                if team == key[0]:   # home
+                    result = "W" if home_s > away_s else "L"
+                else:                # away
+                    result = "W" if away_s > home_s else "L"
+            elif btype == "讓分":
+                spread = 1.5
+                try:
+                    spread = abs(float(label.replace("+","").replace("-","")))
+                except (ValueError, TypeError):
+                    spread = 1.5
+                margin = home_s - away_s  # positive = home wins
+                if team == key[0]:   # home
+                    cover = margin + (spread if label.startswith("+") else -spread)
+                    result = "W" if cover > 0 else "L"
+                else:                # away
+                    cover = away_s - home_s + (spread if label.startswith("+") else -spread)
+                    result = "W" if cover > 0 else "L"
+            elif btype == "大小分":
+                total = home_s + away_s
+                line  = r.get("market_total") or 8.5
+                if label == "OVER":
+                    result = "W" if total > line else "L"
+                else:
+                    result = "W" if total < line else "L"
+            else:
+                continue
+
+            r["result"] = result
+            log.info("Settled %s@%s %s %s→%d:%d %s",
+                     r["away"], r["home"], btype, label, away_s, home_s, result)
+            changed += 1
+
+    if changed:
+        log.info("Settled %d records", changed)
+    return hist
+
+
 # ══════════════════════════════════════════════
 # Discord
 # ══════════════════════════════════════════════
@@ -1102,6 +1193,7 @@ def run():
     if not ODDS_API_KEY: log.error("ODDS_API_KEY not set"); return
 
     hist      = load_hist()
+    hist      = settle_results(hist)
     espn_ok   = fetch_espn_ratings()
     il_src    = fetch_injury_list()
     pitchers  = fetch_probable_pitchers()
@@ -1302,8 +1394,9 @@ def run():
                 log.debug("SKIP %s@%s %s bp=%.2f out of [%.2f,%.2f]",home,away,btype,bp,MIN_P,MAX_P); continue
             if btype==BET_ML and (blend_p is None or blend_p<0.52):
                 log.debug("SKIP %s@%s ML blend_p=%s",home,away,blend_p); continue
-            if btype!=BET_ML and model_p<0.55:
-                log.debug("SKIP %s@%s %s model_p=%.3f<0.55",home,away,btype,model_p); continue
+            _mp_min = MIN_MODEL_P_RL if btype==BET_RL else (MIN_MODEL_P_TOT if btype==BET_TOT else MIN_MODEL_P_ML)
+            if model_p < _mp_min:
+                log.debug("SKIP %s@%s %s model_p=%.3f<%.2f",home,away,btype,model_p,_mp_min); continue
             if bet_conf<0.65:
                 log.debug("SKIP %s@%s %s bet_conf=%.3f<0.65",home,away,btype,bet_conf); continue
             stake=kelly_stake(raw_edge,model_p,bp,conf=bet_conf)
@@ -1461,7 +1554,9 @@ def run():
             if not already_in_hist and not already_in_today:
                 today_records.append({"date":game_date_str,"team":str(bteam),"home":home,"away":away,
                                       "price":bp,"edge":round(raw_edge,4),"conf":round(bet_conf,3),
-                                      "stake":stake,"bet_type":btype,"result":None})
+                                      "stake":stake,"bet_type":btype,"result":None,
+                                      "label":best_pick.get("label",""),
+                                      "market_total":market_total if btype==BET_TOT else None})
 
     # ★ 依穩定性排序：model_p × bet_conf（勝率高且信心高 → 最穩定），最多保留6場
     picks.sort(key=lambda x:(-(x.get("model_p",0) * x.get("conf",0))))
