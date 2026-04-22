@@ -1,7 +1,7 @@
 import os, json, math, logging, datetime, requests
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-log = logging.getLogger("MLB_V139")
+log = logging.getLogger("MLB_V123")
 
 ODDS_API_KEY    = os.getenv("ODDS_API_KEY", "")
 DISCORD_WEBHOOK = os.getenv("DISCORD_WEBHOOK", "")
@@ -12,21 +12,18 @@ GIST_DESC = "mlb_bot_history"
 
 # ── 模型參數 ──────────────────────────────────
 EDGE_MIN       = 0.08
-EDGE_MIN_RL    = 0.10   # 讓分（run line）直接比 raw_edge，不乘 bet_conf
-EDGE_MIN_TOT   = 0.08   # 大小分（totals）edge 門檻
-MIN_MODEL_P_ML  = 0.55  # ML 模型勝率門檻
-MIN_MODEL_P_RL  = 0.65  # RL 門檻更高：預測分差需有足夠緩衝（≈2.1 run margin）
-MIN_MODEL_P_TOT = 0.60  # TOT 門檻：避免貼線的邊際大小分
+EDGE_MIN_RL    = 0.10   # 讓分（run line）需更大 edge，波動較高
+EDGE_MIN_TOT   = 0.09   # 大小分（totals）edge 門檻
 MOD_W          = 0.18
 MKT_W          = 0.82
-TOTAL_STD      = 2.30   # 兩隊合計得分標準差（比勝負差距大）
-STD            = 1.65
+TOTAL_STD      = 2.10   # 兩隊合計得分標準差（比勝負差距大）
+STD            = 1.45
 MIN_P          = 1.35
-MAX_P          = 2.75
-BANK           = float(os.getenv("BANK",      "1000"))
-KELLY          = float(os.getenv("KELLY_FRAC", "0.12"))
-KELLY_MAX      = float(os.getenv("KELLY_MAX",  "150"))
-KELLY_MIN      = float(os.getenv("KELLY_MIN",  "5"))
+MAX_P          = 2.50
+BANK           = 1000.0
+KELLY          = 0.12
+KELLY_MAX      = 150.0
+KELLY_MIN      = 5.0
 LEAGUE_ERA     = 4.20
 HIST_TTL       = 90
 GAP1, GAP2, GAP3 = 1.5, 2.5, 3.5
@@ -34,43 +31,10 @@ ESPN_ALPHA_MAX = 0.65
 SP_RECENT_W    = 0.65   # 近期 ERA 權重
 SP_SEASON_W    = 0.35
 
-# ── 模型調整常數（集中管理，方便校準）────────
-HOME_ADV_BASE    = 0.07   # 主場基礎優勢（分）
-HOME_ADV_FORM    = 0.30   # 主場形態加成係數
-INJURY_MULT      = 0.40   # 傷兵懲罰對期望得分的乘數
-DEF_QUALITY_MULT = 0.08   # 防守品質調整係數
-DEF_QUALITY_CAP  = 0.25   # 防守調整上限（分），防止過度校正
-AWAY_FORM_MULT   = 0.15   # 客隊近期狀態影響係數
-RECENT_FORM_W    = 0.22   # 近期得分形態權重
-B2B_PENALTY      = 0.06   # 連場疲勞懲罰（分）
-SERIES_PEN       = 0.12   # 系列賽動能懲罰（分）
-SERIES_CONF_MULT = 0.93   # 系列賽連敗信心折扣
-MISSING_SP_MULT  = 0.86   # 缺先發信心折扣
-EARLY_GAMES      = 5      # 早賽季場次門檻
-EARLY_CONF_CAP   = 0.85   # 早賽季信心上限
-CONF_FLOOR       = 0.50   # 信心絕對下限（過低信心的注單沒有推薦意義）
-MODEL_TOTAL_W    = 0.30   # 大小分模型混合權重
-MKT_TOTAL_W      = 0.70   # 大小分市場混合權重
-DIV_HARD         = 0.18   # 模型vs市場差距硬過濾門檻（直接跳過）
-DIV_SOFT         = 0.10   # 模型vs市場差距軟懲罰起點
-OVER_BLEND_W     = 0.50   # 大小分機率計算：50%模型+50%市場（避免純模型虛高）
-TOT_MAX          = 2      # 每日大小分推薦上限（保留名額給ML/RL）
-
-# ── 有屋頂球場（天氣不影響得分）─────────────
-DOME_STADIUMS = {
-    "rays",          # Tropicana Field（固定屋頂）
-    "blue jays",     # Rogers Centre（可開合）
-    "astros",        # Minute Maid Park（可開合）
-    "mariners",      # T-Mobile Park（可開合）
-    "diamondbacks",  # Chase Field（可開合）
-    "brewers",       # American Family Field（可開合）
-    "marlins",       # loanDepot park（固定屋頂）
-}
-
-# ── ★ 球場係數（FanGraphs Park Factors 2024/2025）──
+# ── ★ 球場係數（FanGraphs Park Factors 2024）──
 PARK_FACTOR = {
     "rockies":1.30,"rangers":1.12,"red sox":1.10,"cubs":1.08,"reds":1.07,
-    "brewers":1.05,"phillies":1.04,"athletics":1.07,"blue jays":1.02,  # athletics→Sacramento Sutter Health Park
+    "brewers":1.05,"phillies":1.04,"athletics":1.03,"blue jays":1.02,
     "nationals":1.01,"cardinals":1.00,"astros":0.99,"dodgers":0.99,
     "angels":0.99,"tigers":0.98,"white sox":0.98,"twins":0.98,"mets":0.97,
     "braves":0.97,"orioles":0.97,"yankees":0.97,"giants":0.96,"pirates":0.96,
@@ -78,53 +42,45 @@ PARK_FACTOR = {
     "diamondbacks":0.94,"marlins":0.94,"mariners":0.93,
 }
 
-# ── ★ 牛棚 ERA（2025 賽季）──
+# ── ★ 牛棚 ERA（2024 賽季）──
 BULLPEN_ERA = {
-    "dodgers":3.45,"phillies":3.52,"braves":3.58,"astros":3.61,"padres":3.06,
-    "guardians":3.65,"mariners":3.72,"yankees":3.70,"cubs":3.72,"mets":3.75,
-    "rangers":3.78,"brewers":3.63,"red sox":3.82,"blue jays":3.85,"giants":3.87,
+    "dodgers":3.45,"phillies":3.52,"braves":3.58,"astros":3.61,"padres":3.63,
+    "guardians":3.65,"mariners":3.67,"yankees":3.70,"cubs":3.72,"mets":3.75,
+    "rangers":3.78,"brewers":3.80,"red sox":3.82,"blue jays":3.85,"giants":3.87,
     "royals":3.90,"twins":3.92,"tigers":3.95,"orioles":3.97,"rays":3.98,
     "pirates":4.02,"diamondbacks":4.05,"cardinals":4.08,"reds":4.10,
     "athletics":4.15,"angels":4.20,"nationals":4.25,"white sox":4.35,
     "marlins":4.40,"rockies":4.85,
 }
 LEAGUE_BULL_ERA = 3.95
-LEAGUE_DEF_AVG  = 4.45   # MLB 平均每場失分（用於防守品質調整）
 
 # ── 投手賽季 ERA ──────────────────────────────
 PITCHER_ERA = {
-    "skubal":2.21,"yamamoto":2.49,"glasnow":3.19,"fried":2.86,"gausman":3.59,
-    "schlittler":4.50,"sanchez":2.50,"skenes":1.96,"gilbert":3.44,"woo":2.94,
-    "alcantara":5.36,"burns":3.50,"crochet":2.59,"brown":2.43,"cease":3.80,
+    "skubal":3.10,"yamamoto":2.49,"glasnow":3.00,"fried":3.10,"gausman":3.59,
+    "schlittler":4.50,"sanchez":2.50,"skenes":1.96,"gilbert":3.44,"woo":3.50,
+    "alcantara":4.20,"burns":3.50,"crochet":2.59,"brown":2.43,"cease":3.80,
     "webb":3.20,"pivetta":2.87,"vasquez":4.40,"peralta":3.40,"senga":3.60,
-    "ryan":3.42,"bibee":4.24,"ragans":3.40,"lugo":1.59,"valdez":3.66,
+    "ryan":3.42,"bibee":4.24,"ragans":3.40,"lugo":1.59,"valdez":3.20,
     "leiter":2.45,"elder":4.20,"sale":2.58,"roupp":4.22,"mccullers":3.27,
-    "gallen":4.83,"rodriguez_e":4.20,"soroka":4.00,"rasmussen":2.76,
-    "boyle":3.18,"hancock":3.50,"rogers_t":2.50,"eovaldi":1.73,"springs":4.11,
-    "ashcraft":2.25,"mlodzinski":4.36,"soriano_j":3.93,"detmers":3.96,
-    "freeland":4.75,"misiorowski":4.36,"bradley_t":4.11,"bradley":4.11,
-    "liberatore":4.21,"severino":4.54,"cavalli":4.25,"boyd":3.21,"horton":4.10,
-    "abbott":3.42,"burke_s":3.60,"smith_s":3.81,"pfaadt":4.10,"weathers":4.50,
+    "gallen":4.00,"rodriguez_e":4.20,"soroka":4.00,"rasmussen":2.76,
+    "boyle":3.18,"hancock":3.50,"rogers_t":2.50,"eovaldi":3.80,"springs":4.30,
+    "ashcraft":2.25,"mlodzinski":4.36,"soriano_j":3.93,"detmers":2.38,
+    "freeland":4.75,"misiorowski":4.36,"bradley_t":0.87,"liberatore":4.21,
+    "severino":4.54,"cavalli":4.25,"boyd":3.21,"horton":4.10,"abbott":3.42,
+    "burke_s":3.60,"smith_s":3.81,"pfaadt":4.10,"weathers":4.50,
     "williamson":4.60,"chandler":4.00,"mize":4.30,"pallante":4.60,
     "mikolas":4.20,"marquez":4.90,"flexen":4.90,"taillon":4.40,"voth":4.80,
     "adon":4.60,"kolek":4.50,"crawford_k":4.20,"sandoval_p":4.00,
-    "imanaga":3.73,"steele":4.76,"wetherholt":4.50,"winn":4.30,"keller":4.00,
+    "imanaga":3.55,"steele":3.75,"wetherholt":4.50,"winn":4.30,"keller":4.00,
     "pepiot":4.30,"blackburn":4.50,"javier":4.20,"paddack":4.30,"wood":4.20,
-    "musgrove":3.50,"king_m":3.44,"bieber":3.40,"castillo":3.54,"nola":3.70,
-    "flaherty":3.85,"ohtani":3.00,"sasaki":2.90,"mcclanahan":3.10,"burnes":2.66,
-    "verlander":3.80,"kirby":4.21,"bello":3.35,"berrios":4.17,"junk":5.10,
-    "fedde":4.60,"poulin":5.30,"painter":5.26,"mahle":4.20,"burns_c":2.66,
-    "civale":4.50,"gray_j":3.95,"lauer":3.18,"kikuchi":3.99,"degrom":2.97,
-    "holmes":3.99,"buehler":4.20,"williams_g":3.80,"varland":4.60,
-    "martin_c":4.60,"sears":4.50,"cortes":4.30,"houser":4.60,"lynch":4.70,
+    "musgrove":3.50,"king_m":3.90,"bieber":3.40,"castillo":3.30,"nola":3.70,
+    "flaherty":3.85,"ohtani":3.00,"sasaki":2.90,"mcclanahan":3.10,"burnes":3.20,
+    "verlander":3.80,"kirby":3.50,"bello":4.10,"berrios":3.80,"junk":5.10,
+    "fedde":4.60,"poulin":5.30,"painter":4.80,"mahle":4.20,"burns_c":3.50,
+    "civale":4.50,"gray_j":3.95,"lauer":4.40,"kikuchi":4.20,"degrom":3.50,
+    "holmes":4.00,"buehler":4.20,"williams_g":3.80,"varland":4.60,
+    "martin_c":4.60,"sears":4.50,"cortes":4.30,"houser":4.80,"lynch":4.70,
     "cox":4.80,"feltner":5.20,"hudson":5.00,"small":4.70,"wesneski":4.40,
-    # ── 2025 新增 / 修正 ──────────────────────────
-    "povich":4.10,"woodruff":3.20,"littell":4.60,"cameron":4.60,
-    "scherzer":5.19,"taylor":4.90,"lyles":5.10,"hendricks":4.70,
-    "stroman":4.20,"alexander":4.40,"lorenzen":4.80,"cobb":4.50,
-    "montgomery":4.10,"snell":2.41,"means":4.30,"bass":4.80,
-    "irvin":4.60,"urquidy":4.70,"bradish":3.80,"suarez":4.50,
-    "gore":4.17,"nelson_r":3.39,
 }
 
 # ── BASE 隊伍實力 ──────────────────────────────
@@ -300,11 +256,7 @@ _DYN_OUT      = {}
 _DYN_LTD      = {}
 _ESPN_RATINGS = {}
 _RECENT_ERA   = {}
-_RECENT_WHIP  = {}
 _WEATHER_CACHE= {}
-_SCORING_FORM    = {}   # {team: recent_runs_per_game} 最近10場得分均值
-_B2B_TEAMS       = set() # 昨天有出賽的球隊（連續出賽疲勞）
-_SERIES_MOMENTUM = {}   # {(t1,t2): [(home_team, home_won), ...]} 近3天系列賽紀錄
 
 
 # ══════════════════════════════════════════════
@@ -354,149 +306,35 @@ def get_star_injuries(team):
 # ★ 投手近期 ERA
 # ══════════════════════════════════════════════
 
-def _parse_ip(ip_str):
-    """MLB API 局數格式：'6.2' = 6 又 2/3 局（不是 6.2 小數）"""
-    try:
-        s = str(ip_str or "0").strip()
-        if "." in s:
-            whole, frac = s.split(".", 1)
-            return int(whole) + int(frac) / 3.0
-        return float(s)
-    except (ValueError, TypeError):
-        return 0.0
-
 def _fetch_recent_era(pitcher_id, last_n=3):
     data = safe_get(
         "https://statsapi.mlb.com/api/v1/people/%d/stats" % pitcher_id,
         params={"stats":"gameLog","group":"pitching",
                 "season":datetime.date.today().year,
-                "fields":"stats,splits,stat,inningsPitched,earnedRuns,hits,baseOnBalls"},
+                "fields":"stats,splits,stat,inningsPitched,earnedRuns"},
         timeout=10,
     )
     if not data: return None
     splits = []
     for s in data.get("stats",[]): splits = s.get("splits",[]); break
-    starts = [s for s in splits if _parse_ip(s.get("stat",{}).get("inningsPitched","0")) >= 3.0]
+    starts = [s for s in splits if float(s.get("stat",{}).get("inningsPitched","0") or 0) >= 3.0]
     recent = starts[-last_n:] if len(starts) >= last_n else starts
     if not recent: return None
     total_er = sum(float(s.get("stat",{}).get("earnedRuns","0") or 0) for s in recent)
-    total_ip = sum(_parse_ip(s.get("stat",{}).get("inningsPitched","0")) for s in recent)
+    total_ip = sum(float(s.get("stat",{}).get("inningsPitched","0") or 0) for s in recent)
     if total_ip < 3: return None
     era = round(total_er / total_ip * 9, 2)
+    # ★ 近期 ERA 0.00 或極低（< 0.50）代表樣本太少或開季第一場被完封
+    # 用聯盟平均替代，避免模型誤判為超級王牌
     if era < 0.50:
         log.debug("Recent ERA %.2f too low for %s, clamping to league avg", era, pitcher_id)
-        return None
-    era = min(era, 10.0)
-    # 計算近期 WHIP
-    total_h  = sum(int(s.get("stat",{}).get("hits","0") or 0) for s in recent)
-    total_bb = sum(int(s.get("stat",{}).get("baseOnBalls","0") or 0) for s in recent)
-    whip = round((total_h + total_bb) / total_ip, 2)
-    return {"era": era, "whip": whip}
-
-def fetch_b2b_teams():
-    """找出昨天有出賽的球隊（今天連續出賽者）"""
-    global _B2B_TEAMS
-    yesterday = (datetime.date.today() - datetime.timedelta(days=1)).isoformat()
-    data = safe_get(
-        "https://statsapi.mlb.com/api/v1/schedule",
-        params={"sportId":1,"date":yesterday,"gameType":"R",
-                "fields":"dates,games,teams,home,away,team,id,name,status,detailedState"},
-        timeout=10,
-    )
-    if not data: return
-    b2b = set()
-    for de in data.get("dates",[]):
-        for game in de.get("games",[]):
-            status = game.get("status",{}).get("detailedState","")
-            if "Final" not in status and "Completed" not in status: continue
-            hd = game.get("teams",{}).get("home",{})
-            ad = game.get("teams",{}).get("away",{})
-            hn = MLB_TEAM_ID.get(hd.get("team",{}).get("id")) or norm_team(hd.get("team",{}).get("name",""))
-            an = MLB_TEAM_ID.get(ad.get("team",{}).get("id")) or norm_team(ad.get("team",{}).get("name",""))
-            if hn: b2b.add(hn)
-            if an: b2b.add(an)
-    _B2B_TEAMS = b2b
-    log.info("B2B teams: %s", sorted(b2b))
-
-def fetch_recent_scoring():
-    """最近14天完賽場次，計算各隊近10場每場得分均值"""
-    global _SCORING_FORM
-    start     = (datetime.date.today() - datetime.timedelta(days=14)).isoformat()
-    yesterday = (datetime.date.today() - datetime.timedelta(days=1)).isoformat()
-    data = safe_get(
-        "https://statsapi.mlb.com/api/v1/schedule",
-        params={"sportId":1,"startDate":start,"endDate":yesterday,
-                "hydrate":"linescore","gameType":"R",
-                "fields":"dates,games,teams,home,away,team,id,name,score,status,detailedState,linescore,runs"},
-        timeout=15,
-    )
-    if not data: return
-    team_runs = {}  # {team: [runs_list]} 最早→最晚
-    for de in data.get("dates",[]):
-        for game in de.get("games",[]):
-            status = game.get("status",{}).get("detailedState","")
-            if "Final" not in status and "Completed" not in status: continue
-            hd = game.get("teams",{}).get("home",{})
-            ad = game.get("teams",{}).get("away",{})
-            hn = MLB_TEAM_ID.get(hd.get("team",{}).get("id")) or norm_team(hd.get("team",{}).get("name",""))
-            an = MLB_TEAM_ID.get(ad.get("team",{}).get("id")) or norm_team(ad.get("team",{}).get("name",""))
-            # 嘗試從 teams.home/away.score 取分，再 fallback 到 linescore
-            h_runs = hd.get("score")
-            a_runs = ad.get("score")
-            if h_runs is None:
-                ls = game.get("linescore",{})
-                h_runs = ls.get("teams",{}).get("home",{}).get("runs")
-                a_runs = ls.get("teams",{}).get("away",{}).get("runs")
-            if h_runs is None: continue
-            try:
-                if hn: team_runs.setdefault(hn,[]).append(float(h_runs))
-                if an: team_runs.setdefault(an,[]).append(float(a_runs))
-            except (TypeError, ValueError):
-                continue
-    form = {}
-    for team, runs_list in team_runs.items():
-        last10 = runs_list[-10:]   # 取最近10場
-        if len(last10) >= 5:       # 至少5場才有統計意義
-            form[team] = round(sum(last10)/len(last10), 2)
-    _SCORING_FORM = form
-    log.info("Scoring form cached: %d teams", len(form))
-
-def fetch_series_momentum():
-    """最近3天各系列賽勝敗紀錄 → 偵測連敗球隊（如太空人連輸水手）"""
-    global _SERIES_MOMENTUM
-    momentum = {}
-    for days_ago in range(1, 4):
-        d = (datetime.date.today() - datetime.timedelta(days=days_ago)).isoformat()
-        data = safe_get(
-            "https://statsapi.mlb.com/api/v1/schedule",
-            params={"sportId":1,"date":d,"gameType":"R",
-                    "fields":"dates,games,teams,home,away,team,id,name,score,status,detailedState"},
-            timeout=10,
-        )
-        if not data: continue
-        for de in data.get("dates",[]):
-            for game in de.get("games",[]):
-                status = game.get("status",{}).get("detailedState","")
-                if "Final" not in status and "Completed" not in status: continue
-                hd = game.get("teams",{}).get("home",{})
-                ad = game.get("teams",{}).get("away",{})
-                hn = MLB_TEAM_ID.get(hd.get("team",{}).get("id")) or norm_team(hd.get("team",{}).get("name",""))
-                an = MLB_TEAM_ID.get(ad.get("team",{}).get("id")) or norm_team(ad.get("team",{}).get("name",""))
-                if not hn or not an: continue
-                try:
-                    h_score = int(hd.get("score") or 0)
-                    a_score = int(ad.get("score") or 0)
-                except (TypeError, ValueError):
-                    continue
-                key = tuple(sorted([hn, an]))
-                momentum.setdefault(key, []).append((hn, h_score > a_score))
-    _SERIES_MOMENTUM = momentum
-    count = sum(len(v) for v in momentum.values())
-    log.info("Series momentum: %d matchups / %d games", len(momentum), count)
+        return None  # 回傳 None 讓 get_pitcher_era 改用賽季 ERA
+    # 上限：近期 ERA > 12 通常是短暫崩盤，限制到 10 避免過度懲罰
+    return min(era, 10.0)
 
 def build_recent_era_cache(pitchers_dict):
-    global _RECENT_ERA, _RECENT_WHIP
-    cache = {}; whip_cache = {}
+    global _RECENT_ERA
+    cache = {}
     seen  = set()
     for (home, away), info in pitchers_dict.items():
         for key, full in [(info.get("home_pitcher"), info.get("home_name")),
@@ -504,6 +342,7 @@ def build_recent_era_cache(pitchers_dict):
             if not key or key in seen: continue
             if not full or full == "TBD": continue
             seen.add(key)
+            # 用 fullName 搜尋 playerId
             data = safe_get(
                 "https://statsapi.mlb.com/api/v1/people/search",
                 params={"names": full, "sportId": 1},
@@ -514,16 +353,14 @@ def build_recent_era_cache(pitchers_dict):
                 if _name_to_key(p.get("fullName","")) == key:
                     pid = p.get("id")
                     if pid:
-                        result = _fetch_recent_era(pid)
-                        if result is not None:
-                            cache[key] = result["era"]
-                            whip_cache[key] = result["whip"]
-                            log.info("Recent ERA %s: %.2f  WHIP: %.2f",
-                                     key, result["era"], result["whip"])
+                        recent = _fetch_recent_era(pid)
+                        if recent is not None:
+                            cache[key] = recent
+                            log.info("Recent ERA %s: %.2f (season: %.2f)",
+                                     key, recent, PITCHER_ERA.get(key,4.80))
                     break
-    _RECENT_ERA  = cache
-    _RECENT_WHIP = whip_cache
-    log.info("Recent ERA/WHIP cached: %d pitchers", len(cache))
+    _RECENT_ERA = cache
+    log.info("Recent ERA cached: %d pitchers", len(cache))
 
 
 # ══════════════════════════════════════════════
@@ -605,22 +442,10 @@ def fetch_espn_ratings():
                     off_e = round(min(base["off"]+(wp-0.5)*0.5, 5.8), 2)
                     def_e = round(max(base["def"]-(wp-0.5)*0.5, 3.0), 2)
                 alpha = min(t/30, ESPN_ALPHA_MAX)
-                # L10 近期形態（若 ESPN 有提供）
-                try:
-                    l10w = int(st.get("last10Wins", st.get("L10W", st.get("vsLast10Wins", 0))) or 0)
-                    l10l = int(st.get("last10Losses", st.get("L10L", st.get("vsLast10Losses", 0))) or 0)
-                    l10 = l10w + l10l
-                    if l10 >= 8:
-                        l10_wp = l10w / l10
-                        form = round((wp-0.5)*0.10 + (l10_wp-0.5)*0.25, 3)
-                    else:
-                        form = round((wp-0.5)*0.20, 3)
-                except Exception:
-                    form = round((wp-0.5)*0.20, 3)
                 ratings[short] = {
                     "off":  round(off_e*alpha + base["off"]*(1-alpha), 2),
                     "def":  round(def_e*alpha + base["def"]*(1-alpha), 2),
-                    "form": form,
+                    "form": round((wp-0.5)*0.2, 3),
                     "games": t,
                 }
     except Exception as e:
@@ -797,60 +622,23 @@ def get_rating(team):
 def injury_penalty(team):
     t = team.lower()
     penalty = 0.0
-    # OUT 懲罰依球員等級：S=王牌先發/明星野手，A=主力，B=一般
-    _OUT_PEN = {"S": 0.28, "A": 0.16, "B": 0.06}
-    for p in _DYN_OUT.get(t, []):
-        penalty += _OUT_PEN.get(_player_tier(p), 0.06)
-    for item in _DYN_LTD.get(t, []):
-        tier = item[1] if isinstance(item, tuple) else "B"
-        penalty += LT_PEN.get(tier, 0.4) * 0.15
-    return round(min(penalty, 1.5), 3)
-
-def _whip_correction(era, key):
-    """若ERA偏低但WHIP偏高（可能在走運），將ERA向上修正；反之ERA低且WHIP也低則確認表現真實。"""
-    whip = _RECENT_WHIP.get(key)
-    if whip is None: return era
-    if era < 3.80 and whip > 1.30:
-        # 低ERA+高WHIP → 靠殘壘率走運，往上修正
-        correction = min((whip - 1.20) * 0.60, 0.80)
-        return round(era + correction, 2)
-    if era < 3.20 and whip < 1.10:
-        # 低ERA+低WHIP → 真正主宰，往下微調確認
-        return round(era - 0.10, 2)
-    return era
+    for _ in _DYN_OUT.get(t,[]): penalty += 0.05
+    for item in _DYN_LTD.get(t,[]):
+        tier = item[1] if isinstance(item,tuple) else "B"
+        penalty += LT_PEN.get(tier,0.4) * 0.15
+    return round(min(penalty, 1.2), 3)
 
 def get_pitcher_era(key):
     if not key: return LEAGUE_ERA + 0.60
     k = key.lower().strip()
     recent = _RECENT_ERA.get(k)
-    season = PITCHER_ERA.get(k, None)
+    season = PITCHER_ERA.get(k)
     if recent is not None and season is not None:
-        # 小樣本偏差修正：極低/極高 ERA 加重賽季權重
-        if recent < 1.50:
-            w_r, w_s = 0.40, 0.60   # 極低→降低近期比重，避免過度樂觀
-        elif recent > 7.00:
-            w_r, w_s = 0.50, 0.50   # 極高→各半，避免過度悲觀
-        else:
-            w_r, w_s = SP_RECENT_W, SP_SEASON_W
-        era = round(recent * w_r + season * w_s, 2)
-        return _whip_correction(era, k)
-    if recent is not None:
-        # 無賽季ERA：向聯盟平均回歸（防止小樣本過度依賴）
-        if recent < 1.50:
-            era = round(recent * 0.45 + LEAGUE_ERA * 0.55, 2)
-        elif recent > 7.00:
-            era = round(recent * 0.50 + LEAGUE_ERA * 0.50, 2)
-        else:
-            era = round(recent * 0.65 + LEAGUE_ERA * 0.35, 2)
-        return _whip_correction(era, k)
-    return season if season is not None else LEAGUE_ERA + 0.60
+        return round(recent*SP_RECENT_W + season*SP_SEASON_W, 2)
+    return recent if recent is not None else (season if season is not None else LEAGUE_ERA+0.60)
 
 def era_adj(key):
-    era = get_pitcher_era(key)
-    delta = era - LEAGUE_ERA
-    # 非線性：差距越大影響越顯著（|delta|^1.08），最大 ±2.0
-    scaled = math.copysign(min(abs(delta) ** 1.08, 2.0) * 0.34, delta)
-    return round(scaled, 3)
+    return round((get_pitcher_era(key) - LEAGUE_ERA) * 0.35, 3)
 
 def bullpen_adj(team):
     era = BULLPEN_ERA.get(team.lower(), LEAGUE_BULL_ERA)
@@ -886,15 +674,15 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
     a_sp_adj = era_adj(away_sp)
 
     # ② 動態主場優勢
-    ha = HOME_ADV_BASE + hr.get("form", 0.0) * HOME_ADV_FORM
+    ha = 0.07 + hr.get("form", 0.0) * 0.3
 
     # ③ 基礎期望得分
     h_exp = hr["off"] + a_sp_adj + ha
     a_exp = ar["off"] + h_sp_adj
 
     # ④ 傷兵
-    h_exp -= injury_penalty(home) * INJURY_MULT
-    a_exp -= injury_penalty(away) * INJURY_MULT
+    h_exp -= injury_penalty(home) * 0.4
+    a_exp -= injury_penalty(away) * 0.4
 
     # ⑤ ★ 牛棚（對手牛棚好 → 己方後段得分降低）
     h_exp -= bullpen_adj(away)
@@ -905,50 +693,10 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
     h_exp *= pf
     a_exp *= pf
 
-    # ⑦ ★ 天氣（選用，有屋頂球場略過）
-    if game_dt and WEATHER_API_KEY and home not in DOME_STADIUMS:
+    # ⑦ ★ 天氣（選用）
+    if game_dt and WEATHER_API_KEY:
         wf = fetch_weather(home, game_dt)
         h_exp *= wf; a_exp *= wf
-
-    # ⑧ ★ 球隊防守品質（ESPN 實際失分率 vs 聯盟均值，加上限防過度校正）
-    if hr.get("games", 0) >= 5:
-        def_adj = (LEAGUE_DEF_AVG - hr.get("def", LEAGUE_DEF_AVG)) * DEF_QUALITY_MULT
-        a_exp -= max(-DEF_QUALITY_CAP, min(DEF_QUALITY_CAP, def_adj))
-    if ar.get("games", 0) >= 5:
-        def_adj = (LEAGUE_DEF_AVG - ar.get("def", LEAGUE_DEF_AVG)) * DEF_QUALITY_MULT
-        h_exp -= max(-DEF_QUALITY_CAP, min(DEF_QUALITY_CAP, def_adj))
-
-    # ⑨ ★ 客隊近期狀態對進攻的影響
-    a_exp += ar.get("form", 0.0) * AWAY_FORM_MULT
-
-    # ⑩ ★ 近期得分形態（最近10場均值 vs ESPN整季均值，權重22%）
-    if home in _SCORING_FORM and _SCORING_FORM[home] > 0:
-        h_exp += (_SCORING_FORM[home] - hr["off"]) * RECENT_FORM_W
-    if away in _SCORING_FORM and _SCORING_FORM[away] > 0:
-        a_exp += (_SCORING_FORM[away] - ar["off"]) * RECENT_FORM_W
-
-    # ⑪ ★ 連續出賽疲勞
-    if home in _B2B_TEAMS: h_exp -= B2B_PENALTY
-    if away in _B2B_TEAMS: a_exp -= B2B_PENALTY
-
-    # ⑫ ★ 系列賽動能：連敗隊進攻 -SERIES_PEN、信心 ×SERIES_CONF_MULT
-    series_conf_mult = 1.0
-    series_key  = tuple(sorted([home, away]))
-    series_hist = _SERIES_MOMENTUM.get(series_key, [])
-    if len(series_hist) >= 2:
-        h_series_w = sum(
-            1 for (ht, hw) in series_hist
-            if (ht == home and hw) or (ht != home and not hw)
-        )
-        a_series_w = len(series_hist) - h_series_w
-        if h_series_w == 0:
-            h_exp  -= SERIES_PEN
-            series_conf_mult = SERIES_CONF_MULT
-            log.debug("Series: %s swept so far (%d games)", home, len(series_hist))
-        elif a_series_w == 0:
-            a_exp  -= SERIES_PEN
-            series_conf_mult = SERIES_CONF_MULT
-            log.debug("Series: %s swept so far (%d games)", away, len(series_hist))
 
     h_exp = max(2.5, h_exp)
     a_exp = max(2.5, a_exp)
@@ -956,29 +704,25 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
 
     dyn_std = STD + max(0, (10-games)/10) * 0.15
     model_win_p = win_prob_from_margin(margin, dyn_std)
-    # ★ 勝率雙向上限 65%
-    model_win_p = max(0.35, min(0.65, model_win_p))
+    # ★ 勝率上限 90%：現實中單場勝率不會超過此值
+    model_win_p = min(model_win_p, 0.90)
 
     pure_total  = h_exp + a_exp
-    model_total = round(pure_total * MODEL_TOTAL_W + market_total * MKT_TOTAL_W, 2)
+    model_total = round(pure_total*0.30 + market_total*0.70, 2)
     conf = total_confidence(pure_total, market_total)
     conf *= (pitcher_confidence(home_sp) * pitcher_confidence(away_sp)) ** 0.5
-    if not home_sp: conf *= MISSING_SP_MULT
-    if not away_sp: conf *= MISSING_SP_MULT
-    conf *= series_conf_mult
-    if games < EARLY_GAMES: conf = min(conf, EARLY_CONF_CAP)
 
     return {
         "home_win_prob": round(model_win_p, 4),
         "away_win_prob": round(1-model_win_p, 4),
         "model_total":   model_total,
         "pure_total":    round(pure_total, 2),
-        "conf_factor":   round(max(CONF_FLOOR, min(1.0, conf)), 3),
+        "conf_factor":   round(max(0.40, min(1.0, conf)), 3),
         "h_expected":    round(h_exp, 2),
         "a_expected":    round(a_exp, 2),
         "margin":        round(margin, 3),
         "park_factor":   pf,
-        "dyn_std":       round(dyn_std, 3),
+        "dyn_std":       round(dyn_std, 3),  # 供讓分概率計算使用
     }
 
 def runline_prob(margin, spread, dyn_std):
@@ -1003,7 +747,6 @@ def calc_perf(hist):
     return len(settled), wins, wins/len(settled)*100 if settled else 0.0
 
 def calc_pnl(hist):
-    """計算有記錄 stake 的已結算注單累積損益"""
     total_in = total_pnl = 0.0
     for r in hist:
         if r.get("result") not in ("W","L"): continue
@@ -1014,93 +757,50 @@ def calc_pnl(hist):
         total_pnl += stake * (price - 1) if r["result"] == "W" else -stake
     return round(total_in, 1), round(total_pnl, 1)
 
-
-def settle_results(hist):
-    """Fetch ESPN final scores and mark pending history records W/L."""
-    pending = [r for r in hist if r.get("result") is None and r.get("date")]
-    if not pending:
-        return hist
-
-    # Group pending records by date
-    by_date = {}
-    for r in pending:
-        by_date.setdefault(r["date"], []).append(r)
-
-    changed = 0
-    for date_str, records in by_date.items():
-        date_compact = date_str.replace("-", "")
-        url = "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard"
-        data = safe_get(url, params={"dates": date_compact}, timeout=15)
-        if not data:
-            continue
-        # Build score map: (home_norm, away_norm) -> (home_score, away_score)
-        scores = {}
-        for ev in data.get("events", []):
-            comps = ev.get("competitions", [{}])[0]
-            if comps.get("status", {}).get("type", {}).get("completed") is not True:
-                continue
-            home_s = away_s = None
-            home_t = away_t = None
-            for c in comps.get("competitors", []):
-                t = norm_team(c.get("team", {}).get("displayName", "") or
-                              c.get("team", {}).get("name", ""))
-                sc = c.get("score")
-                try:
-                    sc = int(sc)
-                except (TypeError, ValueError):
-                    sc = None
-                if c.get("homeAway") == "home":
-                    home_t, home_s = t, sc
-                else:
-                    away_t, away_s = t, sc
-            if home_t and away_t and home_s is not None and away_s is not None:
-                scores[(home_t, away_t)] = (home_s, away_s)
-
-        for r in records:
-            key = (r.get("home"), r.get("away"))
-            if key not in scores:
-                continue
-            home_s, away_s = scores[key]
-            btype = r.get("bet_type", "獨贏")
-            team  = r.get("team", "")
-            label = r.get("label", "")   # e.g. "-1.5", "+1.5", "OVER", "UNDER"
-
-            if btype == "獨贏":
-                if team == key[0]:   # home
-                    result = "W" if home_s > away_s else "L"
-                else:                # away
-                    result = "W" if away_s > home_s else "L"
-            elif btype == "讓分":
-                spread = 1.5
-                try:
-                    spread = abs(float(label.replace("+","").replace("-","")))
-                except (ValueError, TypeError):
-                    spread = 1.5
-                margin = home_s - away_s  # positive = home wins
-                if team == key[0]:   # home
-                    cover = margin + (spread if label.startswith("+") else -spread)
-                    result = "W" if cover > 0 else "L"
-                else:                # away
-                    cover = away_s - home_s + (spread if label.startswith("+") else -spread)
-                    result = "W" if cover > 0 else "L"
-            elif btype == "大小分":
-                total = home_s + away_s
-                line  = r.get("market_total") or 8.5
-                if label == "OVER":
-                    result = "W" if total > line else "L"
-                else:
-                    result = "W" if total < line else "L"
-            else:
-                continue
-
-            r["result"] = result
-            log.info("Settled %s@%s %s %s→%d:%d %s",
-                     r["away"], r["home"], btype, label, away_s, home_s, result)
-            changed += 1
-
-    if changed:
-        log.info("Settled %d records", changed)
-    return hist
+def write_pages_json(picks, hist, now_tw):
+    total_settled, wins, wr = calc_perf(hist)
+    total_in, total_pnl     = calc_pnl(hist)
+    roi = round(total_pnl / total_in * 100, 1) if total_in > 0 else None
+    records = []
+    for p in picks:
+        records.append({
+            "tier":        p.get("tier",""),
+            "btype":       p.get("btype",""),
+            "away":        p.get("away",""),
+            "home":        p.get("home",""),
+            "away_cn":     p.get("away_cn",""),
+            "home_cn":     p.get("home_cn",""),
+            "bet_label":   p.get("bet_label",""),
+            "bk":          p.get("bk",""),
+            "bp":          round(p.get("bp",0),2),
+            "con_p":       p.get("con_p"),
+            "edge":        round(p.get("edge",0)*100,1),
+            "conf":        round(p.get("conf",0)*100,1),
+            "stake":       round(p.get("stake",0),1),
+            "model_p":     round(p.get("model_p",0)*100,1),
+            "away_sp":     p.get("away_sp_name","TBD"),
+            "home_sp":     p.get("home_sp_name","TBD"),
+            "away_era":    p.get("away_era"),
+            "home_era":    p.get("home_era"),
+            "pred_away":   p.get("pred_away"),
+            "pred_home":   p.get("pred_home"),
+            "model_total": p.get("model_total"),
+            "market_total":p.get("market_total"),
+            "park_factor": p.get("park_factor"),
+            "game_date":   p.get("game_date",""),
+            "game_time":   p.get("game_time",""),
+        })
+    payload = {
+        "generated_at": now_tw.strftime("%Y-%m-%d %H:%M") + " (台灣時間)",
+        "date":         now_tw.strftime("%Y-%m-%d"),
+        "stats": {"settled":total_settled,"wins":wins,"win_rate":round(wr,1),
+                  "total_in":round(total_in,1),"total_pnl":round(total_pnl,1),"roi":roi},
+        "picks": records,
+    }
+    os.makedirs("docs", exist_ok=True)
+    with open("docs/picks_latest.json", "w", encoding="utf-8") as f:
+        json.dump(payload, f, ensure_ascii=False, indent=2)
+    log.info("Wrote docs/picks_latest.json (%d picks)", len(records))
 
 
 # ══════════════════════════════════════════════
@@ -1123,64 +823,6 @@ def send(content):
 
 
 # ══════════════════════════════════════════════
-def write_pages_json(picks, hist, now_tw):
-    """Write picks_latest.json to docs/ for GitHub Pages display."""
-    total_settled, wins, wr = calc_perf(hist)
-    total_in, total_pnl     = calc_pnl(hist)
-    roi = round(total_pnl / total_in * 100, 1) if total_in > 0 else None
-
-    records = []
-    for p in picks:
-        records.append({
-            "tier":       p.get("tier",""),
-            "btype":      p.get("btype",""),
-            "away":       p.get("away",""),
-            "home":       p.get("home",""),
-            "away_cn":    p.get("away_cn",""),
-            "home_cn":    p.get("home_cn",""),
-            "bet_label":  p.get("bet_label",""),
-            "bk":         p.get("bk",""),
-            "bp":         round(p.get("bp",0),2),
-            "con_p":      p.get("con_p"),
-            "edge":       round(p.get("edge",0)*100,1),
-            "conf":       round(p.get("conf",0)*100,1),
-            "stake":      round(p.get("stake",0),1),
-            "model_p":    round(p.get("model_p",0)*100,1),
-            "away_sp":    p.get("away_sp_name","TBD"),
-            "home_sp":    p.get("home_sp_name","TBD"),
-            "away_era":   p.get("away_era"),
-            "home_era":   p.get("home_era"),
-            "away_whip":  p.get("away_whip"),
-            "home_whip":  p.get("home_whip"),
-            "pred_away":  p.get("pred_away"),
-            "pred_home":  p.get("pred_home"),
-            "model_total":p.get("model_total"),
-            "market_total":p.get("market_total"),
-            "park_factor":p.get("park_factor"),
-            "game_date":  p.get("game_date",""),
-            "game_time":  p.get("game_time",""),
-        })
-
-    payload = {
-        "generated_at": now_tw.strftime("%Y-%m-%d %H:%M") + " (台灣時間)",
-        "date":         now_tw.strftime("%Y-%m-%d"),
-        "stats": {
-            "settled":   total_settled,
-            "wins":      wins,
-            "win_rate":  round(wr, 1),
-            "total_in":  round(total_in, 1),
-            "total_pnl": round(total_pnl, 1),
-            "roi":       roi,
-        },
-        "picks": records,
-    }
-
-    os.makedirs("docs", exist_ok=True)
-    with open("docs/picks_latest.json", "w", encoding="utf-8") as f:
-        json.dump(payload, f, ensure_ascii=False, indent=2)
-    log.info("Wrote docs/picks_latest.json (%d picks)", len(records))
-
-
 # 主流程
 # ══════════════════════════════════════════════
 
@@ -1188,31 +830,22 @@ def run():
     now_tw    = datetime.datetime.utcnow() + datetime.timedelta(hours=8)
     today_str = now_tw.strftime("%Y-%m-%d")
     log.info("TW time: %s", now_tw.strftime("%Y-%m-%d %H:%M"))
-    official = (now_tw.hour >= 23 or now_tw.hour < 7)  # 23:30排程 + 深夜補跑皆為正式
+    official = (0 <= now_tw.hour < 7)
 
     if not ODDS_API_KEY: log.error("ODDS_API_KEY not set"); return
 
     hist      = load_hist()
-    hist      = settle_results(hist)
     espn_ok   = fetch_espn_ratings()
     il_src    = fetch_injury_list()
     pitchers  = fetch_probable_pitchers()
     if pitchers:
         try: build_recent_era_cache(pitchers)
         except Exception as e: log.warning("Recent ERA failed: %s", e)
-    try: fetch_b2b_teams()
-    except Exception as e: log.warning("B2B teams failed: %s", e)
-    try: fetch_recent_scoring()
-    except Exception as e: log.warning("Recent scoring failed: %s", e)
-    try: fetch_series_momentum()
-    except Exception as e: log.warning("Series momentum failed: %s", e)
     odds_data = fetch_odds()
     if not odds_data: log.error("No odds data"); return
 
     season_start = "%d-03-25" % datetime.date.today().year
     season_games = sum(1 for r in hist if r.get("date","") >= season_start)
-    # 已寫入 Gist 的場次集合（以比賽台灣日期 + 主客隊為 key，避免重複推薦）
-    hist_game_keys = {(r.get("home"), r.get("away"), r.get("date")) for r in hist}
     picks, today_records = [], []
 
     for game in odds_data:
@@ -1224,9 +857,6 @@ def run():
             game_date_str = game_tw.strftime("%Y-%m-%d")
             game_time_str = game_tw.strftime("%H:%M")
             game_dt       = game_tw
-            # 跳過已開打超過 30 分鐘的比賽
-            now_utc = datetime.datetime.now(datetime.timezone.utc)
-            if game_utc < now_utc - datetime.timedelta(minutes=30): continue
         except Exception:
             game_date_str = today_str; game_time_str = commence[:16]; game_dt = None
 
@@ -1242,10 +872,11 @@ def run():
 
         # ── 收集所有市場最優/共識賠率 ──────────────────────────
         home_price=away_price=home_book=away_book=None
-        rl_lines={}  # {spread_size: {h_price,h_book,h_all,a_price,a_book,a_all,h_pts}}
+        rl_h_price=rl_a_price=rl_h_book=rl_a_book=None
         over_price=under_price=over_book=under_book=None
         market_total=8.5
         con_h_prices=[]; con_a_prices=[]
+        con_rl_h=[]; con_rl_a=[]
         con_over=[]; con_under=[]
         for bm in bms:
             bk_name=bm.get("title","?")
@@ -1260,23 +891,15 @@ def run():
                         elif t==away:
                             con_a_prices.append(p)
                             if away_price is None or p>away_price: away_price=p; away_book=bk_name
-                elif mk == "spreads":  # 只用標準讓分線，不混 alternate_spreads
+                elif mk=="spreads":
                     for o in mkt.get("outcomes",[]):
                         t=norm_team(o.get("name","")); p=o.get("price",0)
-                        try: pts=float(o.get("point",0))
-                        except (ValueError,TypeError): continue
-                        if p<=0 or pts==0: continue
-                        s=round(abs(pts),1)
-                        if s not in rl_lines:
-                            rl_lines[s]={"h_price":None,"h_book":None,"h_all":[],
-                                         "a_price":None,"a_book":None,"a_all":[],"h_pts":None}
-                        e=rl_lines[s]
                         if t==home:
-                            e["h_pts"]=pts; e["h_all"].append(p)
-                            if e["h_price"] is None or p>e["h_price"]: e["h_price"]=p; e["h_book"]=bk_name
+                            con_rl_h.append(p)
+                            if rl_h_price is None or p>rl_h_price: rl_h_price=p; rl_h_book=bk_name
                         elif t==away:
-                            e["a_all"].append(p)
-                            if e["a_price"] is None or p>e["a_price"]: e["a_price"]=p; e["a_book"]=bk_name
+                            con_rl_a.append(p)
+                            if rl_a_price is None or p>rl_a_price: rl_a_price=p; rl_a_book=bk_name
                 elif mk=="totals":
                     for o in mkt.get("outcomes",[]):
                         pt=o.get("point"); p=o.get("price",0); nm=o.get("name","")
@@ -1295,116 +918,60 @@ def run():
         con_a = round(sum(con_a_prices)/len(con_a_prices),3) if con_a_prices else away_price
         if con_h <= 0 or con_a <= 0: continue  # guard: 防止除以零
 
+        con_rl_h_p = round(sum(con_rl_h)/len(con_rl_h),3) if con_rl_h else rl_h_price
+        con_rl_a_p = round(sum(con_rl_a)/len(con_rl_a),3) if con_rl_a else rl_a_price
         con_ov_p   = round(sum(con_over)/len(con_over),3) if con_over else over_price
         con_un_p   = round(sum(con_under)/len(con_under),3) if con_under else under_price
-
-        # ★ 書商數量信心乘數：書商越多，市場共識越可靠
-        n_bks = len(bms)
-        book_conf = 1.00 if n_bks >= 10 else (0.95 if n_bks >= 6 else 0.90)
-
-        # ★ 市場 vig 信心：vig（書商抽水）越低 → 市場定價越有效率 → 信心越高
-        vig = (1.0/con_h + 1.0/con_a) - 1.0
-        vig_conf = 1.00 if vig < 0.04 else (0.95 if vig < 0.06 else 0.90)
-        book_conf = round(min(book_conf * vig_conf, 1.0), 3)
 
         pred    = predict(home,away,home_sp,away_sp,market_total=market_total,game_dt=game_dt)
         margin  = pred["margin"]
         dyn_std = pred["dyn_std"]
         h_model = pred["home_win_prob"]; a_model = pred["away_win_prob"]
-        conf    = pred["conf_factor"] * book_conf
+        conf    = pred["conf_factor"]
 
         # 獨贏市場混合概率（用於 blend 過濾）
         inv_sum  = 1/con_h + 1/con_a
         h_mkt_nv = round((1/con_h)/inv_sum,4); a_mkt_nv = round((1/con_a)/inv_sum,4)
         h_blend  = MOD_W*h_model+MKT_W*h_mkt_nv; a_blend = MOD_W*a_model+MKT_W*a_mkt_nv
 
+        # ── ★ 讓分概率（-1.5/+1.5 Run Line）──────────────────
+        p_h_rl = runline_prob(margin, 1.5, dyn_std)
+        p_a_rl = 1.0 - p_h_rl
+
         # ── ★ 大小分概率（Over/Under）────────────────────────
-        # 50%模型+50%市場混合，避免純模型預測值虛高導致edge失真
-        _ov_input = pred["pure_total"]*OVER_BLEND_W + market_total*(1-OVER_BLEND_W)
-        p_over  = over_prob(_ov_input, market_total)
+        p_over  = over_prob(pred["pure_total"], market_total)
         p_under = 1.0 - p_over
 
         # ── ★ 建立所有候選注單並選最優 ──────────────────────
+        # (bet_type, side_key, team_key, best_price, book, model_p,
+        #  edge_min, blend_p/None, con_p, conf_mult)
         BET_ML="獨贏"; BET_RL="讓分"; BET_TOT="大小分"
         candidates=[]
-        if home_price: candidates.append({"btype":BET_ML,"bside":"home","bteam":home,"bp":home_price,
-            "bk":home_book,"model_p":h_model,"edge_min":EDGE_MIN,"blend_p":h_blend,"con_p":con_h,
-            "conf_mult":1.00,"label":"獨贏","rl_inv":None,"rl_s":None,"mkt_p":h_mkt_nv})
-        if away_price: candidates.append({"btype":BET_ML,"bside":"away","bteam":away,"bp":away_price,
-            "bk":away_book,"model_p":a_model,"edge_min":EDGE_MIN,"blend_p":a_blend,"con_p":con_a,
-            "conf_mult":1.00,"label":"獨贏","rl_inv":None,"rl_s":None,"mkt_p":a_mkt_nv})
-        # RL candidates：每個讓分數（1.5/2.5/…）都產生主客兩個候選
-        for s,e in sorted(rl_lines.items()):
-            hp=e["h_price"]; ap=e["a_price"]
-            if hp is None or ap is None or hp<=0 or ap<=0: continue
-            ch=round(sum(e["h_all"])/len(e["h_all"]),3) if e["h_all"] else hp
-            ca=round(sum(e["a_all"])/len(e["a_all"]),3) if e["a_all"] else ap
-            h_pts=e.get("h_pts") or -s
-            log.debug("RL %s@%s s=%.1f h_pts=%s margin=%.3f hp=%.2f ap=%.2f",home,away,s,h_pts,margin,hp,ap)
-            if h_pts<=0:  # home team gives points (-s)
-                if margin < 0:
-                    log.debug("RL SKIP %s@%s anti-contrarian: h_pts<=0 margin=%.3f<0",home,away,margin); continue
-                p_h=runline_prob(margin,s,dyn_std); h_lbl="-%g"%s; a_lbl="+%g"%s
-            else:         # home team receives points (+s)
-                if margin > 0:
-                    log.debug("RL SKIP %s@%s anti-contrarian: h_pts>0 margin=%.3f>0",home,away,margin); continue
-                p_h=runline_prob(margin,-s,dyn_std); h_lbl="+%g"%s; a_lbl="-%g"%s
-            log.debug("RL %s@%s p_h=%.3f p_a=%.3f",home,away,p_h,1-p_h)
-            # ★ 對稱上限：兩邊最高75%（防止純模型極端值，保留真實edge）
-            p_h=max(0.25, min(0.75, p_h))
-            p_a=1.0-p_h
-            rl_inv_val=(1/ch+1/ca) if (ch>0 and ca>0) else 1.0
-            candidates.append({"btype":BET_RL,"bside":"rl_h","bteam":home,"bp":hp,"bk":e["h_book"],
-                "model_p":p_h,"edge_min":EDGE_MIN_RL,"blend_p":None,"con_p":ch,
-                "conf_mult":0.90,"label":h_lbl,"rl_inv":rl_inv_val,"rl_s":s})
-            candidates.append({"btype":BET_RL,"bside":"rl_a","bteam":away,"bp":ap,"bk":e["a_book"],
-                "model_p":p_a,"edge_min":EDGE_MIN_RL,"blend_p":None,"con_p":ca,
-                "conf_mult":0.90,"label":a_lbl,"rl_inv":rl_inv_val,"rl_s":s})
-        # ★ 大小分：至少 2 家書商才採用
-        if over_price and con_ov_p and len(con_over)>=2:
-            candidates.append({"btype":BET_TOT,"bside":"over","bteam":"over","bp":over_price,
-                "bk":over_book,"model_p":p_over,"edge_min":EDGE_MIN_TOT,"blend_p":None,"con_p":con_ov_p,
-                "conf_mult":0.88,"label":"OVER","rl_inv":None,"rl_s":None})
-        if under_price and con_un_p and len(con_under)>=2:
-            candidates.append({"btype":BET_TOT,"bside":"under","bteam":"under","bp":under_price,
-                "bk":under_book,"model_p":p_under,"edge_min":EDGE_MIN_TOT,"blend_p":None,"con_p":con_un_p,
-                "conf_mult":0.88,"label":"UNDER","rl_inv":None,"rl_s":None})
+        if home_price: candidates.append((BET_ML,"home",home,home_price,home_book,h_model,EDGE_MIN,h_blend,con_h,1.00))
+        if away_price: candidates.append((BET_ML,"away",away,away_price,away_book,a_model,EDGE_MIN,a_blend,con_a,1.00))
+        if rl_h_price and con_rl_h_p: candidates.append((BET_RL,"rl_h",home,rl_h_price,rl_h_book,p_h_rl,EDGE_MIN_RL,None,con_rl_h_p,0.90))
+        if rl_a_price and con_rl_a_p: candidates.append((BET_RL,"rl_a",away,rl_a_price,rl_a_book,p_a_rl,EDGE_MIN_RL,None,con_rl_a_p,0.90))
+        if over_price and con_ov_p:   candidates.append((BET_TOT,"over","over",over_price,over_book,p_over,EDGE_MIN_TOT,None,con_ov_p,0.88))
+        if under_price and con_un_p:  candidates.append((BET_TOT,"under","under",under_price,under_book,p_under,EDGE_MIN_TOT,None,con_un_p,0.88))
 
         best_pick=None
-        for c in candidates:
-            btype=c["btype"]; bp=c["bp"]; con_p=c["con_p"]; model_p=c["model_p"]
-            blend_p=c["blend_p"]; edge_min=c["edge_min"]
-            if bp is None or bp<=0 or con_p is None or con_p<=0:
-                log.debug("SKIP %s@%s %s bp=%s con_p=%s NULL",home,away,btype,bp,con_p); continue
-            bet_conf = conf*c["conf_mult"]
-            # ★ 模型 vs 市場差距過濾（獨贏專用）
-            if btype==BET_ML:
-                mkt_p_val = c.get("mkt_p", model_p)
-                div = abs(model_p - mkt_p_val)
-                if div > DIV_HARD:
-                    log.debug("SKIP %s@%s ML div=%.3f>DIV_HARD",home,away,div); continue
-                if div > DIV_SOFT:
-                    bet_conf *= max(0.75, 1.0 - (div - DIV_SOFT) * 5.0)
+        for btype,bside,bteam,bp,bk,model_p,edge_min,blend_p,con_p,conf_mult in candidates:
+            if bp is None or bp<=0 or con_p is None or con_p<=0: continue
+            bet_conf = conf*conf_mult
             raw_edge = model_p - 1/bp
-            # ML: edge*conf >= edge_min; RL/TOT: edge_min already higher, check raw_edge directly
-            edge_ok = (raw_edge*bet_conf >= edge_min) if btype==BET_ML else (raw_edge >= edge_min)
-            if not edge_ok:
-                log.debug("SKIP %s@%s %s re=%.3f bc=%.3f edge_ok=False thr=%.3f",home,away,btype,raw_edge,bet_conf,edge_min); continue
-            if bp<MIN_P or bp>MAX_P:
-                log.debug("SKIP %s@%s %s bp=%.2f out of [%.2f,%.2f]",home,away,btype,bp,MIN_P,MAX_P); continue
-            if btype==BET_ML and (blend_p is None or blend_p<0.52):
-                log.debug("SKIP %s@%s ML blend_p=%s",home,away,blend_p); continue
-            _mp_min = MIN_MODEL_P_RL if btype==BET_RL else (MIN_MODEL_P_TOT if btype==BET_TOT else MIN_MODEL_P_ML)
-            if model_p < _mp_min:
-                log.debug("SKIP %s@%s %s model_p=%.3f<%.2f",home,away,btype,model_p,_mp_min); continue
-            if bet_conf<0.65:
-                log.debug("SKIP %s@%s %s bet_conf=%.3f<0.65",home,away,btype,bet_conf); continue
+            if raw_edge*bet_conf<edge_min: continue
+            if bp<MIN_P or bp>MAX_P: continue
+            if btype==BET_ML and (blend_p is None or blend_p<0.48): continue
+            if btype!=BET_ML and model_p<0.40: continue
+            if bet_conf<0.60: continue
             stake=kelly_stake(raw_edge,model_p,bp,conf=bet_conf)
-            if stake<KELLY_MIN:
-                log.debug("SKIP %s@%s %s stake=%.1f<KELLY_MIN",home,away,btype,stake); continue
+            if stake<KELLY_MIN: continue
             score=raw_edge*bet_conf
             if best_pick is None or score>best_pick["score"]:
-                best_pick={**c,"raw_edge":raw_edge,"bet_conf":bet_conf,"stake":stake,"score":score}
+                best_pick={"btype":btype,"bside":bside,"bteam":bteam,
+                           "bp":bp,"bk":bk,"model_p":model_p,
+                           "raw_edge":raw_edge,"bet_conf":bet_conf,
+                           "con_p":con_p,"stake":stake,"score":score}
 
         if best_pick is None: continue
 
@@ -1420,28 +987,19 @@ def run():
         con_p    = best_pick["con_p"]
         stake    = best_pick["stake"]
 
-        if raw_edge>=0.15 and bet_conf>=0.85:   tier="💎 頂級"
-        elif raw_edge>=0.11 and bet_conf>=0.75: tier="🔥 強力"
+        if raw_edge>=0.18 and bet_conf>=0.88:   tier="💎 頂級"
+        elif raw_edge>=0.15 and bet_conf>=0.80: tier="🔥 強力"
         else:                                   tier="⭐ 穩定"
 
         acn=CN.get(away,away); hcn=CN.get(home,home)
         h_sp_n = sp_info.get("home_name","TBD") if sp_info else "TBD"
         a_sp_n = sp_info.get("away_name","TBD") if sp_info else "TBD"
         h_era=get_pitcher_era(home_sp); a_era=get_pitcher_era(away_sp)
-        h_whip=_RECENT_WHIP.get(home_sp.lower().strip()) if home_sp else None
-        a_whip=_RECENT_WHIP.get(away_sp.lower().strip()) if away_sp else None
-        def _sp_tag(sp, era, whip, in_recent):
-            if not sp: return ""
-            whip_s = "/WHIP%.2f"%whip if whip is not None else ""
-            prefix = "近期ERA" if in_recent else "ERA"
-            return "(%s%.2f%s)"%(prefix, era, whip_s)
-        h_tag=_sp_tag(home_sp, h_era, h_whip, home_sp in _RECENT_ERA)
-        a_tag=_sp_tag(away_sp, a_era, a_whip, away_sp in _RECENT_ERA)
+        h_tag=("(近期ERA%.2f)"%h_era if home_sp in _RECENT_ERA else "(ERA%.2f)"%h_era) if home_sp else ""
+        a_tag=("(近期ERA%.2f)"%a_era if away_sp in _RECENT_ERA else "(ERA%.2f)"%a_era) if away_sp else ""
         h_sp_str=h_sp_n+h_tag; a_sp_str=a_sp_n+a_tag
 
-        stability = model_p * bet_conf
-        stab_str  = "%.0f%%" % (stability * 100)
-        warn_note = " ⚠️" if bet_conf < 0.75 else ""
+        cf_note=" ⚠️信心%.0f%%"%(bet_conf*100) if bet_conf<0.85 else ""
         pf_note=" 🏟️PF%.2f"%pred["park_factor"] if abs(pred["park_factor"]-1.0)>0.05 else ""
         ou_diff=pred["model_total"]-market_total
         if   ou_diff>1.5:  ou_str="OVER偏向(%.1f/%.1f)"%(pred["model_total"],market_total)
@@ -1456,18 +1014,18 @@ def run():
             mkt_tag=""
         elif btype==BET_RL:
             bcn=CN.get(bteam,bteam)
-            pts_str=best_pick["label"]   # e.g. "-1.5", "+2.5"
-            rl_inv_val=best_pick.get("rl_inv") or 1.0
-            mkt_rl_p=(1/con_p)/rl_inv_val if rl_inv_val>0 else 1/con_p
+            pts_str="-1.5" if bside=="rl_h" else "+1.5"
+            rl_inv=(1/con_rl_h_p+1/con_rl_a_p) if (con_rl_h_p and con_rl_a_p) else 1.0
+            mkt_rl_p=(1/con_p)/rl_inv if rl_inv>0 else 1/con_p
             bet_desc="`%s 讓分(%s)` @ **%.2f** (%s)"%(bcn,pts_str,bp,bk)
             stats_ln="> 共識賠率: %.2f | 讓分勝率: %.1f%% | 市場隱含: %.1f%%"%(con_p,model_p*100,mkt_rl_p*100)
-            mkt_tag=" [讓分%s]"%pts_str
+            mkt_tag=" [讓分]"
         else:  # BET_TOT
             ov_un="OVER" if bside=="over" else "UNDER"
             tot_inv=(1/con_ov_p+1/con_un_p) if (con_ov_p and con_un_p) else 1.0
             mkt_tot_p=(1/con_p)/tot_inv if tot_inv>0 else 1/con_p
             bet_desc="`%s %.1f` @ **%.2f** (%s)"%(ov_un,market_total,bp,bk)
-            stats_ln="> 共識賠率: %.2f | 模型總分: %.1f | 市場隱含: %.1f%%"%(con_p,pred["model_total"],mkt_tot_p*100)
+            stats_ln="> 共識賠率: %.2f | 模型總分: %.1f | 市場隱含: %.1f%%"%(con_p,pred["pure_total"],mkt_tot_p*100)
             mkt_tag=" [大小分]"
             ou_str=""  # 大小分注單不重複顯示方向
 
@@ -1491,106 +1049,61 @@ def run():
         else:
             last_line=None
 
-        # 大小分注單：將預測得分按 model_total 比例縮放，與顯示的校正總分一致
-        if btype==BET_TOT and pred["pure_total"] > 0:
-            _scale = pred["model_total"] / pred["pure_total"]
-            h_disp = pred["h_expected"] * _scale
-            a_disp = pred["a_expected"] * _scale
-        else:
-            h_disp = pred["h_expected"]
-            a_disp = pred["a_expected"]
-        score_str = "> 預測得分: %s **%.1f** — **%.1f** %s"%(acn,a_disp,h_disp,hcn)
         msg_lines=[
             "**%s  %s @ %s**"%(tier,acn,hcn),
             "🕐 %s %s (台灣時間)%s%s"%(game_date_str[5:].replace("-","/"),game_time_str,pf_note,mkt_tag),
             "⚾ 先發: %s — %s"%(a_sp_str,h_sp_str),
             "💰 推薦: %s"%bet_desc,
             stats_ln,
-            score_str,
-            "> Edge: **%+.1f%%** | 穩定%s%s | 推薦下注: $%.1f"%(raw_edge*100,stab_str,warn_note,stake),
+            "> Edge: **%+.1f%%**%s | Kelly: $%.1f"%(raw_edge*100,cf_note,stake),
         ]
         if last_line: msg_lines.append(last_line)
         msg="\n".join(msg_lines)+"\n"
 
-        # Build clean bet label for web display
-        if btype==BET_ML:
-            _web_label = "%s 獨贏 @ %.2f"%(CN.get(bteam,bteam),bp)
-        elif btype==BET_RL:
-            _web_label = "%s 讓分(%s) @ %.2f"%(CN.get(bteam,bteam),best_pick.get("label",""),bp)
-        else:
-            _ov_un="OVER" if bside=="over" else "UNDER"
-            _web_label = "%s %.1f @ %.2f"%(_ov_un,market_total,bp)
-
-        _pick_extra = {
-            "away_cn":acn,"home_cn":hcn,
-            "bet_label":_web_label,"bk":bk,"con_p":round(con_p,3),
-            "away_sp_name":a_sp_n,"home_sp_name":h_sp_n,
-            "away_era":round(a_era,2),"home_era":round(h_era,2),
-            "away_whip":round(a_whip,2) if a_whip else None,
-            "home_whip":round(h_whip,2) if h_whip else None,
-            "pred_away":round(a_disp,1),"pred_home":round(h_disp,1),
-            "model_total":round(pred["model_total"],1) if btype==BET_TOT else None,
-            "market_total":market_total if btype==BET_TOT else None,
-            "park_factor":round(pred["park_factor"],2) if abs(pred["park_factor"]-1.0)>0.05 else None,
-        }
-        _pick_base = {"msg":msg,"tier":tier,"team":str(bteam),"home":home,"away":away,
-                      "edge":raw_edge,"conf":bet_conf,"stake":stake,"score":best_pick["score"],
-                      "model_p":model_p,"bp":bp,"btype":btype,
-                      "label":best_pick.get("label",""),"bteam_cn":CN.get(bteam,bteam),
-                      "game_date":game_date_str,"game_time":game_time_str,"game_dt":game_dt,
-                      **_pick_extra}
-
         gk=(home,away)
         ex=next((i for i,p in enumerate(picks) if (p["home"],p["away"])==gk),None)
+        _pick = {"msg":msg,"tier":tier,"team":str(bteam),"home":home,"away":away,
+                 "edge":raw_edge,"conf":bet_conf,"stake":stake,"score":best_pick["score"],
+                 "game_date":game_date_str,"game_time":game_time_str,"game_dt":game_dt,
+                 "btype":btype,"bp":bp,"bk":bk,"con_p":con_p,"model_p":model_p,
+                 "away_cn":acn,"home_cn":hcn,"bet_label":bet_desc.replace("`","").split("@")[0].strip(),
+                 "away_sp_name":away_sp or "TBD","home_sp_name":home_sp or "TBD",
+                 "away_era":round(a_era,2),"home_era":round(h_era,2),
+                 "pred_away":round(pred.get("a_expected",0),1),"pred_home":round(pred.get("h_expected",0),1),
+                 "model_total":round(pred.get("pure_total",0),1) if btype==BET_TOT else None,
+                 "market_total":market_total if btype==BET_TOT else None,
+                 "park_factor":round(pred.get("park_factor",1.0),2) if abs(pred.get("park_factor",1.0)-1.0)>0.05 else None}
         if ex is not None:
             if best_pick["score"]>picks[ex].get("score",0):
-                picks[ex]=_pick_base
+                picks[ex]=_pick
         else:
-            picks.append(_pick_base)
-        if official:
-            rk=(home,away,game_date_str)
-            already_in_hist = rk in hist_game_keys
-            already_in_today = any((r.get("home"),r.get("away"),r.get("date"))==rk for r in today_records)
-            if not already_in_hist and not already_in_today:
-                today_records.append({"date":game_date_str,"team":str(bteam),"home":home,"away":away,
+            picks.append(_pick)
+        if official and game_date_str==today_str:
+            rk=(home,away)
+            if not any((r.get("home"),r.get("away"))==rk for r in today_records):
+                today_records.append({"date":today_str,"team":str(bteam),"home":home,"away":away,
                                       "price":bp,"edge":round(raw_edge,4),"conf":round(bet_conf,3),
-                                      "stake":stake,"bet_type":btype,"result":None,
-                                      "label":best_pick.get("label",""),
-                                      "market_total":market_total if btype==BET_TOT else None})
+                                      "bet_type":btype,"result":None})
 
-    # ★ 依穩定性排序：model_p × bet_conf（勝率高且信心高 → 最穩定），最多保留6場
-    picks.sort(key=lambda x:(-(x.get("model_p",0) * x.get("conf",0))))
-    # 大小分上限：最多 TOT_MAX 場，避免全部都是大小分
-    filtered, tot_count = [], 0
-    for p in picks:
-        if p.get("btype") == BET_TOT:
-            if tot_count >= TOT_MAX:
-                continue
-            tot_count += 1
-        filtered.append(p)
-    picks = filtered[:6]
-    write_pages_json(picks, hist, now_tw)
+    tier_order={"💎 頂級":0,"🔥 強力":1,"⭐ 穩定":2}
+    # ★ 依推薦強度全局排序：tier → score（edge×conf）→ 日期時間
+    picks.sort(key=lambda x:(tier_order.get(x["tier"],9),
+                              -x.get("score", x.get("edge",0)),
+                              x["game_date"],
+                              x.get("game_dt") or datetime.datetime.min))
 
     total_settled,wins,wr=calc_perf(hist)
-    total_in, total_pnl = calc_pnl(hist)
     now_str  = now_tw.strftime("%m/%d %H:%M")
     espn_str = "✅ESPN" if espn_ok else "⚠️BASE"
     il_str   = {"rotowire":"✅RotoWire","static":"⚠️靜態"}.get(il_src,il_src)
     sp_str   = "✅已取得" if pitchers else "❌未取得"
     era_str  = "✅近期ERA(%d)"%len(_RECENT_ERA) if _RECENT_ERA else "⚠️賽季ERA"
-    scr_str  = "✅得分形態(%d)"%len(_SCORING_FORM) if _SCORING_FORM else "⚠️無得分形態"
-    b2b_str  = "✅B2B(%d)"%len(_B2B_TEAMS) if _B2B_TEAMS else "—B2B"
-    ser_str  = "✅系列賽(%d)"%len(_SERIES_MOMENTUM) if _SERIES_MOMENTUM else "⚠️無系列賽"
-
-    roi_str = "%+.1f%%" % (total_pnl/total_in*100) if total_in > 0 else "N/A"
-    pnl_str = "**%+.1f$**" % total_pnl if total_in > 0 else "尚無結算資料"
 
     lines=[
-        "⚾ **MLB V139 分析報告**",
-        "🕐 %s | %s %s %s %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str,scr_str,b2b_str,ser_str),
+        "⚾ **MLB V123 分析報告**",
+        "🕐 %s | %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str),
         "📌 正式記錄 (00–07時)" if official else "🔧 測試模式 (不寫gist)",
         "📊 歷史: %d勝/%d場 (%.1f%%)"%(wins,total_settled,wr),
-        "💰 累計損益: 投入 $%.1f | 損益 %s | ROI %s"%(total_in, pnl_str, roi_str),
         "",
     ]
 
@@ -1638,32 +1151,35 @@ def run():
                 if rl_be*0.90>be: be=rl_be; bp2=rl_hp if rl_he>=rl_ae else rl_ap; best_lbl="RL"
             # 大小分 edge（比較時套用0.88信心折扣）
             if ov_p and un_p:
-                p_ov=over_prob(pr["pure_total"]*OVER_BLEND_W+mt*(1-OVER_BLEND_W),mt)
+                p_ov=over_prob(pr["pure_total"],mt)
                 tot_he=p_ov-1/ov_p; tot_ue=(1-p_ov)-1/un_p; tot_be=max(tot_he,tot_ue)
                 if tot_be*0.88>be: be=tot_be; bp2=ov_p if tot_he>=tot_ue else un_p; best_lbl="TOT"
             diag.append("`%s@%s` [%s] Edge=%+.1f%% P=%.2f conf=%.0f%% SP:%s/%s"%(
                 CN.get(a,a),CN.get(h,h),best_lbl,be*100,bp2,cf*100,hp_k or "?",ap_k or "?"))
         for d in sorted(diag,key=lambda x:-float(x.split("Edge=")[1].split("%")[0])): lines.append(d)
     else:
-        lines.append("**推薦 %d 場（穩定性高→低 排序）**"%len(picks))
+        lines.append("**推薦 %d 場（💎強→⭐弱 排序）**"%len(picks))
         for p in picks: lines.append(p["msg"])
-        # 今日投入與預期收益彙總
-        day_stake = sum(p.get("stake", 0) for p in picks)
-        day_ev    = sum(p.get("stake", 0) * (p.get("model_p", 0) * p.get("bp", 1) - 1) for p in picks)
-        day_roi   = (day_ev / day_stake * 100) if day_stake > 0 else 0.0
-        lines.append("")
-        lines.append("💵 **今日預計**：投入 $%.1f | 期望盈利 **%+.1f$** | ROI **%+.1f%%**"
-                     % (day_stake, day_ev, day_roi))
 
     lines+=[
-        "═"*20,"🔧 **MLB V139 模型功能**",
-        "• 多因子模型：ERA/WHIP/PF/牛棚/主客攻守/傷兵/疲勞/系列動能",
-        "• 三市場選優 | 書商數×vig信心 | 模型vs市場差距>15%自動跳過",
-        "• 屋頂球場跳過天氣 | 勝率上限65% | 信心下限50% | 防守調整±0.25上限",
-        "• 大小分上限2場/天 | 大小分edge混合50%市場修正 | ML差距門檻18%",
+        "═"*20,"🔧 **V123 更新**",
+        "• ① 投手近期3場ERA融合（65%近期+35%賽季）",
+        "• ② 球場係數 Park Factor（30隊）",
+        "• ③ 牛棚品質（各隊牛棚ERA影響後段）",
+        "• ④ 天氣影響（需設定WEATHER_API_KEY）",
+        "• ⑤ 動態主場優勢+動態STD（隨ESPN form調整）",
+        "• ⑥ 球星缺陣/傷疑顯示",
+        "• ⑦ [V121] Edge顯示修正：原始模型值，conf只在Kelly中套用一次",
+        "• ⑧ [V122] ★ 三市場選優：獨贏/讓分(-1.5)/大小分自動選最高edge",
+        "• ⑨ [V122] ★ 新增讓分概率模型（Gaussian margin distribution）",
+        "• ⑩ [V122] ★ 新增大小分概率模型（TOTAL_STD=2.10）",
+        "• ⑪ [V122] 診斷顯示各市場最優edge類型 [ML/RL/TOT]",
+        "• ⑫ [V123] ★ 推薦依強度全局排序（💎→🔥→⭐，同級再按 score 降序）",
+        "• ⑬ [V123] 時間行加入日期（MM/DD HH:MM），移除日期分組標題",
     ]
 
     out="\n".join(lines)
+    write_pages_json(picks, hist, now_tw)
     if official and today_records: save_hist(hist+today_records)
     log.info("Sending %d chars",len(out))
     send(out)
