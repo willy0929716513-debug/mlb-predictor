@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-04-22 15:55 (台灣時間)",
+  "generated_at": "2026-04-22 16:00 (台灣時間)",
   "date": "2026-04-22",
   "stats": {
-    "settled": 68,
-    "wins": 45,
-    "win_rate": 66.2,
-    "total_in": 544.3,
-    "total_pnl": 151.8,
-    "roi": 27.9
+    "settled": 71,
+    "wins": 46,
+    "win_rate": 64.8,
+    "total_in": 604.3,
+    "total_pnl": 131.8,
+    "roi": 21.8
   },
   "picks": [
     {
@@ -107,7 +107,7 @@
       "bet_label": "UNDER 9.5 @ 2.00",
       "bk": "Bovada",
       "bp": 2.0,
-      "con_p": 1.89,
+      "con_p": 1.889,
       "edge": 18.8,
       "conf": 65.4,
       "stake": 29.6,
