@@ -1086,8 +1086,9 @@ def run():
                                       "bet_type":btype,"result":None})
 
     tier_order={"💎 頂級":0,"🔥 強力":1,"⭐ 穩定":2}
-    # ★ 依推薦強度全局排序：tier → score（edge×conf）→ 日期時間
-    picks.sort(key=lambda x:(tier_order.get(x["tier"],9),
+    # 當天比賽優先，同日再依 tier → score → 時間排序
+    picks.sort(key=lambda x:(0 if x["game_date"]==today_str else 1,
+                              tier_order.get(x["tier"],9),
                               -x.get("score", x.get("edge",0)),
                               x["game_date"],
                               x.get("game_dt") or datetime.datetime.min))
