@@ -14,6 +14,9 @@ GIST_DESC = "mlb_bot_history"
 EDGE_MIN       = 0.08
 EDGE_MIN_RL    = 0.10   # 讓分（run line）直接比 raw_edge，不乘 bet_conf
 EDGE_MIN_TOT   = 0.08   # 大小分（totals）edge 門檻
+MIN_MODEL_P_ML  = 0.55  # ML 模型勝率門檻
+MIN_MODEL_P_RL  = 0.65  # RL 門檻更高：預測分差需有足夠緩衝（≈2.1 run margin）
+MIN_MODEL_P_TOT = 0.60  # TOT 門檻：避免貼線的邊際大小分
 MOD_W          = 0.18
 MKT_W          = 0.82
 TOTAL_STD      = 2.30   # 兩隊合計得分標準差（比勝負差距大）
@@ -1391,8 +1394,9 @@ def run():
                 log.debug("SKIP %s@%s %s bp=%.2f out of [%.2f,%.2f]",home,away,btype,bp,MIN_P,MAX_P); continue
             if btype==BET_ML and (blend_p is None or blend_p<0.52):
                 log.debug("SKIP %s@%s ML blend_p=%s",home,away,blend_p); continue
-            if btype!=BET_ML and model_p<0.55:
-                log.debug("SKIP %s@%s %s model_p=%.3f<0.55",home,away,btype,model_p); continue
+            _mp_min = MIN_MODEL_P_RL if btype==BET_RL else (MIN_MODEL_P_TOT if btype==BET_TOT else MIN_MODEL_P_ML)
+            if model_p < _mp_min:
+                log.debug("SKIP %s@%s %s model_p=%.3f<%.2f",home,away,btype,model_p,_mp_min); continue
             if bet_conf<0.65:
                 log.debug("SKIP %s@%s %s bet_conf=%.3f<0.65",home,away,btype,bet_conf); continue
             stake=kelly_stake(raw_edge,model_p,bp,conf=bet_conf)
