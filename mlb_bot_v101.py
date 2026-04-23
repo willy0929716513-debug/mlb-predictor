@@ -12,12 +12,15 @@ GIST_DESC = "mlb_bot_history"
 
 # ── 模型參數 ──────────────────────────────────
 EDGE_MIN       = 0.08
-EDGE_MIN_RL    = 0.10   # 讓分（run line）需更大 edge，波動較高
+EDGE_MIN_RL    = 0.10   # 讓分 raw_edge 門檻（不乘 bet_conf）
 EDGE_MIN_TOT   = 0.09   # 大小分（totals）edge 門檻
+MIN_MODEL_P_ML  = 0.55  # ML 模型勝率門檻
+MIN_MODEL_P_RL  = 0.65  # RL 門檻：需預測分差 ≥ 2.1 run（-1.5 spread）
+MIN_MODEL_P_TOT = 0.60  # TOT 門檻：避免貼線邊際注單
 MOD_W          = 0.18
 MKT_W          = 0.82
-TOTAL_STD      = 2.10   # 兩隊合計得分標準差（比勝負差距大）
-STD            = 1.45
+TOTAL_STD      = 2.30   # 兩隊合計得分標準差
+STD            = 1.65   # 比賽勝負分差標準差
 MIN_P          = 1.35
 MAX_P          = 2.50
 BANK           = 1000.0
@@ -936,10 +939,12 @@ def run():
 
         # ── ★ 讓分概率（-1.5/+1.5 Run Line）──────────────────
         p_h_rl = runline_prob(margin, 1.5, dyn_std)
+        p_h_rl = max(0.25, min(0.75, p_h_rl))  # 對稱上限，防止純模型極端值
         p_a_rl = 1.0 - p_h_rl
 
-        # ── ★ 大小分概率（Over/Under）────────────────────────
-        p_over  = over_prob(pred["pure_total"], market_total)
+        # ── ★ 大小分概率（50% 模型 + 50% 市場混合）─────────
+        _tot_blend = pred["pure_total"] * 0.50 + market_total * 0.50
+        p_over  = over_prob(_tot_blend, market_total)
         p_under = 1.0 - p_over
 
         # ── ★ 建立所有候選注單並選最優 ──────────────────────
@@ -959,11 +964,14 @@ def run():
             if bp is None or bp<=0 or con_p is None or con_p<=0: continue
             bet_conf = conf*conf_mult
             raw_edge = model_p - 1/bp
-            if raw_edge*bet_conf<edge_min: continue
+            # ML: edge*conf ≥ threshold；RL/TOT: 直接比 raw_edge（EDGE_MIN 已較高）
+            edge_ok = (raw_edge*bet_conf >= edge_min) if btype==BET_ML else (raw_edge >= edge_min)
+            if not edge_ok: continue
             if bp<MIN_P or bp>MAX_P: continue
-            if btype==BET_ML and (blend_p is None or blend_p<0.48): continue
-            if btype!=BET_ML and model_p<0.40: continue
-            if bet_conf<0.60: continue
+            if btype==BET_ML and (blend_p is None or blend_p<0.52): continue
+            _mp_min = MIN_MODEL_P_RL if btype==BET_RL else (MIN_MODEL_P_TOT if btype==BET_TOT else MIN_MODEL_P_ML)
+            if model_p < _mp_min: continue
+            if bet_conf<0.65: continue
             stake=kelly_stake(raw_edge,model_p,bp,conf=bet_conf)
             if stake<KELLY_MIN: continue
             score=raw_edge*bet_conf
