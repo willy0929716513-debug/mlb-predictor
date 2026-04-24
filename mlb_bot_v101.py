@@ -876,6 +876,7 @@ def run():
         # ── 收集所有市場最優/共識賠率 ──────────────────────────
         home_price=away_price=home_book=away_book=None
         rl_h_price=rl_a_price=rl_h_book=rl_a_book=None
+        rl_h_pts=None  # 主隊讓分點數（負=讓分，正=受讓）
         over_price=under_price=over_book=under_book=None
         market_total=8.5
         con_h_prices=[]; con_a_prices=[]
@@ -897,9 +898,14 @@ def run():
                 elif mk=="spreads":
                     for o in mkt.get("outcomes",[]):
                         t=norm_team(o.get("name","")); p=o.get("price",0)
+                        pt=o.get("point")
                         if t==home:
                             con_rl_h.append(p)
-                            if rl_h_price is None or p>rl_h_price: rl_h_price=p; rl_h_book=bk_name
+                            if rl_h_price is None or p>rl_h_price:
+                                rl_h_price=p; rl_h_book=bk_name
+                            if rl_h_pts is None and pt is not None:
+                                try: rl_h_pts=float(pt)
+                                except (ValueError, TypeError): pass
                         elif t==away:
                             con_rl_a.append(p)
                             if rl_a_price is None or p>rl_a_price: rl_a_price=p; rl_a_book=bk_name
@@ -937,9 +943,18 @@ def run():
         h_mkt_nv = round((1/con_h)/inv_sum,4); a_mkt_nv = round((1/con_a)/inv_sum,4)
         h_blend  = MOD_W*h_model+MKT_W*h_mkt_nv; a_blend = MOD_W*a_model+MKT_W*a_mkt_nv
 
-        # ── ★ 讓分概率（-1.5/+1.5 Run Line）──────────────────
-        p_h_rl = runline_prob(margin, 1.5, dyn_std)
-        p_h_rl = max(0.25, min(0.75, p_h_rl))  # 對稱上限，防止純模型極端值
+        # ── ★ 讓分概率（根據 API 實際 spread 方向）───────────
+        # rl_h_pts < 0：主隊讓分(-1.5)，正：主隊受讓(+1.5)
+        # 預設視為主隊讓分（-1.5），若API顯示主隊受讓則反向計算
+        h_gives = (rl_h_pts is None or rl_h_pts < 0)
+        spread_val = abs(rl_h_pts) if rl_h_pts is not None else 1.5
+        if h_gives:
+            # 主隊讓分：P(home wins by > spread)
+            p_h_rl = runline_prob(margin, spread_val, dyn_std)
+        else:
+            # 主隊受讓：P(home loses by < spread) = P(margin > -spread)
+            p_h_rl = runline_prob(margin, -spread_val, dyn_std)
+        p_h_rl = max(0.25, min(0.75, p_h_rl))
         p_a_rl = 1.0 - p_h_rl
 
         # ── ★ 大小分概率（50% 模型 + 50% 市場混合）─────────
@@ -1022,7 +1037,15 @@ def run():
             mkt_tag=""
         elif btype==BET_RL:
             bcn=CN.get(bteam,bteam)
-            pts_str="-1.5" if bside=="rl_h" else "+1.5"
+            # 根據實際 API spread 決定標籤
+            if bside=="rl_h":
+                pts_str = "%.4g" % (rl_h_pts if rl_h_pts is not None else -1.5)
+                if not pts_str.startswith("-"): pts_str = "+"+pts_str
+            else:
+                # away side 是主隊 spread 的反面
+                h_pt = rl_h_pts if rl_h_pts is not None else -1.5
+                pts_str = "%.4g" % (-h_pt)
+                if not pts_str.startswith("-"): pts_str = "+"+pts_str
             rl_inv=(1/con_rl_h_p+1/con_rl_a_p) if (con_rl_h_p and con_rl_a_p) else 1.0
             mkt_rl_p=(1/con_p)/rl_inv if rl_inv>0 else 1/con_p
             bet_desc="`%s 讓分(%s)` @ **%.2f** (%s)"%(bcn,pts_str,bp,bk)
@@ -1092,8 +1115,14 @@ def run():
             already_in_today = any((r.get("home"),r.get("away"),r.get("date"))==rk for r in today_records)
             if not already_in_hist and not already_in_today:
                 bside_v = best_pick["bside"]
-                _label = ("-1.5" if bside_v=="rl_h" else "+1.5") if btype==BET_RL else \
-                         ("OVER" if bside_v=="over" else "UNDER") if btype==BET_TOT else ""
+                if btype==BET_RL:
+                    h_pt = rl_h_pts if rl_h_pts is not None else -1.5
+                    _label = ("%.4g"%h_pt if h_pt<0 else "+%.4g"%h_pt) if bside_v=="rl_h" \
+                             else ("+%.4g"%-h_pt if -h_pt>0 else "%.4g"%-h_pt)
+                elif btype==BET_TOT:
+                    _label = "OVER" if bside_v=="over" else "UNDER"
+                else:
+                    _label = ""
                 today_records.append({"date":today_str,"team":str(bteam),"home":home,"away":away,
                                       "price":bp,"edge":round(raw_edge,4),"conf":round(bet_conf,3),
                                       "bet_type":btype,"result":None,
