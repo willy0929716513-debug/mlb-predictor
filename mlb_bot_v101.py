@@ -1087,11 +1087,18 @@ def run():
         else:
             picks.append(_pick)
         if official and game_date_str==today_str:
-            rk=(home,away)
-            if not any((r.get("home"),r.get("away"))==rk for r in today_records):
+            rk=(home,away,today_str)
+            already_in_hist  = any((r.get("home"),r.get("away"),r.get("date"))==rk for r in hist)
+            already_in_today = any((r.get("home"),r.get("away"),r.get("date"))==rk for r in today_records)
+            if not already_in_hist and not already_in_today:
+                bside_v = best_pick["bside"]
+                _label = ("-1.5" if bside_v=="rl_h" else "+1.5") if btype==BET_RL else \
+                         ("OVER" if bside_v=="over" else "UNDER") if btype==BET_TOT else ""
                 today_records.append({"date":today_str,"team":str(bteam),"home":home,"away":away,
                                       "price":bp,"edge":round(raw_edge,4),"conf":round(bet_conf,3),
-                                      "bet_type":btype,"result":None})
+                                      "bet_type":btype,"result":None,
+                                      "label":_label,
+                                      "market_total":market_total if btype==BET_TOT else None})
 
     tier_order={"💎 頂級":0,"🔥 強力":1,"⭐ 穩定":2}
     # 當天比賽優先，同日再依 tier → score → 時間排序
