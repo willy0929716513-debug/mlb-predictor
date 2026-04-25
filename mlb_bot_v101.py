@@ -567,9 +567,17 @@ def fetch_odds():
     if not ODDS_API_KEY: log.error("ODDS_API_KEY not set"); return []
     data = safe_get(
         "https://api.the-odds-api.com/v4/sports/baseball_mlb/odds/",
-        params={"apiKey":ODDS_API_KEY,"regions":"us","markets":"h2h,spreads,totals",
+        params={"apiKey":ODDS_API_KEY,"regions":"us",
+                "markets":"h2h,spreads,alternate_spreads,totals",
                 "oddsFormat":"decimal","dateFormat":"iso"},
     )
+    if not data:
+        # alternate_spreads 不支援時退回標準
+        data = safe_get(
+            "https://api.the-odds-api.com/v4/sports/baseball_mlb/odds/",
+            params={"apiKey":ODDS_API_KEY,"regions":"us","markets":"h2h,spreads,totals",
+                    "oddsFormat":"decimal","dateFormat":"iso"},
+        )
     if not data: return []
     log.info("Odds: %d games", len(data))
     return data
@@ -909,10 +917,13 @@ def run():
         home_price=away_price=home_book=away_book=None
         rl_h_price=rl_a_price=rl_h_book=rl_a_book=None
         rl_h_pts=None  # 主隊讓分點數（負=讓分，正=受讓）
+        rl_h_price_25=rl_a_price_25=rl_h_book_25=rl_a_book_25=None
+        rl_h_pts_25=None  # 主隊2.5讓分點數
         over_price=under_price=over_book=under_book=None
         market_total=8.5
         con_h_prices=[]; con_a_prices=[]
         con_rl_h=[]; con_rl_a=[]
+        con_rl_h_25=[]; con_rl_a_25=[]
         con_over=[]; con_under=[]
         for bm in bms:
             bk_name=bm.get("title","?")
@@ -941,6 +952,23 @@ def run():
                         elif t==away:
                             con_rl_a.append(p)
                             if rl_a_price is None or p>rl_a_price: rl_a_price=p; rl_a_book=bk_name
+                elif mk=="alternate_spreads":
+                    for o in mkt.get("outcomes",[]):
+                        t=norm_team(o.get("name","")); p=o.get("price",0)
+                        pt=o.get("point")
+                        if pt is None: continue
+                        try: pt_f=float(pt)
+                        except (ValueError, TypeError): continue
+                        if abs(abs(pt_f)-2.5)>0.01: continue  # 只取 2.5 讓分線
+                        if t==home:
+                            con_rl_h_25.append(p)
+                            if rl_h_price_25 is None or p>rl_h_price_25:
+                                rl_h_price_25=p; rl_h_book_25=bk_name
+                            if rl_h_pts_25 is None: rl_h_pts_25=pt_f
+                        elif t==away:
+                            con_rl_a_25.append(p)
+                            if rl_a_price_25 is None or p>rl_a_price_25:
+                                rl_a_price_25=p; rl_a_book_25=bk_name
                 elif mk=="totals":
                     for o in mkt.get("outcomes",[]):
                         pt=o.get("point"); p=o.get("price",0); nm=o.get("name","")
@@ -961,6 +989,8 @@ def run():
 
         con_rl_h_p = round(sum(con_rl_h)/len(con_rl_h),3) if con_rl_h else rl_h_price
         con_rl_a_p = round(sum(con_rl_a)/len(con_rl_a),3) if con_rl_a else rl_a_price
+        con_rl_h_p_25 = round(sum(con_rl_h_25)/len(con_rl_h_25),3) if con_rl_h_25 else rl_h_price_25
+        con_rl_a_p_25 = round(sum(con_rl_a_25)/len(con_rl_a_25),3) if con_rl_a_25 else rl_a_price_25
         con_ov_p   = round(sum(con_over)/len(con_over),3) if con_over else over_price
         con_un_p   = round(sum(con_under)/len(con_under),3) if con_under else under_price
 
@@ -989,6 +1019,18 @@ def run():
         p_h_rl = max(0.25, min(0.75, p_h_rl))
         p_a_rl = 1.0 - p_h_rl
 
+        # ── ★ 2.5 讓分概率 ──────────────────────────────────────
+        p_h_rl_25 = p_a_rl_25 = None
+        if rl_h_price_25 is not None or rl_a_price_25 is not None:
+            h_gives_25 = (rl_h_pts_25 is None or rl_h_pts_25 < 0)
+            spread_val_25 = abs(rl_h_pts_25) if rl_h_pts_25 is not None else 2.5
+            if h_gives_25:
+                p_h_rl_25 = runline_prob(margin, spread_val_25, dyn_std)
+            else:
+                p_h_rl_25 = runline_prob(margin, -spread_val_25, dyn_std)
+            p_h_rl_25 = max(0.20, min(0.80, p_h_rl_25))
+            p_a_rl_25 = 1.0 - p_h_rl_25
+
         # ── ★ 大小分概率（50% 模型 + 50% 市場混合）─────────
         _tot_blend = pred["pure_total"] * 0.50 + market_total * 0.50
         p_over  = over_prob(_tot_blend, market_total)
@@ -1003,6 +1045,8 @@ def run():
         if away_price: candidates.append((BET_ML,"away",away,away_price,away_book,a_model,EDGE_MIN,a_blend,con_a,1.00))
         if rl_h_price and con_rl_h_p: candidates.append((BET_RL,"rl_h",home,rl_h_price,rl_h_book,p_h_rl,EDGE_MIN_RL,None,con_rl_h_p,0.90))
         if rl_a_price and con_rl_a_p: candidates.append((BET_RL,"rl_a",away,rl_a_price,rl_a_book,p_a_rl,EDGE_MIN_RL,None,con_rl_a_p,0.90))
+        if rl_h_price_25 and con_rl_h_p_25 and p_h_rl_25 is not None: candidates.append((BET_RL,"rl_h_25",home,rl_h_price_25,rl_h_book_25,p_h_rl_25,EDGE_MIN_RL,None,con_rl_h_p_25,0.88))
+        if rl_a_price_25 and con_rl_a_p_25 and p_a_rl_25 is not None: candidates.append((BET_RL,"rl_a_25",away,rl_a_price_25,rl_a_book_25,p_a_rl_25,EDGE_MIN_RL,None,con_rl_a_p_25,0.88))
         if over_price and con_ov_p:   candidates.append((BET_TOT,"over","over",over_price,over_book,p_over,EDGE_MIN_TOT,None,con_ov_p,0.88))
         if under_price and con_un_p:  candidates.append((BET_TOT,"under","under",under_price,under_book,p_under,EDGE_MIN_TOT,None,con_un_p,0.88))
 
@@ -1069,16 +1113,25 @@ def run():
             mkt_tag=""
         elif btype==BET_RL:
             bcn=CN.get(bteam,bteam)
-            # 根據實際 API spread 決定標籤
-            if bside=="rl_h":
-                pts_str = "%.4g" % (rl_h_pts if rl_h_pts is not None else -1.5)
-                if not pts_str.startswith("-"): pts_str = "+"+pts_str
+            # 根據實際 API spread 決定標籤（支援 1.5 及 2.5）
+            if bside=="rl_h_25":
+                h_pt_raw = rl_h_pts_25 if rl_h_pts_25 is not None else -2.5
+            elif bside=="rl_h":
+                h_pt_raw = rl_h_pts if rl_h_pts is not None else -1.5
+            elif bside=="rl_a_25":
+                h_pt_raw = rl_h_pts_25 if rl_h_pts_25 is not None else -2.5
             else:
-                # away side 是主隊 spread 的反面
-                h_pt = rl_h_pts if rl_h_pts is not None else -1.5
-                pts_str = "%.4g" % (-h_pt)
-                if not pts_str.startswith("-"): pts_str = "+"+pts_str
-            rl_inv=(1/con_rl_h_p+1/con_rl_a_p) if (con_rl_h_p and con_rl_a_p) else 1.0
+                h_pt_raw = rl_h_pts if rl_h_pts is not None else -1.5
+            if bside in ("rl_h","rl_h_25"):
+                pts_str = "%.4g" % h_pt_raw
+            else:
+                pts_str = "%.4g" % (-h_pt_raw)
+            if not pts_str.startswith("-"): pts_str = "+"+pts_str
+            if bside in ("rl_h_25","rl_a_25"):
+                con_h_p_use = con_rl_h_p_25; con_a_p_use = con_rl_a_p_25
+            else:
+                con_h_p_use = con_rl_h_p; con_a_p_use = con_rl_a_p
+            rl_inv=(1/con_h_p_use+1/con_a_p_use) if (con_h_p_use and con_a_p_use) else 1.0
             mkt_rl_p=(1/con_p)/rl_inv if rl_inv>0 else 1/con_p
             bet_desc="`%s 讓分(%s)` @ **%.2f** (%s)"%(bcn,pts_str,bp,bk)
             stats_ln="> 共識賠率: %.2f | 讓分勝率: %.1f%% | 市場隱含: %.1f%%"%(con_p,model_p*100,mkt_rl_p*100)
@@ -1148,9 +1201,14 @@ def run():
             if not already_in_hist and not already_in_today:
                 bside_v = best_pick["bside"]
                 if btype==BET_RL:
-                    h_pt = rl_h_pts if rl_h_pts is not None else -1.5
-                    _label = ("%.4g"%h_pt if h_pt<0 else "+%.4g"%h_pt) if bside_v=="rl_h" \
-                             else ("+%.4g"%-h_pt if -h_pt>0 else "%.4g"%-h_pt)
+                    if bside_v in ("rl_h","rl_h_25"):
+                        h_pt = (rl_h_pts_25 if bside_v=="rl_h_25" and rl_h_pts_25 is not None
+                                else (rl_h_pts if rl_h_pts is not None else (-2.5 if bside_v=="rl_h_25" else -1.5)))
+                        _label = ("%.4g"%h_pt if h_pt<0 else "+%.4g"%h_pt)
+                    else:
+                        h_pt = (rl_h_pts_25 if bside_v=="rl_a_25" and rl_h_pts_25 is not None
+                                else (rl_h_pts if rl_h_pts is not None else (-2.5 if bside_v=="rl_a_25" else -1.5)))
+                        _label = ("+%.4g"%-h_pt if -h_pt>0 else "%.4g"%-h_pt)
                 elif btype==BET_TOT:
                     _label = "OVER" if bside_v=="over" else "UNDER"
                 else:
