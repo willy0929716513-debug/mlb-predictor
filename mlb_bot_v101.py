@@ -1021,6 +1021,7 @@ def run():
 
         # ── ★ 2.5 讓分概率 ──────────────────────────────────────
         p_h_rl_25 = p_a_rl_25 = None
+        h_gives_25 = True  # 預設主隊讓分
         if rl_h_price_25 is not None or rl_a_price_25 is not None:
             h_gives_25 = (rl_h_pts_25 is None or rl_h_pts_25 < 0)
             spread_val_25 = abs(rl_h_pts_25) if rl_h_pts_25 is not None else 2.5
@@ -1045,8 +1046,11 @@ def run():
         if away_price: candidates.append((BET_ML,"away",away,away_price,away_book,a_model,EDGE_MIN,a_blend,con_a,1.00))
         if rl_h_price and con_rl_h_p: candidates.append((BET_RL,"rl_h",home,rl_h_price,rl_h_book,p_h_rl,EDGE_MIN_RL,None,con_rl_h_p,0.90))
         if rl_a_price and con_rl_a_p: candidates.append((BET_RL,"rl_a",away,rl_a_price,rl_a_book,p_a_rl,EDGE_MIN_RL,None,con_rl_a_p,0.90))
-        if rl_h_price_25 and con_rl_h_p_25 and p_h_rl_25 is not None: candidates.append((BET_RL,"rl_h_25",home,rl_h_price_25,rl_h_book_25,p_h_rl_25,EDGE_MIN_RL,None,con_rl_h_p_25,0.88))
-        if rl_a_price_25 and con_rl_a_p_25 and p_a_rl_25 is not None: candidates.append((BET_RL,"rl_a_25",away,rl_a_price_25,rl_a_book_25,p_a_rl_25,EDGE_MIN_RL,None,con_rl_a_p_25,0.88))
+        # 只考慮受讓 +2.5（不押讓出 -2.5 方）
+        if rl_h_price_25 and con_rl_h_p_25 and p_h_rl_25 is not None and not h_gives_25:
+            candidates.append((BET_RL,"rl_h_25",home,rl_h_price_25,rl_h_book_25,p_h_rl_25,EDGE_MIN_RL,None,con_rl_h_p_25,0.88))
+        if rl_a_price_25 and con_rl_a_p_25 and p_a_rl_25 is not None and h_gives_25:
+            candidates.append((BET_RL,"rl_a_25",away,rl_a_price_25,rl_a_book_25,p_a_rl_25,EDGE_MIN_RL,None,con_rl_a_p_25,0.88))
         if over_price and con_ov_p:   candidates.append((BET_TOT,"over","over",over_price,over_book,p_over,EDGE_MIN_TOT,None,con_ov_p,0.88))
         if under_price and con_un_p:  candidates.append((BET_TOT,"under","under",under_price,under_book,p_under,EDGE_MIN_TOT,None,con_un_p,0.88))
 
