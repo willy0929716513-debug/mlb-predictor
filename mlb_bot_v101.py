@@ -31,8 +31,9 @@ LEAGUE_ERA     = 4.20
 HIST_TTL       = 90
 GAP1, GAP2, GAP3 = 1.5, 2.5, 3.5
 ESPN_ALPHA_MAX = 0.65
-SP_RECENT_W    = 0.65   # 近期 ERA 權重
-SP_SEASON_W    = 0.35
+SP_RECENT_W    = 0.80   # 本賽季 ERA 權重（80%）
+SP_SEASON_W    = 0.20   # 四年歷史均值 ERA 權重（20%）
+SCORING_FORM_W = 0.10   # 近期打擊得分調整幅度（±10%）
 
 # ── ★ 球場係數（FanGraphs Park Factors 2024）──
 PARK_FACTOR = {
@@ -57,7 +58,18 @@ BULLPEN_ERA = {
 }
 LEAGUE_BULL_ERA = 3.95
 
-# ── 投手賽季 ERA ──────────────────────────────
+# ── ★ 牛棚深度（1.0=均值，>1.0=陣容深、可靠，<1.0=陣容薄）──
+BULLPEN_DEPTH = {
+    "dodgers":1.20,"braves":1.15,"phillies":1.15,"yankees":1.18,"astros":1.12,
+    "guardians":1.10,"padres":1.08,"mariners":1.08,"cubs":1.05,"mets":1.05,
+    "brewers":1.05,"rangers":1.03,"red sox":1.00,"blue jays":1.00,"giants":1.00,
+    "royals":0.98,"twins":0.97,"tigers":0.97,"orioles":0.97,"rays":0.98,
+    "pirates":0.93,"diamondbacks":0.95,"cardinals":0.95,"reds":0.92,
+    "athletics":0.90,"angels":0.88,"nationals":0.88,"white sox":0.85,
+    "marlins":0.85,"rockies":0.80,
+}
+
+# ── 投手賽季 ERA（四年歷史均值作為基準）──────────────
 PITCHER_ERA = {
     "skubal":3.10,"yamamoto":2.49,"glasnow":3.00,"fried":3.10,"gausman":3.59,
     "schlittler":4.50,"sanchez":2.50,"skenes":1.96,"gilbert":3.44,"woo":3.50,
@@ -445,11 +457,22 @@ def fetch_espn_ratings():
                     off_e = round(min(base["off"]+(wp-0.5)*0.5, 5.8), 2)
                     def_e = round(max(base["def"]-(wp-0.5)*0.5, 3.0), 2)
                 alpha = min(t/30, ESPN_ALPHA_MAX)
+                # 近期打擊得分形態（最近10場 vs 賽季均值）
+                l10rs = st.get("last10RunsScored", st.get("vsLast10RunsScored",
+                        st.get("last10PointsFor", None)))
+                if l10rs is not None and t >= 10 and rs > 0:
+                    recent_rpg = float(l10rs) / 10.0
+                    season_rpg = rs / t
+                    scoring_form = round((recent_rpg - season_rpg) / max(season_rpg, 3.0), 3)
+                    scoring_form = max(-0.20, min(0.20, scoring_form))
+                else:
+                    scoring_form = 0.0
                 ratings[short] = {
-                    "off":  round(off_e*alpha + base["off"]*(1-alpha), 2),
-                    "def":  round(def_e*alpha + base["def"]*(1-alpha), 2),
-                    "form": round((wp-0.5)*0.2, 3),
+                    "off":   round(off_e*alpha + base["off"]*(1-alpha), 2),
+                    "def":   round(def_e*alpha + base["def"]*(1-alpha), 2),
+                    "form":  round((wp-0.5)*0.2, 3),
                     "games": t,
+                    "scoring_form": scoring_form,
                 }
     except Exception as e:
         log.warning("ESPN parse: %s", e)
@@ -644,8 +667,11 @@ def era_adj(key):
     return round((get_pitcher_era(key) - LEAGUE_ERA) * 0.35, 3)
 
 def bullpen_adj(team):
-    era = BULLPEN_ERA.get(team.lower(), LEAGUE_BULL_ERA)
-    return round((era - LEAGUE_BULL_ERA) * 0.20, 3)
+    t = team.lower()
+    era   = BULLPEN_ERA.get(t, LEAGUE_BULL_ERA)
+    depth = BULLPEN_DEPTH.get(t, 1.0)
+    # 深度好的牛棚：ERA 優勢放大；陣容薄：ERA 優勢縮水
+    return round((era - LEAGUE_BULL_ERA) * 0.20 * depth, 3)
 
 def pitcher_confidence(key):
     era = get_pitcher_era(key)
@@ -687,16 +713,22 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
     h_exp -= injury_penalty(home) * 0.4
     a_exp -= injury_penalty(away) * 0.4
 
-    # ⑤ ★ 牛棚（對手牛棚好 → 己方後段得分降低）
+    # ⑤ ★ 牛棚深度（對手牛棚好且深 → 己方後段得分降低）
     h_exp -= bullpen_adj(away)
     a_exp -= bullpen_adj(home)
 
-    # ⑥ ★ 球場係數
+    # ⑥a ★ 近期打擊得分形態（熱打/冷打調整）
+    h_sf = hr.get("scoring_form", 0.0)
+    a_sf = ar.get("scoring_form", 0.0)
+    h_exp = round(h_exp * (1.0 + h_sf * SCORING_FORM_W), 3)
+    a_exp = round(a_exp * (1.0 + a_sf * SCORING_FORM_W), 3)
+
+    # ⑦ ★ 球場係數
     pf = PARK_FACTOR.get(home.lower(), 1.0)
     h_exp *= pf
     a_exp *= pf
 
-    # ⑦ ★ 天氣（選用）
+    # ⑧ ★ 天氣（選用）
     if game_dt and WEATHER_API_KEY:
         wf = fetch_weather(home, game_dt)
         h_exp *= wf; a_exp *= wf
