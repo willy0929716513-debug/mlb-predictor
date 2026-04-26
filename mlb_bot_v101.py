@@ -20,8 +20,8 @@ MIN_MODEL_P_TOT = 0.60  # TOT 門檻：避免貼線邊際注單
 MOD_W          = 0.18
 MKT_W          = 0.82
 TOTAL_STD      = 2.30   # 兩隊合計得分標準差
-STD            = 1.65   # 比賽勝負分差標準差
-RL_STD_MULT    = 1.90   # 讓分概率用更高不確定性（RL 受機率波動影響更大）
+STD            = 1.80   # 比賽勝負分差標準差（↑1.65→1.80 減少過度自信）
+RL_STD_MULT    = 1.90   # 讓分概率用更高不確定性
 RS_BLEND_W     = 0.12   # 投手隊友得分支援調整幅度
 MIN_P          = 1.35
 MAX_P          = 2.50
@@ -786,7 +786,7 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
     dyn_std = STD + max(0, (10-games)/10) * 0.15
     model_win_p = win_prob_from_margin(margin, dyn_std)
     # ★ 勝率上限 90%：現實中單場勝率不會超過此值
-    model_win_p = min(model_win_p, 0.90)
+    model_win_p = min(model_win_p, 0.82)  # 單場 ML 勝率上限 82%（原 90% 過高）
 
     pure_total  = h_exp + a_exp
     model_total = round(pure_total*0.30 + market_total*0.70, 2)
@@ -1103,7 +1103,7 @@ def run():
             edge_ok = (raw_edge*bet_conf >= edge_min) if btype==BET_ML else (raw_edge >= edge_min)
             if not edge_ok: continue
             if bp<MIN_P or bp>MAX_P: continue
-            if btype==BET_ML and (blend_p is None or blend_p<0.52): continue
+            if btype==BET_ML and (blend_p is None or blend_p<0.60): continue
             _mp_min = MIN_MODEL_P_RL if btype==BET_RL else (MIN_MODEL_P_TOT if btype==BET_TOT else MIN_MODEL_P_ML)
             if model_p < _mp_min: continue
             if bet_conf<0.65: continue
