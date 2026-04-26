@@ -15,12 +15,14 @@ EDGE_MIN       = 0.08
 EDGE_MIN_RL    = 0.10   # 讓分 raw_edge 門檻（不乘 bet_conf）
 EDGE_MIN_TOT   = 0.09   # 大小分（totals）edge 門檻
 MIN_MODEL_P_ML  = 0.55  # ML 模型勝率門檻
-MIN_MODEL_P_RL  = 0.65  # RL 門檻：需預測分差 ≥ 2.1 run（-1.5 spread）
+MIN_MODEL_P_RL  = 0.65  # RL 門檻
 MIN_MODEL_P_TOT = 0.60  # TOT 門檻：避免貼線邊際注單
 MOD_W          = 0.18
 MKT_W          = 0.82
 TOTAL_STD      = 2.30   # 兩隊合計得分標準差
 STD            = 1.65   # 比賽勝負分差標準差
+RL_STD_MULT    = 1.90   # 讓分概率用更高不確定性（RL 受機率波動影響更大）
+RS_BLEND_W     = 0.12   # 投手隊友得分支援調整幅度
 MIN_P          = 1.35
 MAX_P          = 2.50
 BANK           = 1000.0
@@ -271,6 +273,7 @@ _DYN_OUT      = {}
 _DYN_LTD      = {}
 _ESPN_RATINGS = {}
 _RECENT_ERA   = {}
+_PITCHER_RS   = {}  # pitcher_key -> run_support_per_start (隊友場均得分)
 _WEATHER_CACHE= {}
 
 
@@ -347,9 +350,27 @@ def _fetch_recent_era(pitcher_id, last_n=3):
     # 上限：近期 ERA > 12 通常是短暫崩盤，限制到 10 避免過度懲罰
     return min(era, 10.0)
 
+def _fetch_pitcher_rs(pitcher_id):
+    """賽季統計中的隊友場均得分（run support / games started）"""
+    data = safe_get(
+        "https://statsapi.mlb.com/api/v1/people/%d/stats" % pitcher_id,
+        params={"stats":"season","group":"pitching",
+                "season":datetime.date.today().year,"gameType":"R"},
+        timeout=10,
+    )
+    if not data: return None
+    for s in data.get("stats",[]):
+        for spl in s.get("splits",[]):
+            stat = spl.get("stat",{})
+            gs   = stat.get("gamesStarted",0)
+            rs   = stat.get("runSupport")
+            if gs and gs >= 2 and rs is not None:
+                return round(rs / gs, 2)
+    return None
+
 def build_recent_era_cache(pitchers_dict):
-    global _RECENT_ERA
-    cache = {}
+    global _RECENT_ERA, _PITCHER_RS
+    cache = {}; rs_cache = {}
     seen  = set()
     for (home, away), info in pitchers_dict.items():
         for key, full in [(info.get("home_pitcher"), info.get("home_name")),
@@ -373,9 +394,14 @@ def build_recent_era_cache(pitchers_dict):
                             cache[key] = recent
                             log.info("Recent ERA %s: %.2f (season: %.2f)",
                                      key, recent, PITCHER_ERA.get(key,4.80))
+                        rs = _fetch_pitcher_rs(pid)
+                        if rs is not None:
+                            rs_cache[key] = rs
+                            log.info("Run Support %s: %.2f RS/GS", key, rs)
                     break
-    _RECENT_ERA = cache
-    log.info("Recent ERA cached: %d pitchers", len(cache))
+    _RECENT_ERA  = cache
+    _PITCHER_RS  = rs_cache
+    log.info("Recent ERA cached: %d pitchers, RS cached: %d", len(cache), len(rs_cache))
 
 
 # ══════════════════════════════════════════════
@@ -731,6 +757,17 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
     h_exp = round(h_exp * (1.0 + h_sf * SCORING_FORM_W), 3)
     a_exp = round(a_exp * (1.0 + a_sf * SCORING_FORM_W), 3)
 
+    # ⑥b ★ 投手隊友得分支援（run support/GS vs 隊伍場均）
+    # 若這投手先發時隊伍習慣多/少得分，微調期望得分
+    h_rs = _PITCHER_RS.get(home_sp)
+    a_rs = _PITCHER_RS.get(away_sp)
+    h_rpg = hr.get("off", h_exp)   # 用 off 當隊伍基準得分
+    a_rpg = ar.get("off", a_exp)
+    if h_rs is not None and h_rpg > 0:
+        h_exp = round(h_exp + (h_rs - h_rpg) * RS_BLEND_W, 3)
+    if a_rs is not None and a_rpg > 0:
+        a_exp = round(a_exp + (a_rs - a_rpg) * RS_BLEND_W, 3)
+
     # ⑦ ★ 球場係數
     pf = PARK_FACTOR.get(home.lower(), 1.0)
     h_exp *= pf
@@ -765,7 +802,9 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
         "a_expected":    round(a_exp, 2),
         "margin":        round(margin, 3),
         "park_factor":   pf,
-        "dyn_std":       round(dyn_std, 3),  # 供讓分概率計算使用
+        "dyn_std":       round(dyn_std, 3),
+        "h_rs":          h_rs,   # 主隊投手隊友 RS/GS（可為 None）
+        "a_rs":          a_rs,
     }
 
 def runline_prob(margin, spread, dyn_std):
@@ -1006,17 +1045,15 @@ def run():
         h_blend  = MOD_W*h_model+MKT_W*h_mkt_nv; a_blend = MOD_W*a_model+MKT_W*a_mkt_nv
 
         # ── ★ 讓分概率（根據 API 實際 spread 方向）───────────
-        # rl_h_pts < 0：主隊讓分(-1.5)，正：主隊受讓(+1.5)
-        # 預設視為主隊讓分（-1.5），若API顯示主隊受讓則反向計算
+        # RL 使用更高不確定性（RL_STD_MULT），避免模型對接近場次過度樂觀
+        rl_dyn_std = dyn_std * RL_STD_MULT
         h_gives = (rl_h_pts is None or rl_h_pts < 0)
         spread_val = abs(rl_h_pts) if rl_h_pts is not None else 1.5
         if h_gives:
-            # 主隊讓分：P(home wins by > spread)
-            p_h_rl = runline_prob(margin, spread_val, dyn_std)
+            p_h_rl = runline_prob(margin, spread_val, rl_dyn_std)
         else:
-            # 主隊受讓：P(home loses by < spread) = P(margin > -spread)
-            p_h_rl = runline_prob(margin, -spread_val, dyn_std)
-        p_h_rl = max(0.25, min(0.75, p_h_rl))
+            p_h_rl = runline_prob(margin, -spread_val, rl_dyn_std)
+        p_h_rl = max(0.25, min(0.72, p_h_rl))
         p_a_rl = 1.0 - p_h_rl
 
         # ── ★ 2.5 讓分概率 ──────────────────────────────────────
@@ -1026,10 +1063,10 @@ def run():
             h_gives_25 = (rl_h_pts_25 is None or rl_h_pts_25 < 0)
             spread_val_25 = abs(rl_h_pts_25) if rl_h_pts_25 is not None else 2.5
             if h_gives_25:
-                p_h_rl_25 = runline_prob(margin, spread_val_25, dyn_std)
+                p_h_rl_25 = runline_prob(margin, spread_val_25, rl_dyn_std)
             else:
-                p_h_rl_25 = runline_prob(margin, -spread_val_25, dyn_std)
-            p_h_rl_25 = max(0.20, min(0.80, p_h_rl_25))
+                p_h_rl_25 = runline_prob(margin, -spread_val_25, rl_dyn_std)
+            p_h_rl_25 = max(0.20, min(0.75, p_h_rl_25))
             p_a_rl_25 = 1.0 - p_h_rl_25
 
         # ── ★ 大小分概率（50% 模型 + 50% 市場混合）─────────
@@ -1098,8 +1135,14 @@ def run():
         h_sp_n = sp_info.get("home_name","TBD") if sp_info else "TBD"
         a_sp_n = sp_info.get("away_name","TBD") if sp_info else "TBD"
         h_era=get_pitcher_era(home_sp); a_era=get_pitcher_era(away_sp)
-        h_tag=("(近期ERA%.2f)"%h_era if home_sp in _RECENT_ERA else "(ERA%.2f)"%h_era) if home_sp else ""
-        a_tag=("(近期ERA%.2f)"%a_era if away_sp in _RECENT_ERA else "(ERA%.2f)"%a_era) if away_sp else ""
+        h_rs_val = pred.get("h_rs"); a_rs_val = pred.get("a_rs")
+        def _sp_tag(sp_key, sp_name, era, rs_val, in_recent):
+            if not sp_key: return ""
+            tag = "(近期ERA%.2f)"%era if in_recent else "(ERA%.2f)"%era
+            if rs_val is not None: tag += " RS%.1f"%rs_val
+            return tag
+        h_tag = _sp_tag(home_sp, h_sp_n, h_era, h_rs_val, home_sp in _RECENT_ERA)
+        a_tag = _sp_tag(away_sp, a_sp_n, a_era, a_rs_val, away_sp in _RECENT_ERA)
         h_sp_str=h_sp_n+h_tag; a_sp_str=a_sp_n+a_tag
 
         cf_note=" ⚠️信心%.0f%%"%(bet_conf*100) if bet_conf<0.85 else ""
