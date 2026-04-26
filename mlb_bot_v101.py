@@ -598,16 +598,9 @@ def fetch_odds():
     data = safe_get(
         "https://api.the-odds-api.com/v4/sports/baseball_mlb/odds/",
         params={"apiKey":ODDS_API_KEY,"regions":"us",
-                "markets":"h2h,spreads,alternate_spreads,totals",
+                "markets":"h2h,spreads,totals",
                 "oddsFormat":"decimal","dateFormat":"iso"},
     )
-    if not data:
-        # alternate_spreads 不支援時退回標準
-        data = safe_get(
-            "https://api.the-odds-api.com/v4/sports/baseball_mlb/odds/",
-            params={"apiKey":ODDS_API_KEY,"regions":"us","markets":"h2h,spreads,totals",
-                    "oddsFormat":"decimal","dateFormat":"iso"},
-        )
     if not data: return []
     log.info("Odds: %d games", len(data))
     return data
