@@ -803,8 +803,10 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
         "margin":        round(margin, 3),
         "park_factor":   pf,
         "dyn_std":       round(dyn_std, 3),
-        "h_rs":          h_rs,   # 主隊投手隊友 RS/GS（可為 None）
+        "h_rs":          h_rs,          # 投手專屬 RS/GS（API 有才有，否則 None）
         "a_rs":          a_rs,
+        "h_team_rpg":    round(hr.get("off", 4.5), 2),  # 主隊場均得分（always available）
+        "a_team_rpg":    round(ar.get("off", 4.5), 2),
     }
 
 def runline_prob(margin, spread, dyn_std):
@@ -1135,14 +1137,17 @@ def run():
         h_sp_n = sp_info.get("home_name","TBD") if sp_info else "TBD"
         a_sp_n = sp_info.get("away_name","TBD") if sp_info else "TBD"
         h_era=get_pitcher_era(home_sp); a_era=get_pitcher_era(away_sp)
-        h_rs_val = pred.get("h_rs"); a_rs_val = pred.get("a_rs")
-        def _sp_tag(sp_key, sp_name, era, rs_val, in_recent):
+        def _sp_tag(sp_key, era, rs_pitcher, team_rpg, in_recent):
             if not sp_key: return ""
-            tag = "(近期ERA%.2f)"%era if in_recent else "(ERA%.2f)"%era
-            if rs_val is not None: tag += " RS%.1f"%rs_val
-            return tag
-        h_tag = _sp_tag(home_sp, h_sp_n, h_era, h_rs_val, home_sp in _RECENT_ERA)
-        a_tag = _sp_tag(away_sp, a_sp_n, a_era, a_rs_val, away_sp in _RECENT_ERA)
+            era_tag = "(近期ERA%.2f)"%era if in_recent else "(ERA%.2f)"%era
+            # 投手專屬 RS 優先；沒有就顯示隊伍場均
+            if rs_pitcher is not None:
+                rs_tag = " 投RS%.1f"%rs_pitcher
+            else:
+                rs_tag = " 隊均%.1f"%team_rpg if team_rpg else ""
+            return era_tag + rs_tag
+        h_tag = _sp_tag(home_sp, h_era, pred.get("h_rs"), pred.get("h_team_rpg"), home_sp in _RECENT_ERA)
+        a_tag = _sp_tag(away_sp, a_era, pred.get("a_rs"), pred.get("a_team_rpg"), away_sp in _RECENT_ERA)
         h_sp_str=h_sp_n+h_tag; a_sp_str=a_sp_n+a_tag
 
         cf_note=" ⚠️信心%.0f%%"%(bet_conf*100) if bet_conf<0.85 else ""
