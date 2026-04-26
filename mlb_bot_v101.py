@@ -351,19 +351,22 @@ def _fetch_recent_era(pitcher_id, last_n=3):
     else:
         era_ret = min(era, 10.0)
 
-    # ── Run Support：從各場 linescore 取隊伍得分 ──────────────
+    # ── Run Support：從各場 boxscore 取隊伍得分（linescore 無 team.id）──
     rs_vals = []
     for s in recent:
         gpk = s.get("game",{}).get("gamePk")
         tid = s.get("team",{}).get("id")
         if not gpk or not tid: continue
-        ls = safe_get("https://statsapi.mlb.com/api/v1/game/%d/linescore" % gpk,
-                      timeout=6)
-        if not ls: continue
+        box = safe_get(
+            "https://statsapi.mlb.com/api/v1/game/%d/boxscore" % gpk,
+            params={"fields":"teams,home,away,team,id,teamStats,batting,runs"},
+            timeout=6,
+        )
+        if not box: continue
         for side in ("home","away"):
-            sd = ls.get("teams",{}).get(side,{})
-            if sd.get("team",{}).get("id") == tid:
-                r = sd.get("runs")
+            td = box.get("teams",{}).get(side,{})
+            if td.get("team",{}).get("id") == tid:
+                r = td.get("teamStats",{}).get("batting",{}).get("runs")
                 if r is not None:
                     try: rs_vals.append(float(r))
                     except: pass
