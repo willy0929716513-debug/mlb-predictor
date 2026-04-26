@@ -20,8 +20,8 @@ MIN_MODEL_P_TOT = 0.60  # TOT 門檻：避免貼線邊際注單
 MOD_W          = 0.18
 MKT_W          = 0.82
 TOTAL_STD      = 2.30   # 兩隊合計得分標準差
-STD            = 1.65   # 比賽勝負分差標準差
-RL_STD_MULT    = 1.90   # 讓分概率用更高不確定性（RL 受機率波動影響更大）
+STD            = 1.80   # 比賽勝負分差標準差（↑1.65→1.80 減少過度自信）
+RL_STD_MULT    = 1.90   # 讓分概率用更高不確定性
 RS_BLEND_W     = 0.12   # 投手隊友得分支援調整幅度
 MIN_P          = 1.35
 MAX_P          = 2.50
@@ -325,48 +325,51 @@ def get_star_injuries(team):
 # ══════════════════════════════════════════════
 
 def _fetch_recent_era(pitcher_id, last_n=3):
+    """返回 (近期ERA, 近期先發場均得分RS) 的 tuple；資料不足時各為 None"""
+    year = datetime.date.today().year
     data = safe_get(
         "https://statsapi.mlb.com/api/v1/people/%d/stats" % pitcher_id,
-        params={"stats":"gameLog","group":"pitching",
-                "season":datetime.date.today().year,
-                "fields":"stats,splits,stat,inningsPitched,earnedRuns"},
+        params={"stats":"gameLog","group":"pitching","season":year},
         timeout=10,
     )
-    if not data: return None
+    if not data: return None, None
     splits = []
     for s in data.get("stats",[]): splits = s.get("splits",[]); break
-    starts = [s for s in splits if float(s.get("stat",{}).get("inningsPitched","0") or 0) >= 3.0]
+    starts = [s for s in splits
+              if float(s.get("stat",{}).get("inningsPitched","0") or 0) >= 3.0]
     recent = starts[-last_n:] if len(starts) >= last_n else starts
-    if not recent: return None
+    if not recent: return None, None
+
+    # ── ERA ──────────────────────────────────────────────────
     total_er = sum(float(s.get("stat",{}).get("earnedRuns","0") or 0) for s in recent)
     total_ip = sum(float(s.get("stat",{}).get("inningsPitched","0") or 0) for s in recent)
-    if total_ip < 3: return None
+    if total_ip < 3: return None, None
     era = round(total_er / total_ip * 9, 2)
-    # ★ 近期 ERA 0.00 或極低（< 0.50）代表樣本太少或開季第一場被完封
-    # 用聯盟平均替代，避免模型誤判為超級王牌
     if era < 0.50:
-        log.debug("Recent ERA %.2f too low for %s, clamping to league avg", era, pitcher_id)
-        return None  # 回傳 None 讓 get_pitcher_era 改用賽季 ERA
-    # 上限：近期 ERA > 12 通常是短暫崩盤，限制到 10 避免過度懲罰
-    return min(era, 10.0)
+        log.debug("Recent ERA %.2f too low for %s, clamping", era, pitcher_id)
+        era_ret = None
+    else:
+        era_ret = min(era, 10.0)
 
-def _fetch_pitcher_rs(pitcher_id):
-    """賽季統計中的隊友場均得分（run support / games started）"""
-    data = safe_get(
-        "https://statsapi.mlb.com/api/v1/people/%d/stats" % pitcher_id,
-        params={"stats":"season","group":"pitching",
-                "season":datetime.date.today().year,"gameType":"R"},
-        timeout=10,
-    )
-    if not data: return None
-    for s in data.get("stats",[]):
-        for spl in s.get("splits",[]):
-            stat = spl.get("stat",{})
-            gs   = stat.get("gamesStarted",0)
-            rs   = stat.get("runSupport")
-            if gs and gs >= 2 and rs is not None:
-                return round(rs / gs, 2)
-    return None
+    # ── Run Support：從各場 linescore 取隊伍得分 ──────────────
+    rs_vals = []
+    for s in recent:
+        gpk = s.get("game",{}).get("gamePk")
+        tid = s.get("team",{}).get("id")
+        if not gpk or not tid: continue
+        ls = safe_get("https://statsapi.mlb.com/api/v1/game/%d/linescore" % gpk,
+                      timeout=6)
+        if not ls: continue
+        for side in ("home","away"):
+            sd = ls.get("teams",{}).get(side,{})
+            if sd.get("team",{}).get("id") == tid:
+                r = sd.get("runs")
+                if r is not None:
+                    try: rs_vals.append(float(r))
+                    except: pass
+                break
+    rs_ret = round(sum(rs_vals)/len(rs_vals), 2) if rs_vals else None
+    return era_ret, rs_ret
 
 def build_recent_era_cache(pitchers_dict):
     global _RECENT_ERA, _PITCHER_RS
@@ -378,7 +381,6 @@ def build_recent_era_cache(pitchers_dict):
             if not key or key in seen: continue
             if not full or full == "TBD": continue
             seen.add(key)
-            # 用 fullName 搜尋 playerId
             data = safe_get(
                 "https://statsapi.mlb.com/api/v1/people/search",
                 params={"names": full, "sportId": 1},
@@ -389,19 +391,18 @@ def build_recent_era_cache(pitchers_dict):
                 if _name_to_key(p.get("fullName","")) == key:
                     pid = p.get("id")
                     if pid:
-                        recent = _fetch_recent_era(pid)
+                        recent, rs = _fetch_recent_era(pid)
                         if recent is not None:
                             cache[key] = recent
                             log.info("Recent ERA %s: %.2f (season: %.2f)",
                                      key, recent, PITCHER_ERA.get(key,4.80))
-                        rs = _fetch_pitcher_rs(pid)
                         if rs is not None:
                             rs_cache[key] = rs
-                            log.info("Run Support %s: %.2f RS/GS", key, rs)
+                            log.info("Run Support %s: %.2f RS/start", key, rs)
                     break
     _RECENT_ERA  = cache
     _PITCHER_RS  = rs_cache
-    log.info("Recent ERA cached: %d pitchers, RS cached: %d", len(cache), len(rs_cache))
+    log.info("Recent ERA: %d pitchers, RS: %d pitchers", len(cache), len(rs_cache))
 
 
 # ══════════════════════════════════════════════
@@ -785,7 +786,7 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
     dyn_std = STD + max(0, (10-games)/10) * 0.15
     model_win_p = win_prob_from_margin(margin, dyn_std)
     # ★ 勝率上限 90%：現實中單場勝率不會超過此值
-    model_win_p = min(model_win_p, 0.90)
+    model_win_p = min(model_win_p, 0.82)  # 單場 ML 勝率上限 82%（原 90% 過高）
 
     pure_total  = h_exp + a_exp
     model_total = round(pure_total*0.30 + market_total*0.70, 2)
@@ -803,8 +804,10 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
         "margin":        round(margin, 3),
         "park_factor":   pf,
         "dyn_std":       round(dyn_std, 3),
-        "h_rs":          h_rs,   # 主隊投手隊友 RS/GS（可為 None）
+        "h_rs":          h_rs,          # 投手專屬 RS/GS（API 有才有，否則 None）
         "a_rs":          a_rs,
+        "h_team_rpg":    round(hr.get("off", 4.5), 2),  # 主隊場均得分（always available）
+        "a_team_rpg":    round(ar.get("off", 4.5), 2),
     }
 
 def runline_prob(margin, spread, dyn_std):
@@ -1100,7 +1103,7 @@ def run():
             edge_ok = (raw_edge*bet_conf >= edge_min) if btype==BET_ML else (raw_edge >= edge_min)
             if not edge_ok: continue
             if bp<MIN_P or bp>MAX_P: continue
-            if btype==BET_ML and (blend_p is None or blend_p<0.52): continue
+            if btype==BET_ML and (blend_p is None or blend_p<0.60): continue
             _mp_min = MIN_MODEL_P_RL if btype==BET_RL else (MIN_MODEL_P_TOT if btype==BET_TOT else MIN_MODEL_P_ML)
             if model_p < _mp_min: continue
             if bet_conf<0.65: continue
@@ -1135,14 +1138,17 @@ def run():
         h_sp_n = sp_info.get("home_name","TBD") if sp_info else "TBD"
         a_sp_n = sp_info.get("away_name","TBD") if sp_info else "TBD"
         h_era=get_pitcher_era(home_sp); a_era=get_pitcher_era(away_sp)
-        h_rs_val = pred.get("h_rs"); a_rs_val = pred.get("a_rs")
-        def _sp_tag(sp_key, sp_name, era, rs_val, in_recent):
+        def _sp_tag(sp_key, era, rs_pitcher, team_rpg, in_recent):
             if not sp_key: return ""
-            tag = "(近期ERA%.2f)"%era if in_recent else "(ERA%.2f)"%era
-            if rs_val is not None: tag += " RS%.1f"%rs_val
-            return tag
-        h_tag = _sp_tag(home_sp, h_sp_n, h_era, h_rs_val, home_sp in _RECENT_ERA)
-        a_tag = _sp_tag(away_sp, a_sp_n, a_era, a_rs_val, away_sp in _RECENT_ERA)
+            era_tag = "(近期ERA%.2f)"%era if in_recent else "(ERA%.2f)"%era
+            # 投手專屬 RS 優先；沒有就顯示隊伍場均
+            if rs_pitcher is not None:
+                rs_tag = " 投RS%.1f"%rs_pitcher
+            else:
+                rs_tag = " 隊均%.1f"%team_rpg if team_rpg else ""
+            return era_tag + rs_tag
+        h_tag = _sp_tag(home_sp, h_era, pred.get("h_rs"), pred.get("h_team_rpg"), home_sp in _RECENT_ERA)
+        a_tag = _sp_tag(away_sp, a_era, pred.get("a_rs"), pred.get("a_team_rpg"), away_sp in _RECENT_ERA)
         h_sp_str=h_sp_n+h_tag; a_sp_str=a_sp_n+a_tag
 
         cf_note=" ⚠️信心%.0f%%"%(bet_conf*100) if bet_conf<0.85 else ""
