@@ -325,48 +325,51 @@ def get_star_injuries(team):
 # ══════════════════════════════════════════════
 
 def _fetch_recent_era(pitcher_id, last_n=3):
+    """返回 (近期ERA, 近期先發場均得分RS) 的 tuple；資料不足時各為 None"""
+    year = datetime.date.today().year
     data = safe_get(
         "https://statsapi.mlb.com/api/v1/people/%d/stats" % pitcher_id,
-        params={"stats":"gameLog","group":"pitching",
-                "season":datetime.date.today().year,
-                "fields":"stats,splits,stat,inningsPitched,earnedRuns"},
+        params={"stats":"gameLog","group":"pitching","season":year},
         timeout=10,
     )
-    if not data: return None
+    if not data: return None, None
     splits = []
     for s in data.get("stats",[]): splits = s.get("splits",[]); break
-    starts = [s for s in splits if float(s.get("stat",{}).get("inningsPitched","0") or 0) >= 3.0]
+    starts = [s for s in splits
+              if float(s.get("stat",{}).get("inningsPitched","0") or 0) >= 3.0]
     recent = starts[-last_n:] if len(starts) >= last_n else starts
-    if not recent: return None
+    if not recent: return None, None
+
+    # ── ERA ──────────────────────────────────────────────────
     total_er = sum(float(s.get("stat",{}).get("earnedRuns","0") or 0) for s in recent)
     total_ip = sum(float(s.get("stat",{}).get("inningsPitched","0") or 0) for s in recent)
-    if total_ip < 3: return None
+    if total_ip < 3: return None, None
     era = round(total_er / total_ip * 9, 2)
-    # ★ 近期 ERA 0.00 或極低（< 0.50）代表樣本太少或開季第一場被完封
-    # 用聯盟平均替代，避免模型誤判為超級王牌
     if era < 0.50:
-        log.debug("Recent ERA %.2f too low for %s, clamping to league avg", era, pitcher_id)
-        return None  # 回傳 None 讓 get_pitcher_era 改用賽季 ERA
-    # 上限：近期 ERA > 12 通常是短暫崩盤，限制到 10 避免過度懲罰
-    return min(era, 10.0)
+        log.debug("Recent ERA %.2f too low for %s, clamping", era, pitcher_id)
+        era_ret = None
+    else:
+        era_ret = min(era, 10.0)
 
-def _fetch_pitcher_rs(pitcher_id):
-    """賽季統計中的隊友場均得分（run support / games started）"""
-    data = safe_get(
-        "https://statsapi.mlb.com/api/v1/people/%d/stats" % pitcher_id,
-        params={"stats":"season","group":"pitching",
-                "season":datetime.date.today().year,"gameType":"R"},
-        timeout=10,
-    )
-    if not data: return None
-    for s in data.get("stats",[]):
-        for spl in s.get("splits",[]):
-            stat = spl.get("stat",{})
-            gs   = stat.get("gamesStarted",0)
-            rs   = stat.get("runSupport")
-            if gs and gs >= 2 and rs is not None:
-                return round(rs / gs, 2)
-    return None
+    # ── Run Support：從各場 linescore 取隊伍得分 ──────────────
+    rs_vals = []
+    for s in recent:
+        gpk = s.get("game",{}).get("gamePk")
+        tid = s.get("team",{}).get("id")
+        if not gpk or not tid: continue
+        ls = safe_get("https://statsapi.mlb.com/api/v1/game/%d/linescore" % gpk,
+                      timeout=6)
+        if not ls: continue
+        for side in ("home","away"):
+            sd = ls.get("teams",{}).get(side,{})
+            if sd.get("team",{}).get("id") == tid:
+                r = sd.get("runs")
+                if r is not None:
+                    try: rs_vals.append(float(r))
+                    except: pass
+                break
+    rs_ret = round(sum(rs_vals)/len(rs_vals), 2) if rs_vals else None
+    return era_ret, rs_ret
 
 def build_recent_era_cache(pitchers_dict):
     global _RECENT_ERA, _PITCHER_RS
@@ -378,7 +381,6 @@ def build_recent_era_cache(pitchers_dict):
             if not key or key in seen: continue
             if not full or full == "TBD": continue
             seen.add(key)
-            # 用 fullName 搜尋 playerId
             data = safe_get(
                 "https://statsapi.mlb.com/api/v1/people/search",
                 params={"names": full, "sportId": 1},
@@ -389,19 +391,18 @@ def build_recent_era_cache(pitchers_dict):
                 if _name_to_key(p.get("fullName","")) == key:
                     pid = p.get("id")
                     if pid:
-                        recent = _fetch_recent_era(pid)
+                        recent, rs = _fetch_recent_era(pid)
                         if recent is not None:
                             cache[key] = recent
                             log.info("Recent ERA %s: %.2f (season: %.2f)",
                                      key, recent, PITCHER_ERA.get(key,4.80))
-                        rs = _fetch_pitcher_rs(pid)
                         if rs is not None:
                             rs_cache[key] = rs
-                            log.info("Run Support %s: %.2f RS/GS", key, rs)
+                            log.info("Run Support %s: %.2f RS/start", key, rs)
                     break
     _RECENT_ERA  = cache
     _PITCHER_RS  = rs_cache
-    log.info("Recent ERA cached: %d pitchers, RS cached: %d", len(cache), len(rs_cache))
+    log.info("Recent ERA: %d pitchers, RS: %d pitchers", len(cache), len(rs_cache))
 
 
 # ══════════════════════════════════════════════
