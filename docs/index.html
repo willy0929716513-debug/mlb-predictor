@@ -85,6 +85,11 @@ function spTag(name, era, whip) {
   if (whip != null) s += `/WHIP${whip.toFixed(2)}`;
   return s;
 }
+function rsTag(rs, rpg) {
+  if (rs != null) return `<span class="text-emerald-400">投RS ${rs.toFixed(1)}</span>`;
+  if (rpg != null) return `<span class="text-slate-400">隊均 ${rpg.toFixed(1)}</span>`;
+  return "—";
+}
 function pnlColor(val) {
   if (val == null) return "text-slate-400";
   return val >= 0 ? "text-emerald-400" : "text-rose-400";
@@ -142,6 +147,8 @@ function renderCard(p) {
     <div class="mt-2 grid grid-cols-2 gap-1 text-xs text-slate-400">
       <div>客隊先發: <span class="text-slate-300">${awayTag}</span></div>
       <div>主隊先發: <span class="text-slate-300">${homeTag}</span></div>
+      <div>客隊得分支援: ${rsTag(p.away_rs, p.away_rpg)}</div>
+      <div>主隊得分支援: ${rsTag(p.home_rs, p.home_rpg)}</div>
     </div>
 
     ${scoreSection}
