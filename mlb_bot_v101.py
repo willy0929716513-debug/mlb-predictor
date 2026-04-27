@@ -273,6 +273,7 @@ _DYN_OUT      = {}
 _DYN_LTD      = {}
 _ESPN_RATINGS = {}
 _RECENT_ERA   = {}
+_SEASON_ERA   = {}  # pitcher_key -> 2025 season ERA (all game log starts)
 _PITCHER_RS   = {}  # pitcher_key -> run_support_per_start (隊友場均得分)
 _WEATHER_CACHE= {}
 
@@ -325,31 +326,38 @@ def get_star_injuries(team):
 # ══════════════════════════════════════════════
 
 def _fetch_recent_era(pitcher_id, last_n=3):
-    """返回 (近期ERA, 近期先發場均得分RS) 的 tuple；資料不足時各為 None"""
+    """返回 (近期ERA, 賽季ERA, 近期先發場均得分RS) 的 tuple；資料不足時各為 None"""
     year = datetime.date.today().year
     data = safe_get(
         "https://statsapi.mlb.com/api/v1/people/%d/stats" % pitcher_id,
         params={"stats":"gameLog","group":"pitching","season":year},
         timeout=10,
     )
-    if not data: return None, None
+    if not data: return None, None, None
     splits = []
     for s in data.get("stats",[]): splits = s.get("splits",[]); break
     starts = [s for s in splits
               if float(s.get("stat",{}).get("inningsPitched","0") or 0) >= 3.0]
     recent = starts[-last_n:] if len(starts) >= last_n else starts
-    if not recent: return None, None
+    if not recent: return None, None, None
 
-    # ── ERA ──────────────────────────────────────────────────
+    # ── 近期 ERA (last_n starts) ─────────────────────────────
     total_er = sum(float(s.get("stat",{}).get("earnedRuns","0") or 0) for s in recent)
     total_ip = sum(float(s.get("stat",{}).get("inningsPitched","0") or 0) for s in recent)
-    if total_ip < 3: return None, None
+    if total_ip < 3: return None, None, None
     era = round(total_er / total_ip * 9, 2)
     if era < 0.50:
         log.debug("Recent ERA %.2f too low for %s, clamping", era, pitcher_id)
         era_ret = None
     else:
         era_ret = min(era, 10.0)
+
+    # ── 2025 賽季整體 ERA (all starts) ─────────────────────────
+    season_er = sum(float(s.get("stat",{}).get("earnedRuns","0") or 0) for s in starts)
+    season_ip = sum(float(s.get("stat",{}).get("inningsPitched","0") or 0) for s in starts)
+    season_era = round(season_er / season_ip * 9, 2) if season_ip >= 3 else None
+    if season_era is not None and season_era < 0.50:
+        season_era = None
 
     # ── Run Support：從各場 boxscore 取隊伍得分（linescore 無 team.id）──
     rs_vals = []
@@ -372,11 +380,11 @@ def _fetch_recent_era(pitcher_id, last_n=3):
                     except: pass
                 break
     rs_ret = round(sum(rs_vals)/len(rs_vals), 2) if rs_vals else None
-    return era_ret, rs_ret
+    return era_ret, season_era, rs_ret
 
 def build_recent_era_cache(pitchers_dict):
-    global _RECENT_ERA, _PITCHER_RS
-    cache = {}; rs_cache = {}
+    global _RECENT_ERA, _SEASON_ERA, _PITCHER_RS
+    cache = {}; sea_cache = {}; rs_cache = {}
     seen  = set()
     for (home, away), info in pitchers_dict.items():
         for key, full in [(info.get("home_pitcher"), info.get("home_name")),
@@ -394,18 +402,23 @@ def build_recent_era_cache(pitchers_dict):
                 if _name_to_key(p.get("fullName","")) == key:
                     pid = p.get("id")
                     if pid:
-                        recent, rs = _fetch_recent_era(pid)
+                        recent, season_e, rs = _fetch_recent_era(pid)
                         if recent is not None:
                             cache[key] = recent
-                            log.info("Recent ERA %s: %.2f (season: %.2f)",
-                                     key, recent, PITCHER_ERA.get(key,4.80))
+                        if season_e is not None:
+                            sea_cache[key] = season_e
+                            log.info("ERA %s: 近期%.2f 賽季%.2f", key, recent or 0, season_e)
+                        elif recent is not None:
+                            log.info("ERA %s: 近期%.2f (無賽季ERA)", key, recent)
                         if rs is not None:
                             rs_cache[key] = rs
                             log.info("Run Support %s: %.2f RS/start", key, rs)
                     break
     _RECENT_ERA  = cache
+    _SEASON_ERA  = sea_cache
     _PITCHER_RS  = rs_cache
-    log.info("Recent ERA: %d pitchers, RS: %d pitchers", len(cache), len(rs_cache))
+    log.info("Recent ERA: %d pitchers, Season ERA: %d, RS: %d",
+             len(cache), len(sea_cache), len(rs_cache))
 
 
 # ══════════════════════════════════════════════
@@ -689,7 +702,8 @@ def get_pitcher_era(key):
     if not key: return LEAGUE_ERA + 0.60
     k = key.lower().strip()
     recent = _RECENT_ERA.get(k)
-    season = PITCHER_ERA.get(k)
+    # 優先用從 game log 計算的 2025 賽季 ERA，fallback 到靜態歷史均值
+    season = _SEASON_ERA.get(k) or PITCHER_ERA.get(k)
     if recent is not None and season is not None:
         return round(recent*SP_RECENT_W + season*SP_SEASON_W, 2)
     return recent if recent is not None else (season if season is not None else LEAGUE_ERA+0.60)
@@ -1289,7 +1303,7 @@ def run():
     espn_str = "✅ESPN" if espn_ok else "⚠️BASE"
     il_str   = {"rotowire":"✅RotoWire","static":"⚠️靜態"}.get(il_src,il_src)
     sp_str   = "✅已取得" if pitchers else "❌未取得"
-    era_str  = "✅近期ERA(%d)"%len(_RECENT_ERA) if _RECENT_ERA else "⚠️賽季ERA"
+    era_str  = "✅ERA近期%d/賽季%d"%(len(_RECENT_ERA),len(_SEASON_ERA)) if _RECENT_ERA else "⚠️賽季ERA(靜態)"
 
     lines=[
         "⚾ **MLB V123 分析報告**",
