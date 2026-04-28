@@ -72,9 +72,6 @@
 </div>
 <script>
 (function(){
-  if(sessionStorage.getItem("mlb_auth")==="1"){
-    document.getElementById("pw-overlay").style.display="none";
-  }
   document.getElementById("pw-input").addEventListener("keydown",function(e){
     if(e.key==="Enter") checkPw();
   });
@@ -82,7 +79,6 @@
 function checkPw(){
   const val=document.getElementById("pw-input").value;
   if(btoa(val)==="d2lsa3ltYWtleW91d2lu"){
-    sessionStorage.setItem("mlb_auth","1");
     document.getElementById("pw-overlay").style.display="none";
   } else {
     const box=document.getElementById("pw-box");
