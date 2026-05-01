@@ -739,18 +739,7 @@ def load_hist():
         log.info("Hist loaded: %d records", len(records))
         return _purge(records)
     except Exception as e:
-        log.warning("load_hist parse: %s — Gist JSON 損壞，自動重置", e)
-        # JSON 損壞時自動清空 Gist，讓下次可以正常存取
-        try:
-            body = json.dumps([], ensure_ascii=False, indent=2)
-            pl = {"description":GIST_DESC,"public":False,
-                  "files":{"history.json":{"content":body}}}
-            requests.patch("https://api.github.com/gists/"+gid,
-                           headers=h, json=pl, timeout=10).raise_for_status()
-            log.info("Gist 已重置為空陣列")
-        except Exception as e2:
-            log.warning("Gist 重置失敗: %s", e2)
-        return []
+        log.warning("load_hist parse: %s", e); return []
 
 def save_hist(records):
     if not GH_TOKEN: return
