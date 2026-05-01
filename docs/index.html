@@ -220,7 +220,7 @@ function renderCard(p) {
       <div class="flex-1">
         <div class="flex justify-between text-xs text-slate-400 mb-1">
           <span>信心 ${confBar}%</span>
-          <span>Edge ${edgeStr}</span>
+          <span class="text-amber-300 font-semibold">CLV ${p.clv != null ? (p.clv >= 0 ? "+" : "") + p.clv.toFixed(1) + "%" : edgeStr}</span>
         </div>
         <div class="h-1.5 bg-slate-700 rounded-full overflow-hidden">
           <div class="h-full rounded-full ${confBar>=80?'bg-emerald-500':confBar>=70?'bg-amber-400':'bg-sky-400'}"

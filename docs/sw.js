@@ -1,4 +1,4 @@
-const CACHE = "mlb-v142";
+const CACHE = "mlb-v143";
 const SHELL = ["./", "./index.html", "./manifest.json", "./icon.svg"];
 
 self.addEventListener("install", e => {
