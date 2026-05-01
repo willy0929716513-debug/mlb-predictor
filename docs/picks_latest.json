@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-05-01 21:07 (台灣時間)",
+  "generated_at": "2026-05-01 21:12 (台灣時間)",
   "date": "2026-05-01",
   "stats": {
-    "settled": 78,
-    "wins": 51,
-    "win_rate": 65.4,
-    "total_in": 604.3,
-    "total_pnl": 131.8,
-    "roi": 21.8
+    "settled": 0,
+    "wins": 0,
+    "win_rate": 0.0,
+    "total_in": 0.0,
+    "total_pnl": 0.0,
+    "roi": null
   },
   "picks": [
     {
@@ -20,7 +20,7 @@
       "bet_label": "洋基 獨贏",
       "bk": "LowVig.ag",
       "bp": 1.59,
-      "con_p": 1.568,
+      "con_p": 1.567,
       "edge": 16.5,
       "conf": 78.7,
       "stake": 41.9,
@@ -51,7 +51,7 @@
       "bet_label": "國民 讓分(+1.5)",
       "bk": "BetMGM",
       "bp": 1.8,
-      "con_p": 1.772,
+      "con_p": 1.771,
       "edge": 13.7,
       "conf": 78.2,
       "stake": 29.0,
