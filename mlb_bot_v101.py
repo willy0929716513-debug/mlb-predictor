@@ -29,6 +29,7 @@ BANK           = 1000.0
 KELLY          = 0.12
 KELLY_MAX      = 150.0
 KELLY_MIN      = 5.0
+MAX_PICKS      = 5      # CLV 排序後只取前 N 名，讓推薦穩定
 LEAGUE_ERA     = 4.20
 HIST_TTL       = 90
 GAP1, GAP2, GAP3 = 1.5, 2.5, 3.5
@@ -1233,6 +1234,7 @@ def run():
         ex=next((i for i,p in enumerate(picks) if (p["home"],p["away"])==gk),None)
         _pick = {"msg":msg,"tier":tier,"team":str(bteam),"home":home,"away":away,
                  "edge":raw_edge,"conf":bet_conf,"stake":stake,"score":best_pick["score"],
+                 "clv":round(raw_edge*100,1),
                  "game_date":game_date_str,"game_time":game_time_str,"game_dt":game_dt,
                  "btype":btype,"bp":bp,"bk":bk,"con_p":con_p,"model_p":model_p,
                  "away_cn":acn,"home_cn":hcn,"bet_label":bet_desc.replace("`","").split("@")[0].strip(),
@@ -1276,13 +1278,12 @@ def run():
                                       "label":_label,
                                       "market_total":market_total if btype==BET_TOT else None})
 
-    tier_order={"💎 頂級":0,"🔥 強力":1,"⭐ 穩定":2}
-    # 當天比賽優先，同日再依 tier → score → 時間排序
+    # 當天比賽優先，同日純按 CLV（score）降序排列，讓輸出穩定
     picks.sort(key=lambda x:(0 if x["game_date"]==today_str else 1,
-                              tier_order.get(x["tier"],9),
                               -x.get("score", x.get("edge",0)),
                               x["game_date"],
                               x.get("game_dt") or datetime.datetime.min))
+    picks = picks[:MAX_PICKS]  # 只取 CLV 最高的前 N 場
 
     total_settled,wins,wr=calc_perf(hist)
     now_str  = now_tw.strftime("%m/%d %H:%M")
