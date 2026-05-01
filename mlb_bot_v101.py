@@ -615,6 +615,96 @@ def _purge(records):
     cutoff = (datetime.datetime.utcnow()-datetime.timedelta(days=HIST_TTL)).strftime("%Y-%m-%d")
     return [r for r in records if r.get("date","9999") >= cutoff]
 
+def _tkey(name):
+    """球隊名標準化：移除空格/特殊字元，全小寫，用於比對。"""
+    import re as _re
+    return _re.sub(r'[^a-z]', '', (name or "").lower())
+
+def _team_match(n1, n2):
+    """MLB API / Odds API 隊名可能略有差異（如 Angels vs Angels of Anaheim），
+    用包含關係做模糊比對。"""
+    k1, k2 = _tkey(n1), _tkey(n2)
+    if not k1 or not k2: return False
+    return k1 == k2 or k1 in k2 or k2 in k1
+
+def settle_hist(hist):
+    """結算 result=None 的過去紀錄，透過 MLB Stats API 查最終比分。
+    直接修改 hist 內容（in-place），回傳結算筆數。"""
+    today = datetime.date.today().isoformat()
+    pending = [r for r in hist
+               if r.get("result") is None and r.get("date","") < today]
+    if not pending: return 0
+
+    by_date = {}
+    for r in pending:
+        by_date.setdefault(r["date"], []).append(r)
+
+    updated = 0
+    for date_str, records in sorted(by_date.items()):
+        data = safe_get(
+            "https://statsapi.mlb.com/api/v1/schedule",
+            params={"sportId":1,"date":date_str,
+                    "fields":"dates,games,teams,home,away,team,name,score,status,detailedState"},
+            timeout=10,
+        )
+        if not data: continue
+
+        # 建立 (home隊名key, away隊名key) -> (h_score, a_score) 查找表
+        score_map = {}
+        for d in data.get("dates",[]):
+            for g in d.get("games",[]):
+                if "Final" not in g.get("status",{}).get("detailedState",""):
+                    continue
+                hd = g.get("teams",{}).get("home",{}); ad = g.get("teams",{}).get("away",{})
+                hs = hd.get("score"); as_ = ad.get("score")
+                if hs is None or as_ is None: continue
+                hk = _tkey(hd.get("team",{}).get("name",""))
+                ak = _tkey(ad.get("team",{}).get("name",""))
+                score_map[(hk, ak)] = (int(hs), int(as_))
+
+        for r in records:
+            r_hk = _tkey(r.get("home",""))
+            r_ak = _tkey(r.get("away",""))
+            scores = None
+            for (hk, ak), sc in score_map.items():
+                if _team_match(r_hk, hk) and _team_match(r_ak, ak):
+                    scores = sc; break
+            if scores is None: continue
+            h_score, a_score = scores
+
+            btype = r.get("bet_type","")
+            team  = r.get("team","")
+            label = r.get("label","") or ""
+            team_is_home = _team_match(_tkey(team), r_hk)
+
+            try:
+                if btype == "獨贏":
+                    win = (h_score > a_score) if team_is_home else (a_score > h_score)
+                elif btype == "讓分":
+                    spread = float(label)
+                    if team_is_home:
+                        win = (h_score + spread) > a_score
+                    else:
+                        win = (a_score + spread) > h_score
+                elif btype == "大小分":
+                    mkt = r.get("market_total")
+                    if mkt is None: continue
+                    total = h_score + a_score
+                    win = (total > mkt) if label == "OVER" else (total < mkt)
+                else:
+                    continue
+            except Exception as ex:
+                log.warning("settle calc error %s: %s", r, ex); continue
+
+            r["result"] = "W" if win else "L"
+            updated += 1
+            log.info("Settled [%s] %s (%d-%d) → %s  %s %s",
+                     date_str, r.get("home","")+"v"+r.get("away",""),
+                     h_score, a_score, r["result"], btype, label or team)
+
+    log.info("Auto-settled: %d records", updated)
+    return updated
+
 def _gh_h(): return {"Authorization":"token "+GH_TOKEN,"Content-Type":"application/json"}
 
 def _find_gid(gists):
@@ -916,11 +1006,13 @@ def run():
     now_tw    = datetime.datetime.utcnow() + datetime.timedelta(hours=8)
     today_str = now_tw.strftime("%Y-%m-%d")
     log.info("TW time: %s", now_tw.strftime("%Y-%m-%d %H:%M"))
-    official = (0 <= now_tw.hour < 7)
+    official = (now_tw.hour >= 23 or now_tw.hour < 7)  # 台灣時間 23:00–07:00
 
     if not ODDS_API_KEY: log.error("ODDS_API_KEY not set"); return
 
     hist      = load_hist()
+    settled_n = settle_hist(hist)       # 結算昨天以前的未結算紀錄
+    if settled_n > 0: save_hist(hist)   # 有更新就立即存回 Gist
     espn_ok   = fetch_espn_ratings()
     il_src    = fetch_injury_list()
     pitchers  = fetch_probable_pitchers()
@@ -1273,7 +1365,8 @@ def run():
                 else:
                     _label = ""
                 today_records.append({"date":today_str,"team":str(bteam),"home":home,"away":away,
-                                      "price":bp,"edge":round(raw_edge,4),"conf":round(bet_conf,3),
+                                      "price":bp,"stake":round(stake,1),
+                                      "edge":round(raw_edge,4),"conf":round(bet_conf,3),
                                       "bet_type":btype,"result":None,
                                       "label":_label,
                                       "market_total":market_total if btype==BET_TOT else None})
