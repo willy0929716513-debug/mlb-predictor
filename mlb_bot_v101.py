@@ -633,6 +633,11 @@ def settle_hist(hist):
     today = datetime.date.today().isoformat()
     pending = [r for r in hist
                if r.get("result") is None and r.get("date","") < today]
+    log.info("settle_hist: total=%d pending=%d (today=%s)", len(hist), len(pending), today)
+    if pending:
+        s = pending[0]
+        log.info("settle_hist sample: date=%s home=%r away=%r team=%r bet=%r",
+                 s.get("date"), s.get("home"), s.get("away"), s.get("team"), s.get("bet_type"))
     if not pending: return 0
 
     by_date = {}
@@ -647,7 +652,7 @@ def settle_hist(hist):
                     "fields":"dates,games,teams,home,away,team,name,score,status,detailedState"},
             timeout=10,
         )
-        if not data: continue
+        if not data: log.warning("settle_hist: no API data for %s", date_str); continue
 
         # 建立 (home隊名key, away隊名key) -> (h_score, a_score) 查找表
         score_map = {}
@@ -661,6 +666,7 @@ def settle_hist(hist):
                 hk = _tkey(hd.get("team",{}).get("name",""))
                 ak = _tkey(ad.get("team",{}).get("name",""))
                 score_map[(hk, ak)] = (int(hs), int(as_))
+        log.info("settle_hist %s: %d final games, %d pending picks", date_str, len(score_map), len(records))
 
         for r in records:
             r_hk = _tkey(r.get("home",""))
