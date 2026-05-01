@@ -369,10 +369,10 @@ def _fetch_recent_era(pitcher_id, last_n=3):
             if td.get("team",{}).get("id") == tid:
                 r = td.get("teamStats",{}).get("batting",{}).get("runs")
                 if r is not None:
-                    try: rs_vals.append(float(r))
+                    try: rs_vals.append(min(float(r), 10.0))  # 單場上限 10，避免爆炸場污染均值
                     except: pass
                 break
-    rs_ret = round(sum(rs_vals)/len(rs_vals), 2) if rs_vals else None
+    rs_ret = round(min(sum(rs_vals)/len(rs_vals), 8.0), 2) if rs_vals else None  # 均值上限 8.0
     return era_ret, rs_ret
 
 def build_recent_era_cache(pitchers_dict):
