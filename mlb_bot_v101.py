@@ -30,6 +30,8 @@ KELLY          = 0.12
 KELLY_MAX      = 150.0
 KELLY_MIN      = 5.0
 MAX_PICKS      = 5      # CLV 排序後只取前 N 名，讓推薦穩定
+LINE_CLV_MIN   = 0.0    # 線路 CLV 門檻：市場需往我方方向移動（或無前次資料才放行）
+ODDS_SNAP_PATH = "docs/odds_snapshot.json"
 LEAGUE_ERA     = 4.20
 HIST_TTL       = 90
 GAP1, GAP2, GAP3 = 1.5, 2.5, 3.5
@@ -711,6 +713,34 @@ def settle_hist(hist):
     log.info("Auto-settled: %d records", updated)
     return updated
 
+# ── 線路 CLV 快照 ────────────────────────────────
+_SIDE_KEY = {
+    "home":"home_ml","away":"away_ml",
+    "rl_h":"rl_h","rl_a":"rl_a",
+    "rl_h_25":"rl_h_25","rl_a_25":"rl_a_25",
+    "over":"over","under":"under",
+}
+
+def load_odds_snapshot():
+    try:
+        with open(ODDS_SNAP_PATH,"r",encoding="utf-8") as f:
+            return json.load(f)
+    except:
+        return {}
+
+def save_odds_snapshot(snap):
+    try:
+        with open(ODDS_SNAP_PATH,"w",encoding="utf-8") as f:
+            json.dump(snap,f,ensure_ascii=False,indent=2)
+    except Exception as e:
+        log.warning("save odds snap: %s", e)
+
+def line_clv(curr_price, prev_price):
+    """市場賠率移動帶來的真實 CLV 信號（%）：
+    正值 = 賠率縮短（市場認同我方），負值 = 賠率拉長（市場不認同）。"""
+    if not prev_price or not curr_price: return None
+    return round((1/curr_price - 1/prev_price) * 100, 2)
+
 def _gh_h(): return {"Authorization":"token "+GH_TOKEN,"Content-Type":"application/json"}
 
 def _find_gid(gists):
@@ -1032,6 +1062,9 @@ def run():
     season_games = sum(1 for r in hist if r.get("date","") >= season_start)
     picks, today_records = [], []
 
+    prev_snap = load_odds_snapshot()
+    new_snap  = {}
+
     for game in odds_data:
         if game.get("sport_key") != "baseball_mlb": continue
         commence = game.get("commence_time","")
@@ -1124,6 +1157,17 @@ def run():
                             if under_price is None or p>under_price: under_price=p; under_book=bk_name
         if home_price is None or away_price is None: continue
 
+        # ── 儲存本次賠率快照（供下次計算線路 CLV）──
+        snap_key = "%s|%s|%s" % (game_date_str, home, away)
+        new_snap[snap_key] = {
+            "ts":today_str,
+            "home_ml":home_price,"away_ml":away_price,
+            "rl_h":rl_h_price,"rl_a":rl_a_price,
+            "rl_h_25":rl_h_price_25,"rl_a_25":rl_a_price_25,
+            "over":over_price,"under":under_price,
+        }
+        prev_game = prev_snap.get(snap_key, {})
+
         con_h = round(sum(con_h_prices)/len(con_h_prices),3) if con_h_prices else home_price
         con_a = round(sum(con_a_prices)/len(con_a_prices),3) if con_a_prices else away_price
         if con_h <= 0 or con_a <= 0: continue  # guard: 防止除以零
@@ -1206,12 +1250,16 @@ def run():
             _mp_min = MIN_MODEL_P_RL if btype==BET_RL else (MIN_MODEL_P_TOT if btype==BET_TOT else MIN_MODEL_P_ML)
             if model_p < _mp_min: continue
             if bet_conf<0.65: continue
+            # ── 線路 CLV 過濾：有前次賠率才比較，無資料直接放行 ──
+            prev_bp = prev_game.get(_SIDE_KEY.get(bside,""))
+            lclv = line_clv(bp, prev_bp)
+            if lclv is not None and lclv < LINE_CLV_MIN: continue
             stake=kelly_stake(raw_edge,model_p,bp,conf=bet_conf)
             if stake<KELLY_MIN: continue
             score=raw_edge*bet_conf
             if best_pick is None or score>best_pick["score"]:
                 best_pick={"btype":btype,"bside":bside,"bteam":bteam,
-                           "bp":bp,"bk":bk,"model_p":model_p,
+                           "bp":bp,"bk":bk,"model_p":model_p,"lclv":lclv,
                            "raw_edge":raw_edge,"bet_conf":bet_conf,
                            "con_p":con_p,"stake":stake,"score":score}
 
@@ -1228,6 +1276,7 @@ def run():
         bet_conf = best_pick["bet_conf"]
         con_p    = best_pick["con_p"]
         stake    = best_pick["stake"]
+        lclv     = best_pick.get("lclv")  # 線路 CLV（%），None = 首次出現無前次資料
 
         if raw_edge>=0.18 and bet_conf>=0.88:   tier="💎 頂級"
         elif raw_edge>=0.15 and bet_conf>=0.80: tier="🔥 強力"
@@ -1323,7 +1372,9 @@ def run():
             "⚾ 先發: %s — %s"%(a_sp_str,h_sp_str),
             "💰 推薦: %s"%bet_desc,
             stats_ln,
-            "> Edge: **%+.1f%%**%s | Kelly: $%.1f"%(raw_edge*100,cf_note,stake),
+            "> Edge: **%+.1f%%**%s | Kelly: $%.1f%s"%(
+                raw_edge*100,cf_note,stake,
+                " | 線路CLV: **%+.1f%%**"%lclv if lclv is not None else " | 線路CLV: 首次出現"),
         ]
         if last_line: msg_lines.append(last_line)
         msg="\n".join(msg_lines)+"\n"
@@ -1332,7 +1383,7 @@ def run():
         ex=next((i for i,p in enumerate(picks) if (p["home"],p["away"])==gk),None)
         _pick = {"msg":msg,"tier":tier,"team":str(bteam),"home":home,"away":away,
                  "edge":raw_edge,"conf":bet_conf,"stake":stake,"score":best_pick["score"],
-                 "clv":round(raw_edge*100,1),
+                 "clv":round(raw_edge*100,1),"line_clv":lclv,
                  "game_date":game_date_str,"game_time":game_time_str,"game_dt":game_dt,
                  "btype":btype,"bp":bp,"bk":bk,"con_p":con_p,"model_p":model_p,
                  "away_cn":acn,"home_cn":hcn,"bet_label":bet_desc.replace("`","").split("@")[0].strip(),
@@ -1472,6 +1523,7 @@ def run():
 
     out="\n".join(lines)
     write_pages_json(picks, hist, now_tw)
+    save_odds_snapshot(new_snap)
     if official and today_records: save_hist(hist+today_records)
     log.info("Sending %d chars",len(out))
     send(out)
