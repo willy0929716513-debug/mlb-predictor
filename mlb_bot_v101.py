@@ -999,6 +999,7 @@ def write_pages_json(picks, hist, now_tw):
             "model_total": p.get("model_total"),
             "market_total":p.get("market_total"),
             "park_factor": p.get("park_factor"),
+            "line_clv":    p.get("line_clv"),
             "game_date":   p.get("game_date",""),
             "game_time":   p.get("game_time",""),
         })
