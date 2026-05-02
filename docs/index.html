@@ -220,7 +220,7 @@ function renderCard(p) {
       <div class="flex-1">
         <div class="flex justify-between text-xs text-slate-400 mb-1">
           <span>信心 ${confBar}%</span>
-          <span class="text-amber-300 font-semibold">CLV ${p.clv != null ? (p.clv >= 0 ? "+" : "") + p.clv.toFixed(1) + "%" : edgeStr}</span>
+          <span>Edge ${edgeStr}</span>
         </div>
         <div class="h-1.5 bg-slate-700 rounded-full overflow-hidden">
           <div class="h-full rounded-full ${confBar>=80?'bg-emerald-500':confBar>=70?'bg-amber-400':'bg-sky-400'}"
@@ -231,6 +231,17 @@ function renderCard(p) {
         模型 <span class="text-white font-medium">${p.model_p.toFixed(1)}%</span>
       </div>
     </div>
+    ${p.line_clv != null ? `
+    <div class="mt-2 flex items-center justify-between text-xs">
+      <span class="text-slate-500">線路 CLV</span>
+      <span class="font-semibold ${p.line_clv >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${p.line_clv >= 0 ? '+' : ''}${p.line_clv.toFixed(1)}%
+        <span class="text-slate-500 font-normal">${p.line_clv >= 0 ? '市場認同↑' : '市場反向↓'}</span>
+      </span>
+    </div>` : `
+    <div class="mt-2 flex items-center justify-between text-xs">
+      <span class="text-slate-500">線路 CLV</span>
+      <span class="text-slate-500">首次出現</span>
+    </div>`}
   </div>`;
 }
 
