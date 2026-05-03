@@ -35,6 +35,8 @@ MAX_RL_PICKS   = 2      # 每日RL推薦上限（防止同日過度集中）
 LINE_CLV_MIN   = 0.0    # 線路 CLV 門檻：市場需往我方方向移動（或無前次資料才放行）
 BLOWOUT_ERA_DIFF = 1.5  # ERA差門檻：弱投手隊不推薦讓分受讓
 BLOWOUT_ERA_POOR = 4.20 # 弱投手ERA門檻（≥此值且ERA差距大，拒絕RL）
+ELITE_ERA_DUAL   = 3.50 # 雙方投手都低於此值時視為菁英對決
+ELITE_ERA_OVER_P = 0.68 # 菁英投手對決時，OVER需達更高概率門檻（防RS拉高）
 ODDS_SNAP_PATH = "docs/odds_snapshot.json"
 LEAGUE_ERA     = 4.20
 HIST_TTL       = 90
@@ -1280,6 +1282,12 @@ def run():
                     # 主隊受讓：若客隊投手明顯較優且客隊模型分差大 → 拒絕
                     if _era_diff > BLOWOUT_ERA_DIFF and _h_era_v >= BLOWOUT_ERA_POOR and _margin < -1.2:
                         continue
+            # ── ★ 菁英對決保護：雙方ERA均優時，OVER門檻提高 ──
+            # 若雙SP ERA < 3.50，RS易誤拉高total，需更高p_over才下Over
+            if btype == BET_TOT and bside == "over":
+                if _h_era_v < ELITE_ERA_DUAL and _a_era_v < ELITE_ERA_DUAL:
+                    if model_p < ELITE_ERA_OVER_P:
+                        continue
             # ── 線路 CLV 過濾：有前次賠率才比較，無資料直接放行 ──
             prev_bp = prev_game.get(_SIDE_KEY.get(bside,""))
             lclv = line_clv(bp, prev_bp)
@@ -1311,6 +1319,21 @@ def run():
         if raw_edge>=0.18 and bet_conf>=0.88:   tier="💎 頂級"
         elif raw_edge>=0.15 and bet_conf>=0.80: tier="🔥 強力"
         else:                                   tier="⭐ 穩定"
+
+        # 預先計算歷史紀錄所需的 label（RL=讓分點數, TOT=OVER/UNDER, ML=""）
+        if btype==BET_RL:
+            if bside in ("rl_h","rl_h_25"):
+                _h_pt = (rl_h_pts_25 if bside=="rl_h_25" and rl_h_pts_25 is not None
+                         else (rl_h_pts if rl_h_pts is not None else (-2.5 if bside=="rl_h_25" else -1.5)))
+                _hist_label = ("%.4g"%_h_pt if _h_pt<0 else "+%.4g"%_h_pt)
+            else:
+                _h_pt = (rl_h_pts_25 if bside=="rl_a_25" and rl_h_pts_25 is not None
+                         else (rl_h_pts if rl_h_pts is not None else (-2.5 if bside=="rl_a_25" else -1.5)))
+                _hist_label = ("+%.4g"%-_h_pt if -_h_pt>0 else "%.4g"%-_h_pt)
+        elif btype==BET_TOT:
+            _hist_label = "OVER" if bside=="over" else "UNDER"
+        else:
+            _hist_label = ""
 
         acn=CN.get(away,away); hcn=CN.get(home,home)
         h_sp_n = sp_info.get("home_name","TBD") if sp_info else "TBD"
@@ -1426,37 +1449,14 @@ def run():
                  "pred_away":round(pred.get("a_expected",0),1),"pred_home":round(pred.get("h_expected",0),1),
                  "model_total":round(pred.get("pure_total",0),1) if btype==BET_TOT else None,
                  "market_total":market_total if btype==BET_TOT else None,
-                 "park_factor":round(pred.get("park_factor",1.0),2) if abs(pred.get("park_factor",1.0)-1.0)>0.05 else None}
+                 "park_factor":round(pred.get("park_factor",1.0),2) if abs(pred.get("park_factor",1.0)-1.0)>0.05 else None,
+                 "hist_label":_hist_label,
+                 "hist_mkt_total":market_total if btype==BET_TOT else None}
         if ex is not None:
             if best_pick["score"]>picks[ex].get("score",0):
                 picks[ex]=_pick
         else:
             picks.append(_pick)
-        if official and game_date_str==today_str:
-            rk=(home,away,today_str)
-            already_in_hist  = any((r.get("home"),r.get("away"),r.get("date"))==rk for r in hist)
-            already_in_today = any((r.get("home"),r.get("away"),r.get("date"))==rk for r in today_records)
-            if not already_in_hist and not already_in_today:
-                bside_v = best_pick["bside"]
-                if btype==BET_RL:
-                    if bside_v in ("rl_h","rl_h_25"):
-                        h_pt = (rl_h_pts_25 if bside_v=="rl_h_25" and rl_h_pts_25 is not None
-                                else (rl_h_pts if rl_h_pts is not None else (-2.5 if bside_v=="rl_h_25" else -1.5)))
-                        _label = ("%.4g"%h_pt if h_pt<0 else "+%.4g"%h_pt)
-                    else:
-                        h_pt = (rl_h_pts_25 if bside_v=="rl_a_25" and rl_h_pts_25 is not None
-                                else (rl_h_pts if rl_h_pts is not None else (-2.5 if bside_v=="rl_a_25" else -1.5)))
-                        _label = ("+%.4g"%-h_pt if -h_pt>0 else "%.4g"%-h_pt)
-                elif btype==BET_TOT:
-                    _label = "OVER" if bside_v=="over" else "UNDER"
-                else:
-                    _label = ""
-                today_records.append({"date":today_str,"team":str(bteam),"home":home,"away":away,
-                                      "price":bp,"stake":round(stake,1),
-                                      "edge":round(raw_edge,4),"conf":round(bet_conf,3),
-                                      "bet_type":btype,"result":None,
-                                      "label":_label,
-                                      "market_total":market_total if btype==BET_TOT else None})
 
     # 當天比賽優先，同日純按 CLV（score）降序排列，讓輸出穩定
     picks.sort(key=lambda x:(0 if x["game_date"]==today_str else 1,
@@ -1475,6 +1475,29 @@ def run():
         else:
             _filtered.append(p)
     picks = _filtered
+
+    # ★ 歷史紀錄只寫入最終顯示的注單（過濾後），避免被拒之注單汙染勝率統計
+    if official:
+        for p in picks:
+            if p["game_date"] != today_str: continue
+            rk = (p["home"], p["away"], today_str)
+            already_in_hist  = any((r.get("home"),r.get("away"),r.get("date"))==rk for r in hist)
+            already_in_today = any((r.get("home"),r.get("away"),r.get("date"))==rk for r in today_records)
+            if not already_in_hist and not already_in_today:
+                today_records.append({
+                    "date":    today_str,
+                    "team":    p["team"],
+                    "home":    p["home"],
+                    "away":    p["away"],
+                    "price":   round(p["bp"], 2),
+                    "stake":   round(p["stake"], 1),
+                    "edge":    round(p["edge"], 4),
+                    "conf":    round(p["conf"], 3),
+                    "bet_type":p["btype"],
+                    "result":  None,
+                    "label":   p.get("hist_label",""),
+                    "market_total": p.get("hist_mkt_total"),
+                })
 
     total_settled,wins,wr=calc_perf(hist)
     now_str  = now_tw.strftime("%m/%d %H:%M")
