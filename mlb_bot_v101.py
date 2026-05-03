@@ -15,14 +15,15 @@ EDGE_MIN       = 0.08
 EDGE_MIN_RL    = 0.10   # 讓分 raw_edge 門檻（不乘 bet_conf）
 EDGE_MIN_TOT   = 0.09   # 大小分（totals）edge 門檻
 MIN_MODEL_P_ML  = 0.55  # ML 模型勝率門檻
-MIN_MODEL_P_RL  = 0.65  # RL 門檻
+MIN_MODEL_P_RL  = 0.68  # RL 門檻（↑0.65→0.68 減少邊際RL注單）
 MIN_MODEL_P_TOT = 0.60  # TOT 門檻：避免貼線邊際注單
 MOD_W          = 0.18
 MKT_W          = 0.82
 TOTAL_STD      = 2.30   # 兩隊合計得分標準差
 STD            = 1.80   # 比賽勝負分差標準差（↑1.65→1.80 減少過度自信）
 RL_STD_MULT    = 1.90   # 讓分概率用更高不確定性
-RS_BLEND_W     = 0.12   # 投手隊友得分支援調整幅度
+RS_BLEND_W     = 0.12   # 投手隊友得分支援調整幅度（用於ML/RL預測）
+RS_BLEND_W_TOT = 0.04   # 大小分預測的RS權重（極低，防止RS拉高Over）
 MIN_P          = 1.35
 MAX_P          = 2.50
 BANK           = 1000.0
@@ -30,7 +31,10 @@ KELLY          = 0.12
 KELLY_MAX      = 150.0
 KELLY_MIN      = 5.0
 MAX_PICKS      = 5      # CLV 排序後只取前 N 名，讓推薦穩定
+MAX_RL_PICKS   = 2      # 每日RL推薦上限（防止同日過度集中）
 LINE_CLV_MIN   = 0.0    # 線路 CLV 門檻：市場需往我方方向移動（或無前次資料才放行）
+BLOWOUT_ERA_DIFF = 1.5  # ERA差門檻：弱投手隊不推薦讓分受讓
+BLOWOUT_ERA_POOR = 4.20 # 弱投手ERA門檻（≥此值且ERA差距大，拒絕RL）
 ODDS_SNAP_PATH = "docs/odds_snapshot.json"
 LEAGUE_ERA     = 4.20
 HIST_TTL       = 90
@@ -883,27 +887,35 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
 
     # ⑥b ★ 投手隊友得分支援（run support/GS vs 隊伍場均）
     # 若這投手先發時隊伍習慣多/少得分，微調期望得分
+    # ML/RL使用完整RS_BLEND_W；大小分使用極低RS_BLEND_W_TOT（防RS拉高Over）
     h_rs = _PITCHER_RS.get(home_sp)
     a_rs = _PITCHER_RS.get(away_sp)
     h_rpg = hr.get("off", h_exp)   # 用 off 當隊伍基準得分
     a_rpg = ar.get("off", a_exp)
+    h_exp_tot = h_exp  # 大小分專用，RS權重更低
+    a_exp_tot = a_exp
     if h_rs is not None and h_rpg > 0:
-        h_exp = round(h_exp + (h_rs - h_rpg) * RS_BLEND_W, 3)
+        rs_adj_h = h_rs - h_rpg
+        h_exp     = round(h_exp     + rs_adj_h * RS_BLEND_W,     3)
+        h_exp_tot = round(h_exp_tot + rs_adj_h * RS_BLEND_W_TOT, 3)
     if a_rs is not None and a_rpg > 0:
-        a_exp = round(a_exp + (a_rs - a_rpg) * RS_BLEND_W, 3)
+        rs_adj_a = a_rs - a_rpg
+        a_exp     = round(a_exp     + rs_adj_a * RS_BLEND_W,     3)
+        a_exp_tot = round(a_exp_tot + rs_adj_a * RS_BLEND_W_TOT, 3)
 
     # ⑦ ★ 球場係數
     pf = PARK_FACTOR.get(home.lower(), 1.0)
-    h_exp *= pf
-    a_exp *= pf
+    h_exp     *= pf; a_exp     *= pf
+    h_exp_tot *= pf; a_exp_tot *= pf
 
     # ⑧ ★ 天氣（選用）
     if game_dt and WEATHER_API_KEY:
         wf = fetch_weather(home, game_dt)
-        h_exp *= wf; a_exp *= wf
+        h_exp     *= wf; a_exp     *= wf
+        h_exp_tot *= wf; a_exp_tot *= wf
 
-    h_exp = max(2.5, h_exp)
-    a_exp = max(2.5, a_exp)
+    h_exp = max(2.5, h_exp); a_exp = max(2.5, a_exp)
+    h_exp_tot = max(2.5, h_exp_tot); a_exp_tot = max(2.5, a_exp_tot)
     margin = h_exp - a_exp
 
     dyn_std = STD + max(0, (10-games)/10) * 0.15
@@ -911,26 +923,28 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
     # ★ 勝率上限 90%：現實中單場勝率不會超過此值
     model_win_p = min(model_win_p, 0.82)  # 單場 ML 勝率上限 82%（原 90% 過高）
 
-    pure_total  = h_exp + a_exp
-    model_total = round(pure_total*0.30 + market_total*0.70, 2)
+    pure_total     = h_exp     + a_exp
+    pure_total_tot = h_exp_tot + a_exp_tot  # 大小分投注用（降低RS影響）
+    model_total    = round(pure_total*0.30 + market_total*0.70, 2)
     conf = total_confidence(pure_total, market_total)
     conf *= (pitcher_confidence(home_sp) * pitcher_confidence(away_sp)) ** 0.5
 
     return {
-        "home_win_prob": round(model_win_p, 4),
-        "away_win_prob": round(1-model_win_p, 4),
-        "model_total":   model_total,
-        "pure_total":    round(pure_total, 2),
-        "conf_factor":   round(max(0.40, min(1.0, conf)), 3),
-        "h_expected":    round(h_exp, 2),
-        "a_expected":    round(a_exp, 2),
-        "margin":        round(margin, 3),
-        "park_factor":   pf,
-        "dyn_std":       round(dyn_std, 3),
-        "h_rs":          h_rs,          # 投手專屬 RS/GS（API 有才有，否則 None）
-        "a_rs":          a_rs,
-        "h_team_rpg":    round(hr.get("off", 4.5), 2),  # 主隊場均得分（always available）
-        "a_team_rpg":    round(ar.get("off", 4.5), 2),
+        "home_win_prob":  round(model_win_p, 4),
+        "away_win_prob":  round(1-model_win_p, 4),
+        "model_total":    model_total,
+        "pure_total":     round(pure_total, 2),
+        "pure_total_tot": round(pure_total_tot, 2),
+        "conf_factor":    round(max(0.40, min(1.0, conf)), 3),
+        "h_expected":     round(h_exp, 2),
+        "a_expected":     round(a_exp, 2),
+        "margin":         round(margin, 3),
+        "park_factor":    pf,
+        "dyn_std":        round(dyn_std, 3),
+        "h_rs":           h_rs,          # 投手專屬 RS/GS（API 有才有，否則 None）
+        "a_rs":           a_rs,
+        "h_team_rpg":     round(hr.get("off", 4.5), 2),
+        "a_team_rpg":     round(ar.get("off", 4.5), 2),
     }
 
 def runline_prob(margin, spread, dyn_std):
@@ -1217,7 +1231,8 @@ def run():
             p_a_rl_25 = 1.0 - p_h_rl_25
 
         # ── ★ 大小分概率（50% 模型 + 50% 市場混合）─────────
-        _tot_blend = pred["pure_total"] * 0.50 + market_total * 0.50
+        # 使用 pure_total_tot（RS權重極低），防止高RS誤拉高Over概率
+        _tot_blend = pred["pure_total_tot"] * 0.50 + market_total * 0.50
         p_over  = over_prob(_tot_blend, market_total)
         p_under = 1.0 - p_over
 
@@ -1239,6 +1254,8 @@ def run():
         if under_price and con_un_p:  candidates.append((BET_TOT,"under","under",under_price,under_book,p_under,EDGE_MIN_TOT,None,con_un_p,0.88))
 
         best_pick=None
+        _h_era_v = get_pitcher_era(home_sp)
+        _a_era_v = get_pitcher_era(away_sp)
         for btype,bside,bteam,bp,bk,model_p,edge_min,blend_p,con_p,conf_mult in candidates:
             if bp is None or bp<=0 or con_p is None or con_p<=0: continue
             bet_conf = conf*conf_mult
@@ -1251,6 +1268,18 @@ def run():
             _mp_min = MIN_MODEL_P_RL if btype==BET_RL else (MIN_MODEL_P_TOT if btype==BET_TOT else MIN_MODEL_P_ML)
             if model_p < _mp_min: continue
             if bet_conf<0.65: continue
+            # ── ★ RL 爆冷保護：ERA差距大且模型分差同向 → 拒絕弱投手隊讓分受讓 ──
+            if btype == BET_RL:
+                _era_diff = _h_era_v - _a_era_v  # 正值=主隊投手較弱
+                _margin   = pred["margin"]        # 正值=主隊模型預期較強
+                if bside in ("rl_a","rl_a_25"):
+                    # 客隊受讓：若主隊投手明顯較優且模型分差大 → 拒絕
+                    if _era_diff < -BLOWOUT_ERA_DIFF and _a_era_v >= BLOWOUT_ERA_POOR and _margin > 1.2:
+                        continue
+                elif bside in ("rl_h","rl_h_25"):
+                    # 主隊受讓：若客隊投手明顯較優且客隊模型分差大 → 拒絕
+                    if _era_diff > BLOWOUT_ERA_DIFF and _h_era_v >= BLOWOUT_ERA_POOR and _margin < -1.2:
+                        continue
             # ── 線路 CLV 過濾：有前次賠率才比較，無資料直接放行 ──
             prev_bp = prev_game.get(_SIDE_KEY.get(bside,""))
             lclv = line_clv(bp, prev_bp)
@@ -1435,6 +1464,17 @@ def run():
                               x["game_date"],
                               x.get("game_dt") or datetime.datetime.min))
     picks = picks[:MAX_PICKS]  # 只取 CLV 最高的前 N 場
+
+    # ★ RL濃度控制：每日RL推薦不超過 MAX_RL_PICKS 場（防同日過度集中）
+    _rl_cnt = 0
+    _filtered = []
+    for p in picks:
+        if p.get("btype") == "讓分":
+            if _rl_cnt < MAX_RL_PICKS:
+                _filtered.append(p); _rl_cnt += 1
+        else:
+            _filtered.append(p)
+    picks = _filtered
 
     total_settled,wins,wr=calc_perf(hist)
     now_str  = now_tw.strftime("%m/%d %H:%M")
