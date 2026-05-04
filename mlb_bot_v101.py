@@ -32,6 +32,9 @@ KELLY_MAX      = 150.0
 KELLY_MIN      = 5.0
 MAX_PICKS      = 5      # CLV 排序後只取前 N 名，讓推薦穩定
 MAX_RL_PICKS   = 2      # 每日RL推薦上限（防止同日過度集中）
+RL_BET_CONF_MIN= 0.72  # RL 最低信心門檻（高於全局 0.65，邊際RL需更確定）
+RL_KELLY_MULT  = 0.75  # RL Kelly 折扣（不確定性更高，下注降低25%）
+RL_KELLY_MAX   = 100.0 # RL 最大下注上限（低於ML的150）
 LINE_CLV_MIN   = 0.0    # 線路 CLV 門檻：市場需往我方方向移動（或無前次資料才放行）
 BLOWOUT_ERA_DIFF = 1.5  # ERA差門檻：弱投手隊不推薦讓分受讓
 BLOWOUT_ERA_POOR = 4.20 # 弱投手ERA門檻（≥此值且ERA差距大，拒絕RL）
@@ -1271,22 +1274,28 @@ def run():
             _mp_min = MIN_MODEL_P_RL if btype==BET_RL else (MIN_MODEL_P_TOT if btype==BET_TOT else MIN_MODEL_P_ML)
             if model_p < _mp_min: continue
             if bet_conf<0.65: continue
-            # ── ★ RL 爆冷保護：ERA差距大且模型分差同向 → 拒絕弱投手隊讓分受讓 ──
+            if btype == BET_RL and bet_conf < RL_BET_CONF_MIN: continue  # RL 需更高信心
+            # ── ★ RL 保護層（依序：信心→TBD→爆冷→王牌→菁英對決）──
             if btype == BET_RL:
+                # ① TBD 投手：ERA預設值不可靠，不推薦讓分受讓
+                if bside in ("rl_a","rl_a_25") and not home_sp:
+                    continue
+                if bside in ("rl_h","rl_h_25") and not away_sp:
+                    continue
                 _era_diff = _h_era_v - _a_era_v  # 正值=主隊投手較弱
                 _margin   = pred["margin"]        # 正值=主隊模型預期較強
                 if bside in ("rl_a","rl_a_25"):
-                    # 客隊受讓：若主隊投手明顯較優且模型分差大 → 拒絕
+                    # ② 爆冷保護：客隊弱投手 + ERA差大 + 模型分差大
                     if _era_diff < -BLOWOUT_ERA_DIFF and _a_era_v >= BLOWOUT_ERA_POOR and _margin > 1.2:
                         continue
-                    # 王牌封殺：客隊需面對主隊王牌（ERA≤ACE_ERA_RL）→ 得分難，拒絕受讓
+                    # ③ 王牌封殺：面對 ERA≤2.70 王牌，客隊幾乎無法得分
                     if _h_era_v <= ACE_ERA_RL:
                         continue
                 elif bside in ("rl_h","rl_h_25"):
-                    # 主隊受讓：若客隊投手明顯較優且客隊模型分差大 → 拒絕
+                    # ② 爆冷保護：主隊弱投手 + ERA差大 + 模型分差大
                     if _era_diff > BLOWOUT_ERA_DIFF and _h_era_v >= BLOWOUT_ERA_POOR and _margin < -1.2:
                         continue
-                    # 王牌封殺：主隊需面對客隊王牌（ERA≤ACE_ERA_RL）→ 得分難，拒絕受讓
+                    # ③ 王牌封殺：面對 ERA≤2.70 王牌，主隊幾乎無法得分
                     if _a_era_v <= ACE_ERA_RL:
                         continue
             # ── ★ 菁英對決保護：雙方ERA均優時，OVER門檻提高 ──
@@ -1299,9 +1308,15 @@ def run():
             prev_bp = prev_game.get(_SIDE_KEY.get(bside,""))
             lclv = line_clv(bp, prev_bp)
             if lclv is not None and lclv < LINE_CLV_MIN: continue
-            stake=kelly_stake(raw_edge,model_p,bp,conf=bet_conf)
-            if stake<KELLY_MIN: continue
-            score=raw_edge*bet_conf
+            stake = kelly_stake(raw_edge, model_p, bp, conf=bet_conf)
+            if btype == BET_RL:
+                # RL 下注降低25%、上限100（不確定性更高）
+                stake = round(min(max(KELLY_MIN, stake * RL_KELLY_MULT), RL_KELLY_MAX), 1)
+            if stake < KELLY_MIN: continue
+            score = raw_edge * bet_conf
+            # ④ 菁英對決中RL降分，讓TOT注單更容易獲選（偏好UNDER而非RL）
+            if btype == BET_RL and _h_era_v < ELITE_ERA_DUAL and _a_era_v < ELITE_ERA_DUAL:
+                score *= 0.80
             if best_pick is None or score>best_pick["score"]:
                 best_pick={"btype":btype,"bside":bside,"bteam":bteam,
                            "bp":bp,"bk":bk,"model_p":model_p,"lclv":lclv,
@@ -1402,7 +1417,7 @@ def run():
             tot_inv=(1/con_ov_p+1/con_un_p) if (con_ov_p and con_un_p) else 1.0
             mkt_tot_p=(1/con_p)/tot_inv if tot_inv>0 else 1/con_p
             bet_desc="`%s %.1f` @ **%.2f** (%s)"%(ov_un,market_total,bp,bk)
-            stats_ln="> 共識賠率: %.2f | 模型總分: %.1f | 市場隱含: %.1f%%"%(con_p,pred["pure_total"],mkt_tot_p*100)
+            stats_ln="> 共識賠率: %.2f | 模型總分: %.1f | 市場隱含: %.1f%%"%(con_p,pred["pure_total_tot"],mkt_tot_p*100)
             mkt_tag=" [大小分]"
             ou_str=""  # 大小分注單不重複顯示方向
 
@@ -1565,7 +1580,7 @@ def run():
                 if rl_be*0.90>be: be=rl_be; bp2=rl_hp if rl_he>=rl_ae else rl_ap; best_lbl="RL"
             # 大小分 edge（比較時套用0.88信心折扣）
             if ov_p and un_p:
-                p_ov=over_prob(pr["pure_total"],mt)
+                p_ov=over_prob(pr.get("pure_total_tot", pr["pure_total"]),mt)
                 tot_he=p_ov-1/ov_p; tot_ue=(1-p_ov)-1/un_p; tot_be=max(tot_he,tot_ue)
                 if tot_be*0.88>be: be=tot_be; bp2=ov_p if tot_he>=tot_ue else un_p; best_lbl="TOT"
             diag.append("`%s@%s` [%s] Edge=%+.1f%% P=%.2f conf=%.0f%% SP:%s/%s"%(
