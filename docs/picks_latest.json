@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-05 00:35 (台灣時間)",
+  "generated_at": "2026-05-05 01:03 (台灣時間)",
   "date": "2026-05-05",
   "stats": {
     "settled": 77,
@@ -20,7 +20,7 @@
       "bet_label": "勇士 讓分(+1.5)",
       "bk": "LowVig.ag",
       "bp": 1.61,
-      "con_p": 1.592,
+      "con_p": 1.595,
       "edge": 12.9,
       "conf": 78.2,
       "stake": 23.9,
@@ -38,7 +38,7 @@
       "model_total": null,
       "market_total": null,
       "park_factor": 0.93,
-      "line_clv": 0.38,
+      "line_clv": 0.0,
       "game_date": "2026-05-05",
       "game_time": "09:41"
     },
@@ -52,7 +52,7 @@
       "bet_label": "小熊 獨贏",
       "bk": "BetOnline.ag",
       "bp": 1.5,
-      "con_p": 1.486,
+      "con_p": 1.484,
       "edge": 12.8,
       "conf": 66.8,
       "stake": 30.8,
