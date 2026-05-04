@@ -12,10 +12,10 @@ GIST_DESC = "mlb_bot_history"
 
 # ── 模型參數 ──────────────────────────────────
 EDGE_MIN       = 0.08
-EDGE_MIN_RL    = 0.10   # 讓分 raw_edge 門檻（不乘 bet_conf）
+EDGE_MIN_RL    = 0.12   # 讓分 raw_edge 門檻（↑0.10→0.12 要求更明確優勢）
 EDGE_MIN_TOT   = 0.09   # 大小分（totals）edge 門檻
 MIN_MODEL_P_ML  = 0.55  # ML 模型勝率門檻
-MIN_MODEL_P_RL  = 0.68  # RL 門檻（↑0.65→0.68 減少邊際RL注單）
+MIN_MODEL_P_RL  = 0.73  # RL 門檻（↑0.68→0.73 過濾70-72%邊際注單）
 MIN_MODEL_P_TOT = 0.60  # TOT 門檻：避免貼線邊際注單
 MOD_W          = 0.18
 MKT_W          = 0.82
@@ -37,6 +37,7 @@ BLOWOUT_ERA_DIFF = 1.5  # ERA差門檻：弱投手隊不推薦讓分受讓
 BLOWOUT_ERA_POOR = 4.20 # 弱投手ERA門檻（≥此值且ERA差距大，拒絕RL）
 ELITE_ERA_DUAL   = 3.50 # 雙方投手都低於此值時視為菁英對決
 ELITE_ERA_OVER_P = 0.68 # 菁英投手對決時，OVER需達更高概率門檻（防RS拉高）
+ACE_ERA_RL       = 2.70 # 面對此ERA以下的王牌投手時，拒絕推薦讓分受讓
 ODDS_SNAP_PATH = "docs/odds_snapshot.json"
 LEAGUE_ERA     = 4.20
 HIST_TTL       = 90
@@ -1278,9 +1279,15 @@ def run():
                     # 客隊受讓：若主隊投手明顯較優且模型分差大 → 拒絕
                     if _era_diff < -BLOWOUT_ERA_DIFF and _a_era_v >= BLOWOUT_ERA_POOR and _margin > 1.2:
                         continue
+                    # 王牌封殺：客隊需面對主隊王牌（ERA≤ACE_ERA_RL）→ 得分難，拒絕受讓
+                    if _h_era_v <= ACE_ERA_RL:
+                        continue
                 elif bside in ("rl_h","rl_h_25"):
                     # 主隊受讓：若客隊投手明顯較優且客隊模型分差大 → 拒絕
                     if _era_diff > BLOWOUT_ERA_DIFF and _h_era_v >= BLOWOUT_ERA_POOR and _margin < -1.2:
+                        continue
+                    # 王牌封殺：主隊需面對客隊王牌（ERA≤ACE_ERA_RL）→ 得分難，拒絕受讓
+                    if _a_era_v <= ACE_ERA_RL:
                         continue
             # ── ★ 菁英對決保護：雙方ERA均優時，OVER門檻提高 ──
             # 若雙SP ERA < 3.50，RS易誤拉高total，需更高p_over才下Over
