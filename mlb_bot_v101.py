@@ -49,6 +49,10 @@ ESPN_ALPHA_MAX = 0.65
 SP_RECENT_W    = 0.80   # 本賽季 ERA 權重（80%）
 SP_SEASON_W    = 0.20   # 四年歷史均值 ERA 權重（20%）
 SCORING_FORM_W = 0.10   # 近期打擊得分調整幅度（±10%）
+MIN_SP_IP_UNDER    = 5.0   # 先發場均局數門檻：低於此值UNDER需更高概率（開場/短局投手保護）
+UNDER_LOW_IP_EXTRA = 0.10  # 低局數先發UNDER額外概率門檻（+10%）
+UNDER_WHIP_THRESH  = 1.40  # 高WHIP門檻：任一先發超過此值時UNDER需額外確認
+UNDER_WHIP_EXTRA   = 0.05  # 高WHIP UNDER額外概率門檻（+5%）
 
 # ── ★ 球場係數（FanGraphs Park Factors 2024）──
 PARK_FACTOR = {
@@ -282,12 +286,15 @@ STAR_DISPLAY = {
 }
 
 # 動態快取
-_DYN_OUT      = {}
-_DYN_LTD      = {}
-_ESPN_RATINGS = {}
-_RECENT_ERA   = {}
-_PITCHER_RS   = {}  # pitcher_key -> run_support_per_start (隊友場均得分)
-_WEATHER_CACHE= {}
+_DYN_OUT        = {}
+_DYN_LTD        = {}
+_ESPN_RATINGS   = {}
+_RECENT_ERA     = {}
+_PITCHER_RS     = {}  # pitcher_key -> run_support_per_start (隊友場均得分)
+_PITCHER_IP     = {}  # pitcher_key -> avg_ip_per_qualifying_start (IP≥4.0才計入)
+_PITCHER_WHIP   = {}  # pitcher_key -> recent WHIP = (BB+H)/IP
+_RELIEVER_FLAGS = set()  # 偵測為牛棚型：有出賽紀錄但無任何IP≥4.0先發
+_WEATHER_CACHE  = {}
 
 
 # ══════════════════════════════════════════════
@@ -338,33 +345,44 @@ def get_star_injuries(team):
 # ══════════════════════════════════════════════
 
 def _fetch_recent_era(pitcher_id, last_n=3):
-    """返回 (近期ERA, 近期先發場均得分RS) 的 tuple；資料不足時各為 None"""
+    """返回 (近期ERA, RS, avg_ip, is_reliever) 的 tuple；資料不足時各欄位為 None/False。
+    is_reliever=True：有出賽紀錄但無任何 IP≥4.0 先發，視為牛棚型投手。
+    avg_ip：最近 qualifying 先發的場均局數。"""
     year = datetime.date.today().year
     data = safe_get(
         "https://statsapi.mlb.com/api/v1/people/%d/stats" % pitcher_id,
         params={"stats":"gameLog","group":"pitching","season":year},
         timeout=10,
     )
-    if not data: return None, None
+    if not data: return None, None, None, None, False
     splits = []
     for s in data.get("stats",[]): splits = s.get("splits",[]); break
-    starts = [s for s in splits
-              if float(s.get("stat",{}).get("inningsPitched","0") or 0) >= 3.0]
-    recent = starts[-last_n:] if len(starts) >= last_n else starts
-    if not recent: return None, None
 
-    # ── ERA ──────────────────────────────────────────────────
+    # 完整先發（IP ≥ 4.0，過濾開場型中繼）
+    proper_starts = [s for s in splits
+                     if float(s.get("stat",{}).get("inningsPitched","0") or 0) >= 4.0]
+    # 任何出賽（用於偵測牛棚投手）
+    any_apps = [s for s in splits
+                if float(s.get("stat",{}).get("inningsPitched","0") or 0) >= 0.1]
+    # 有出賽紀錄但無完整先發 → 牛棚型
+    is_reliever = (len(any_apps) > 0 and len(proper_starts) == 0)
+
+    recent = proper_starts[-last_n:] if len(proper_starts) >= last_n else proper_starts
+    if not recent: return None, None, None, None, is_reliever
+
+    # ── ERA + avg_ip + WHIP ──────────────────────────────────
     total_er = sum(float(s.get("stat",{}).get("earnedRuns","0") or 0) for s in recent)
     total_ip = sum(float(s.get("stat",{}).get("inningsPitched","0") or 0) for s in recent)
-    if total_ip < 3: return None, None
-    era = round(total_er / total_ip * 9, 2)
-    if era < 0.50:
-        log.debug("Recent ERA %.2f too low for %s, clamping", era, pitcher_id)
-        era_ret = None
-    else:
-        era_ret = min(era, 10.0)
+    total_bb = sum(float(s.get("stat",{}).get("baseOnBalls","0") or 0) for s in recent)
+    total_h  = sum(float(s.get("stat",{}).get("hits","0") or 0) for s in recent)
+    if total_ip < 4: return None, None, None, None, is_reliever
 
-    # ── Run Support：從各場 boxscore 取隊伍得分（linescore 無 team.id）──
+    era = round(total_er / total_ip * 9, 2)
+    era_ret  = None if era < 0.50 else min(era, 10.0)
+    avg_ip   = round(total_ip / len(recent), 1)
+    whip_ret = round((total_bb + total_h) / total_ip, 2) if total_ip > 0 else None
+
+    # ── Run Support：從各場 boxscore 取隊伍得分 ──
     rs_vals = []
     for s in recent:
         gpk = s.get("game",{}).get("gamePk")
@@ -381,15 +399,15 @@ def _fetch_recent_era(pitcher_id, last_n=3):
             if td.get("team",{}).get("id") == tid:
                 r = td.get("teamStats",{}).get("batting",{}).get("runs")
                 if r is not None:
-                    try: rs_vals.append(min(float(r), 10.0))  # 單場上限 10，避免爆炸場污染均值
+                    try: rs_vals.append(min(float(r), 10.0))
                     except: pass
                 break
-    rs_ret = round(min(sum(rs_vals)/len(rs_vals), 8.0), 2) if rs_vals else None  # 均值上限 8.0
-    return era_ret, rs_ret
+    rs_ret = round(min(sum(rs_vals)/len(rs_vals), 8.0), 2) if rs_vals else None
+    return era_ret, rs_ret, avg_ip, whip_ret, is_reliever
 
 def build_recent_era_cache(pitchers_dict):
-    global _RECENT_ERA, _PITCHER_RS
-    cache = {}; rs_cache = {}
+    global _RECENT_ERA, _PITCHER_RS, _PITCHER_IP, _PITCHER_WHIP, _RELIEVER_FLAGS
+    cache = {}; rs_cache = {}; ip_cache = {}; whip_cache = {}; reliever_set = set()
     seen  = set()
     for (home, away), info in pitchers_dict.items():
         for key, full in [(info.get("home_pitcher"), info.get("home_name")),
@@ -407,18 +425,31 @@ def build_recent_era_cache(pitchers_dict):
                 if _name_to_key(p.get("fullName","")) == key:
                     pid = p.get("id")
                     if pid:
-                        recent, rs = _fetch_recent_era(pid)
+                        recent, rs, avg_ip, whip, is_reliever = _fetch_recent_era(pid)
+                        if is_reliever:
+                            reliever_set.add(key)
+                            log.info("Reliever detected: %s (no IP≥4.0 starts)", key)
                         if recent is not None:
                             cache[key] = recent
-                            log.info("Recent ERA %s: %.2f (season: %.2f)",
-                                     key, recent, PITCHER_ERA.get(key,4.80))
+                            log.info("Recent ERA %s: %.2f (season: %.2f) avgIP=%.1f WHIP=%s",
+                                     key, recent, PITCHER_ERA.get(key, 4.80),
+                                     avg_ip if avg_ip else 0,
+                                     "%.2f" % whip if whip else "N/A")
                         if rs is not None:
                             rs_cache[key] = rs
                             log.info("Run Support %s: %.2f RS/start", key, rs)
+                        if avg_ip is not None:
+                            ip_cache[key] = avg_ip
+                        if whip is not None:
+                            whip_cache[key] = whip
                     break
-    _RECENT_ERA  = cache
-    _PITCHER_RS  = rs_cache
-    log.info("Recent ERA: %d pitchers, RS: %d pitchers", len(cache), len(rs_cache))
+    _RECENT_ERA     = cache
+    _PITCHER_RS     = rs_cache
+    _PITCHER_IP     = ip_cache
+    _PITCHER_WHIP   = whip_cache
+    _RELIEVER_FLAGS = reliever_set
+    log.info("Recent ERA: %d pitchers, RS: %d, IP: %d, Relievers: %d",
+             len(cache), len(rs_cache), len(ip_cache), len(reliever_set))
 
 
 # ══════════════════════════════════════════════
@@ -1304,6 +1335,24 @@ def run():
                 if _h_era_v < ELITE_ERA_DUAL and _a_era_v < ELITE_ERA_DUAL:
                     if model_p < ELITE_ERA_OVER_P:
                         continue
+            # ── ★ UNDER 保護層（依序：牛棚投手→低局數→高WHIP）──
+            if btype == BET_TOT and bside == "under":
+                # ① 牛棚型投手擔任先發：ERA不具整場代表性，拒絕UNDER
+                if home_sp in _RELIEVER_FLAGS or away_sp in _RELIEVER_FLAGS:
+                    continue
+                # ② 場均局數不足（開場/短局型）：牛棚投球局數多，UNDER風險高
+                _h_avgip = _PITCHER_IP.get(home_sp, 6.0)
+                _a_avgip = _PITCHER_IP.get(away_sp, 6.0)
+                if min(_h_avgip, _a_avgip) < MIN_SP_IP_UNDER:
+                    if model_p < MIN_MODEL_P_TOT + UNDER_LOW_IP_EXTRA:
+                        continue
+                # ③ 高WHIP先發：上壘率高，UNDER有較高失分風險
+                _h_whip = _PITCHER_WHIP.get(home_sp)
+                _a_whip = _PITCHER_WHIP.get(away_sp)
+                if ((_h_whip is not None and _h_whip > UNDER_WHIP_THRESH) or
+                        (_a_whip is not None and _a_whip > UNDER_WHIP_THRESH)):
+                    if model_p < MIN_MODEL_P_TOT + UNDER_WHIP_EXTRA:
+                        continue
             # ── 線路 CLV 過濾：有前次賠率才比較，無資料直接放行 ──
             prev_bp = prev_game.get(_SIDE_KEY.get(bside,""))
             lclv = line_clv(bp, prev_bp)
@@ -1364,12 +1413,20 @@ def run():
         def _sp_tag(sp_key, era, rs_pitcher, team_rpg, in_recent):
             if not sp_key: return ""
             era_tag = "(近期ERA%.2f)"%era if in_recent else "(ERA%.2f)"%era
+            # 角色標記：牛棚投手警示 / 場均局數（低於5局加警示符）
+            if sp_key in _RELIEVER_FLAGS:
+                role_tag = " ⚠️牛棚"
+            elif sp_key in _PITCHER_IP:
+                ip_val = _PITCHER_IP[sp_key]
+                role_tag = (" ⚠️%.1fIP" % ip_val) if ip_val < MIN_SP_IP_UNDER else (" %.1fIP" % ip_val)
+            else:
+                role_tag = ""
             # 投手專屬 RS 優先；沒有就顯示隊伍場均
             if rs_pitcher is not None:
                 rs_tag = " 投RS%.1f"%rs_pitcher
             else:
                 rs_tag = " 隊均%.1f"%team_rpg if team_rpg else ""
-            return era_tag + rs_tag
+            return era_tag + role_tag + rs_tag
         h_tag = _sp_tag(home_sp, h_era, pred.get("h_rs"), pred.get("h_team_rpg"), home_sp in _RECENT_ERA)
         a_tag = _sp_tag(away_sp, a_era, pred.get("a_rs"), pred.get("a_team_rpg"), away_sp in _RECENT_ERA)
         h_sp_str=h_sp_n+h_tag; a_sp_str=a_sp_n+a_tag
@@ -1526,7 +1583,9 @@ def run():
     espn_str = "✅ESPN" if espn_ok else "⚠️BASE"
     il_str   = {"rotowire":"✅RotoWire","static":"⚠️靜態"}.get(il_src,il_src)
     sp_str   = "✅已取得" if pitchers else "❌未取得"
-    era_str  = "✅近期ERA(%d)"%len(_RECENT_ERA) if _RECENT_ERA else "⚠️賽季ERA"
+    era_str  = ("✅近期ERA(%d%s)" % (len(_RECENT_ERA),
+                "/⚠️%d牛棚" % len(_RELIEVER_FLAGS) if _RELIEVER_FLAGS else "")
+                if _RECENT_ERA else "⚠️賽季ERA")
 
     lines=[
         "⚾ **MLB V123 分析報告**",
@@ -1592,9 +1651,9 @@ def run():
 
     lines+=[
         "═"*20,
-        "• ERA融合(近期80%+賽季20%) · 球場PF · 牛棚深度 · 傷兵 · CLV線路過濾",
+        "• ERA融合(近期80%+賽季20%) · 場均IP(≥4.0局才算) · WHIP · 球場PF · 牛棚 · 傷兵 · CLV",
         "• 三市場選優(獨贏/讓分/大小分) · Kelly下注 · 每日最多%d推薦"%MAX_PICKS,
-        "• RL爆冷保護(ERA差>1.5) · 菁英對決OVER門檻↑ · RS與大小分分離",
+        "• RL爆冷/王牌保護 · UNDER牛棚偵測+低局數+高WHIP保護 · RS大小分分離",
     ]
 
     out="\n".join(lines)
