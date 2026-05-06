@@ -1192,8 +1192,27 @@ def write_pages_json(picks, hist, now_tw):
     total_settled, wins, wr = calc_perf(hist)
     total_in, total_pnl     = calc_pnl(hist)
     roi = round(total_pnl / total_in * 100, 1) if total_in > 0 else None
+
+    # ★ 分類型勝率 + ROI（供網頁顯示）
+    by_type = {}
+    for btlabel, btkey in [("ML","獨贏"),("RL","讓分"),("TOT","大小分")]:
+        _rs = [r for r in hist if r.get("result") in ("W","L") and r.get("bet_type")==btkey]
+        if len(_rs) >= 3:
+            _w = sum(1 for r in _rs if r["result"]=="W")
+            _in = sum(r.get("stake",0) for r in _rs)
+            _pnl = sum(r.get("stake",0)*(r.get("price",2)-1) if r["result"]=="W"
+                       else -r.get("stake",0) for r in _rs)
+            by_type[btlabel] = {
+                "wins": _w, "settled": len(_rs),
+                "win_rate": round(_w/len(_rs)*100, 1),
+                "roi": round(_pnl/_in*100, 1) if _in > 0 else None,
+            }
+
+    _ak = lambda p, k: p.get("away_sp_name","")
+    _hk = lambda p, k: p.get("home_sp_name","")
     records = []
     for p in picks:
+        ask, hsk = p.get("away_sp_name",""), p.get("home_sp_name","")
         records.append({
             "tier":        p.get("tier",""),
             "btype":       p.get("btype",""),
@@ -1205,22 +1224,25 @@ def write_pages_json(picks, hist, now_tw):
             "bk":          p.get("bk",""),
             "bp":          round(p.get("bp",0),2),
             "con_p":       p.get("con_p"),
+            "dv_p":        p.get("dv_p"),            # devigged 真實市場概率
             "edge":        round(p.get("edge",0)*100,1),
             "conf":        round(p.get("conf",0)*100,1),
             "stake":       round(p.get("stake",0),1),
             "model_p":     round(p.get("model_p",0)*100,1),
-            "away_sp":     p.get("away_sp_name","TBD"),
-            "home_sp":     p.get("home_sp_name","TBD"),
+            "away_sp":     p.get("away_sp_full", ask) or ask,   # 完整姓名
+            "home_sp":     p.get("home_sp_full", hsk) or hsk,
             "away_era":    p.get("away_era"),
             "home_era":    p.get("home_era"),
-            "away_fip":    round(_PITCHER_FIP[p["away_sp_name"]], 2) if p.get("away_sp_name") and p["away_sp_name"] in _PITCHER_FIP else None,
-            "home_fip":    round(_PITCHER_FIP[p["home_sp_name"]], 2) if p.get("home_sp_name") and p["home_sp_name"] in _PITCHER_FIP else None,
-            "away_k9":     round(_PITCHER_K9[p["away_sp_name"]], 1)  if p.get("away_sp_name") and p["away_sp_name"] in _PITCHER_K9  else None,
-            "home_k9":     round(_PITCHER_K9[p["home_sp_name"]], 1)  if p.get("home_sp_name") and p["home_sp_name"] in _PITCHER_K9  else None,
-            "away_avgip":  round(_PITCHER_IP[p["away_sp_name"]], 1)  if p.get("away_sp_name") and p["away_sp_name"] in _PITCHER_IP  else None,
-            "home_avgip":  round(_PITCHER_IP[p["home_sp_name"]], 1)  if p.get("home_sp_name") and p["home_sp_name"] in _PITCHER_IP  else None,
-            "away_rest":   get_rest_days(p.get("away_sp_name")),
-            "home_rest":   get_rest_days(p.get("home_sp_name")),
+            "away_fip":    round(_PITCHER_FIP[ask],2) if ask in _PITCHER_FIP else None,
+            "home_fip":    round(_PITCHER_FIP[hsk],2) if hsk in _PITCHER_FIP else None,
+            "away_k9":     round(_PITCHER_K9[ask],1)  if ask in _PITCHER_K9  else None,
+            "home_k9":     round(_PITCHER_K9[hsk],1)  if hsk in _PITCHER_K9  else None,
+            "away_avgip":  round(_PITCHER_IP[ask],1)  if ask in _PITCHER_IP  else None,
+            "home_avgip":  round(_PITCHER_IP[hsk],1)  if hsk in _PITCHER_IP  else None,
+            "away_whip":   round(_PITCHER_WHIP[ask],2) if ask in _PITCHER_WHIP else None,
+            "home_whip":   round(_PITCHER_WHIP[hsk],2) if hsk in _PITCHER_WHIP else None,
+            "away_rest":   get_rest_days(ask) if ask else None,
+            "home_rest":   get_rest_days(hsk) if hsk else None,
             "away_rs":     p.get("away_rs"),
             "home_rs":     p.get("home_rs"),
             "away_rpg":    p.get("away_rpg"),
@@ -1237,8 +1259,12 @@ def write_pages_json(picks, hist, now_tw):
     payload = {
         "generated_at": now_tw.strftime("%Y-%m-%d %H:%M") + " (台灣時間)",
         "date":         now_tw.strftime("%Y-%m-%d"),
-        "stats": {"settled":total_settled,"wins":wins,"win_rate":round(wr,1),
-                  "total_in":round(total_in,1),"total_pnl":round(total_pnl,1),"roi":roi},
+        "stats": {
+            "settled":   total_settled, "wins": wins,
+            "win_rate":  round(wr,1),
+            "total_in":  round(total_in,1), "total_pnl": round(total_pnl,1), "roi": roi,
+            "by_type":   by_type,      # ★ 分類型勝率（ML/RL/TOT）
+        },
         "picks": records,
     }
     os.makedirs("docs", exist_ok=True)
@@ -1779,15 +1805,17 @@ def run():
                  "clv":round(raw_edge*100,1),"line_clv":lclv,
                  "game_date":game_date_str,"game_time":game_time_str,"game_dt":game_dt,
                  "btype":btype,"bp":bp,"bk":bk,"con_p":con_p,"model_p":model_p,
+                 "dv_p": round(_dv.get(bside, 1.0/con_p), 4),  # ★ devigged 真實市場概率
                  "away_cn":acn,"home_cn":hcn,"bet_label":bet_desc.replace("`","").split("@")[0].strip(),
                  "away_sp_name":away_sp or "TBD","home_sp_name":home_sp or "TBD",
+                 "away_sp_full":a_sp_n,"home_sp_full":h_sp_n,  # ★ 完整姓名（顯示用）
                  "away_era":round(a_era,2),"home_era":round(h_era,2),
                  "away_rs": round(pred.get("a_rs"),2) if pred.get("a_rs") is not None else None,
                  "home_rs": round(pred.get("h_rs"),2) if pred.get("h_rs") is not None else None,
                  "away_rpg":round(pred.get("a_team_rpg",4.5),2),
                  "home_rpg":round(pred.get("h_team_rpg",4.5),2),
                  "pred_away":round(pred.get("a_expected",0),1),"pred_home":round(pred.get("h_expected",0),1),
-                 "model_total":round(pred.get("pure_total",0),1) if btype==BET_TOT else None,
+                 "model_total":round(pred.get("pure_total_tot",0),1) if btype==BET_TOT else None,
                  "market_total":market_total if btype==BET_TOT else None,
                  "park_factor":round(pred.get("park_factor",1.0),2) if abs(pred.get("park_factor",1.0)-1.0)>0.05 else None,
                  "hist_label":_hist_label,

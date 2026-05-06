@@ -16,16 +16,34 @@
 
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body { background:#0f172a; color:#e2e8f0; font-family:'Segoe UI',sans-serif; }
+    body { background:#0f172a; color:#e2e8f0; font-family:'Segoe UI',system-ui,sans-serif; }
+
+    /* Cards */
     .card { background:#1e293b; border:1px solid #334155; }
     .tier-diamond { border-left:4px solid #a78bfa; }
     .tier-fire    { border-left:4px solid #f97316; }
     .tier-star    { border-left:4px solid #38bdf8; }
-    .badge { display:inline-block; padding:1px 8px; border-radius:9999px; font-size:0.72rem; font-weight:600; }
-    .badge-ml  { background:#1d4ed8; color:#bfdbfe; }
-    .badge-rl  { background:#7c3aed; color:#ede9fe; }
-    .badge-tot { background:#065f46; color:#a7f3d0; }
-    .stat-box { background:#0f172a; border-radius:0.5rem; padding:0.5rem 1rem; }
+
+    /* Bet type badges */
+    .badge { display:inline-flex; align-items:center; padding:2px 9px; border-radius:9999px; font-size:0.70rem; font-weight:700; letter-spacing:.02em; }
+    .badge-ml  { background:#1e3a8a; color:#93c5fd; }
+    .badge-rl  { background:#4c1d95; color:#c4b5fd; }
+    .badge-tot { background:#064e3b; color:#6ee7b7; }
+
+    /* Stat blocks */
+    .stat-box { background:#0f172a; border-radius:0.5rem; padding:0.5rem 0.75rem; }
+    .type-pill { background:#1e293b; border:1px solid #334155; border-radius:0.5rem; padding:0.4rem 0.6rem; }
+
+    /* SP detail pills */
+    .sp-chip { display:inline-flex; align-items:center; gap:3px;
+               background:#0f172a; border:1px solid #334155;
+               border-radius:6px; padding:2px 7px; font-size:0.68rem; }
+    .sp-warn { border-color:#f97316; color:#fb923c; }
+
+    /* Probability bar */
+    .prob-segment { height:6px; border-radius:2px; }
+
+    /* Password overlay */
     #pw-overlay {
       position:fixed; inset:0; z-index:9999;
       background:#0f172a;
@@ -48,6 +66,7 @@
       background:#1d4ed8; color:#bfdbfe;
       border:none; border-radius:0.5rem;
       padding:0.6rem; font-size:0.95rem; cursor:pointer;
+      transition:background .15s;
     }
     #pw-btn:hover { background:#2563eb; }
     #pw-err { color:#f87171; font-size:0.8rem; margin-top:0.5rem; min-height:1.2em; }
@@ -57,7 +76,7 @@
     .shake { animation:shake .35s ease; }
   </style>
 </head>
-<body class="min-h-screen p-4 md:p-8">
+<body class="min-h-screen p-4 md:p-6">
 
 <!-- 密碼鎖 -->
 <div id="pw-overlay">
@@ -71,20 +90,13 @@
   </div>
 </div>
 <script>
-(function(){
-  document.getElementById("pw-input").addEventListener("keydown",function(e){
-    if(e.key==="Enter") checkPw();
-  });
-})();
+document.getElementById("pw-input").addEventListener("keydown",e=>{if(e.key==="Enter")checkPw();});
 function checkPw(){
-  const val=document.getElementById("pw-input").value;
-  if(btoa(val)==="d2lsa3ltYWtleW91d2lu"){
+  if(btoa(document.getElementById("pw-input").value)==="d2lsa3ltYWtleW91d2lu"){
     document.getElementById("pw-overlay").style.display="none";
   } else {
-    const box=document.getElementById("pw-box");
-    box.classList.remove("shake");
-    void box.offsetWidth;
-    box.classList.add("shake");
+    const b=document.getElementById("pw-box");
+    b.classList.remove("shake"); void b.offsetWidth; b.classList.add("shake");
     document.getElementById("pw-err").textContent="密碼錯誤，請再試一次";
     document.getElementById("pw-input").value="";
     document.getElementById("pw-input").focus();
@@ -93,191 +105,309 @@ function checkPw(){
 </script>
 
 <div class="max-w-2xl mx-auto">
-  <!-- Header -->
-  <div class="flex items-center justify-between mb-6">
+
+  <!-- ── Header ───────────────────────────────── -->
+  <div class="flex items-center justify-between mb-5">
     <div>
-      <h1 class="text-2xl font-bold text-white">⚾ MLB 每日推薦</h1>
-      <p id="gen-time" class="text-xs text-slate-400 mt-1"></p>
+      <h1 class="text-xl font-bold text-white">⚾ MLB V2 每日推薦</h1>
+      <p id="gen-time" class="text-xs text-slate-500 mt-0.5"></p>
     </div>
-    <button onclick="loadData()" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg text-slate-300">重新整理</button>
+    <button onclick="loadData()"
+            class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg text-slate-300 transition-colors">
+      ↻ 重新整理
+    </button>
   </div>
 
-  <!-- Stats row -->
-  <div class="grid grid-cols-3 gap-3 mb-6" id="stats-row">
-    <div class="stat-box text-center">
-      <div class="text-lg font-bold text-white" id="s-wr">—</div>
-      <div class="text-xs text-slate-400">勝率</div>
+  <!-- ── 整體統計 ──────────────────────────────── -->
+  <div class="card rounded-xl p-4 mb-4">
+    <div class="grid grid-cols-3 gap-3 mb-3">
+      <div class="stat-box text-center">
+        <div class="text-xl font-bold text-white" id="s-wr">—</div>
+        <div class="text-xs text-slate-500 mt-0.5">整體勝率</div>
+      </div>
+      <div class="stat-box text-center">
+        <div class="text-xl font-bold" id="s-roi">—</div>
+        <div class="text-xs text-slate-500 mt-0.5">ROI</div>
+      </div>
+      <div class="stat-box text-center">
+        <div class="text-xl font-bold text-white" id="s-record">—</div>
+        <div class="text-xs text-slate-500 mt-0.5">勝 / 場</div>
+      </div>
     </div>
-    <div class="stat-box text-center">
-      <div class="text-lg font-bold" id="s-roi">—</div>
-      <div class="text-xs text-slate-400">ROI</div>
-    </div>
-    <div class="stat-box text-center">
-      <div class="text-lg font-bold text-white" id="s-record">—</div>
-      <div class="text-xs text-slate-400">歷史戰績</div>
+
+    <!-- 分類型勝率 -->
+    <div class="grid grid-cols-3 gap-2" id="by-type-row">
+      <!-- JS fills in ML / RL / TOT pills -->
     </div>
   </div>
 
-  <!-- Pick cards -->
+  <!-- ── Pick cards ────────────────────────────── -->
   <div id="picks-container">
     <div class="text-center text-slate-400 py-12">載入中…</div>
   </div>
 
-  <p class="text-center text-xs text-slate-600 mt-8">MLB V138 · 數據每日自動更新 · 僅供參考</p>
+  <p class="text-center text-xs text-slate-700 mt-6">
+    Poisson · FIP+ERA混合 · K/9 · WHIP · 休息天數 · 球場PF · Devig · Kelly · 僅供參考
+  </p>
 </div>
 
 <script>
 const JSON_URL = "picks_latest.json";
 
-function tierClass(tier) {
-  if (tier.includes("💎")) return "tier-diamond";
-  if (tier.includes("🔥")) return "tier-fire";
+/* ── helpers ─────────────────────────────────── */
+function tierClass(tier){
+  if(tier.includes("💎")) return "tier-diamond";
+  if(tier.includes("🔥")) return "tier-fire";
   return "tier-star";
 }
-function btypeBadge(btype) {
-  if (btype === "ml")  return '<span class="badge badge-ml">獨贏</span>';
-  if (btype === "rl")  return '<span class="badge badge-rl">讓分</span>';
-  if (btype === "tot") return '<span class="badge badge-tot">大小分</span>';
+
+function btypeBadge(btype){
+  if(btype==="獨贏") return '<span class="badge badge-ml">ML 獨贏</span>';
+  if(btype==="讓分") return '<span class="badge badge-rl">RL 讓分</span>';
+  if(btype==="大小分") return '<span class="badge badge-tot">TOT 大小分</span>';
   return "";
 }
-function spTag(name, era, whip) {
-  if (!name || name === "TBD") return "TBD";
-  let s = name;
-  if (era != null) s += ` ERA${era.toFixed(2)}`;
-  if (whip != null) s += `/WHIP${whip.toFixed(2)}`;
-  return s;
-}
-function rsTag(rs, rpg) {
-  if (rs != null) return `<span class="text-emerald-400">投RS ${rs.toFixed(1)}</span>`;
-  if (rpg != null) return `<span class="text-slate-400">隊均 ${rpg.toFixed(1)}</span>`;
-  return "—";
-}
-function pnlColor(val) {
-  if (val == null) return "text-slate-400";
-  return val >= 0 ? "text-emerald-400" : "text-rose-400";
+
+function pnlColor(v){ return v==null?"text-slate-400":v>=0?"text-emerald-400":"text-rose-400"; }
+function signStr(v,dec=1){ return (v>=0?"+":"")+v.toFixed(dec); }
+
+/* ── SP tag builder ──────────────────────────── */
+function spChips(name, era, fip, k9, avgip, rest, whip){
+  if(!name||name==="TBD") return '<span class="text-slate-600">TBD</span>';
+  let chips = `<span class="font-medium text-slate-200">${name}</span>`;
+
+  // ERA chip — highlight bad ERA red, good ERA green
+  if(era!=null){
+    const col = era<=3.5?"text-emerald-400":era>=4.8?"text-rose-400":"text-slate-300";
+    let eraLabel = `ERA ${era.toFixed(2)}`;
+    if(fip!=null && Math.abs(fip-era)>=0.50){
+      const fipCol = fip<era?"text-emerald-300":"text-amber-300";
+      eraLabel += ` <span class="${fipCol}">FIP ${fip.toFixed(2)}</span>`;
+    }
+    chips += ` <span class="sp-chip ${col}">${eraLabel}</span>`;
+  }
+
+  // K/9
+  if(k9!=null && k9>=8.5){
+    chips += ` <span class="sp-chip text-sky-400">K/9 ${k9.toFixed(1)}</span>`;
+  }
+
+  // avgIP
+  if(avgip!=null){
+    const warn = avgip<5.0;
+    chips += ` <span class="sp-chip ${warn?'sp-warn':''}">${avgip.toFixed(1)} IP/G${warn?' ⚠️':''}</span>`;
+  }
+
+  // WHIP
+  if(whip!=null && whip>=1.30){
+    chips += ` <span class="sp-chip text-amber-400">WHIP ${whip.toFixed(2)}</span>`;
+  }
+
+  // Rest days
+  if(rest!=null){
+    if(rest<=3)
+      chips += ` <span class="sp-chip sp-warn">短休 ${rest}d ⚠️</span>`;
+    else if(rest>=9)
+      chips += ` <span class="sp-chip sp-warn">長休 ${rest}d ⚠️</span>`;
+  }
+
+  return chips;
 }
 
-function renderCard(p) {
-  const tc = tierClass(p.tier);
+/* ── Probability bar (market vs model vs break-even) ── */
+function probBar(dvp, model_p, bp){
+  // dvp: devigged market prob (0-1), model_p: model prob (0-100), bp: decimal odds
+  const mkt   = dvp   ? (dvp*100).toFixed(1) : null;
+  const mdl   = model_p != null ? model_p.toFixed(1) : null;
+  const be    = bp     ? (100/bp).toFixed(1) : null;
+
+  let rows = "";
+  if(mkt) rows += `<div class="flex justify-between text-xs"><span class="text-slate-500">真實市場概率</span><span class="text-slate-300">${mkt}%</span></div>`;
+  if(mdl) rows += `<div class="flex justify-between text-xs"><span class="text-slate-500">模型勝率</span><span class="font-semibold text-white">${mdl}%</span></div>`;
+  if(be)  rows += `<div class="flex justify-between text-xs"><span class="text-slate-500">盈虧平衡</span><span class="text-slate-400">${be}%</span></div>`;
+  return rows;
+}
+
+/* ── Pick card renderer ──────────────────────── */
+function renderCard(p){
+  const tc    = tierClass(p.tier);
   const badge = btypeBadge(p.btype);
-  const awayTag = spTag(p.away_sp, p.away_era, p.away_whip);
-  const homeTag = spTag(p.home_sp, p.home_era, p.home_whip);
-  const confBar = Math.round(p.conf);
-  const edgeStr = (p.edge >= 0 ? "+" : "") + p.edge.toFixed(1) + "%";
-  const pfNote  = p.park_factor ? `🏟️ PF${p.park_factor.toFixed(2)}` : "";
+  const conf  = Math.round(p.conf||0);
+  const edgeStr = signStr(p.edge||0)+"%";
+  const confCol = conf>=80?"bg-emerald-500":conf>=70?"bg-amber-400":"bg-sky-400";
 
-  let scoreSection = "";
-  if (p.btype === "tot" && p.model_total != null) {
-    scoreSection = `
-      <div class="flex justify-between text-sm mt-2">
-        <span class="text-slate-400">模型總分</span>
-        <span class="font-semibold text-white">${p.model_total} <span class="text-slate-500 text-xs">/ 線 ${p.market_total}</span></span>
+  // Score / total section
+  let scoreHtml = "";
+  if(p.btype==="大小分" && p.model_total!=null){
+    const dir  = p.model_total > p.market_total ? "偏OVER" : p.model_total < p.market_total ? "偏UNDER" : "中性";
+    const dirCol = p.model_total > p.market_total ? "text-orange-400" : p.model_total < p.market_total ? "text-sky-400" : "text-slate-400";
+    scoreHtml = `
+      <div class="flex justify-between items-center text-sm">
+        <span class="text-slate-500">模型總分</span>
+        <span><span class="font-bold text-white">${p.model_total}</span>
+              <span class="text-slate-500 text-xs"> / 線 ${p.market_total}</span>
+              <span class="ml-1 text-xs ${dirCol}">(${dir})</span></span>
       </div>`;
   } else {
-    scoreSection = `
-      <div class="flex justify-between text-sm mt-2">
-        <span class="text-slate-400">預測得分</span>
-        <span class="font-semibold text-white">${p.away_cn} ${p.pred_away} — ${p.pred_home} ${p.home_cn}</span>
+    scoreHtml = `
+      <div class="flex justify-between items-center text-sm">
+        <span class="text-slate-500">預測得分</span>
+        <span class="font-bold text-white">${p.away_cn} <span class="text-slate-400">${p.pred_away}</span> — <span class="text-slate-400">${p.pred_home}</span> ${p.home_cn}</span>
       </div>`;
   }
 
+  // CLV
+  const clvHtml = p.line_clv!=null
+    ? `<span class="font-semibold ${p.line_clv>=0?"text-emerald-400":"text-rose-400"}">${signStr(p.line_clv)}% <span class="font-normal text-slate-500">${p.line_clv>=0?"市場認同↑":"市場反向↓"}</span></span>`
+    : `<span class="text-slate-600">首次出現</span>`;
+
+  // Park factor
+  const pfHtml = p.park_factor
+    ? `<span class="text-xs text-amber-400 ml-1">🏟️ PF${p.park_factor.toFixed(2)}</span>`
+    : "";
+
+  // RS
+  const awayRS = p.away_rs!=null
+    ? `<span class="text-emerald-400">RS ${p.away_rs.toFixed(1)}</span>`
+    : p.away_rpg!=null ? `<span class="text-slate-500">隊均 ${p.away_rpg.toFixed(1)}</span>` : "—";
+  const homeRS = p.home_rs!=null
+    ? `<span class="text-emerald-400">RS ${p.home_rs.toFixed(1)}</span>`
+    : p.home_rpg!=null ? `<span class="text-slate-500">隊均 ${p.home_rpg.toFixed(1)}</span>` : "—";
+
   return `
   <div class="card rounded-xl p-4 mb-4 ${tc}">
-    <div class="flex items-start justify-between">
-      <div>
+
+    <!-- Header row -->
+    <div class="flex items-start justify-between gap-2">
+      <div class="min-w-0">
         <div class="flex items-center gap-2 flex-wrap">
-          <span class="text-base font-bold text-white">${p.tier}</span>
+          <span class="text-sm font-bold text-white">${p.tier}</span>
           ${badge}
-          ${pfNote ? `<span class="text-xs text-amber-400">${pfNote}</span>` : ""}
+          ${pfHtml}
         </div>
-        <div class="text-lg font-semibold text-white mt-0.5">${p.away_cn} @ ${p.home_cn}</div>
-        <div class="text-xs text-slate-400">${p.game_date} ${p.game_time} (台灣時間)</div>
+        <div class="text-lg font-bold text-white mt-0.5 truncate">${p.away_cn} @ ${p.home_cn}</div>
+        <div class="text-xs text-slate-500">${p.game_date} &nbsp;${p.game_time} 台灣時間</div>
       </div>
-      <div class="text-right">
-        <div class="text-xl font-bold text-emerald-400">$${p.stake}</div>
-        <div class="text-xs text-slate-400">建議下注</div>
+      <div class="text-right shrink-0">
+        <div class="text-2xl font-bold text-emerald-400">$${p.stake}</div>
+        <div class="text-xs text-slate-500">建議下注</div>
+        <div class="text-xs text-slate-400 mt-0.5">@ ${p.bp ? p.bp.toFixed(2) : "—"}</div>
       </div>
     </div>
 
     <!-- Bet label -->
-    <div class="mt-3 bg-slate-800 rounded-lg px-3 py-2">
+    <div class="mt-3 bg-slate-800/60 rounded-lg px-3 py-2 flex items-center justify-between gap-2">
       <span class="text-sm font-semibold text-white">${p.bet_label}</span>
-      <span class="ml-2 text-xs text-slate-400">共識: ${p.con_p ? p.con_p.toFixed(2) : "—"}</span>
+      <span class="text-xs text-slate-500 shrink-0">${p.bk||""}</span>
     </div>
 
-    <!-- SP row -->
-    <div class="mt-2 grid grid-cols-2 gap-1 text-xs text-slate-400">
-      <div>客隊先發: <span class="text-slate-300">${awayTag}</span></div>
-      <div>主隊先發: <span class="text-slate-300">${homeTag}</span></div>
-      <div>客隊得分支援: ${rsTag(p.away_rs, p.away_rpg)}</div>
-      <div>主隊得分支援: ${rsTag(p.home_rs, p.home_rpg)}</div>
-    </div>
-
-    ${scoreSection}
-
-    <!-- Edge / conf bar -->
-    <div class="mt-3 flex items-center gap-3">
-      <div class="flex-1">
-        <div class="flex justify-between text-xs text-slate-400 mb-1">
-          <span>信心 ${confBar}%</span>
-          <span>Edge ${edgeStr}</span>
-        </div>
-        <div class="h-1.5 bg-slate-700 rounded-full overflow-hidden">
-          <div class="h-full rounded-full ${confBar>=80?'bg-emerald-500':confBar>=70?'bg-amber-400':'bg-sky-400'}"
-               style="width:${confBar}%"></div>
-        </div>
+    <!-- SP section -->
+    <div class="mt-3 space-y-1.5">
+      <div class="text-xs text-slate-500 font-medium">先發投手</div>
+      <div class="text-xs leading-relaxed">
+        <span class="text-slate-500 mr-1">客隊</span>
+        ${spChips(p.away_sp, p.away_era, p.away_fip, p.away_k9, p.away_avgip, p.away_rest, p.away_whip)}
       </div>
-      <div class="text-xs text-slate-400">
-        模型 <span class="text-white font-medium">${p.model_p.toFixed(1)}%</span>
+      <div class="text-xs leading-relaxed">
+        <span class="text-slate-500 mr-1">主隊</span>
+        ${spChips(p.home_sp, p.home_era, p.home_fip, p.home_k9, p.home_avgip, p.home_rest, p.home_whip)}
+      </div>
+      <div class="grid grid-cols-2 gap-1 text-xs text-slate-500 mt-1">
+        <div>得分支援: ${awayRS}</div>
+        <div>得分支援: ${homeRS}</div>
       </div>
     </div>
-    ${p.line_clv != null ? `
+
+    <!-- Score -->
+    <div class="mt-3 bg-slate-800/40 rounded-lg px-3 py-2">
+      ${scoreHtml}
+    </div>
+
+    <!-- Probability breakdown -->
+    <div class="mt-3 bg-slate-800/40 rounded-lg px-3 py-2 space-y-1">
+      ${probBar(p.dv_p, p.model_p, p.bp)}
+    </div>
+
+    <!-- Edge / confidence bar -->
+    <div class="mt-3">
+      <div class="flex justify-between text-xs text-slate-400 mb-1">
+        <span>信心 <span class="text-white font-medium">${conf}%</span></span>
+        <span>Edge <span class="font-semibold ${(p.edge||0)>=12?"text-emerald-400":(p.edge||0)>=8?"text-amber-400":"text-sky-400"}">${edgeStr}</span></span>
+      </div>
+      <div class="h-1.5 bg-slate-700 rounded-full overflow-hidden">
+        <div class="h-full rounded-full ${confCol}" style="width:${Math.min(conf,100)}%"></div>
+      </div>
+    </div>
+
+    <!-- CLV -->
     <div class="mt-2 flex items-center justify-between text-xs">
-      <span class="text-slate-500">線路 CLV</span>
-      <span class="font-semibold ${p.line_clv >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${p.line_clv >= 0 ? '+' : ''}${p.line_clv.toFixed(1)}%
-        <span class="text-slate-500 font-normal">${p.line_clv >= 0 ? '市場認同↑' : '市場反向↓'}</span>
-      </span>
-    </div>` : `
-    <div class="mt-2 flex items-center justify-between text-xs">
-      <span class="text-slate-500">線路 CLV</span>
-      <span class="text-slate-500">首次出現</span>
-    </div>`}
+      <span class="text-slate-600">線路 CLV</span>
+      ${clvHtml}
+    </div>
+
   </div>`;
 }
 
-async function loadData() {
+/* ── Type pill renderer ──────────────────────── */
+function renderTypePill(label, data){
+  if(!data) return `
+    <div class="type-pill text-center">
+      <div class="text-xs font-bold text-slate-400">${label}</div>
+      <div class="text-xs text-slate-600 mt-0.5">資料不足</div>
+    </div>`;
+  const wrCol = data.win_rate>=55?"text-emerald-400":data.win_rate>=50?"text-amber-400":"text-rose-400";
+  const roiCol = data.roi!=null?(data.roi>=0?"text-emerald-400":"text-rose-400"):"text-slate-500";
+  const roiStr = data.roi!=null?signStr(data.roi)+"%":"N/A";
+  return `
+    <div class="type-pill text-center">
+      <div class="text-xs font-bold text-slate-300 mb-1">${label}</div>
+      <div class="text-sm font-bold ${wrCol}">${data.win_rate.toFixed(1)}%</div>
+      <div class="text-xs text-slate-500">${data.wins}/${data.settled}</div>
+      <div class="text-xs font-semibold ${roiCol} mt-0.5">ROI ${roiStr}</div>
+    </div>`;
+}
+
+/* ── Main loader ─────────────────────────────── */
+async function loadData(){
   const container = document.getElementById("picks-container");
   try {
-    const res = await fetch(JSON_URL + "?t=" + Date.now());
-    if (!res.ok) throw new Error("HTTP " + res.status);
+    const res = await fetch(JSON_URL+"?t="+Date.now());
+    if(!res.ok) throw new Error("HTTP "+res.status);
     const data = await res.json();
 
-    document.getElementById("gen-time").textContent = "更新於 " + data.generated_at;
+    document.getElementById("gen-time").textContent = "更新於 "+data.generated_at;
 
     const s = data.stats;
+
+    // Overall stats
     const wrEl  = document.getElementById("s-wr");
     const roiEl = document.getElementById("s-roi");
     const recEl = document.getElementById("s-record");
-    wrEl.textContent  = s.win_rate.toFixed(1) + "%";
-    roiEl.textContent = (s.roi != null ? (s.roi >= 0 ? "+" : "") + s.roi.toFixed(1) + "%" : "N/A");
-    roiEl.className   = "text-lg font-bold " + pnlColor(s.roi);
-    recEl.textContent = s.wins + "/" + s.settled;
+    wrEl.textContent  = s.win_rate.toFixed(1)+"%";
+    roiEl.textContent = s.roi!=null?signStr(s.roi)+"%":"N/A";
+    roiEl.className   = "text-xl font-bold "+(s.roi!=null?(s.roi>=0?"text-emerald-400":"text-rose-400"):"text-slate-400");
+    recEl.textContent = s.wins+" / "+s.settled;
 
-    if (!data.picks || data.picks.length === 0) {
-      container.innerHTML = '<div class="text-center text-slate-400 py-12">今日無符合條件之推薦</div>';
+    // Per-type pills
+    const bt = s.by_type||{};
+    document.getElementById("by-type-row").innerHTML =
+      renderTypePill("ML 獨贏", bt["ML"]||null) +
+      renderTypePill("RL 讓分", bt["RL"]||null) +
+      renderTypePill("TOT 大小分", bt["TOT"]||null);
+
+    // Picks
+    if(!data.picks||data.picks.length===0){
+      container.innerHTML='<div class="card rounded-xl p-8 text-center text-slate-400">今日無符合條件之推薦</div>';
       return;
     }
     container.innerHTML = data.picks.map(renderCard).join("");
-  } catch(e) {
-    container.innerHTML = `<div class="text-center text-rose-400 py-12">載入失敗：${e.message}</div>`;
+  } catch(e){
+    container.innerHTML=`<div class="card rounded-xl p-8 text-center text-rose-400">載入失敗：${e.message}</div>`;
   }
 }
 
 loadData();
-
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw.js");
-}
+if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
 </script>
 </body>
 </html>
