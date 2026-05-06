@@ -42,6 +42,7 @@ ELITE_ERA_DUAL   = 3.50 # 雙方投手都低於此值時視為菁英對決
 ELITE_ERA_OVER_P = 0.68 # 菁英投手對決時，OVER需達更高概率門檻（防RS拉高）
 ACE_ERA_RL       = 2.70 # 面對此ERA以下的王牌投手時，拒絕推薦讓分受讓
 FIP_ERA_WARN_GAP = 1.50 # RL: 推薦隊SP的FIP比ERA高超過此值 → 幸運ERA不可持續，拒絕RL
+FIP_ERA_UNDER_GAP= 1.00 # UNDER: 任一SP的FIP比ERA高超過此值 → 幸運ERA，失分回歸，拒絕UNDER
 ODDS_SNAP_PATH = "docs/odds_snapshot.json"
 LEAGUE_ERA     = 4.20
 HIST_TTL       = 90
@@ -1622,7 +1623,22 @@ def run():
                         (_a_whip is not None and _a_whip > UNDER_WHIP_THRESH)):
                     if model_p < MIN_MODEL_P_TOT + UNDER_WHIP_EXTRA:
                         continue
-                # ⑤ K/9 加成：雙方高三振 → UNDER更有利（三振=少安打少跑壘）
+                # ⑤ FIP回歸保護：任一SP的FIP遠高於ERA → 幸運ERA，失分回歸風險，拒絕UNDER
+                _h_fip_raw = _PITCHER_FIP.get(home_sp)
+                _a_fip_raw = _PITCHER_FIP.get(away_sp)
+                _h_era_raw = _RECENT_ERA.get(home_sp)
+                _a_era_raw = _RECENT_ERA.get(away_sp)
+                if (_h_fip_raw and _h_era_raw and
+                        (_h_fip_raw - _h_era_raw) > FIP_ERA_UNDER_GAP):
+                    log.info("UNDER blocked FIP-ERA gap: %s gap=%.2f (FIP=%.2f ERA=%.2f)",
+                             home_sp, _h_fip_raw - _h_era_raw, _h_fip_raw, _h_era_raw)
+                    continue
+                if (_a_fip_raw and _a_era_raw and
+                        (_a_fip_raw - _a_era_raw) > FIP_ERA_UNDER_GAP):
+                    log.info("UNDER blocked FIP-ERA gap: %s gap=%.2f (FIP=%.2f ERA=%.2f)",
+                             away_sp, _a_fip_raw - _a_era_raw, _a_fip_raw, _a_era_raw)
+                    continue
+                # ⑥ K/9 加成：雙方高三振 → UNDER更有利（三振=少安打少跑壘）
                 _h_k9 = _PITCHER_K9.get(home_sp, 7.0)
                 _a_k9 = _PITCHER_K9.get(away_sp, 7.0)
                 if _h_k9 >= K9_HIGH_THRESH and _a_k9 >= K9_HIGH_THRESH:
