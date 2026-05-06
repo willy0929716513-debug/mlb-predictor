@@ -1,4 +1,4 @@
-import os, json, math, logging, datetime, requests
+import os, json, math, logging, datetime, re, requests
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger("MLB_V123")
@@ -68,6 +68,13 @@ MIN_BOOKS      = 3      # 最少bookmaker數（不足時視為非流動市場）
 LOW_BOOKS_CONF = 0.88   # bookmaker數不足時的信心係數折扣
 # ── ★ 相關性風險管理 ──────────────────────────────────────
 CORR_DAMP_W    = 0.80   # 同方向第二注以後的Kelly折扣（20%縮注）
+# ── ★ 風險管理 ────────────────────────────────────────────
+MAX_DAILY_STAKE  = 300.0 # 單日總曝險上限（佔bankroll 30%）
+SLUMP_WINDOW     = 10    # 低迷偵測近N注
+SLUMP_WR_THRESH  = 0.40  # 近N注勝率低於此值視為低迷期
+SLUMP_KELLY_MUL  = 0.75  # 低迷期全局Kelly折扣
+# ── ★ 校正 ───────────────────────────────────────────────
+MIN_SAMPLE_CALIB = 20    # 分類型勝率校正所需最少樣本
 
 # ── ★ 球場係數（FanGraphs Park Factors 2024）──
 PARK_FACTOR = {
@@ -312,6 +319,7 @@ _PITCHER_FIP    = {}  # pitcher_key -> recent FIP (Fielding Independent Pitching
 _PITCHER_K9     = {}  # pitcher_key -> recent K/9 (每9局三振數)
 _PITCHER_LAST   = {}  # pitcher_key -> last start date (YYYY-MM-DD)
 _RELIEVER_FLAGS = set()  # 偵測為牛棚型：有出賽紀錄但無任何IP≥4.0先發
+_LIVE_SP_ERA    = {}  # pitcher_key -> 本賽季整體ERA（MLB Stats API即時）
 _WEATHER_CACHE  = {}
 
 
@@ -680,6 +688,47 @@ def fetch_probable_pitchers():
 
 
 # ══════════════════════════════════════════════
+# ★ 即時先發投手賽季ERA（MLB Stats API）
+# ══════════════════════════════════════════════
+
+def fetch_live_sp_era():
+    """從 MLB Stats API 拉取本賽季全部投手ERA，
+    補充靜態 PITCHER_ERA 字典（同名者不覆蓋，新名者補入）。
+    IP≥20 局過濾，排除純牛棚。"""
+    global _LIVE_SP_ERA
+    year = datetime.date.today().year
+    data = safe_get(
+        "https://statsapi.mlb.com/api/v1/stats",
+        params={"stats":"season","group":"pitching","gameType":"R",
+                "season":year,"limit":1000,
+                "fields":"stats,splits,player,fullName,stat,era,inningsPitched"},
+        timeout=15,
+    )
+    if not data: return False
+    live = {}
+    for split in data.get("stats",[{}])[0].get("splits",[]):
+        pname = split.get("player",{}).get("fullName","")
+        stat  = split.get("stat",{})
+        era_s = stat.get("era","")
+        ip_s  = str(stat.get("inningsPitched","0"))
+        try:
+            # MLB API IP格式："123.1" = 123又1/3局
+            ip_parts = ip_s.split(".")
+            ip_total = int(ip_parts[0]) + (int(ip_parts[1])/3 if len(ip_parts)>1 and ip_parts[1] else 0)
+            if ip_total < 20: continue
+            era = float(era_s)
+            if era < 0.5 or era > 9.5: continue
+            key = _name_to_key(pname)
+            if key: live[key] = round(era, 2)
+        except: pass
+    if live:
+        _LIVE_SP_ERA = live
+        log.info("Live SP ERA: %d pitchers (IP≥20)", len(live))
+        return True
+    return False
+
+
+# ══════════════════════════════════════════════
 # Odds API
 # ══════════════════════════════════════════════
 
@@ -900,13 +949,14 @@ def injury_penalty(team):
     return round(min(penalty, 1.2), 3)
 
 def get_pitcher_era(key):
-    """ERA 估計：近期ERA + FIP 混合（消除BABIP運氣），再與賽季基準融合。
+    """ERA 估計：近期ERA+FIP 混合（消除BABIP），再與賽季基準融合。
     有效公式：0.48×近期ERA + 0.32×近期FIP + 0.20×賽季基準
-    （FIP 對未來表現預測力優於 ERA，尤其在小樣本時）"""
+    賽季基準優先序：_LIVE_SP_ERA（MLB API即時）> PITCHER_ERA（靜態字典）"""
     if not key: return LEAGUE_ERA + 0.60
     k = key.lower().strip()
     recent_era = _RECENT_ERA.get(k)
-    season_era = PITCHER_ERA.get(k)
+    # 賽季基準：優先即時API，靜態字典次之（新投手/未收錄者自動補）
+    season_era = _LIVE_SP_ERA.get(k) or PITCHER_ERA.get(k)
     fip        = _PITCHER_FIP.get(k)
     if recent_era is not None:
         # FIP 混合：近期ERA中用FIP替換部分比重，降低運氣成分
@@ -964,6 +1014,24 @@ def norm_cdf(x): return 0.5 * (1 + math.erf(x / math.sqrt(2)))
 
 def win_prob_from_margin(margin, std=STD):
     return max(0.05, min(0.95, norm_cdf(margin/std)))
+
+def poisson_cdf(k_int, lam):
+    """P(Poisson(lam) ≤ k_int)：直接累積計算，無需外部函式庫。"""
+    if lam <= 0: return 1.0
+    total, term = 0.0, math.exp(-lam)
+    for i in range(int(k_int) + 1):
+        total += term
+        if total >= 1.0: return 1.0
+        term *= lam / (i + 1)
+    return total
+
+def over_prob(exp_total, line, std=None):
+    """P(合計得分 > line) — Poisson 模型（棒球得分正確分佈）。
+    比高斯更準確：得分為非負整數、右偏、Poisson 是標準棒球模型。
+    std 參數保留但不使用（向後相容）。"""
+    # 8.5線 → 需要 X≥9，即 1 - P(X≤8)；9.0線 → 需要 X≥10，即 1 - P(X≤9)
+    k = int(line)  # floor: P(X > line) = P(X >= k+1) = 1 - P(X <= k)
+    return max(0.02, min(0.98, 1.0 - poisson_cdf(k, max(0.1, exp_total))))
 
 def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
     hr = get_rating(home)
@@ -1094,6 +1162,21 @@ def calc_pnl(hist):
         total_pnl += stake * (price - 1) if r["result"] == "W" else -stake
     return round(total_in, 1), round(total_pnl, 1)
 
+def calc_perf_by_type(hist):
+    """分別計算 ML/RL/TOT 歷史勝率，用於動態信心校正。
+    需 ≥ MIN_SAMPLE_CALIB 筆才回傳值，否則回傳 None（避免小樣本過擬合）。"""
+    buckets = {"獨贏":[0,0], "讓分":[0,0], "大小分":[0,0]}
+    for r in hist:
+        if r.get("result") not in ("W","L"): continue
+        bt = r.get("bet_type","")
+        if bt in buckets:
+            buckets[bt][0] += 1
+            if r["result"]=="W": buckets[bt][1] += 1
+    return {
+        bt: (v[1]/v[0] if v[0]>=MIN_SAMPLE_CALIB else None)
+        for bt, v in buckets.items()
+    }
+
 def write_pages_json(picks, hist, now_tw):
     total_settled, wins, wr = calc_perf(hist)
     total_in, total_pnl     = calc_pnl(hist)
@@ -1179,12 +1262,30 @@ def run():
     hist      = load_hist()
     settled_n = settle_hist(hist)       # 結算昨天以前的未結算紀錄
     if settled_n > 0: save_hist(hist)   # 有更新就立即存回 Gist
+
+    # ★ 按投注類型計算歷史勝率（≥MIN_SAMPLE_CALIB 才啟用，防小樣本過擬合）
+    wr_by_type = calc_perf_by_type(hist) or {}
+
+    # ★ 低迷偵測：近 SLUMP_WINDOW 已結算注，勝率 < SLUMP_WR_THRESH → 全局縮注
+    _recent_settled = [r for r in hist if r.get("result") in ("W", "L")][-SLUMP_WINDOW:]
+    _slump_mult = (SLUMP_KELLY_MUL
+                   if len(_recent_settled) >= SLUMP_WINDOW
+                   and sum(1 for r in _recent_settled if r["result"] == "W") / len(_recent_settled) < SLUMP_WR_THRESH
+                   else 1.0)
+    if _slump_mult < 1.0:
+        log.info("Slump detected (last %d: WR<%.0f%%), Kelly x%.2f",
+                 SLUMP_WINDOW, SLUMP_WR_THRESH * 100, _slump_mult)
+
     espn_ok   = fetch_espn_ratings()
     il_src    = fetch_injury_list()
     pitchers  = fetch_probable_pitchers()
     if pitchers:
         try: build_recent_era_cache(pitchers)
         except Exception as e: log.warning("Recent ERA failed: %s", e)
+    # ★ 即時賽季 ERA（補強靜態 PITCHER_ERA 字典）
+    try: fetch_live_sp_era()
+    except Exception as e: log.warning("Live SP ERA fetch failed: %s", e)
+
     odds_data = fetch_odds()
     if not odds_data: log.error("No odds data"); return
 
@@ -1351,16 +1452,29 @@ def run():
         p_over  = over_prob(_tot_blend, market_total)
         p_under = 1.0 - p_over
 
+        # ── ★ Devig：從共識賠率移除 bookmaker vig，得到真實市場隱含概率 ──
+        # raw_edge = model_p - true_market_p（更準確量化真實優勢）
+        _dv = {}
+        if con_h>0 and con_a>0:
+            _m = 1/con_h + 1/con_a
+            _dv["home"] = round((1/con_h)/_m, 4); _dv["away"] = round((1/con_a)/_m, 4)
+        if con_rl_h_p and con_rl_a_p and con_rl_h_p>0 and con_rl_a_p>0:
+            _m = 1/con_rl_h_p + 1/con_rl_a_p
+            _dv["rl_h"] = round((1/con_rl_h_p)/_m, 4); _dv["rl_a"] = round((1/con_rl_a_p)/_m, 4)
+        if con_rl_h_p_25 and con_rl_a_p_25 and con_rl_h_p_25>0 and con_rl_a_p_25>0:
+            _m25 = 1/con_rl_h_p_25 + 1/con_rl_a_p_25
+            _dv["rl_h_25"] = round((1/con_rl_h_p_25)/_m25, 4); _dv["rl_a_25"] = round((1/con_rl_a_p_25)/_m25, 4)
+        if con_ov_p and con_un_p and con_ov_p>0 and con_un_p>0:
+            _m = 1/con_ov_p + 1/con_un_p
+            _dv["over"] = round((1/con_ov_p)/_m, 4); _dv["under"] = round((1/con_un_p)/_m, 4)
+
         # ── ★ 建立所有候選注單並選最優 ──────────────────────
-        # (bet_type, side_key, team_key, best_price, book, model_p,
-        #  edge_min, blend_p/None, con_p, conf_mult)
         BET_ML="獨贏"; BET_RL="讓分"; BET_TOT="大小分"
         candidates=[]
         if home_price: candidates.append((BET_ML,"home",home,home_price,home_book,h_model,EDGE_MIN,h_blend,con_h,1.00))
         if away_price: candidates.append((BET_ML,"away",away,away_price,away_book,a_model,EDGE_MIN,a_blend,con_a,1.00))
         if rl_h_price and con_rl_h_p: candidates.append((BET_RL,"rl_h",home,rl_h_price,rl_h_book,p_h_rl,EDGE_MIN_RL,None,con_rl_h_p,0.90))
         if rl_a_price and con_rl_a_p: candidates.append((BET_RL,"rl_a",away,rl_a_price,rl_a_book,p_a_rl,EDGE_MIN_RL,None,con_rl_a_p,0.90))
-        # 只考慮受讓 +2.5（不押讓出 -2.5 方）
         if rl_h_price_25 and con_rl_h_p_25 and p_h_rl_25 is not None and not h_gives_25:
             candidates.append((BET_RL,"rl_h_25",home,rl_h_price_25,rl_h_book_25,p_h_rl_25,EDGE_MIN_RL,None,con_rl_h_p_25,0.88))
         if rl_a_price_25 and con_rl_a_p_25 and p_a_rl_25 is not None and h_gives_25:
@@ -1374,7 +1488,13 @@ def run():
         for btype,bside,bteam,bp,bk,model_p,edge_min,blend_p,con_p,conf_mult in candidates:
             if bp is None or bp<=0 or con_p is None or con_p<=0: continue
             bet_conf = conf*conf_mult
-            raw_edge = model_p - 1/bp
+            # ★ 分類型歷史勝率校正（需 ≥MIN_SAMPLE_CALIB 才生效，防小樣本過擬合）
+            _wr_hist = wr_by_type.get(btype)
+            if _wr_hist is not None:
+                if   _wr_hist < 0.50: bet_conf = round(bet_conf * 0.90, 4)
+                elif _wr_hist < 0.55: bet_conf = round(bet_conf * 0.95, 4)
+                elif _wr_hist > 0.68: bet_conf = round(min(1.0, bet_conf * 1.05), 4)
+            raw_edge = model_p - _dv.get(bside, 1/bp)  # ★ Devigged edge
             # ML: edge*conf ≥ threshold；RL/TOT: 直接比 raw_edge（EDGE_MIN 已較高）
             edge_ok = (raw_edge*bet_conf >= edge_min) if btype==BET_ML else (raw_edge >= edge_min)
             if not edge_ok: continue
@@ -1648,7 +1768,6 @@ def run():
     picks = _filtered
 
     # ★ 相關性折扣：同方向多注（2個以上UNDER / 2個以上同向ML）第二注縮注20%
-    # 同日多個UNDER間有市場相關性（同受天氣/投手環境影響），分散風險
     _under_seen = 0
     for p in picks:
         _is_under = p.get("btype")=="大小分" and "UNDER" in p.get("bet_label","")
@@ -1657,9 +1776,28 @@ def run():
             if _under_seen > 1:
                 old_s = p["stake"]
                 p["stake"] = round(max(KELLY_MIN, old_s * CORR_DAMP_W), 1)
-                p["msg"]   = p["msg"].replace(
-                    "Kelly: $%.1f" % old_s,
-                    "Kelly: $%.1f [📊相關折]" % p["stake"], 1)
+                p["msg"]   = re.sub(r"Kelly: \$[0-9.]+(?:\s*\[[^\]]*\])?",
+                                    "Kelly: $%.1f [📊相關折]"%p["stake"], p["msg"], count=1)
+
+    # ★ 低迷縮注：近N注勝率過低，Kelly全局折扣（保護本金）
+    if _slump_mult < 1.0:
+        log.info("Slump mode: Kelly x%.2f applied to all picks", _slump_mult)
+        for p in picks:
+            old_s = p["stake"]
+            p["stake"] = round(max(KELLY_MIN, old_s * _slump_mult), 1)
+            p["msg"] = re.sub(r"Kelly: \$[0-9.]+(?:\s*\[[^\]]*\])?",
+                              "Kelly: $%.1f [📉低迷]"%p["stake"], p["msg"], count=1)
+
+    # ★ 每日總曝險上限：超過 MAX_DAILY_STAKE 按比例縮注
+    _total_stake = sum(p["stake"] for p in picks)
+    if _total_stake > MAX_DAILY_STAKE:
+        _ratio = MAX_DAILY_STAKE / _total_stake
+        log.info("Daily cap: total_stake %.1f > %.1f, ratio=%.2f", _total_stake, MAX_DAILY_STAKE, _ratio)
+        for p in picks:
+            old_s = p["stake"]
+            p["stake"] = round(max(KELLY_MIN, old_s * _ratio), 1)
+            p["msg"] = re.sub(r"Kelly: \$[0-9.]+(?:\s*\[[^\]]*\])?",
+                              "Kelly: $%.1f [🔒限額]"%p["stake"], p["msg"], count=1)
 
     # ★ 歷史紀錄只寫入最終顯示的注單（過濾後），避免被拒之注單汙染勝率統計
     if official:
