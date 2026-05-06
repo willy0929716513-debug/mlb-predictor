@@ -41,6 +41,8 @@ BLOWOUT_ERA_POOR = 4.20 # 弱投手ERA門檻（≥此值且ERA差距大，拒絕
 ELITE_ERA_DUAL   = 3.50 # 雙方投手都低於此值時視為菁英對決
 ELITE_ERA_OVER_P = 0.68 # 菁英投手對決時，OVER需達更高概率門檻（防RS拉高）
 ACE_ERA_RL       = 2.70 # 面對此ERA以下的王牌投手時，拒絕推薦讓分受讓
+FIP_ERA_WARN_GAP = 1.50 # RL: 推薦隊SP的FIP比ERA高超過此值 → 幸運ERA不可持續，拒絕RL
+FIP_ERA_UNDER_GAP= 1.00 # UNDER: 任一SP的FIP比ERA高超過此值 → 幸運ERA，失分回歸，拒絕UNDER
 ODDS_SNAP_PATH = "docs/odds_snapshot.json"
 LEAGUE_ERA     = 4.20
 HIST_TTL       = 90
@@ -55,7 +57,10 @@ UNDER_WHIP_THRESH  = 1.40  # 高WHIP門檻：任一先發超過此值時UNDER需
 UNDER_WHIP_EXTRA   = 0.05  # 高WHIP UNDER額外概率門檻（+5%）
 # ── ★ FIP + K/9 ──────────────────────────────────────────
 FIP_CONST      = 3.10   # FIP固定常數（依聯盟ERA標準化）
-FIP_BLEND_W    = 0.35   # 近期FIP混入ERA的比重（消除BABIP運氣成分）
+FIP_BLEND_W    = 0.35   # 近期FIP混入ERA的比重（基準，FIP-ERA缺口小時使用）
+FIP_BLEND_MID  = 0.55   # FIP-ERA缺口 0.5–1.0：輕度幸運ERA，FIP權重提升
+FIP_BLEND_HIGH = 0.70   # FIP-ERA缺口 1.0–1.5：嚴重幸運ERA，FIP主導
+FIP_BLEND_MAX  = 0.85   # FIP-ERA缺口 > 1.5：極端幸運ERA，幾乎全信FIP
 K9_HIGH_THRESH = 9.0    # 高三振率門檻（K/9）：雙方達標時UNDER信心加成
 K9_UNDER_CONF  = 0.04   # 雙高K/9 UNDER信心加成幅度
 # ── ★ 投手休息天數 ────────────────────────────────────────
@@ -973,8 +978,16 @@ def get_pitcher_era(key):
     season_era = _LIVE_SP_ERA.get(k) or PITCHER_ERA.get(k)
     fip        = _PITCHER_FIP.get(k)
     if recent_era is not None:
-        # FIP 混合：近期ERA中用FIP替換部分比重，降低運氣成分
-        adj_recent = round(recent_era*(1-FIP_BLEND_W) + fip*FIP_BLEND_W, 2) if fip else recent_era
+        # FIP 動態混合：FIP-ERA缺口越大 → FIP權重越高（幸運ERA回歸修正）
+        if fip:
+            _gap = fip - recent_era
+            if _gap > 1.50:   _fw = FIP_BLEND_MAX   # 極端幸運ERA
+            elif _gap > 1.00: _fw = FIP_BLEND_HIGH   # 嚴重幸運ERA
+            elif _gap > 0.50: _fw = FIP_BLEND_MID    # 輕度幸運ERA
+            else:             _fw = FIP_BLEND_W       # ERA可信，基準混合
+            adj_recent = round(recent_era*(1-_fw) + fip*_fw, 2)
+        else:
+            adj_recent = recent_era
         if season_era is not None:
             return round(adj_recent*SP_RECENT_W + season_era*SP_SEASON_W, 2)
         return adj_recent
@@ -1571,12 +1584,28 @@ def run():
                     # ③ 王牌封殺：面對 ERA≤2.70 王牌，客隊幾乎無法得分
                     if _h_era_v <= ACE_ERA_RL:
                         continue
+                    # ④ FIP回歸保護：客隊推薦隊SP的FIP遠高於ERA → 幸運ERA不可持續，RL風險高
+                    _rl_sp_fip = _PITCHER_FIP.get(away_sp)
+                    _rl_sp_era_raw = _RECENT_ERA.get(away_sp)
+                    if (_rl_sp_fip and _rl_sp_era_raw and
+                            (_rl_sp_fip - _rl_sp_era_raw) > FIP_ERA_WARN_GAP):
+                        log.info("RL blocked FIP-ERA gap: %s gap=%.2f (FIP=%.2f ERA=%.2f)",
+                                 away_sp, _rl_sp_fip - _rl_sp_era_raw, _rl_sp_fip, _rl_sp_era_raw)
+                        continue
                 elif bside in ("rl_h","rl_h_25"):
                     # ② 爆冷保護：主隊弱投手 + ERA差大 + 模型分差大
                     if _era_diff > BLOWOUT_ERA_DIFF and _h_era_v >= BLOWOUT_ERA_POOR and _margin < -1.2:
                         continue
                     # ③ 王牌封殺：面對 ERA≤2.70 王牌，主隊幾乎無法得分
                     if _a_era_v <= ACE_ERA_RL:
+                        continue
+                    # ④ FIP回歸保護：主隊推薦隊SP的FIP遠高於ERA → 幸運ERA不可持續，RL風險高
+                    _rl_sp_fip = _PITCHER_FIP.get(home_sp)
+                    _rl_sp_era_raw = _RECENT_ERA.get(home_sp)
+                    if (_rl_sp_fip and _rl_sp_era_raw and
+                            (_rl_sp_fip - _rl_sp_era_raw) > FIP_ERA_WARN_GAP):
+                        log.info("RL blocked FIP-ERA gap: %s gap=%.2f (FIP=%.2f ERA=%.2f)",
+                                 home_sp, _rl_sp_fip - _rl_sp_era_raw, _rl_sp_fip, _rl_sp_era_raw)
                         continue
             # ── ★ 菁英對決保護：雙方ERA均優時，OVER門檻提高 ──
             # 若雙SP ERA < 3.50，RS易誤拉高total，需更高p_over才下Over
@@ -1605,7 +1634,22 @@ def run():
                         (_a_whip is not None and _a_whip > UNDER_WHIP_THRESH)):
                     if model_p < MIN_MODEL_P_TOT + UNDER_WHIP_EXTRA:
                         continue
-                # ⑤ K/9 加成：雙方高三振 → UNDER更有利（三振=少安打少跑壘）
+                # ⑤ FIP回歸保護：任一SP的FIP遠高於ERA → 幸運ERA，失分回歸風險，拒絕UNDER
+                _h_fip_raw = _PITCHER_FIP.get(home_sp)
+                _a_fip_raw = _PITCHER_FIP.get(away_sp)
+                _h_era_raw = _RECENT_ERA.get(home_sp)
+                _a_era_raw = _RECENT_ERA.get(away_sp)
+                if (_h_fip_raw and _h_era_raw and
+                        (_h_fip_raw - _h_era_raw) > FIP_ERA_UNDER_GAP):
+                    log.info("UNDER blocked FIP-ERA gap: %s gap=%.2f (FIP=%.2f ERA=%.2f)",
+                             home_sp, _h_fip_raw - _h_era_raw, _h_fip_raw, _h_era_raw)
+                    continue
+                if (_a_fip_raw and _a_era_raw and
+                        (_a_fip_raw - _a_era_raw) > FIP_ERA_UNDER_GAP):
+                    log.info("UNDER blocked FIP-ERA gap: %s gap=%.2f (FIP=%.2f ERA=%.2f)",
+                             away_sp, _a_fip_raw - _a_era_raw, _a_fip_raw, _a_era_raw)
+                    continue
+                # ⑥ K/9 加成：雙方高三振 → UNDER更有利（三振=少安打少跑壘）
                 _h_k9 = _PITCHER_K9.get(home_sp, 7.0)
                 _a_k9 = _PITCHER_K9.get(away_sp, 7.0)
                 if _h_k9 >= K9_HIGH_THRESH and _a_k9 >= K9_HIGH_THRESH:
