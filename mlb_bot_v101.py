@@ -463,38 +463,45 @@ def build_recent_era_cache(pitchers_dict):
     fip_cache={}; k9_cache={}; last_cache={}; reliever_set=set()
     seen = set()
     for (home, away), info in pitchers_dict.items():
-        for key, full in [(info.get("home_pitcher"), info.get("home_name")),
-                          (info.get("away_pitcher"), info.get("away_name"))]:
+        for key, full, direct_id in [
+            (info.get("home_pitcher"), info.get("home_name"), info.get("home_pitcher_id")),
+            (info.get("away_pitcher"), info.get("away_name"), info.get("away_pitcher_id")),
+        ]:
             if not key or key in seen: continue
             if not full or full == "TBD": continue
             seen.add(key)
-            data = safe_get(
-                "https://statsapi.mlb.com/api/v1/people/search",
-                params={"names": full, "sportId": 1},
-                timeout=8,
-            )
-            if not data: continue
-            for p in data.get("people", []):
-                if _name_to_key(p.get("fullName","")) == key:
-                    pid = p.get("id")
-                    if pid:
-                        era, rs, avg_ip, whip, fip, k9, last_start, is_reliever = _fetch_recent_era(pid)
-                        if is_reliever:
-                            reliever_set.add(key)
-                            log.info("Reliever: %s (no IP≥4.0 starts)", key)
-                        if era is not None:
-                            cache[key] = era
-                            log.info("ERA %s: %.2f (FIP=%.2f K9=%.1f avgIP=%.1f WHIP=%.2f)",
-                                     key, era,
-                                     fip if fip else 0, k9 if k9 else 0,
-                                     avg_ip if avg_ip else 0, whip if whip else 0)
-                        if rs is not None:  rs_cache[key]  = rs
-                        if avg_ip is not None: ip_cache[key] = avg_ip
-                        if whip is not None: whip_cache[key] = whip
-                        if fip is not None:  fip_cache[key] = fip
-                        if k9 is not None:   k9_cache[key]  = k9
-                        if last_start:       last_cache[key] = last_start
-                    break
+
+            # ★ 優先使用 schedule API 直接給的 pitcher ID（省去 name-search API 往返）
+            pid = direct_id
+            if not pid:
+                # Fallback：name search（API 未給 ID 時）
+                sdata = safe_get(
+                    "https://statsapi.mlb.com/api/v1/people/search",
+                    params={"names": full, "sportId": 1},
+                    timeout=8,
+                )
+                if sdata:
+                    for p in sdata.get("people", []):
+                        if _name_to_key(p.get("fullName","")) == key:
+                            pid = p.get("id"); break
+
+            if not pid: continue
+            era, rs, avg_ip, whip, fip, k9, last_start, is_reliever = _fetch_recent_era(pid)
+            if is_reliever:
+                reliever_set.add(key)
+                log.info("Reliever: %s (no IP≥4.0 starts)", key)
+            if era is not None:
+                cache[key] = era
+                log.info("ERA %s: %.2f (FIP=%.2f K9=%.1f avgIP=%.1f WHIP=%.2f)",
+                         key, era,
+                         fip if fip else 0, k9 if k9 else 0,
+                         avg_ip if avg_ip else 0, whip if whip else 0)
+            if rs is not None:      rs_cache[key]   = rs
+            if avg_ip is not None:  ip_cache[key]   = avg_ip
+            if whip is not None:    whip_cache[key] = whip
+            if fip is not None:     fip_cache[key]  = fip
+            if k9 is not None:      k9_cache[key]   = k9
+            if last_start:          last_cache[key] = last_start
     _RECENT_ERA     = cache
     _PITCHER_RS     = rs_cache
     _PITCHER_IP     = ip_cache
@@ -677,12 +684,16 @@ def fetch_probable_pitchers():
             ad  = game.get("teams",{}).get("away",{})
             hs  = MLB_TEAM_ID.get(hd.get("team",{}).get("id")) or norm_team(hd.get("team",{}).get("name",""))
             as_ = MLB_TEAM_ID.get(ad.get("team",{}).get("id")) or norm_team(ad.get("team",{}).get("name",""))
-            hp  = hd.get("probablePitcher",{}).get("fullName")
-            ap  = ad.get("probablePitcher",{}).get("fullName")
+            hp     = hd.get("probablePitcher",{}).get("fullName")
+            ap     = ad.get("probablePitcher",{}).get("fullName")
+            hp_id  = hd.get("probablePitcher",{}).get("id")   # ★ 直接 MLB ID，省去重複 name-search
+            ap_id  = ad.get("probablePitcher",{}).get("id")
             if hs and as_:
                 result[(hs, as_)] = {
                     "home_pitcher":_name_to_key(hp),"away_pitcher":_name_to_key(ap),
                     "home_name":hp or "TBD","away_name":ap or "TBD",
+                    "home_pitcher_id": hp_id,
+                    "away_pitcher_id": ap_id,
                 }
                 log.info("SP: %s vs %s | H=%s A=%s", hs, as_, _name_to_key(hp), _name_to_key(ap))
     log.info("Pitchers resolved: %d games", len(result))
@@ -757,8 +768,7 @@ def _purge(records):
 
 def _tkey(name):
     """球隊名標準化：移除空格/特殊字元，全小寫，用於比對。"""
-    import re as _re
-    return _re.sub(r'[^a-z]', '', (name or "").lower())
+    return re.sub(r'[^a-z]', '', (name or "").lower())
 
 def _team_match(n1, n2):
     """MLB API / Odds API 隊名可能略有差異（如 Angels vs Angels of Anaheim），
@@ -920,8 +930,9 @@ def save_hist(records):
     except Exception as e:
         log.warning("save_hist: %s", e); return
     gid = _find_gid(gists)
+    import time as _time
     pl  = {"description":GIST_DESC,"public":False,"files":{"history.json":{"content":body}}}
-    for attempt in range(1,4):
+    for attempt in range(1, 4):
         try:
             if gid:
                 requests.patch("https://api.github.com/gists/"+gid, headers=h, json=pl, timeout=10).raise_for_status()
@@ -930,6 +941,7 @@ def save_hist(records):
             log.info("Hist saved (%d records)", len(records)); return
         except Exception as e:
             log.warning("save_hist %d/3: %s", attempt, e)
+            if attempt < 3: _time.sleep(2 ** attempt)  # 指數退避：2s, 4s
 
 
 # ══════════════════════════════════════════════
@@ -1027,11 +1039,9 @@ def poisson_cdf(k_int, lam):
         term *= lam / (i + 1)
     return total
 
-def over_prob(exp_total, line, std=None):
+def over_prob(exp_total, line):
     """P(合計得分 > line) — Poisson 模型（棒球得分正確分佈）。
-    比高斯更準確：得分為非負整數、右偏、Poisson 是標準棒球模型。
-    std 參數保留但不使用（向後相容）。"""
-    # 8.5線 → 需要 X≥9，即 1 - P(X≤8)；9.0線 → 需要 X≥10，即 1 - P(X≤9)
+    8.5線 → P(X≥9) = 1 - P(X≤8)；9.0線 → P(X≥10) = 1 - P(X≤9)。"""
     k = int(line)  # floor: P(X > line) = P(X >= k+1) = 1 - P(X <= k)
     return max(0.02, min(0.98, 1.0 - poisson_cdf(k, max(0.1, exp_total))))
 
@@ -1203,6 +1213,14 @@ def write_pages_json(picks, hist, now_tw):
             "home_sp":     p.get("home_sp_name","TBD"),
             "away_era":    p.get("away_era"),
             "home_era":    p.get("home_era"),
+            "away_fip":    round(_PITCHER_FIP[p["away_sp_name"]], 2) if p.get("away_sp_name") and p["away_sp_name"] in _PITCHER_FIP else None,
+            "home_fip":    round(_PITCHER_FIP[p["home_sp_name"]], 2) if p.get("home_sp_name") and p["home_sp_name"] in _PITCHER_FIP else None,
+            "away_k9":     round(_PITCHER_K9[p["away_sp_name"]], 1)  if p.get("away_sp_name") and p["away_sp_name"] in _PITCHER_K9  else None,
+            "home_k9":     round(_PITCHER_K9[p["home_sp_name"]], 1)  if p.get("home_sp_name") and p["home_sp_name"] in _PITCHER_K9  else None,
+            "away_avgip":  round(_PITCHER_IP[p["away_sp_name"]], 1)  if p.get("away_sp_name") and p["away_sp_name"] in _PITCHER_IP  else None,
+            "home_avgip":  round(_PITCHER_IP[p["home_sp_name"]], 1)  if p.get("home_sp_name") and p["home_sp_name"] in _PITCHER_IP  else None,
+            "away_rest":   get_rest_days(p.get("away_sp_name")),
+            "home_rest":   get_rest_days(p.get("home_sp_name")),
             "away_rs":     p.get("away_rs"),
             "home_rs":     p.get("home_rs"),
             "away_rpg":    p.get("away_rpg"),
@@ -1871,13 +1889,19 @@ def run():
                 "/⚠️%d牛棚" % len(_RELIEVER_FLAGS) if _RELIEVER_FLAGS else "")
                 if _RECENT_ERA else "⚠️賽季ERA")
 
-    # ★ 分類型歷史統計（用於頁尾顯示）
+    # ★ 分類型歷史統計（勝率 + ROI，用於頁尾顯示）
     _type_stats = []
-    for _btname, _btkey in [("獨贏","獨贏"),("讓分","讓分"),("大小分","大小分")]:
+    for _btname, _btkey in [("ML","獨贏"),("RL","讓分"),("TOT","大小分")]:
         _settled_t = [r for r in hist if r.get("result") in ("W","L") and r.get("bet_type")==_btkey]
         if len(_settled_t) >= 5:
-            _w_t = sum(1 for r in _settled_t if r["result"]=="W")
-            _type_stats.append("%s%d/%d" % (_btname, _w_t, len(_settled_t)))
+            _w_t   = sum(1 for r in _settled_t if r["result"]=="W")
+            _wr_t  = _w_t / len(_settled_t) * 100
+            _in_t  = sum(r.get("stake",0) for r in _settled_t)
+            _pnl_t = sum(r.get("stake",0)*(r.get("price",2)-1) if r["result"]=="W"
+                         else -r.get("stake",0) for r in _settled_t)
+            _roi_t = _pnl_t / _in_t * 100 if _in_t > 0 else 0
+            _type_stats.append("%s %d/%d(%.0f%% ROI%+.0f%%)" % (
+                _btname, _w_t, len(_settled_t), _wr_t, _roi_t))
     _type_stats_str = " | ".join(_type_stats) if _type_stats else ""
 
     lines=[
