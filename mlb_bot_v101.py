@@ -1,4 +1,4 @@
-import os, json, math, logging, datetime, re, requests
+import os, json, math, logging, datetime, re, requests, unicodedata
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger("MLB_V123")
@@ -35,7 +35,7 @@ MAX_RL_PICKS   = 2      # 每日RL推薦上限（防止同日過度集中）
 RL_BET_CONF_MIN= 0.72  # RL 最低信心門檻（高於全局 0.65，邊際RL需更確定）
 RL_KELLY_MULT  = 0.75  # RL Kelly 折扣（不確定性更高，下注降低25%）
 RL_KELLY_MAX   = 100.0 # RL 最大下注上限（低於ML的150）
-LINE_CLV_MIN   = 0.0    # 線路 CLV 門檻：市場需往我方方向移動（或無前次資料才放行）
+LINE_CLV_MIN   = -0.30  # 線路 CLV 門檻：允許 ≤0.30% 的線路噪音，避免過度過濾
 BLOWOUT_ERA_DIFF = 1.5  # ERA差門檻：弱投手隊不推薦讓分受讓
 BLOWOUT_ERA_POOR = 4.20 # 弱投手ERA門檻（≥此值且ERA差距大，拒絕RL）
 ELITE_ERA_DUAL   = 3.50 # 雙方投手都低於此值時視為菁英對決
@@ -342,9 +342,11 @@ def safe_get(url, params=None, headers=None, timeout=12):
 
 def _name_to_key(full_name):
     if not full_name: return None
-    parts = full_name.strip().split()
-    k = parts[-1].lower() if len(parts) >= 2 else full_name.lower()
-    if k in ("jr.","sr.","ii","iii","iv") and len(parts) >= 2:
+    # Strip accents: "Rodríguez" → "rodriguez", "Peña" → "pena"
+    ascii_name = unicodedata.normalize("NFKD", full_name).encode("ascii", "ignore").decode("ascii")
+    parts = ascii_name.strip().split()
+    k = parts[-1].lower() if len(parts) >= 2 else ascii_name.lower()
+    if k in ("jr.","jr","sr.","sr","ii","iii","iv") and len(parts) >= 2:
         k = parts[-2].lower()
     return k
 
@@ -380,7 +382,7 @@ def _fetch_recent_era(pitcher_id, last_n=3):
     year = datetime.date.today().year
     data = safe_get(
         "https://statsapi.mlb.com/api/v1/people/%d/stats" % pitcher_id,
-        params={"stats":"gameLog","group":"pitching","season":year},
+        params={"stats":"gameLog","group":"pitching","season":year,"gameType":"R"},
         timeout=10,
     )
     if not data: return _NONE8
@@ -1109,8 +1111,10 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
     pure_total     = h_exp     + a_exp
     pure_total_tot = h_exp_tot + a_exp_tot  # 大小分投注用（降低RS影響）
     model_total    = round(pure_total*0.30 + market_total*0.70, 2)
-    conf = total_confidence(pure_total, market_total)
-    conf *= (pitcher_confidence(home_sp) * pitcher_confidence(away_sp)) ** 0.5
+    _pc = (pitcher_confidence(home_sp) * pitcher_confidence(away_sp)) ** 0.5
+    conf     = total_confidence(pure_total, market_total) * _pc
+    # ★ TOT專用信心：用pure_total_tot（降低RS影響）比較更準確
+    conf_tot = total_confidence(pure_total_tot, market_total) * _pc
 
     return {
         "home_win_prob":  round(model_win_p, 4),
@@ -1119,6 +1123,7 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
         "pure_total":     round(pure_total, 2),
         "pure_total_tot": round(pure_total_tot, 2),
         "conf_factor":    round(max(0.40, min(1.0, conf)), 3),
+        "conf_tot":       round(max(0.40, min(1.0, conf_tot)), 3),
         "h_expected":     round(h_exp, 2),
         "a_expected":     round(a_exp, 2),
         "margin":         round(margin, 3),
@@ -1133,10 +1138,6 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
 def runline_prob(margin, spread, dyn_std):
     """P(主場隊蓋掉 -spread 讓分，即贏分差 > spread)"""
     return max(0.02, min(0.98, norm_cdf((margin - spread) / dyn_std)))
-
-def over_prob(pure_total, line, std=TOTAL_STD):
-    """P(兩隊合計得分 > 大小分線 line)"""
-    return max(0.02, min(0.98, norm_cdf((pure_total - line) / std)))
 
 def kelly_stake(edge, model_p, price, conf=1.0):
     if edge<=0 or price<=1.0: return 0.0
@@ -1265,6 +1266,9 @@ def run():
 
     # ★ 按投注類型計算歷史勝率（≥MIN_SAMPLE_CALIB 才啟用，防小樣本過擬合）
     wr_by_type = calc_perf_by_type(hist) or {}
+    for _bt, _bwr in wr_by_type.items():
+        if _bwr is not None:
+            log.info("HistCalib [%s]: WR=%.1f%%", _bt, _bwr * 100)
 
     # ★ 低迷偵測：近 SLUMP_WINDOW 已結算注，勝率 < SLUMP_WR_THRESH → 全局縮注
     _recent_settled = [r for r in hist if r.get("result") in ("W", "L")][-SLUMP_WINDOW:]
@@ -1413,8 +1417,9 @@ def run():
         pred    = predict(home,away,home_sp,away_sp,market_total=market_total,game_dt=game_dt)
         margin  = pred["margin"]
         dyn_std = pred["dyn_std"]
-        h_model = pred["home_win_prob"]; a_model = pred["away_win_prob"]
-        conf    = pred["conf_factor"]
+        h_model   = pred["home_win_prob"]; a_model = pred["away_win_prob"]
+        conf      = pred["conf_factor"]    # ML/RL 信心（pure_total 基礎）
+        conf_tot  = pred["conf_tot"]       # TOT 專用信心（pure_total_tot，降低RS影響）
 
         # 獨贏市場混合概率（用於 blend 過濾）
         inv_sum  = 1/con_h + 1/con_a
@@ -1487,7 +1492,9 @@ def run():
         _a_era_v = get_pitcher_era(away_sp)
         for btype,bside,bteam,bp,bk,model_p,edge_min,blend_p,con_p,conf_mult in candidates:
             if bp is None or bp<=0 or con_p is None or con_p<=0: continue
-            bet_conf = conf*conf_mult
+            # ★ TOT使用conf_tot（pure_total_tot基礎，RS影響更低）；ML/RL用conf
+            _base_conf = conf_tot if btype == BET_TOT else conf
+            bet_conf = _base_conf*conf_mult
             # ★ 分類型歷史勝率校正（需 ≥MIN_SAMPLE_CALIB 才生效，防小樣本過擬合）
             _wr_hist = wr_by_type.get(btype)
             if _wr_hist is not None:
@@ -1533,25 +1540,28 @@ def run():
                 if _h_era_v < ELITE_ERA_DUAL and _a_era_v < ELITE_ERA_DUAL:
                     if model_p < ELITE_ERA_OVER_P:
                         continue
-            # ── ★ UNDER 保護層（依序：牛棚投手→低局數→高WHIP）──
+            # ── ★ UNDER 保護層（依序：TBD→牛棚投手→低局數→高WHIP）──
             if btype == BET_TOT and bside == "under":
-                # ① 牛棚型投手擔任先發：ERA不具整場代表性，拒絕UNDER
+                # ① TBD先發：不知道誰上場幾局，UNDER風險極高，直接拒絕
+                if not home_sp or not away_sp:
+                    continue
+                # ② 牛棚型投手擔任先發：ERA不具整場代表性，拒絕UNDER
                 if home_sp in _RELIEVER_FLAGS or away_sp in _RELIEVER_FLAGS:
                     continue
-                # ② 場均局數不足（開場/短局型）：牛棚投球局數多，UNDER風險高
+                # ③ 場均局數不足（開場/短局型）：牛棚投球局數多，UNDER風險高
                 _h_avgip = _PITCHER_IP.get(home_sp, 6.0)
                 _a_avgip = _PITCHER_IP.get(away_sp, 6.0)
                 if min(_h_avgip, _a_avgip) < MIN_SP_IP_UNDER:
                     if model_p < MIN_MODEL_P_TOT + UNDER_LOW_IP_EXTRA:
                         continue
-                # ③ 高WHIP先發：上壘率高，UNDER有較高失分風險
+                # ④ 高WHIP先發：上壘率高，UNDER有較高失分風險
                 _h_whip = _PITCHER_WHIP.get(home_sp)
                 _a_whip = _PITCHER_WHIP.get(away_sp)
                 if ((_h_whip is not None and _h_whip > UNDER_WHIP_THRESH) or
                         (_a_whip is not None and _a_whip > UNDER_WHIP_THRESH)):
                     if model_p < MIN_MODEL_P_TOT + UNDER_WHIP_EXTRA:
                         continue
-                # ④ K/9 加成：雙方高三振 → UNDER更有利（三振=少安打少跑壘）
+                # ⑤ K/9 加成：雙方高三振 → UNDER更有利（三振=少安打少跑壘）
                 _h_k9 = _PITCHER_K9.get(home_sp, 7.0)
                 _a_k9 = _PITCHER_K9.get(away_sp, 7.0)
                 if _h_k9 >= K9_HIGH_THRESH and _a_k9 >= K9_HIGH_THRESH:
@@ -1624,8 +1634,17 @@ def run():
         h_era=get_pitcher_era(home_sp); a_era=get_pitcher_era(away_sp)
         def _sp_tag(sp_key, era, rs_pitcher, team_rpg, in_recent):
             if not sp_key: return ""
-            era_tag = "(近期ERA%.2f)"%era if in_recent else "(ERA%.2f)"%era
-            # 角色標記：牛棚投手警示 / 場均局數（低於5局加警示符）
+            pfx = "近期" if in_recent else ""
+            # ── ERA + FIP（FIP與ERA差距>0.5時才顯示，過濾噪音）──
+            fip_val = _PITCHER_FIP.get(sp_key)
+            if fip_val and abs(fip_val - era) >= 0.50:
+                era_tag = "(%sERA%.2f/FIP%.2f)" % (pfx, era, fip_val)
+            else:
+                era_tag = "(%sERA%.2f)" % (pfx, era)
+            # ── K/9（≥8.5才顯示，突出高三振型投手）──
+            k9_val = _PITCHER_K9.get(sp_key)
+            k9_tag = " K9:%.1f"%k9_val if k9_val and k9_val >= 8.5 else ""
+            # ── 角色標記：牛棚警示 / 場均局數（低於5局加⚠️）──
             if sp_key in _RELIEVER_FLAGS:
                 role_tag = " ⚠️牛棚"
             elif sp_key in _PITCHER_IP:
@@ -1633,12 +1652,20 @@ def run():
                 role_tag = (" ⚠️%.1fIP" % ip_val) if ip_val < MIN_SP_IP_UNDER else (" %.1fIP" % ip_val)
             else:
                 role_tag = ""
-            # 投手專屬 RS 優先；沒有就顯示隊伍場均
-            if rs_pitcher is not None:
-                rs_tag = " 投RS%.1f"%rs_pitcher
+            # ── 休息天數（短休/長休才顯示警示）──
+            rest_d = get_rest_days(sp_key)
+            if rest_d is not None:
+                if rest_d <= REST_SHORT_DAYS:   rest_tag = " 短休%dd⚠️" % rest_d
+                elif rest_d >= REST_LONG_DAYS:  rest_tag = " 長休%dd⚠️" % rest_d
+                else:                           rest_tag = ""
             else:
-                rs_tag = " 隊均%.1f"%team_rpg if team_rpg else ""
-            return era_tag + role_tag + rs_tag
+                rest_tag = ""
+            # ── Run Support ──
+            if rs_pitcher is not None:
+                rs_tag = " RS%.1f" % rs_pitcher
+            else:
+                rs_tag = " 隊%.1f" % team_rpg if team_rpg else ""
+            return era_tag + k9_tag + role_tag + rest_tag + rs_tag
         h_tag = _sp_tag(home_sp, h_era, pred.get("h_rs"), pred.get("h_team_rpg"), home_sp in _RECENT_ERA)
         a_tag = _sp_tag(away_sp, a_era, pred.get("a_rs"), pred.get("a_team_rpg"), away_sp in _RECENT_ERA)
         h_sp_str=h_sp_n+h_tag; a_sp_str=a_sp_n+a_tag
@@ -1654,7 +1681,11 @@ def run():
         if btype==BET_ML:
             bcn=CN.get(bteam,bteam)
             bet_desc="`%s 獨贏` @ **%.2f** (%s)"%(bcn,bp,bk)
-            stats_ln="> 共識賠率: %.2f | 市場勝率: %.1f%% | 模型勝率: %.1f%%"%(con_p,(1/bp)*100,model_p*100)
+            # ★ 使用 devigged 真實市場概率（已移除 bookmaker vig）
+            _mkt_true_p = _dv.get(bside, 1.0/con_p) * 100
+            _break_even = (1.0/bp)*100
+            stats_ln="> 共識賠率: %.2f | 真實市場: %.1f%% | 盈虧平衡: %.1f%% | 模型: %.1f%%"%(
+                con_p, _mkt_true_p, _break_even, model_p*100)
             mkt_tag=""
         elif btype==BET_RL:
             bcn=CN.get(bteam,bteam)
@@ -1767,13 +1798,22 @@ def run():
             _filtered.append(p)
     picks = _filtered
 
-    # ★ 相關性折扣：同方向多注（2個以上UNDER / 2個以上同向ML）第二注縮注20%
+    # ★ 相關性折扣：同方向多注 第二注起縮注20%（UNDER/OVER分別計算，防高度相關虧損）
     _under_seen = 0
+    _over_seen  = 0
     for p in picks:
         _is_under = p.get("btype")=="大小分" and "UNDER" in p.get("bet_label","")
+        _is_over  = p.get("btype")=="大小分" and "OVER"  in p.get("bet_label","")
         if _is_under:
             _under_seen += 1
             if _under_seen > 1:
+                old_s = p["stake"]
+                p["stake"] = round(max(KELLY_MIN, old_s * CORR_DAMP_W), 1)
+                p["msg"]   = re.sub(r"Kelly: \$[0-9.]+(?:\s*\[[^\]]*\])?",
+                                    "Kelly: $%.1f [📊相關折]"%p["stake"], p["msg"], count=1)
+        if _is_over:
+            _over_seen += 1
+            if _over_seen > 1:
                 old_s = p["stake"]
                 p["stake"] = round(max(KELLY_MIN, old_s * CORR_DAMP_W), 1)
                 p["msg"]   = re.sub(r"Kelly: \$[0-9.]+(?:\s*\[[^\]]*\])?",
@@ -1831,11 +1871,21 @@ def run():
                 "/⚠️%d牛棚" % len(_RELIEVER_FLAGS) if _RELIEVER_FLAGS else "")
                 if _RECENT_ERA else "⚠️賽季ERA")
 
+    # ★ 分類型歷史統計（用於頁尾顯示）
+    _type_stats = []
+    for _btname, _btkey in [("獨贏","獨贏"),("讓分","讓分"),("大小分","大小分")]:
+        _settled_t = [r for r in hist if r.get("result") in ("W","L") and r.get("bet_type")==_btkey]
+        if len(_settled_t) >= 5:
+            _w_t = sum(1 for r in _settled_t if r["result"]=="W")
+            _type_stats.append("%s%d/%d" % (_btname, _w_t, len(_settled_t)))
+    _type_stats_str = " | ".join(_type_stats) if _type_stats else ""
+
     lines=[
-        "⚾ **MLB V123 分析報告**",
+        "⚾ **MLB V2 分析報告**",
         "🕐 %s | %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str),
         "📌 正式記錄 (00–07時)" if official else "🔧 測試模式 (不寫gist)",
-        "📊 歷史: %d勝/%d場 (%.1f%%)"%(wins,total_settled,wr),
+        "📊 歷史: %d勝/%d場 (%.1f%%)%s"%(wins,total_settled,wr,
+            "  [%s]"%_type_stats_str if _type_stats_str else ""),
         "",
     ]
 
@@ -1895,9 +1945,9 @@ def run():
 
     lines+=[
         "═"*20,
-        "• ERA+FIP混合(消除BABIP運氣) · K/9 · WHIP · 場均IP · 休息天數 · 球場PF · 傷兵 · CLV",
-        "• 三市場選優(獨贏/讓分/大小分) · Kelly下注 · 每日最多%d推薦"%MAX_PICKS,
-        "• RL多層保護 · UNDER牛棚偵測+低IP+WHIP+K9 · 相關性折扣 · Bookmaker品質過濾",
+        "• Poisson大小分 · ERA+FIP混合(去BABIP) · K/9 · WHIP · 場均IP · 休息天數 · 球場PF · 傷兵",
+        "• Devig真實市場概率 · 三市場選優(ML/RL/TOT) · Kelly下注 · 每日最多%d推薦 · 每日曝險≤$%d"%( MAX_PICKS, int(MAX_DAILY_STAKE)),
+        "• RL多層保護 · UNDER(TBD/牛棚/低IP/WHIP/K9) · OVER/UNDER相關折 · 低迷縮注 · BM品質過濾",
     ]
 
     out="\n".join(lines)
