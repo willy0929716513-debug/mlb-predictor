@@ -41,6 +41,7 @@ BLOWOUT_ERA_POOR = 4.20 # 弱投手ERA門檻（≥此值且ERA差距大，拒絕
 ELITE_ERA_DUAL   = 3.50 # 雙方投手都低於此值時視為菁英對決
 ELITE_ERA_OVER_P = 0.68 # 菁英投手對決時，OVER需達更高概率門檻（防RS拉高）
 ACE_ERA_RL       = 2.70 # 面對此ERA以下的王牌投手時，拒絕推薦讓分受讓
+FIP_ERA_WARN_GAP = 1.50 # RL: 推薦隊SP的FIP比ERA高超過此值 → 幸運ERA不可持續，拒絕RL
 ODDS_SNAP_PATH = "docs/odds_snapshot.json"
 LEAGUE_ERA     = 4.20
 HIST_TTL       = 90
@@ -1571,12 +1572,28 @@ def run():
                     # ③ 王牌封殺：面對 ERA≤2.70 王牌，客隊幾乎無法得分
                     if _h_era_v <= ACE_ERA_RL:
                         continue
+                    # ④ FIP回歸保護：客隊推薦隊SP的FIP遠高於ERA → 幸運ERA不可持續，RL風險高
+                    _rl_sp_fip = _PITCHER_FIP.get(away_sp)
+                    _rl_sp_era_raw = _RECENT_ERA.get(away_sp)
+                    if (_rl_sp_fip and _rl_sp_era_raw and
+                            (_rl_sp_fip - _rl_sp_era_raw) > FIP_ERA_WARN_GAP):
+                        log.info("RL blocked FIP-ERA gap: %s gap=%.2f (FIP=%.2f ERA=%.2f)",
+                                 away_sp, _rl_sp_fip - _rl_sp_era_raw, _rl_sp_fip, _rl_sp_era_raw)
+                        continue
                 elif bside in ("rl_h","rl_h_25"):
                     # ② 爆冷保護：主隊弱投手 + ERA差大 + 模型分差大
                     if _era_diff > BLOWOUT_ERA_DIFF and _h_era_v >= BLOWOUT_ERA_POOR and _margin < -1.2:
                         continue
                     # ③ 王牌封殺：面對 ERA≤2.70 王牌，主隊幾乎無法得分
                     if _a_era_v <= ACE_ERA_RL:
+                        continue
+                    # ④ FIP回歸保護：主隊推薦隊SP的FIP遠高於ERA → 幸運ERA不可持續，RL風險高
+                    _rl_sp_fip = _PITCHER_FIP.get(home_sp)
+                    _rl_sp_era_raw = _RECENT_ERA.get(home_sp)
+                    if (_rl_sp_fip and _rl_sp_era_raw and
+                            (_rl_sp_fip - _rl_sp_era_raw) > FIP_ERA_WARN_GAP):
+                        log.info("RL blocked FIP-ERA gap: %s gap=%.2f (FIP=%.2f ERA=%.2f)",
+                                 home_sp, _rl_sp_fip - _rl_sp_era_raw, _rl_sp_fip, _rl_sp_era_raw)
                         continue
             # ── ★ 菁英對決保護：雙方ERA均優時，OVER門檻提高 ──
             # 若雙SP ERA < 3.50，RS易誤拉高total，需更高p_over才下Over
