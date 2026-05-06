@@ -49,6 +49,25 @@ ESPN_ALPHA_MAX = 0.65
 SP_RECENT_W    = 0.80   # 本賽季 ERA 權重（80%）
 SP_SEASON_W    = 0.20   # 四年歷史均值 ERA 權重（20%）
 SCORING_FORM_W = 0.10   # 近期打擊得分調整幅度（±10%）
+MIN_SP_IP_UNDER    = 5.0   # 先發場均局數門檻：低於此值UNDER需更高概率（開場/短局投手保護）
+UNDER_LOW_IP_EXTRA = 0.10  # 低局數先發UNDER額外概率門檻（+10%）
+UNDER_WHIP_THRESH  = 1.40  # 高WHIP門檻：任一先發超過此值時UNDER需額外確認
+UNDER_WHIP_EXTRA   = 0.05  # 高WHIP UNDER額外概率門檻（+5%）
+# ── ★ FIP + K/9 ──────────────────────────────────────────
+FIP_CONST      = 3.10   # FIP固定常數（依聯盟ERA標準化）
+FIP_BLEND_W    = 0.35   # 近期FIP混入ERA的比重（消除BABIP運氣成分）
+K9_HIGH_THRESH = 9.0    # 高三振率門檻（K/9）：雙方達標時UNDER信心加成
+K9_UNDER_CONF  = 0.04   # 雙高K/9 UNDER信心加成幅度
+# ── ★ 投手休息天數 ────────────────────────────────────────
+REST_SHORT_DAYS = 3     # 短休門檻（≤此天數）：投手可能未完全恢復
+REST_SHORT_ERA  = 0.30  # 短休 ERA 懲罰（效果等同ERA+0.30）
+REST_LONG_DAYS  = 9     # 長休門檻（≥此天數）：鏽腳/狀態不穩定
+REST_LONG_ERA   = 0.20  # 長休 ERA 懲罰
+# ── ★ 市場品質 ────────────────────────────────────────────
+MIN_BOOKS      = 3      # 最少bookmaker數（不足時視為非流動市場）
+LOW_BOOKS_CONF = 0.88   # bookmaker數不足時的信心係數折扣
+# ── ★ 相關性風險管理 ──────────────────────────────────────
+CORR_DAMP_W    = 0.80   # 同方向第二注以後的Kelly折扣（20%縮注）
 
 # ── ★ 球場係數（FanGraphs Park Factors 2024）──
 PARK_FACTOR = {
@@ -282,12 +301,18 @@ STAR_DISPLAY = {
 }
 
 # 動態快取
-_DYN_OUT      = {}
-_DYN_LTD      = {}
-_ESPN_RATINGS = {}
-_RECENT_ERA   = {}
-_PITCHER_RS   = {}  # pitcher_key -> run_support_per_start (隊友場均得分)
-_WEATHER_CACHE= {}
+_DYN_OUT        = {}
+_DYN_LTD        = {}
+_ESPN_RATINGS   = {}
+_RECENT_ERA     = {}
+_PITCHER_RS     = {}  # pitcher_key -> run_support_per_start (隊友場均得分)
+_PITCHER_IP     = {}  # pitcher_key -> avg_ip_per_qualifying_start (IP≥4.0才計入)
+_PITCHER_WHIP   = {}  # pitcher_key -> recent WHIP = (BB+H)/IP
+_PITCHER_FIP    = {}  # pitcher_key -> recent FIP (Fielding Independent Pitching，防守獨立ERA)
+_PITCHER_K9     = {}  # pitcher_key -> recent K/9 (每9局三振數)
+_PITCHER_LAST   = {}  # pitcher_key -> last start date (YYYY-MM-DD)
+_RELIEVER_FLAGS = set()  # 偵測為牛棚型：有出賽紀錄但無任何IP≥4.0先發
+_WEATHER_CACHE  = {}
 
 
 # ══════════════════════════════════════════════
@@ -338,33 +363,67 @@ def get_star_injuries(team):
 # ══════════════════════════════════════════════
 
 def _fetch_recent_era(pitcher_id, last_n=3):
-    """返回 (近期ERA, 近期先發場均得分RS) 的 tuple；資料不足時各為 None"""
+    """返回 (ERA, RS, avg_ip, WHIP, FIP, K9, last_start, is_reliever) 8-tuple。
+    FIP = Fielding Independent Pitching：消除打者運氣的純投手指標。
+    K9 = 每9局三振數：高K9是UNDER的強烈正向信號。
+    last_start = 最近先發日期 YYYY-MM-DD，用於計算休息天數。
+    is_reliever = 有出賽紀錄但無任何IP≥4.0先發。"""
+    _NONE8 = (None, None, None, None, None, None, None, False)
     year = datetime.date.today().year
     data = safe_get(
         "https://statsapi.mlb.com/api/v1/people/%d/stats" % pitcher_id,
         params={"stats":"gameLog","group":"pitching","season":year},
         timeout=10,
     )
-    if not data: return None, None
+    if not data: return _NONE8
     splits = []
     for s in data.get("stats",[]): splits = s.get("splits",[]); break
-    starts = [s for s in splits
-              if float(s.get("stat",{}).get("inningsPitched","0") or 0) >= 3.0]
-    recent = starts[-last_n:] if len(starts) >= last_n else starts
-    if not recent: return None, None
+
+    # 完整先發（IP ≥ 4.0，過濾開場型中繼與牛棚短局出賽）
+    proper_starts = [s for s in splits
+                     if float(s.get("stat",{}).get("inningsPitched","0") or 0) >= 4.0]
+    any_apps = [s for s in splits
+                if float(s.get("stat",{}).get("inningsPitched","0") or 0) >= 0.1]
+    is_reliever = (len(any_apps) > 0 and len(proper_starts) == 0)
+
+    recent = proper_starts[-last_n:] if len(proper_starts) >= last_n else proper_starts
+    if not recent: return (None, None, None, None, None, None, None, is_reliever)
+
+    def _f(key, default="0"):
+        return sum(float(s.get("stat",{}).get(key, default) or default) for s in recent)
+
+    total_ip  = _f("inningsPitched")
+    if total_ip < 4: return (None, None, None, None, None, None, None, is_reliever)
+
+    total_er  = _f("earnedRuns")
+    total_bb  = _f("baseOnBalls")
+    total_h   = _f("hits")
+    total_hr  = _f("homeRuns")
+    total_k   = _f("strikeOuts")
+    total_hbp = _f("hitBatsmen")
 
     # ── ERA ──────────────────────────────────────────────────
-    total_er = sum(float(s.get("stat",{}).get("earnedRuns","0") or 0) for s in recent)
-    total_ip = sum(float(s.get("stat",{}).get("inningsPitched","0") or 0) for s in recent)
-    if total_ip < 3: return None, None
-    era = round(total_er / total_ip * 9, 2)
-    if era < 0.50:
-        log.debug("Recent ERA %.2f too low for %s, clamping", era, pitcher_id)
-        era_ret = None
-    else:
-        era_ret = min(era, 10.0)
+    era     = round(total_er / total_ip * 9, 2)
+    era_ret = None if era < 0.50 else min(era, 10.0)
 
-    # ── Run Support：從各場 boxscore 取隊伍得分（linescore 無 team.id）──
+    # ── FIP（防守獨立投球指標）──────────────────────────────
+    # FIP = (13×HR + 3×(BB+HBP) - 2×K) / IP + FIP_CONST
+    # 消除守備/BABIP運氣，更能預測未來表現
+    fip_raw = (13*total_hr + 3*(total_bb+total_hbp) - 2*total_k) / total_ip + FIP_CONST
+    fip_ret = round(max(0.50, min(fip_raw, 10.0)), 2)
+
+    # ── K/9（每9局三振數）────────────────────────────────────
+    k9_ret   = round(total_k / total_ip * 9, 1)
+
+    # ── 場均局數 + WHIP ──────────────────────────────────────
+    avg_ip   = round(total_ip / len(recent), 1)
+    whip_ret = round((total_bb + total_h) / total_ip, 2)
+
+    # ── 最近先發日期（用於休息天數計算）────────────────────
+    dates = [s.get("game",{}).get("gameDate","")[:10] for s in recent if s.get("game",{}).get("gameDate")]
+    last_start_ret = max(dates) if dates else None
+
+    # ── Run Support：從各場 boxscore 取隊伍得分 ──
     rs_vals = []
     for s in recent:
         gpk = s.get("game",{}).get("gamePk")
@@ -381,16 +440,18 @@ def _fetch_recent_era(pitcher_id, last_n=3):
             if td.get("team",{}).get("id") == tid:
                 r = td.get("teamStats",{}).get("batting",{}).get("runs")
                 if r is not None:
-                    try: rs_vals.append(min(float(r), 10.0))  # 單場上限 10，避免爆炸場污染均值
+                    try: rs_vals.append(min(float(r), 10.0))
                     except: pass
                 break
-    rs_ret = round(min(sum(rs_vals)/len(rs_vals), 8.0), 2) if rs_vals else None  # 均值上限 8.0
-    return era_ret, rs_ret
+    rs_ret = round(min(sum(rs_vals)/len(rs_vals), 8.0), 2) if rs_vals else None
+    return era_ret, rs_ret, avg_ip, whip_ret, fip_ret, k9_ret, last_start_ret, is_reliever
 
 def build_recent_era_cache(pitchers_dict):
-    global _RECENT_ERA, _PITCHER_RS
-    cache = {}; rs_cache = {}
-    seen  = set()
+    global _RECENT_ERA, _PITCHER_RS, _PITCHER_IP, _PITCHER_WHIP
+    global _PITCHER_FIP, _PITCHER_K9, _PITCHER_LAST, _RELIEVER_FLAGS
+    cache={}; rs_cache={}; ip_cache={}; whip_cache={}
+    fip_cache={}; k9_cache={}; last_cache={}; reliever_set=set()
+    seen = set()
     for (home, away), info in pitchers_dict.items():
         for key, full in [(info.get("home_pitcher"), info.get("home_name")),
                           (info.get("away_pitcher"), info.get("away_name"))]:
@@ -407,18 +468,34 @@ def build_recent_era_cache(pitchers_dict):
                 if _name_to_key(p.get("fullName","")) == key:
                     pid = p.get("id")
                     if pid:
-                        recent, rs = _fetch_recent_era(pid)
-                        if recent is not None:
-                            cache[key] = recent
-                            log.info("Recent ERA %s: %.2f (season: %.2f)",
-                                     key, recent, PITCHER_ERA.get(key,4.80))
-                        if rs is not None:
-                            rs_cache[key] = rs
-                            log.info("Run Support %s: %.2f RS/start", key, rs)
+                        era, rs, avg_ip, whip, fip, k9, last_start, is_reliever = _fetch_recent_era(pid)
+                        if is_reliever:
+                            reliever_set.add(key)
+                            log.info("Reliever: %s (no IP≥4.0 starts)", key)
+                        if era is not None:
+                            cache[key] = era
+                            log.info("ERA %s: %.2f (FIP=%.2f K9=%.1f avgIP=%.1f WHIP=%.2f)",
+                                     key, era,
+                                     fip if fip else 0, k9 if k9 else 0,
+                                     avg_ip if avg_ip else 0, whip if whip else 0)
+                        if rs is not None:  rs_cache[key]  = rs
+                        if avg_ip is not None: ip_cache[key] = avg_ip
+                        if whip is not None: whip_cache[key] = whip
+                        if fip is not None:  fip_cache[key] = fip
+                        if k9 is not None:   k9_cache[key]  = k9
+                        if last_start:       last_cache[key] = last_start
                     break
-    _RECENT_ERA  = cache
-    _PITCHER_RS  = rs_cache
-    log.info("Recent ERA: %d pitchers, RS: %d pitchers", len(cache), len(rs_cache))
+    _RECENT_ERA     = cache
+    _PITCHER_RS     = rs_cache
+    _PITCHER_IP     = ip_cache
+    _PITCHER_WHIP   = whip_cache
+    _PITCHER_FIP    = fip_cache
+    _PITCHER_K9     = k9_cache
+    _PITCHER_LAST   = last_cache
+    _RELIEVER_FLAGS = reliever_set
+    log.info("ERA:%d FIP:%d K9:%d RS:%d IP:%d Relievers:%d",
+             len(cache), len(fip_cache), len(k9_cache),
+             len(rs_cache), len(ip_cache), len(reliever_set))
 
 
 # ══════════════════════════════════════════════
@@ -823,13 +900,40 @@ def injury_penalty(team):
     return round(min(penalty, 1.2), 3)
 
 def get_pitcher_era(key):
+    """ERA 估計：近期ERA + FIP 混合（消除BABIP運氣），再與賽季基準融合。
+    有效公式：0.48×近期ERA + 0.32×近期FIP + 0.20×賽季基準
+    （FIP 對未來表現預測力優於 ERA，尤其在小樣本時）"""
     if not key: return LEAGUE_ERA + 0.60
     k = key.lower().strip()
-    recent = _RECENT_ERA.get(k)
-    season = PITCHER_ERA.get(k)
-    if recent is not None and season is not None:
-        return round(recent*SP_RECENT_W + season*SP_SEASON_W, 2)
-    return recent if recent is not None else (season if season is not None else LEAGUE_ERA+0.60)
+    recent_era = _RECENT_ERA.get(k)
+    season_era = PITCHER_ERA.get(k)
+    fip        = _PITCHER_FIP.get(k)
+    if recent_era is not None:
+        # FIP 混合：近期ERA中用FIP替換部分比重，降低運氣成分
+        adj_recent = round(recent_era*(1-FIP_BLEND_W) + fip*FIP_BLEND_W, 2) if fip else recent_era
+        if season_era is not None:
+            return round(adj_recent*SP_RECENT_W + season_era*SP_SEASON_W, 2)
+        return adj_recent
+    return (season_era if season_era is not None else LEAGUE_ERA+0.60)
+
+def get_rest_days(sp_key):
+    """計算投手從最後先發到今天的休息天數；無資料返回 None。"""
+    if not sp_key: return None
+    last_str = _PITCHER_LAST.get(sp_key)
+    if not last_str: return None
+    try:
+        last = datetime.date.fromisoformat(last_str)
+        return (datetime.date.today() - last).days
+    except: return None
+
+def rest_era_penalty(sp_key):
+    """短休（≤3天）或長休（≥9天）都會增加有效ERA。
+    正常休息（4-8天）不調整。返回 ERA 加成值。"""
+    days = get_rest_days(sp_key)
+    if days is None: return 0.0
+    if days <= REST_SHORT_DAYS: return REST_SHORT_ERA
+    if days >= REST_LONG_DAYS:  return REST_LONG_ERA
+    return 0.0
 
 def era_adj(key):
     return round((get_pitcher_era(key) - LEAGUE_ERA) * 0.35, 3)
@@ -866,16 +970,21 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
     ar = get_rating(away)
     games = hr.get("games", 0)
 
-    # ① 先發 ERA（近期+賽季融合）
+    # ① 先發 ERA（近期ERA×(1-FIP_BLEND) + FIP×FIP_BLEND 混合，已在 get_pitcher_era 中完成）
     h_sp_adj = era_adj(home_sp)
     a_sp_adj = era_adj(away_sp)
+
+    # ① 延伸：休息天數懲罰（短休/長休 → 有效ERA上升 → 對手得分微增）
+    # era_adj 的轉換係數 0.35：ERA 增加 1.0 → scoring adjustment 增加 0.35
+    h_rest_pen = rest_era_penalty(home_sp) * 0.35  # 主隊SP短休 → 客隊得分小幅增加
+    a_rest_pen = rest_era_penalty(away_sp) * 0.35  # 客隊SP短休 → 主隊得分小幅增加
 
     # ② 動態主場優勢
     ha = 0.07 + hr.get("form", 0.0) * 0.3
 
-    # ③ 基礎期望得分
-    h_exp = hr["off"] + a_sp_adj + ha
-    a_exp = ar["off"] + h_sp_adj
+    # ③ 基礎期望得分（含休息天數調整）
+    h_exp = hr["off"] + a_sp_adj + a_rest_pen + ha
+    a_exp = ar["off"] + h_sp_adj + h_rest_pen
 
     # ④ 傷兵
     h_exp -= injury_penalty(home) * 0.4
@@ -1304,6 +1413,38 @@ def run():
                 if _h_era_v < ELITE_ERA_DUAL and _a_era_v < ELITE_ERA_DUAL:
                     if model_p < ELITE_ERA_OVER_P:
                         continue
+            # ── ★ UNDER 保護層（依序：牛棚投手→低局數→高WHIP）──
+            if btype == BET_TOT and bside == "under":
+                # ① 牛棚型投手擔任先發：ERA不具整場代表性，拒絕UNDER
+                if home_sp in _RELIEVER_FLAGS or away_sp in _RELIEVER_FLAGS:
+                    continue
+                # ② 場均局數不足（開場/短局型）：牛棚投球局數多，UNDER風險高
+                _h_avgip = _PITCHER_IP.get(home_sp, 6.0)
+                _a_avgip = _PITCHER_IP.get(away_sp, 6.0)
+                if min(_h_avgip, _a_avgip) < MIN_SP_IP_UNDER:
+                    if model_p < MIN_MODEL_P_TOT + UNDER_LOW_IP_EXTRA:
+                        continue
+                # ③ 高WHIP先發：上壘率高，UNDER有較高失分風險
+                _h_whip = _PITCHER_WHIP.get(home_sp)
+                _a_whip = _PITCHER_WHIP.get(away_sp)
+                if ((_h_whip is not None and _h_whip > UNDER_WHIP_THRESH) or
+                        (_a_whip is not None and _a_whip > UNDER_WHIP_THRESH)):
+                    if model_p < MIN_MODEL_P_TOT + UNDER_WHIP_EXTRA:
+                        continue
+                # ④ K/9 加成：雙方高三振 → UNDER更有利（三振=少安打少跑壘）
+                _h_k9 = _PITCHER_K9.get(home_sp, 7.0)
+                _a_k9 = _PITCHER_K9.get(away_sp, 7.0)
+                if _h_k9 >= K9_HIGH_THRESH and _a_k9 >= K9_HIGH_THRESH:
+                    bet_conf = min(1.0, bet_conf + K9_UNDER_CONF)
+            # ── ★ 市場品質：bookmaker數不足時降低信心（非流動市場賠率不可靠）──
+            if btype == BET_ML:
+                _n_books = len(con_h_prices) if bside=="home" else len(con_a_prices)
+            elif btype == BET_RL:
+                _n_books = len(con_rl_h) if bside in ("rl_h","rl_h_25") else len(con_rl_a)
+            else:
+                _n_books = len(con_over) if bside=="over" else len(con_under)
+            if _n_books < MIN_BOOKS:
+                bet_conf = round(bet_conf * LOW_BOOKS_CONF, 4)
             # ── 線路 CLV 過濾：有前次賠率才比較，無資料直接放行 ──
             prev_bp = prev_game.get(_SIDE_KEY.get(bside,""))
             lclv = line_clv(bp, prev_bp)
@@ -1364,12 +1505,20 @@ def run():
         def _sp_tag(sp_key, era, rs_pitcher, team_rpg, in_recent):
             if not sp_key: return ""
             era_tag = "(近期ERA%.2f)"%era if in_recent else "(ERA%.2f)"%era
+            # 角色標記：牛棚投手警示 / 場均局數（低於5局加警示符）
+            if sp_key in _RELIEVER_FLAGS:
+                role_tag = " ⚠️牛棚"
+            elif sp_key in _PITCHER_IP:
+                ip_val = _PITCHER_IP[sp_key]
+                role_tag = (" ⚠️%.1fIP" % ip_val) if ip_val < MIN_SP_IP_UNDER else (" %.1fIP" % ip_val)
+            else:
+                role_tag = ""
             # 投手專屬 RS 優先；沒有就顯示隊伍場均
             if rs_pitcher is not None:
                 rs_tag = " 投RS%.1f"%rs_pitcher
             else:
                 rs_tag = " 隊均%.1f"%team_rpg if team_rpg else ""
-            return era_tag + rs_tag
+            return era_tag + role_tag + rs_tag
         h_tag = _sp_tag(home_sp, h_era, pred.get("h_rs"), pred.get("h_team_rpg"), home_sp in _RECENT_ERA)
         a_tag = _sp_tag(away_sp, a_era, pred.get("a_rs"), pred.get("a_team_rpg"), away_sp in _RECENT_ERA)
         h_sp_str=h_sp_n+h_tag; a_sp_str=a_sp_n+a_tag
@@ -1498,6 +1647,20 @@ def run():
             _filtered.append(p)
     picks = _filtered
 
+    # ★ 相關性折扣：同方向多注（2個以上UNDER / 2個以上同向ML）第二注縮注20%
+    # 同日多個UNDER間有市場相關性（同受天氣/投手環境影響），分散風險
+    _under_seen = 0
+    for p in picks:
+        _is_under = p.get("btype")=="大小分" and "UNDER" in p.get("bet_label","")
+        if _is_under:
+            _under_seen += 1
+            if _under_seen > 1:
+                old_s = p["stake"]
+                p["stake"] = round(max(KELLY_MIN, old_s * CORR_DAMP_W), 1)
+                p["msg"]   = p["msg"].replace(
+                    "Kelly: $%.1f" % old_s,
+                    "Kelly: $%.1f [📊相關折]" % p["stake"], 1)
+
     # ★ 歷史紀錄只寫入最終顯示的注單（過濾後），避免被拒之注單汙染勝率統計
     if official:
         for p in picks:
@@ -1526,7 +1689,9 @@ def run():
     espn_str = "✅ESPN" if espn_ok else "⚠️BASE"
     il_str   = {"rotowire":"✅RotoWire","static":"⚠️靜態"}.get(il_src,il_src)
     sp_str   = "✅已取得" if pitchers else "❌未取得"
-    era_str  = "✅近期ERA(%d)"%len(_RECENT_ERA) if _RECENT_ERA else "⚠️賽季ERA"
+    era_str  = ("✅近期ERA(%d%s)" % (len(_RECENT_ERA),
+                "/⚠️%d牛棚" % len(_RELIEVER_FLAGS) if _RELIEVER_FLAGS else "")
+                if _RECENT_ERA else "⚠️賽季ERA")
 
     lines=[
         "⚾ **MLB V123 分析報告**",
@@ -1592,9 +1757,9 @@ def run():
 
     lines+=[
         "═"*20,
-        "• ERA融合(近期80%+賽季20%) · 球場PF · 牛棚深度 · 傷兵 · CLV線路過濾",
+        "• ERA+FIP混合(消除BABIP運氣) · K/9 · WHIP · 場均IP · 休息天數 · 球場PF · 傷兵 · CLV",
         "• 三市場選優(獨贏/讓分/大小分) · Kelly下注 · 每日最多%d推薦"%MAX_PICKS,
-        "• RL爆冷保護(ERA差>1.5) · 菁英對決OVER門檻↑ · RS與大小分分離",
+        "• RL多層保護 · UNDER牛棚偵測+低IP+WHIP+K9 · 相關性折扣 · Bookmaker品質過濾",
     ]
 
     out="\n".join(lines)
