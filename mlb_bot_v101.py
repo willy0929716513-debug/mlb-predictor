@@ -57,7 +57,10 @@ UNDER_WHIP_THRESH  = 1.40  # 高WHIP門檻：任一先發超過此值時UNDER需
 UNDER_WHIP_EXTRA   = 0.05  # 高WHIP UNDER額外概率門檻（+5%）
 # ── ★ FIP + K/9 ──────────────────────────────────────────
 FIP_CONST      = 3.10   # FIP固定常數（依聯盟ERA標準化）
-FIP_BLEND_W    = 0.35   # 近期FIP混入ERA的比重（消除BABIP運氣成分）
+FIP_BLEND_W    = 0.35   # 近期FIP混入ERA的比重（基準，FIP-ERA缺口小時使用）
+FIP_BLEND_MID  = 0.55   # FIP-ERA缺口 0.5–1.0：輕度幸運ERA，FIP權重提升
+FIP_BLEND_HIGH = 0.70   # FIP-ERA缺口 1.0–1.5：嚴重幸運ERA，FIP主導
+FIP_BLEND_MAX  = 0.85   # FIP-ERA缺口 > 1.5：極端幸運ERA，幾乎全信FIP
 K9_HIGH_THRESH = 9.0    # 高三振率門檻（K/9）：雙方達標時UNDER信心加成
 K9_UNDER_CONF  = 0.04   # 雙高K/9 UNDER信心加成幅度
 # ── ★ 投手休息天數 ────────────────────────────────────────
@@ -975,8 +978,16 @@ def get_pitcher_era(key):
     season_era = _LIVE_SP_ERA.get(k) or PITCHER_ERA.get(k)
     fip        = _PITCHER_FIP.get(k)
     if recent_era is not None:
-        # FIP 混合：近期ERA中用FIP替換部分比重，降低運氣成分
-        adj_recent = round(recent_era*(1-FIP_BLEND_W) + fip*FIP_BLEND_W, 2) if fip else recent_era
+        # FIP 動態混合：FIP-ERA缺口越大 → FIP權重越高（幸運ERA回歸修正）
+        if fip:
+            _gap = fip - recent_era
+            if _gap > 1.50:   _fw = FIP_BLEND_MAX   # 極端幸運ERA
+            elif _gap > 1.00: _fw = FIP_BLEND_HIGH   # 嚴重幸運ERA
+            elif _gap > 0.50: _fw = FIP_BLEND_MID    # 輕度幸運ERA
+            else:             _fw = FIP_BLEND_W       # ERA可信，基準混合
+            adj_recent = round(recent_era*(1-_fw) + fip*_fw, 2)
+        else:
+            adj_recent = recent_era
         if season_era is not None:
             return round(adj_recent*SP_RECENT_W + season_era*SP_SEASON_W, 2)
         return adj_recent
