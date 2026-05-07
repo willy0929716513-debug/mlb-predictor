@@ -43,66 +43,10 @@
     /* Probability bar */
     .prob-segment { height:6px; border-radius:2px; }
 
-    /* Password overlay */
-    #pw-overlay {
-      position:fixed; inset:0; z-index:9999;
-      background:#0f172a;
-      display:flex; align-items:center; justify-content:center;
-    }
-    #pw-box {
-      background:#1e293b; border:1px solid #334155;
-      border-radius:1rem; padding:2rem 2.5rem;
-      width:min(340px,90vw); text-align:center;
-    }
-    #pw-input {
-      width:100%; background:#0f172a; border:1px solid #475569;
-      color:#e2e8f0; border-radius:0.5rem;
-      padding:0.6rem 1rem; font-size:1rem; margin-top:1rem;
-      outline:none;
-    }
-    #pw-input:focus { border-color:#38bdf8; }
-    #pw-btn {
-      margin-top:0.75rem; width:100%;
-      background:#1d4ed8; color:#bfdbfe;
-      border:none; border-radius:0.5rem;
-      padding:0.6rem; font-size:0.95rem; cursor:pointer;
-      transition:background .15s;
-    }
-    #pw-btn:hover { background:#2563eb; }
-    #pw-err { color:#f87171; font-size:0.8rem; margin-top:0.5rem; min-height:1.2em; }
-    @keyframes shake {
-      0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-6px)} 40%,80%{transform:translateX(6px)}
-    }
-    .shake { animation:shake .35s ease; }
   </style>
 </head>
 <body class="min-h-screen p-4 md:p-6">
 
-<!-- 密碼鎖 -->
-<div id="pw-overlay">
-  <div id="pw-box">
-    <div class="text-3xl mb-2">⚾</div>
-    <div class="text-white font-bold text-lg">MLB 每日推薦</div>
-    <div class="text-slate-400 text-sm mt-1">請輸入密碼以繼續</div>
-    <input id="pw-input" type="password" placeholder="密碼" autocomplete="current-password"/>
-    <button id="pw-btn" onclick="checkPw()">進入</button>
-    <div id="pw-err"></div>
-  </div>
-</div>
-<script>
-document.getElementById("pw-input").addEventListener("keydown",e=>{if(e.key==="Enter")checkPw();});
-function checkPw(){
-  if(btoa(document.getElementById("pw-input").value)==="d2lsa3ltYWtleW91d2lu"){
-    document.getElementById("pw-overlay").style.display="none";
-  } else {
-    const b=document.getElementById("pw-box");
-    b.classList.remove("shake"); void b.offsetWidth; b.classList.add("shake");
-    document.getElementById("pw-err").textContent="密碼錯誤，請再試一次";
-    document.getElementById("pw-input").value="";
-    document.getElementById("pw-input").focus();
-  }
-}
-</script>
 
 <div class="max-w-2xl mx-auto">
 
