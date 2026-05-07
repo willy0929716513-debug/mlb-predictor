@@ -16,7 +16,7 @@ EDGE_MIN_RL    = 0.12   # 讓分 raw_edge 門檻（↑0.10→0.12 要求更明�
 EDGE_MIN_TOT   = 0.09   # 大小分（totals）edge 門檻
 EDGE_MIN_ML_FAV= 0.14   # ML低賠（賠率<1.65）額外edge門檻：損益平衡高，需更大優勢
 MIN_MODEL_P_ML  = 0.65  # ML 模型勝率門檻（↑0.55→0.65，1.60賠率損益平衡62.5%）
-MIN_MODEL_P_RL  = 0.73  # RL 門檻（↑0.68→0.73 過濾70-72%邊際注單）
+MIN_MODEL_P_RL  = 0.68  # RL 門檻（恢復0.68，0.73過度嚴格導致遺漏高conf好注）
 MIN_MODEL_P_TOT = 0.60  # TOT 門檻：避免貼線邊際注單
 ML_BET_CONF_MIN = 0.72  # ML 最低信心門檻（同RL，過濾邊際低賠注單）
 ML_FAV_PRICE    = 1.65  # ML低賠閾值：低於此賠率視為高損益平衡重注
@@ -2037,21 +2037,40 @@ def run():
             if not hp or not ap: continue
             pr=predict(h,a,hp_k,ap_k,market_total=mt)
             cf=pr["conf_factor"]; mg=pr["margin"]; ds=pr["dyn_std"]
+            _h_era=get_pitcher_era(hp_k); _a_era=get_pitcher_era(ap_k)
             # ML edge
             he=pr["home_win_prob"]-1/hp; ae=pr["away_win_prob"]-1/ap
             be=max(he,ae); bp2=hp if he>=ae else ap; best_lbl="ML"
+            best_mp=pr["home_win_prob"] if he>=ae else pr["away_win_prob"]
             # 讓分 edge（比較時套用0.90信心折扣）
             if rl_hp and rl_ap:
                 rl_ph=runline_prob(mg,1.5,ds)
                 rl_he=rl_ph-1/rl_hp; rl_ae=(1-rl_ph)-1/rl_ap; rl_be=max(rl_he,rl_ae)
-                if rl_be*0.90>be: be=rl_be; bp2=rl_hp if rl_he>=rl_ae else rl_ap; best_lbl="RL"
+                if rl_be*0.90>be:
+                    be=rl_be; bp2=rl_hp if rl_he>=rl_ae else rl_ap; best_lbl="RL"
+                    best_mp=rl_ph if rl_he>=rl_ae else (1-rl_ph)
             # 大小分 edge（比較時套用0.88信心折扣）
             if ov_p and un_p:
                 p_ov=over_prob(pr.get("pure_total_tot", pr["pure_total"]),mt)
                 tot_he=p_ov-1/ov_p; tot_ue=(1-p_ov)-1/un_p; tot_be=max(tot_he,tot_ue)
-                if tot_be*0.88>be: be=tot_be; bp2=ov_p if tot_he>=tot_ue else un_p; best_lbl="TOT"
-            diag.append("`%s@%s` [%s] Edge=%+.1f%% P=%.2f conf=%.0f%% SP:%s/%s"%(
-                CN.get(a,a),CN.get(h,h),best_lbl,be*100,bp2,cf*100,hp_k or "?",ap_k or "?"))
+                if tot_be*0.88>be:
+                    be=tot_be; bp2=ov_p if tot_he>=tot_ue else un_p; best_lbl="TOT"
+                    best_mp=p_ov if tot_he>=tot_ue else (1-p_ov)
+            # 診斷擋關原因
+            _why=""
+            _conf_min = RL_BET_CONF_MIN if best_lbl=="RL" else (ML_BET_CONF_MIN if best_lbl=="ML" else 0.65)
+            _mp_min   = MIN_MODEL_P_RL  if best_lbl=="RL" else (MIN_MODEL_P_ML  if best_lbl=="ML" else MIN_MODEL_P_TOT)
+            if cf < 0.65:             _why="❌低信心"
+            elif cf < _conf_min:      _why="❌信心<%.0f%%"%(_conf_min*100)
+            elif best_mp < _mp_min:   _why="❌modelP=%.2f<%.2f"%(best_mp,_mp_min)
+            elif best_lbl=="RL" and (_h_era<=ACE_ERA_RL or _a_era<=ACE_ERA_RL):
+                _ace=hp_k if _h_era<=ACE_ERA_RL else ap_k
+                _why="❌王牌%s ERA%.2f"%((_ace or "?"),min(_h_era,_a_era))
+            elif best_lbl=="RL":      _why="❌RL保護"
+            elif best_lbl=="ML" and bp2<ML_FAV_PRICE and be<EDGE_MIN_ML_FAV: _why="❌低賠edge不足"
+            else:                     _why="❌其他過濾"
+            diag.append("`%s@%s` [%s] Edge=%+.1f%% P=%.2f conf=%.0f%% modelP=%.2f %s SP:%s/%s"%(
+                CN.get(a,a),CN.get(h,h),best_lbl,be*100,bp2,cf*100,best_mp,_why,hp_k or "?",ap_k or "?"))
         for d in sorted(diag,key=lambda x:-float(x.split("Edge=")[1].split("%")[0])): lines.append(d)
     else:
         lines.append("**推薦 %d 場（💎強→⭐弱 排序）**"%len(picks))
