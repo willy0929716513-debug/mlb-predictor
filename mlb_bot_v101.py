@@ -14,9 +14,11 @@ GIST_DESC = "mlb_bot_history"
 EDGE_MIN       = 0.08
 EDGE_MIN_RL    = 0.12   # 讓分 raw_edge 門檻（↑0.10→0.12 要求更明確優勢）
 EDGE_MIN_TOT   = 0.09   # 大小分（totals）edge 門檻
-MIN_MODEL_P_ML  = 0.55  # ML 模型勝率門檻
+EDGE_MIN_ML_FAV= 0.14   # ML低賠（賠率<1.65）額外edge門檻：損益平衡高，需更大優勢
+MIN_MODEL_P_ML  = 0.65  # ML 模型勝率門檻（↑0.55→0.65，1.60賠率損益平衡62.5%）
 MIN_MODEL_P_RL  = 0.73  # RL 門檻（↑0.68→0.73 過濾70-72%邊際注單）
 MIN_MODEL_P_TOT = 0.60  # TOT 門檻：避免貼線邊際注單
+ML_BET_CONF_MIN = 0.72  # ML 最低信心門檻（同RL，過濾邊際低賠注單）
 MOD_W          = 0.18
 MKT_W          = 0.82
 TOTAL_STD      = 2.30   # 兩隊合計得分標準差
@@ -1567,7 +1569,10 @@ def run():
             _mp_min = MIN_MODEL_P_RL if btype==BET_RL else (MIN_MODEL_P_TOT if btype==BET_TOT else MIN_MODEL_P_ML)
             if model_p < _mp_min: continue
             if bet_conf<0.65: continue
+            if btype == BET_ML and bet_conf < ML_BET_CONF_MIN: continue  # ML 同RL，過濾邊際低賠
             if btype == BET_RL and bet_conf < RL_BET_CONF_MIN: continue  # RL 需更高信心
+            # ML低賠保護：賠率<1.65（損益平衡≥60.6%），需更大的devigged edge
+            if btype == BET_ML and bp < 1.65 and raw_edge < EDGE_MIN_ML_FAV: continue
             # ── ★ RL 保護層（依序：信心→TBD→爆冷→王牌→菁英對決）──
             if btype == BET_RL:
                 # ① TBD 投手：ERA預設值不可靠，不推薦讓分受讓
