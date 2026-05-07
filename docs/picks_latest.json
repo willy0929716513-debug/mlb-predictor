@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-05-07 23:34 (台灣時間)",
-  "date": "2026-05-07",
+  "generated_at": "2026-05-08 01:11 (台灣時間)",
+  "date": "2026-05-08",
   "stats": {
     "settled": 82,
     "wins": 54,
@@ -39,12 +39,12 @@
       "home_cn": "教士",
       "bet_label": "紅雀 讓分(+1.5)",
       "bk": "FanDuel",
-      "bp": 1.69,
-      "con_p": 1.663,
-      "dv_p": 0.5781,
+      "bp": 1.68,
+      "con_p": 1.664,
+      "dv_p": 0.5779,
       "edge": 12.4,
       "conf": 72.6,
-      "stake": 10.7,
+      "stake": 10.2,
       "model_p": 70.2,
       "away_sp": "Matthew Liberatore",
       "home_sp": "Michael King",
@@ -69,7 +69,7 @@
       "model_total": null,
       "market_total": null,
       "park_factor": null,
-      "line_clv": 0.69,
+      "line_clv": 0.35,
       "game_date": "2026-05-08",
       "game_time": "10:11"
     }
