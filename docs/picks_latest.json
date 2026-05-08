@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-09 00:11 (台灣時間)",
+  "generated_at": "2026-05-09 00:46 (台灣時間)",
   "date": "2026-05-09",
   "stats": {
     "settled": 83,
@@ -41,7 +41,7 @@
       "bk": "DraftKings",
       "bp": 1.93,
       "con_p": 1.894,
-      "dv_p": 0.5043,
+      "dv_p": 0.5042,
       "edge": 12.0,
       "conf": 69.3,
       "stake": 11.1,
@@ -69,7 +69,7 @@
       "model_total": 7.5,
       "market_total": 8.0,
       "park_factor": 0.94,
-      "line_clv": 1.81,
+      "line_clv": 0.0,
       "game_date": "2026-05-09",
       "game_time": "09:41"
     }
