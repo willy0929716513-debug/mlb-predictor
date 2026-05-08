@@ -2051,6 +2051,18 @@ def run():
                             if nm=="Over" and (ov_p is None or p>ov_p): ov_p=p
                             elif nm=="Under" and (un_p is None or p>un_p): un_p=p
             if not hp or not ap: continue
+            # 取得本場快照（用於 CLV 診斷）
+            _diag_snap_key = None
+            try:
+                _c = game.get("commence_time","")
+                _gdt = datetime.datetime.fromisoformat(_c.replace("Z","+00:00"))
+                _gdate = (_gdt + datetime.timedelta(hours=8)).strftime("%Y-%m-%d")
+                _diag_snap_key = "%s|%s|%s" % (_gdate, h, a)
+            except: pass
+            _prev_gd = prev_snap.get(_diag_snap_key, {}) if _diag_snap_key else {}
+            def _diag_clv(side_key, curr_p):
+                prev_p = _prev_gd.get(side_key)
+                return line_clv(curr_p, prev_p) if prev_p and curr_p else None
             pr=predict(h,a,hp_k,ap_k,market_total=mt)
             cf=pr["conf_factor"]; mg=pr["margin"]; ds=pr["dyn_std"]
             _h_era=get_pitcher_era(hp_k); _a_era=get_pitcher_era(ap_k)
@@ -2059,7 +2071,7 @@ def run():
             be=max(he,ae); bp2=hp if he>=ae else ap; best_lbl="ML"
             best_mp=pr["home_win_prob"] if he>=ae else pr["away_win_prob"]
             # 讓分 edge（比較時套用0.90信心折扣；使用RL_STD_MULT與主循環一致）
-            rl_he=rl_ae=0.0
+            rl_he=rl_ae=tot_he=tot_ue=0.0
             if rl_hp and rl_ap:
                 rl_ph=runline_prob(mg,1.5,ds*RL_STD_MULT)
                 rl_ph=max(0.25,min(0.72,rl_ph))  # 與主循環clamp一致
@@ -2074,6 +2086,12 @@ def run():
                 if tot_be*0.88>be:
                     be=tot_be; bp2=ov_p if tot_he>=tot_ue else un_p; best_lbl="TOT"
                     best_mp=p_ov if tot_he>=tot_ue else (1-p_ov)
+            # ML blend 計算（用於診斷）
+            _inv_sum_d = 1/hp + 1/ap
+            _h_mkt_nv_d = (1/hp)/_inv_sum_d; _a_mkt_nv_d = (1/ap)/_inv_sum_d
+            _h_blend_d = MOD_W*pr["home_win_prob"] + MKT_W*_h_mkt_nv_d
+            _a_blend_d = MOD_W*pr["away_win_prob"] + MKT_W*_a_mkt_nv_d
+            _best_blend_d = _h_blend_d if he>=ae else _a_blend_d
             # 診斷擋關原因
             _why=""
             _conf_min = RL_BET_CONF_MIN if best_lbl=="RL" else (ML_BET_CONF_MIN if best_lbl=="ML" else 0.65)
@@ -2097,14 +2115,25 @@ def run():
                     _why="❌FIP回歸%s(gap+%.1f)"%(hp_k,_h_fip_d-_h_era_r)
                 elif (_a_fip_d and _a_era_r and (_a_fip_d-_a_era_r)>FIP_ERA_WARN_GAP):
                     _why="❌FIP回歸%s(gap+%.1f)"%(ap_k,_a_fip_d-_a_era_r)
-                elif abs(_era_diff_d)>BLOWOUT_ERA_DIFF and ((_h_era>=BLOWOUT_ERA_POOR and _era_diff_d>0) or (_a_era>=BLOWOUT_ERA_POOR and _era_diff_d<0)):
+                elif (
+                    (rl_he>=rl_ae and _era_diff_d>BLOWOUT_ERA_DIFF  and _h_era>=BLOWOUT_ERA_POOR and mg<-1.2) or
+                    (rl_he<rl_ae  and _era_diff_d<-BLOWOUT_ERA_DIFF and _a_era>=BLOWOUT_ERA_POOR and mg>1.2)
+                ):
                     _why="❌爆冷保護(ERAdiff%.1f)"%_era_diff_d
                 elif not hp_k or not ap_k:
                     _why="❌TBD先發"
                 else:
-                    _why="❌RL保護(其他)"
+                    _clv_key = "rl_h" if rl_he>=rl_ae else "rl_a"
+                    _clv_p   = rl_hp  if rl_he>=rl_ae else rl_ap
+                    _clv_v   = _diag_clv(_clv_key, _clv_p)
+                    _why = "❌CLV下行%.2f%%"%_clv_v if (_clv_v is not None and _clv_v < LINE_CLV_MIN) else "❌RL保護(其他)"
             elif best_lbl=="ML" and bp2<ML_FAV_PRICE and be<EDGE_MIN_ML_FAV: _why="❌低賠edge不足"
-            else:                     _why="❌其他過濾"
+            elif best_lbl=="ML" and _best_blend_d < 0.60: _why="❌混合<60%(模市背離)"
+            else:
+                _clv_key = ("home_ml" if he>=ae else "away_ml") if best_lbl=="ML" else ("over" if tot_he>=tot_ue else "under")
+                _clv_p   = (hp if he>=ae else ap) if best_lbl=="ML" else (ov_p if tot_he>=tot_ue else un_p)
+                _clv_v   = _diag_clv(_clv_key, _clv_p)
+                _why = "❌CLV下行%.2f%%"%_clv_v if (_clv_v is not None and _clv_v < LINE_CLV_MIN) else "❌其他過濾"
             diag.append("`%s@%s` [%s] Edge=%+.1f%% P=%.2f conf=%.0f%% modelP=%.2f %s SP:%s/%s"%(
                 CN.get(a,a),CN.get(h,h),best_lbl,be*100,bp2,cf*100,best_mp,_why,hp_k or "?",ap_k or "?"))
         for d in sorted(diag,key=lambda x:-float(x.split("Edge=")[1].split("%")[0])): lines.append(d)
