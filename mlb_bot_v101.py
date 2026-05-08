@@ -69,6 +69,7 @@ FIP_BLEND_HIGH = 0.70   # FIP-ERA缺口 1.0–1.5：嚴重幸運ERA，FIP主導
 FIP_BLEND_MAX  = 0.85   # FIP-ERA缺口 > 1.5：極端幸運ERA，幾乎全信FIP
 FIP_MISSING_REGRESS = 0.25  # FIP無資料時，ERA向聯盟均值回歸比例（保守修正）
 ERA_FLOOR_NO_FIP    = 2.50  # FIP無資料時有效ERA下限（防止過信異常低ERA）
+RELIEVER_SP_REGRESS = 0.50  # 牛棚型先發：ERA不代表先發表現，50%回歸聯盟均值
 K9_HIGH_THRESH = 9.0    # 高三振率門檻（K/9）：雙方達標時UNDER信心加成
 K9_UNDER_CONF  = 0.04   # 雙高K/9 UNDER信心加成幅度
 # ── ★ 投手休息天數 ────────────────────────────────────────
@@ -859,6 +860,10 @@ def settle_hist(hist):
                     mkt = r.get("market_total")
                     if mkt is None: continue
                     total = h_score + a_score
+                    if total == mkt:          # 整數線平局：退注，不計入勝負
+                        r["result"] = "P"; updated += 1
+                        log.info("Push [%s] total=%d line=%.1f", date_str, total, mkt)
+                        continue
                     win = (total > mkt) if label == "OVER" else (total < mkt)
                 else:
                     continue
@@ -1001,10 +1006,13 @@ def get_pitcher_era(key):
             # FIP無資料：ERA可靠性未知，向聯盟均值保守回歸，且不低於下限
             adj_recent = round(recent_era*(1-FIP_MISSING_REGRESS) + LEAGUE_ERA*FIP_MISSING_REGRESS, 2)
             adj_recent = max(ERA_FLOOR_NO_FIP, adj_recent)
-        if season_era is not None:
-            return round(adj_recent*SP_RECENT_W + season_era*SP_SEASON_W, 2)
-        return adj_recent
-    return (season_era if season_era is not None else LEAGUE_ERA+0.60)
+        era_out = round(adj_recent*SP_RECENT_W + season_era*SP_SEASON_W, 2) if season_era is not None else adj_recent
+    else:
+        era_out = season_era if season_era is not None else LEAGUE_ERA+0.60
+    # 牛棚型先發：先發表現難以預測，50%回歸聯盟均值降低過度依賴
+    if k in _RELIEVER_FLAGS:
+        era_out = round(era_out * (1 - RELIEVER_SP_REGRESS) + LEAGUE_ERA * RELIEVER_SP_REGRESS, 2)
+    return era_out
 
 def get_rest_days(sp_key):
     """計算投手從最後先發到今天的休息天數；無資料返回 None。"""
@@ -1676,7 +1684,10 @@ def run():
             if btype == BET_ML:
                 _n_books = len(con_h_prices) if bside=="home" else len(con_a_prices)
             elif btype == BET_RL:
-                _n_books = len(con_rl_h) if bside in ("rl_h","rl_h_25") else len(con_rl_a)
+                if   bside == "rl_h_25": _n_books = len(con_rl_h_25)
+                elif bside == "rl_a_25": _n_books = len(con_rl_a_25)
+                elif bside == "rl_h":    _n_books = len(con_rl_h)
+                else:                    _n_books = len(con_rl_a)
             else:
                 _n_books = len(con_over) if bside=="over" else len(con_under)
             if _n_books < MIN_BOOKS:
