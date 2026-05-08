@@ -860,6 +860,10 @@ def settle_hist(hist):
                     mkt = r.get("market_total")
                     if mkt is None: continue
                     total = h_score + a_score
+                    if total == mkt:          # 整數線平局：退注，不計入勝負
+                        r["result"] = "P"; updated += 1
+                        log.info("Push [%s] total=%d line=%.1f", date_str, total, mkt)
+                        continue
                     win = (total > mkt) if label == "OVER" else (total < mkt)
                 else:
                     continue
@@ -1680,7 +1684,10 @@ def run():
             if btype == BET_ML:
                 _n_books = len(con_h_prices) if bside=="home" else len(con_a_prices)
             elif btype == BET_RL:
-                _n_books = len(con_rl_h) if bside in ("rl_h","rl_h_25") else len(con_rl_a)
+                if   bside == "rl_h_25": _n_books = len(con_rl_h_25)
+                elif bside == "rl_a_25": _n_books = len(con_rl_a_25)
+                elif bside == "rl_h":    _n_books = len(con_rl_h)
+                else:                    _n_books = len(con_rl_a)
             else:
                 _n_books = len(con_over) if bside=="over" else len(con_under)
             if _n_books < MIN_BOOKS:
