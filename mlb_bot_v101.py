@@ -46,7 +46,7 @@ BLOWOUT_ERA_DIFF = 1.5  # ERA差門檻：弱投手隊不推薦讓分受讓
 BLOWOUT_ERA_POOR = 4.20 # 弱投手ERA門檻（≥此值且ERA差距大，拒絕RL）
 ELITE_ERA_DUAL   = 3.50 # 雙方投手都低於此值時視為菁英對決
 ELITE_ERA_OVER_P = 0.68 # 菁英投手對決時，OVER需達更高概率門檻（防RS拉高）
-ACE_ERA_RL       = 2.70 # 面對此ERA以下的王牌投手時，拒絕推薦讓分受讓
+ACE_ERA_RL       = 2.20 # 面對此ERA以下的真正頂級王牌時，拒絕推薦讓分受讓（↓2.70→2.20）
 FIP_ERA_WARN_GAP = 1.50 # RL: 推薦隊SP的FIP比ERA高超過此值 → 幸運ERA不可持續，拒絕RL
 FIP_ERA_UNDER_GAP= 1.00 # UNDER: 任一SP的FIP比ERA高超過此值 → 幸運ERA，失分回歸，拒絕UNDER
 ODDS_SNAP_PATH = "docs/odds_snapshot.json"
@@ -2068,7 +2068,21 @@ def run():
             elif best_lbl=="RL" and (_h_era<=ACE_ERA_RL or _a_era<=ACE_ERA_RL):
                 _ace=hp_k if _h_era<=ACE_ERA_RL else ap_k
                 _why="❌王牌%s ERA%.2f"%((_ace or "?"),min(_h_era,_a_era))
-            elif best_lbl=="RL":      _why="❌RL保護"
+            elif best_lbl=="RL":
+                # 細分 RL保護 原因
+                _h_fip_d=_PITCHER_FIP.get(hp_k); _a_fip_d=_PITCHER_FIP.get(ap_k)
+                _h_era_r=_RECENT_ERA.get(hp_k);  _a_era_r=_RECENT_ERA.get(ap_k)
+                _era_diff_d = _h_era - _a_era
+                if (_h_fip_d and _h_era_r and (_h_fip_d-_h_era_r)>FIP_ERA_WARN_GAP):
+                    _why="❌FIP回歸%s(gap+%.1f)"%(hp_k,_h_fip_d-_h_era_r)
+                elif (_a_fip_d and _a_era_r and (_a_fip_d-_a_era_r)>FIP_ERA_WARN_GAP):
+                    _why="❌FIP回歸%s(gap+%.1f)"%(ap_k,_a_fip_d-_a_era_r)
+                elif abs(_era_diff_d)>BLOWOUT_ERA_DIFF and ((_h_era>=BLOWOUT_ERA_POOR and _era_diff_d>0) or (_a_era>=BLOWOUT_ERA_POOR and _era_diff_d<0)):
+                    _why="❌爆冷保護(ERAdiff%.1f)"%_era_diff_d
+                elif not hp_k or not ap_k:
+                    _why="❌TBD先發"
+                else:
+                    _why="❌RL保護(其他)"
             elif best_lbl=="ML" and bp2<ML_FAV_PRICE and be<EDGE_MIN_ML_FAV: _why="❌低賠edge不足"
             else:                     _why="❌其他過濾"
             diag.append("`%s@%s` [%s] Edge=%+.1f%% P=%.2f conf=%.0f%% modelP=%.2f %s SP:%s/%s"%(
