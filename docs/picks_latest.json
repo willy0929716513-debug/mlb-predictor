@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-05-08 22:32 (台灣時間)",
-  "date": "2026-05-08",
+  "generated_at": "2026-05-09 00:11 (台灣時間)",
+  "date": "2026-05-09",
   "stats": {
     "settled": 83,
     "wins": 55,
@@ -38,13 +38,13 @@
       "away_cn": "大都會",
       "home_cn": "響尾蛇",
       "bet_label": "UNDER 8.0",
-      "bk": "Bovada",
-      "bp": 2.0,
-      "con_p": 1.907,
-      "dv_p": 0.5009,
-      "edge": 12.4,
+      "bk": "DraftKings",
+      "bp": 1.93,
+      "con_p": 1.894,
+      "dv_p": 0.5043,
+      "edge": 12.0,
       "conf": 69.3,
-      "stake": 13.5,
+      "stake": 11.1,
       "model_p": 62.5,
       "away_sp": "Nolan McLean",
       "home_sp": "Ryne Nelson",
@@ -69,7 +69,7 @@
       "model_total": 7.5,
       "market_total": 8.0,
       "park_factor": 0.94,
-      "line_clv": 0.0,
+      "line_clv": 1.81,
       "game_date": "2026-05-09",
       "game_time": "09:41"
     }
