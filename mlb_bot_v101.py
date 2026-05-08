@@ -989,10 +989,13 @@ def get_pitcher_era(key):
         # FIP 動態混合：FIP-ERA缺口越大 → FIP權重越高（幸運ERA回歸修正）
         if fip:
             _gap = fip - recent_era
-            if _gap > 1.50:   _fw = FIP_BLEND_MAX   # 極端幸運ERA
-            elif _gap > 1.00: _fw = FIP_BLEND_HIGH   # 嚴重幸運ERA
-            elif _gap > 0.50: _fw = FIP_BLEND_MID    # 輕度幸運ERA
-            else:             _fw = FIP_BLEND_W       # ERA可信，基準混合
+            if   _gap >  1.50: _fw = FIP_BLEND_MAX   # 極端幸運ERA
+            elif _gap >  1.00: _fw = FIP_BLEND_HIGH   # 嚴重幸運ERA
+            elif _gap >  0.50: _fw = FIP_BLEND_MID    # 輕度幸運ERA
+            elif _gap < -1.50: _fw = FIP_BLEND_MAX   # FIP遠低於ERA：投手被低估
+            elif _gap < -1.00: _fw = FIP_BLEND_HIGH  # 投手表現優於ERA
+            elif _gap < -0.50: _fw = FIP_BLEND_MID   # 輕度低估
+            else:              _fw = FIP_BLEND_W      # ERA可信，基準混合
             adj_recent = round(recent_era*(1-_fw) + fip*_fw, 2)
         else:
             # FIP無資料：ERA可靠性未知，向聯盟均值保守回歸，且不低於下限
