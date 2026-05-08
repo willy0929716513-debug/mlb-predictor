@@ -989,10 +989,13 @@ def get_pitcher_era(key):
         # FIP 動態混合：FIP-ERA缺口越大 → FIP權重越高（幸運ERA回歸修正）
         if fip:
             _gap = fip - recent_era
-            if _gap > 1.50:   _fw = FIP_BLEND_MAX   # 極端幸運ERA
-            elif _gap > 1.00: _fw = FIP_BLEND_HIGH   # 嚴重幸運ERA
-            elif _gap > 0.50: _fw = FIP_BLEND_MID    # 輕度幸運ERA
-            else:             _fw = FIP_BLEND_W       # ERA可信，基準混合
+            if   _gap >  1.50: _fw = FIP_BLEND_MAX   # 極端幸運ERA
+            elif _gap >  1.00: _fw = FIP_BLEND_HIGH   # 嚴重幸運ERA
+            elif _gap >  0.50: _fw = FIP_BLEND_MID    # 輕度幸運ERA
+            elif _gap < -1.50: _fw = FIP_BLEND_MAX   # FIP遠低於ERA：投手被低估
+            elif _gap < -1.00: _fw = FIP_BLEND_HIGH  # 投手表現優於ERA
+            elif _gap < -0.50: _fw = FIP_BLEND_MID   # 輕度低估
+            else:              _fw = FIP_BLEND_W      # ERA可信，基準混合
             adj_recent = round(recent_era*(1-_fw) + fip*_fw, 2)
         else:
             # FIP無資料：ERA可靠性未知，向聯盟均值保守回歸，且不低於下限
@@ -2044,9 +2047,11 @@ def run():
             he=pr["home_win_prob"]-1/hp; ae=pr["away_win_prob"]-1/ap
             be=max(he,ae); bp2=hp if he>=ae else ap; best_lbl="ML"
             best_mp=pr["home_win_prob"] if he>=ae else pr["away_win_prob"]
-            # 讓分 edge（比較時套用0.90信心折扣）
+            # 讓分 edge（比較時套用0.90信心折扣；使用RL_STD_MULT與主循環一致）
+            rl_he=rl_ae=0.0
             if rl_hp and rl_ap:
-                rl_ph=runline_prob(mg,1.5,ds)
+                rl_ph=runline_prob(mg,1.5,ds*RL_STD_MULT)
+                rl_ph=max(0.25,min(0.72,rl_ph))  # 與主循環clamp一致
                 rl_he=rl_ph-1/rl_hp; rl_ae=(1-rl_ph)-1/rl_ap; rl_be=max(rl_he,rl_ae)
                 if rl_be*0.90>be:
                     be=rl_be; bp2=rl_hp if rl_he>=rl_ae else rl_ap; best_lbl="RL"
@@ -2065,9 +2070,13 @@ def run():
             if cf < 0.65:             _why="❌低信心"
             elif cf < _conf_min:      _why="❌信心<%.0f%%"%(_conf_min*100)
             elif best_mp < _mp_min:   _why="❌modelP=%.2f<%.2f"%(best_mp,_mp_min)
-            elif best_lbl=="RL" and (_h_era<=ACE_ERA_RL or _a_era<=ACE_ERA_RL):
-                _ace=hp_k if _h_era<=ACE_ERA_RL else ap_k
-                _why="❌王牌%s ERA%.2f"%((_ace or "?"),min(_h_era,_a_era))
+            elif best_lbl=="RL" and (
+                (rl_he>=rl_ae and _a_era<=ACE_ERA_RL) or   # 主場RL：檢查客隊王牌
+                (rl_he<rl_ae  and _h_era<=ACE_ERA_RL)       # 客場RL：檢查主隊王牌
+            ):
+                _ace=ap_k if rl_he>=rl_ae else hp_k
+                _ace_era=_a_era if rl_he>=rl_ae else _h_era
+                _why="❌王牌%s ERA%.2f"%((_ace or "?"),_ace_era)
             elif best_lbl=="RL":
                 # 細分 RL保護 原因
                 _h_fip_d=_PITCHER_FIP.get(hp_k); _a_fip_d=_PITCHER_FIP.get(ap_k)
