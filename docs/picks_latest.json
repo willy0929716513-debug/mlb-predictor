@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-05-09 00:46 (台灣時間)",
+  "generated_at": "2026-05-09 16:06 (台灣時間)",
   "date": "2026-05-09",
   "stats": {
-    "settled": 83,
-    "wins": 55,
-    "win_rate": 66.3,
-    "total_in": 765.0,
-    "total_pnl": 176.5,
-    "roi": 23.1,
+    "settled": 84,
+    "wins": 56,
+    "win_rate": 66.7,
+    "total_in": 776.1,
+    "total_pnl": 186.9,
+    "roi": 24.1,
     "by_type": {
       "ML": {
         "wins": 21,
@@ -22,56 +22,12 @@
         "roi": 70.6
       },
       "TOT": {
-        "wins": 12,
-        "settled": 19,
-        "win_rate": 63.2,
-        "roi": 44.1
+        "wins": 13,
+        "settled": 20,
+        "win_rate": 65.0,
+        "roi": 45.9
       }
     }
   },
-  "picks": [
-    {
-      "tier": "⭐ 穩定",
-      "btype": "大小分",
-      "away": "mets",
-      "home": "diamondbacks",
-      "away_cn": "大都會",
-      "home_cn": "響尾蛇",
-      "bet_label": "UNDER 8.0",
-      "bk": "DraftKings",
-      "bp": 1.93,
-      "con_p": 1.894,
-      "dv_p": 0.5042,
-      "edge": 12.0,
-      "conf": 69.3,
-      "stake": 11.1,
-      "model_p": 62.5,
-      "away_sp": "Nolan McLean",
-      "home_sp": "Ryne Nelson",
-      "away_era": 2.12,
-      "home_era": 4.76,
-      "away_fip": 1.52,
-      "home_fip": 4.86,
-      "away_k9": 13.6,
-      "home_k9": 8.8,
-      "away_avgip": 5.1,
-      "home_avgip": 5.1,
-      "away_whip": 1.25,
-      "home_whip": 1.31,
-      "away_rest": null,
-      "home_rest": null,
-      "away_rs": 2.33,
-      "home_rs": 5.67,
-      "away_rpg": 4.01,
-      "home_rpg": 4.47,
-      "pred_away": 3.8,
-      "pred_home": 3.8,
-      "model_total": 7.5,
-      "market_total": 8.0,
-      "park_factor": 0.94,
-      "line_clv": 0.0,
-      "game_date": "2026-05-09",
-      "game_time": "09:41"
-    }
-  ]
+  "picks": []
 }
