@@ -33,13 +33,14 @@ MIN_P          = 1.35
 MAX_P          = 2.80  # 上限放寬（↑2.50→2.80），讓高賠RL好注進來
 BANK           = 1000.0
 KELLY          = 0.12
-KELLY_MAX      = 150.0
-KELLY_MIN      = 5.0
+KELLY_MAX      = 100.0  # 每注上限 $100
+KELLY_FLOOR    = 50.0   # 每注下限 $50（Kelly算出更低時仍至少投50，不影響Kelly=0的排除邏輯）
+KELLY_MIN      = 5.0    # Kelly過濾門檻：Kelly算出≤0時排除注單
 MAX_PICKS      = 5      # CLV 排序後只取前 N 名，讓推薦穩定
 MAX_RL_PICKS   = 2      # 每日RL推薦上限（防止同日過度集中）
 RL_BET_CONF_MIN= 0.68  # RL 最低信心門檻（↓0.70→0.68，RL ROI+71%，小幅鬆動增加穩定性）
 RL_KELLY_MULT  = 0.75  # RL Kelly 折扣（不確定性更高，下注降低25%）
-RL_KELLY_MAX   = 100.0 # RL 最大下注上限（低於ML的150）
+RL_KELLY_MAX   = 100.0 # RL 最大下注上限
 LINE_CLV_MIN   = -1.50  # 線路 CLV 門檻（↑-0.30→-1.50）：2.50賠率需移動0.10+才觸發；≤0.30%只是噪音
 STALE_PRICE_GAP = 0.20  # 最佳賠率超過共識20%以上 → 可能是過時賠率，顯示警告
 BLOWOUT_ERA_DIFF = 1.5  # ERA差門檻：弱投手隊不推薦讓分受讓
@@ -83,7 +84,7 @@ LOW_BOOKS_CONF = 0.88   # bookmaker數不足時的信心係數折扣
 # ── ★ 相關性風險管理 ──────────────────────────────────────
 CORR_DAMP_W    = 0.80   # 同方向第二注以後的Kelly折扣（20%縮注）
 # ── ★ 風險管理 ────────────────────────────────────────────
-MAX_DAILY_STAKE  = 300.0 # 單日總曝險上限（佔bankroll 30%）
+MAX_DAILY_STAKE  = 400.0 # 單日總曝險上限（↑300→400，配合每注$50起）
 SLUMP_WINDOW     = 10    # 低迷偵測近N注
 SLUMP_WR_THRESH  = 0.40  # 近N注勝率低於此值視為低迷期
 SLUMP_KELLY_MUL  = 0.75  # 低迷期全局Kelly折扣
@@ -1699,12 +1700,13 @@ def run():
             _dv_p_kelly = _dv.get(bside, 1.0/con_p) if con_p else None
             stake = kelly_stake(raw_edge, model_p, bp, conf=bet_conf, dv_p=_dv_p_kelly)
             if btype == BET_RL:
-                # RL 下注降低25%、上限100（不確定性更高）
-                stake = round(min(max(KELLY_MIN, stake * RL_KELLY_MULT), RL_KELLY_MAX), 1)
+                # RL 下注降低25%、上限RL_KELLY_MAX
+                stake = round(min(max(0.0, stake * RL_KELLY_MULT), RL_KELLY_MAX), 1)
             elif btype == BET_ML and bp < ML_FAV_PRICE:
-                # ML低賠（損益平衡高）：Kelly縮水20%，降低高break-even場次的曝險
-                stake = round(max(KELLY_MIN, stake * ML_FAV_KELLY), 1)
-            if stake < KELLY_MIN: continue
+                # ML低賠（損益平衡高）：Kelly縮水20%
+                stake = round(max(0.0, stake * ML_FAV_KELLY), 1)
+            if stake <= 0: continue  # Kelly建議不下（負期望值），排除
+            stake = round(max(KELLY_FLOOR, min(KELLY_MAX, stake)), 1)  # 下限$50，上限$100
             score = raw_edge * bet_conf
             # ④ 菁英對決中RL降分，讓TOT注單更容易獲選（偏好UNDER而非RL）
             if btype == BET_RL and _h_era_v < ELITE_ERA_DUAL and _a_era_v < ELITE_ERA_DUAL:
@@ -1932,14 +1934,14 @@ def run():
             _under_seen += 1
             if _under_seen > 1:
                 old_s = p["stake"]
-                p["stake"] = round(max(KELLY_MIN, old_s * CORR_DAMP_W), 1)
+                p["stake"] = round(max(KELLY_FLOOR, old_s * CORR_DAMP_W), 1)
                 p["msg"]   = re.sub(r"Kelly: \$[0-9.]+(?:\s*\[[^\]]*\])?",
                                     "Kelly: $%.1f [📊相關折]"%p["stake"], p["msg"], count=1)
         if _is_over:
             _over_seen += 1
             if _over_seen > 1:
                 old_s = p["stake"]
-                p["stake"] = round(max(KELLY_MIN, old_s * CORR_DAMP_W), 1)
+                p["stake"] = round(max(KELLY_FLOOR, old_s * CORR_DAMP_W), 1)
                 p["msg"]   = re.sub(r"Kelly: \$[0-9.]+(?:\s*\[[^\]]*\])?",
                                     "Kelly: $%.1f [📊相關折]"%p["stake"], p["msg"], count=1)
 
@@ -1948,7 +1950,7 @@ def run():
         log.info("Slump mode: Kelly x%.2f applied to all picks", _slump_mult)
         for p in picks:
             old_s = p["stake"]
-            p["stake"] = round(max(KELLY_MIN, old_s * _slump_mult), 1)
+            p["stake"] = round(max(KELLY_FLOOR, old_s * _slump_mult), 1)
             p["msg"] = re.sub(r"Kelly: \$[0-9.]+(?:\s*\[[^\]]*\])?",
                               "Kelly: $%.1f [📉低迷]"%p["stake"], p["msg"], count=1)
 
@@ -1959,7 +1961,7 @@ def run():
         log.info("Daily cap: total_stake %.1f > %.1f, ratio=%.2f", _total_stake, MAX_DAILY_STAKE, _ratio)
         for p in picks:
             old_s = p["stake"]
-            p["stake"] = round(max(KELLY_MIN, old_s * _ratio), 1)
+            p["stake"] = round(max(KELLY_FLOOR, old_s * _ratio), 1)
             p["msg"] = re.sub(r"Kelly: \$[0-9.]+(?:\s*\[[^\]]*\])?",
                               "Kelly: $%.1f [🔒限額]"%p["stake"], p["msg"], count=1)
 
