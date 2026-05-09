@@ -1587,7 +1587,10 @@ def run():
             edge_ok = (raw_edge*bet_conf >= edge_min) if btype==BET_ML else (raw_edge >= edge_min)
             if not edge_ok: continue
             if bp<MIN_P or bp>MAX_P: continue
-            if btype==BET_ML and (blend_p is None or blend_p<0.60): continue
+            if btype==BET_ML and (blend_p is None or
+                (bp < 2.0 and blend_p < 0.57) or   # ML favorite: model+market agree direction
+                (bp >= 2.0 and blend_p < 0.60)):    # ML underdog: stricter
+                continue
             _mp_min = MIN_MODEL_P_RL if btype==BET_RL else (MIN_MODEL_P_TOT if btype==BET_TOT else MIN_MODEL_P_ML)
             if model_p < _mp_min: continue
             if bet_conf<0.65: continue
@@ -2130,7 +2133,7 @@ def run():
                     _clv_v   = _diag_clv(_clv_key, _clv_p)
                     _why = "❌CLV下行%.2f%%"%_clv_v if (_clv_v is not None and _clv_v < LINE_CLV_MIN) else "❌RL保護(其他)"
             elif best_lbl=="ML" and bp2<ML_FAV_PRICE and be<EDGE_MIN_ML_FAV: _why="❌低賠edge不足"
-            elif best_lbl=="ML" and _best_blend_d < 0.60: _why="❌混合<60%(模市背離)"
+            elif best_lbl=="ML" and ((bp2 < 2.0 and _best_blend_d < 0.57) or (bp2 >= 2.0 and _best_blend_d < 0.60)): _why="❌混合%.0f%%(模市背離)"%(_best_blend_d*100)
             else:
                 _clv_key = ("home_ml" if he>=ae else "away_ml") if best_lbl=="ML" else ("over" if tot_he>=tot_ue else "under")
                 _clv_p   = (hp if he>=ae else ap) if best_lbl=="ML" else (ov_p if tot_he>=tot_ue else un_p)
