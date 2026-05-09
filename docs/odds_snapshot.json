@@ -2,9 +2,9 @@
   "2026-05-10|blue jays|angels": {
     "ts": "2026-05-09",
     "home_ml": 1.58,
-    "away_ml": 2.58,
+    "away_ml": 2.55,
     "rl_h": 2.2,
-    "rl_a": 1.75,
+    "rl_a": 1.74,
     "rl_h_25": null,
     "rl_a_25": null,
     "over": 1.95,
@@ -18,24 +18,24 @@
     "rl_a": 1.56,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 2.0,
+    "over": 2.01,
     "under": 1.88
   },
   "2026-05-10|red sox|rays": {
     "ts": "2026-05-09",
-    "home_ml": 1.68,
-    "away_ml": 2.34,
-    "rl_h": 2.5,
+    "home_ml": 1.69,
+    "away_ml": 2.31,
+    "rl_h": 2.55,
     "rl_a": 1.62,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 1.95,
+    "over": 1.99,
     "under": 2.03
   },
   "2026-05-10|reds|astros": {
     "ts": "2026-05-09",
-    "home_ml": 1.63,
-    "away_ml": 2.43,
+    "home_ml": 1.65,
+    "away_ml": 2.41,
     "rl_h": 2.35,
     "rl_a": 1.69,
     "rl_h_25": null,
@@ -57,9 +57,9 @@
   "2026-05-10|phillies|rockies": {
     "ts": "2026-05-09",
     "home_ml": 1.56,
-    "away_ml": 2.67,
-    "rl_h": 2.25,
-    "rl_a": 1.78,
+    "away_ml": 2.62,
+    "rl_h": 2.2,
+    "rl_a": 1.77,
     "rl_h_25": null,
     "rl_a_25": null,
     "over": 1.95,
@@ -70,7 +70,7 @@
     "home_ml": 1.87,
     "away_ml": 2.05,
     "rl_h": 2.79,
-    "rl_a": 2.6,
+    "rl_a": 2.65,
     "rl_h_25": null,
     "rl_a_25": null,
     "over": 1.91,
@@ -81,11 +81,11 @@
     "home_ml": 2.22,
     "away_ml": 1.75,
     "rl_h": 1.71,
-    "rl_a": 2.27,
+    "rl_a": 2.25,
     "rl_h_25": null,
     "rl_a_25": null,
     "over": 2.0,
-    "under": 1.91
+    "under": 1.93
   },
   "2026-05-10|white sox|mariners": {
     "ts": "2026-05-09",
@@ -106,30 +106,30 @@
     "rl_a": 1.62,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 1.98,
+    "over": 2.0,
     "under": 1.98
   },
   "2026-05-10|brewers|yankees": {
     "ts": "2026-05-09",
     "home_ml": 2.24,
     "away_ml": 1.74,
-    "rl_h": 1.72,
+    "rl_h": 1.71,
     "rl_a": 2.25,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 1.93,
-    "under": 1.93
+    "over": 2.05,
+    "under": 1.89
   },
   "2026-05-10|diamondbacks|mets": {
     "ts": "2026-05-09",
     "home_ml": 2.05,
     "away_ml": 1.87,
-    "rl_h": 1.64,
+    "rl_h": 1.62,
     "rl_a": 2.46,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 2.0,
-    "under": 2.07
+    "over": 2.07,
+    "under": 2.0
   },
   "2026-05-10|padres|cardinals": {
     "ts": "2026-05-09",
