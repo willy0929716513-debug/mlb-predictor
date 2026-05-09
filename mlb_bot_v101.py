@@ -1934,14 +1934,14 @@ def run():
             _under_seen += 1
             if _under_seen > 1:
                 old_s = p["stake"]
-                p["stake"] = round(max(KELLY_MIN, old_s * CORR_DAMP_W), 1)
+                p["stake"] = round(max(KELLY_FLOOR, old_s * CORR_DAMP_W), 1)
                 p["msg"]   = re.sub(r"Kelly: \$[0-9.]+(?:\s*\[[^\]]*\])?",
                                     "Kelly: $%.1f [📊相關折]"%p["stake"], p["msg"], count=1)
         if _is_over:
             _over_seen += 1
             if _over_seen > 1:
                 old_s = p["stake"]
-                p["stake"] = round(max(KELLY_MIN, old_s * CORR_DAMP_W), 1)
+                p["stake"] = round(max(KELLY_FLOOR, old_s * CORR_DAMP_W), 1)
                 p["msg"]   = re.sub(r"Kelly: \$[0-9.]+(?:\s*\[[^\]]*\])?",
                                     "Kelly: $%.1f [📊相關折]"%p["stake"], p["msg"], count=1)
 
@@ -1950,7 +1950,7 @@ def run():
         log.info("Slump mode: Kelly x%.2f applied to all picks", _slump_mult)
         for p in picks:
             old_s = p["stake"]
-            p["stake"] = round(max(KELLY_MIN, old_s * _slump_mult), 1)
+            p["stake"] = round(max(KELLY_FLOOR, old_s * _slump_mult), 1)
             p["msg"] = re.sub(r"Kelly: \$[0-9.]+(?:\s*\[[^\]]*\])?",
                               "Kelly: $%.1f [📉低迷]"%p["stake"], p["msg"], count=1)
 
@@ -1961,7 +1961,7 @@ def run():
         log.info("Daily cap: total_stake %.1f > %.1f, ratio=%.2f", _total_stake, MAX_DAILY_STAKE, _ratio)
         for p in picks:
             old_s = p["stake"]
-            p["stake"] = round(max(KELLY_MIN, old_s * _ratio), 1)
+            p["stake"] = round(max(KELLY_FLOOR, old_s * _ratio), 1)
             p["msg"] = re.sub(r"Kelly: \$[0-9.]+(?:\s*\[[^\]]*\])?",
                               "Kelly: $%.1f [🔒限額]"%p["stake"], p["msg"], count=1)
 
