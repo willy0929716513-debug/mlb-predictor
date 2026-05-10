@@ -42,7 +42,8 @@ RL_BET_CONF_MIN= 0.68  # RL 最低信心門檻（↓0.70→0.68，RL ROI+71%，�
 RL_KELLY_MULT  = 0.75  # RL Kelly 折扣（不確定性更高，下注降低25%）
 RL_KELLY_MAX   = 100.0 # RL 最大下注上限
 LINE_CLV_MIN   = -1.50  # 線路 CLV 門檻（↑-0.30→-1.50）：2.50賠率需移動0.10+才觸發；≤0.30%只是噪音
-STALE_PRICE_GAP = 0.20  # 最佳賠率超過共識20%以上 → 可能是過時賠率，顯示警告
+STALE_PRICE_GAP = 0.20  # 最佳賠率超過共識20%以上 → 顯示警告
+MAX_PRICE_GAP   = 0.25  # 超過25% → 直接封鎖（可能為錯誤賠率或過時報價）
 BLOWOUT_ERA_DIFF = 1.5  # ERA差門檻：弱投手隊不推薦讓分受讓
 BLOWOUT_ERA_POOR = 4.20 # 弱投手ERA門檻（≥此值且ERA差距大，拒絕RL）
 ELITE_ERA_DUAL   = 3.50 # 雙方投手都低於此值時視為菁英對決
@@ -1600,6 +1601,7 @@ def run():
         _a_era_v = get_pitcher_era(away_sp)
         for btype,bside,bteam,bp,bk,model_p,edge_min,blend_p,con_p,conf_mult in candidates:
             if bp is None or bp<=0 or con_p is None or con_p<=0: continue
+            if bp/con_p - 1 > MAX_PRICE_GAP: continue  # 賠率偏離共識>25%，疑似錯誤或過時報價
             # ★ TOT使用conf_tot（pure_total_tot基礎，RS影響更低）；ML/RL用conf
             _base_conf = conf_tot if btype == BET_TOT else conf
             bet_conf = _base_conf*conf_mult
@@ -2061,19 +2063,20 @@ def run():
             if h not in BASE or a not in BASE: continue
             si=pitchers.get((h,a),{}); hp_k=si.get("home_pitcher"); ap_k=si.get("away_pitcher")
             bms2=game.get("bookmakers",[]); hp=ap=rl_hp=rl_ap=ov_p=un_p=None; mt=8.5
+            _hp_all=[]; _ap_all=[]; _rl_hp_all=[]; _rl_ap_all=[]
             for bm in bms2:
                 for mkt in bm.get("markets",[]):
                     mk2=mkt.get("key")
                     if mk2=="h2h":
                         for o in mkt.get("outcomes",[]):
                             t=norm_team(o.get("name","")); p=o.get("price",0)
-                            if t==h and (hp is None or p>hp): hp=p
-                            elif t==a and (ap is None or p>ap): ap=p
+                            if t==h: _hp_all.append(p); hp=max(hp,p) if hp else p
+                            elif t==a: _ap_all.append(p); ap=max(ap,p) if ap else p
                     elif mk2=="spreads":
                         for o in mkt.get("outcomes",[]):
                             t=norm_team(o.get("name","")); p=o.get("price",0)
-                            if t==h and (rl_hp is None or p>rl_hp): rl_hp=p
-                            elif t==a and (rl_ap is None or p>rl_ap): rl_ap=p
+                            if t==h: _rl_hp_all.append(p); rl_hp=max(rl_hp,p) if rl_hp else p
+                            elif t==a: _rl_ap_all.append(p); rl_ap=max(rl_ap,p) if rl_ap else p
                     elif mk2=="totals":
                         for o in mkt.get("outcomes",[]):
                             pt=o.get("point"); p=o.get("price",0); nm=o.get("name","")
@@ -2082,6 +2085,9 @@ def run():
                                 except (ValueError, TypeError): pass
                             if nm=="Over" and (ov_p is None or p>ov_p): ov_p=p
                             elif nm=="Under" and (un_p is None or p>un_p): un_p=p
+            _con = lambda lst: round(sum(lst)/len(lst),2) if lst else None
+            hp_con=_con(_hp_all); ap_con=_con(_ap_all)
+            rl_hp_con=_con(_rl_hp_all); rl_ap_con=_con(_rl_ap_all)
             if not hp or not ap: continue
             # 取得本場快照（用於 CLV 診斷）
             _diag_snap_key = None
@@ -2128,7 +2134,12 @@ def run():
             _why=""
             _conf_min = RL_BET_CONF_MIN if best_lbl=="RL" else (ML_BET_CONF_MIN if best_lbl=="ML" else 0.65)
             _mp_min   = MIN_MODEL_P_RL  if best_lbl=="RL" else (MIN_MODEL_P_ML  if best_lbl=="ML" else MIN_MODEL_P_TOT)
-            if cf < 0.65:             _why="❌低信心"
+            if best_lbl=="RL":   con_p2 = rl_hp_con if rl_he>=rl_ae else rl_ap_con
+            elif best_lbl=="ML": con_p2 = hp_con if he>=ae else ap_con
+            else:                con_p2 = None
+            _price_dev = (bp2/con_p2 - 1) if (con_p2 and con_p2 > 0) else 0
+            if _price_dev > MAX_PRICE_GAP: _why="❌賠率偏離共識%.0f%%(%.2f→%.2f)"%(_price_dev*100,con_p2,bp2)
+            elif cf < 0.65:             _why="❌低信心"
             elif cf < _conf_min:      _why="❌信心<%.0f%%"%(_conf_min*100)
             elif best_mp < _mp_min:   _why="❌modelP=%.2f<%.2f"%(best_mp,_mp_min)
             elif best_lbl=="RL" and (
