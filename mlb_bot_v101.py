@@ -1386,7 +1386,7 @@ def run():
         commence = game.get("commence_time","")
         try:
             game_utc      = datetime.datetime.fromisoformat(commence.replace("Z","+00:00"))
-            game_tw       = game_utc + datetime.timedelta(hours=8)
+            game_tw       = game_utc.replace(tzinfo=None) + datetime.timedelta(hours=8)
             game_date_str = game_tw.strftime("%Y-%m-%d")
             game_time_str = game_tw.strftime("%H:%M")
             game_dt       = game_tw
