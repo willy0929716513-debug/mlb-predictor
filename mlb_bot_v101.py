@@ -1431,18 +1431,13 @@ def run():
         bms      = game.get("bookmakers",[])
         if not bms: continue
 
-        # ── 收集所有市場最優/共識賠率 ──────────────────────────
-        home_price=away_price=home_book=away_book=None
-        rl_h_price=rl_a_price=rl_h_book=rl_a_book=None
-        rl_h_pts=None  # 主隊讓分點數（負=讓分，正=受讓）
-        rl_h_price_25=rl_a_price_25=rl_h_book_25=rl_a_book_25=None
-        rl_h_pts_25=None  # 主隊2.5讓分點數
-        over_price=under_price=over_book=under_book=None
+        # ── 收集所有市場報價（兩段式：先收全部，再篩離群取最佳）──
         market_total=8.5
-        con_h_prices=[]; con_a_prices=[]
-        con_rl_h=[]; con_rl_a=[]
-        con_rl_h_25=[]; con_rl_a_25=[]
-        con_over=[]; con_under=[]
+        rl_h_pts=rl_h_pts_25=None
+        _h_bids=[]; _a_bids=[]
+        _rl_h_bids=[]; _rl_a_bids=[]
+        _rl_h_bids_25=[]; _rl_a_bids_25=[]
+        _ov_bids=[]; _un_bids=[]
         for bm in bms:
             bk_name=bm.get("title","?")
             for mkt in bm.get("markets",[]):
@@ -1450,55 +1445,71 @@ def run():
                 if mk=="h2h":
                     for o in mkt.get("outcomes",[]):
                         t=norm_team(o.get("name","")); p=o.get("price",0)
-                        if t==home:
-                            con_h_prices.append(p)
-                            if home_price is None or p>home_price: home_price=p; home_book=bk_name
-                        elif t==away:
-                            con_a_prices.append(p)
-                            if away_price is None or p>away_price: away_price=p; away_book=bk_name
+                        if p<=1.0: continue
+                        if t==home: _h_bids.append((p,bk_name))
+                        elif t==away: _a_bids.append((p,bk_name))
                 elif mk=="spreads":
                     for o in mkt.get("outcomes",[]):
                         t=norm_team(o.get("name","")); p=o.get("price",0)
                         pt=o.get("point")
+                        if p<=1.0: continue
                         if t==home:
-                            con_rl_h.append(p)
-                            if rl_h_price is None or p>rl_h_price:
-                                rl_h_price=p; rl_h_book=bk_name
+                            _rl_h_bids.append((p,bk_name))
                             if rl_h_pts is None and pt is not None:
                                 try: rl_h_pts=float(pt)
                                 except (ValueError, TypeError): pass
-                        elif t==away:
-                            con_rl_a.append(p)
-                            if rl_a_price is None or p>rl_a_price: rl_a_price=p; rl_a_book=bk_name
+                        elif t==away: _rl_a_bids.append((p,bk_name))
                 elif mk=="alternate_spreads":
                     for o in mkt.get("outcomes",[]):
                         t=norm_team(o.get("name","")); p=o.get("price",0)
                         pt=o.get("point")
-                        if pt is None: continue
+                        if pt is None or p<=1.0: continue
                         try: pt_f=float(pt)
                         except (ValueError, TypeError): continue
-                        if abs(abs(pt_f)-2.5)>0.01: continue  # 只取 2.5 讓分線
+                        if abs(abs(pt_f)-2.5)>0.01: continue
                         if t==home:
-                            con_rl_h_25.append(p)
-                            if rl_h_price_25 is None or p>rl_h_price_25:
-                                rl_h_price_25=p; rl_h_book_25=bk_name
+                            _rl_h_bids_25.append((p,bk_name))
                             if rl_h_pts_25 is None: rl_h_pts_25=pt_f
-                        elif t==away:
-                            con_rl_a_25.append(p)
-                            if rl_a_price_25 is None or p>rl_a_price_25:
-                                rl_a_price_25=p; rl_a_book_25=bk_name
+                        elif t==away: _rl_a_bids_25.append((p,bk_name))
                 elif mk=="totals":
                     for o in mkt.get("outcomes",[]):
                         pt=o.get("point"); p=o.get("price",0); nm=o.get("name","")
+                        if p<=1.0: continue
                         if pt is not None:
                             try: market_total=float(pt)
                             except (ValueError, TypeError): pass
-                        if nm=="Over":
-                            con_over.append(p)
-                            if over_price is None or p>over_price: over_price=p; over_book=bk_name
-                        elif nm=="Under":
-                            con_under.append(p)
-                            if under_price is None or p>under_price: under_price=p; under_book=bk_name
+                        if nm=="Over": _ov_bids.append((p,bk_name))
+                        elif nm=="Under": _un_bids.append((p,bk_name))
+
+        def _con_avg(bids): return round(sum(p for p,_ in bids)/len(bids),3) if bids else None
+        def _best_valid(bids, con):
+            # 排除超過共識 MAX_PRICE_GAP 的離群賠率，取剩餘最高值
+            if not bids: return None, None
+            valid = [(p,bk) for p,bk in bids if con is None or (p/con-1)<=MAX_PRICE_GAP]
+            pool  = valid if valid else bids  # 若全被濾掉（極罕見），退回全部
+            return max(pool, key=lambda x: x[0])
+
+        # 共識（平均）
+        con_h_prices=[p for p,_ in _h_bids]; con_a_prices=[p for p,_ in _a_bids]
+        con_rl_h=[p for p,_ in _rl_h_bids];  con_rl_a=[p for p,_ in _rl_a_bids]
+        con_rl_h_25=[p for p,_ in _rl_h_bids_25]; con_rl_a_25=[p for p,_ in _rl_a_bids_25]
+        con_over=[p for p,_ in _ov_bids]; con_under=[p for p,_ in _un_bids]
+
+        _con_h=_con_avg(_h_bids); _con_a=_con_avg(_a_bids)
+        _con_rl_h=_con_avg(_rl_h_bids); _con_rl_a=_con_avg(_rl_a_bids)
+        _con_rl_h_25=_con_avg(_rl_h_bids_25); _con_rl_a_25=_con_avg(_rl_a_bids_25)
+        _con_ov=_con_avg(_ov_bids); _con_un=_con_avg(_un_bids)
+
+        # 最佳非離群賠率
+        home_price,home_book   = _best_valid(_h_bids, _con_h)
+        away_price,away_book   = _best_valid(_a_bids, _con_a)
+        rl_h_price,rl_h_book   = _best_valid(_rl_h_bids, _con_rl_h)
+        rl_a_price,rl_a_book   = _best_valid(_rl_a_bids, _con_rl_a)
+        rl_h_price_25,rl_h_book_25 = _best_valid(_rl_h_bids_25, _con_rl_h_25)
+        rl_a_price_25,rl_a_book_25 = _best_valid(_rl_a_bids_25, _con_rl_a_25)
+        over_price,over_book   = _best_valid(_ov_bids, _con_ov)
+        under_price,under_book = _best_valid(_un_bids, _con_un)
+
         if home_price is None or away_price is None: continue
 
         # ── 儲存本次賠率快照（供下次計算線路 CLV）──
