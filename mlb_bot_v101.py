@@ -1393,6 +1393,10 @@ def run():
         except Exception:
             game_date_str = today_str; game_time_str = commence[:16]; game_dt = None
 
+        # 跳過已開賽的比賽（保留10分鐘緩衝，以防時鐘誤差）
+        if game_dt and game_dt < now_tw - datetime.timedelta(minutes=10):
+            continue
+
         home = norm_team(game.get("home_team",""))
         away = norm_team(game.get("away_team",""))
         if home not in BASE or away not in BASE: continue
