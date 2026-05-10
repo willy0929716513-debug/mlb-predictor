@@ -1270,6 +1270,10 @@ def get_pitcher_era(key):
             elif _gap < -1.00: _fw = FIP_BLEND_HIGH  # 投手表現優於ERA
             elif _gap < -0.50: _fw = FIP_BLEND_MID   # 輕度低估
             else:              _fw = FIP_BLEND_W      # ERA可信，基準混合
+            # FIP 觸底保護：FIP ≤ 0.80 為程式下限截斷值，小樣本可信度低
+            # 避免極端低FIP以85%權重過度壓低混合ERA，上限65%
+            if fip <= 0.80 and _fw > 0.65:
+                _fw = 0.65
             adj_recent = round(recent_era*(1-_fw) + fip*_fw, 2)
         else:
             # FIP無資料：ERA可靠性未知，向聯盟均值保守回歸，且不低於下限
