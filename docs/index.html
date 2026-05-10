@@ -58,13 +58,49 @@
     @keyframes spin { to { transform:rotate(360deg); } }
     .spin { animation: spin .7s linear; }
 
-    /* History panel slide-down */
+    /* Token modal */
+    #token-modal { backdrop-filter:blur(4px); }
     #history-panel { overflow:hidden; transition:max-height .35s ease, opacity .3s ease; }
     #history-panel.closed { max-height:0; opacity:0; }
     #history-panel.open   { max-height:2000px; opacity:1; }
   </style>
 </head>
 <body class="min-h-screen p-4 md:p-6">
+
+<!-- Token modal -->
+<div id="token-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70"
+     onclick="if(event.target===this)closeTokenModal()">
+  <div class="bg-slate-800 border border-slate-600 rounded-2xl p-5 mx-4 w-full max-w-sm shadow-2xl">
+    <h3 class="text-white font-bold text-base mb-1">🔑 輸入 GitHub Token</h3>
+    <p class="text-slate-400 text-xs mb-3">
+      需要有 <code class="bg-slate-700 px-1 rounded">workflow</code> 權限的 Personal Access Token（Fine-grained 或 Classic）。
+      只會存在瀏覽器 localStorage，不會傳送到其他地方。
+    </p>
+    <input id="token-input" type="password" placeholder="ghp_xxxxxxxxxxxx"
+           class="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white
+                  placeholder:text-slate-600 focus:outline-none focus:border-sky-500 mb-3"/>
+    <div class="flex gap-2">
+      <button onclick="saveToken()"
+              class="flex-1 bg-sky-600 hover:bg-sky-500 text-white text-sm font-semibold py-2 rounded-lg transition-colors">
+        儲存並執行
+      </button>
+      <button onclick="closeTokenModal()"
+              class="px-4 bg-slate-700 hover:bg-slate-600 text-slate-300 text-sm rounded-lg transition-colors">
+        取消
+      </button>
+    </div>
+    <button onclick="clearToken()"
+            class="mt-2 w-full text-xs text-slate-600 hover:text-rose-400 transition-colors text-center">
+      清除已儲存的 Token
+    </button>
+  </div>
+</div>
+
+<!-- Run toast -->
+<div id="run-toast"
+     class="fixed top-5 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0
+            text-sm font-semibold px-4 py-2 rounded-full shadow-xl transition-opacity duration-300">
+</div>
 
 <!-- Copy toast -->
 <div id="copy-toast"
@@ -82,6 +118,11 @@
       <p id="gen-time" class="text-xs text-slate-500 mt-0.5"></p>
     </div>
     <div class="flex items-center gap-2">
+      <button onclick="triggerBot()"
+              id="run-btn"
+              class="text-xs bg-emerald-700 hover:bg-emerald-600 active:bg-emerald-800 px-3 py-1.5 rounded-lg text-white font-semibold transition-colors flex items-center gap-1">
+        <span id="run-btn-icon">▶</span> 執行
+      </button>
       <button onclick="toggleHistory()"
               class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg text-slate-300 transition-colors flex items-center gap-1.5">
         📋 <span id="hist-btn-label">歷史紀錄</span>
@@ -416,6 +457,93 @@ function renderPicks(){
     return;
   }
   container.innerHTML = filtered.map(renderCard).join("");
+}
+
+/* ── Run bot ─────────────────────────────────── */
+const GH_OWNER    = "willy0929716513-debug";
+const GH_REPO     = "mlb-predictor";
+const GH_WORKFLOW = "mlb_bot.yml";
+const GH_BRANCH   = "main";
+
+function showRunToast(msg, ok){
+  const t = document.getElementById("run-toast");
+  t.textContent = msg;
+  t.className = "fixed top-5 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 text-sm font-semibold px-4 py-2 rounded-full shadow-xl transition-opacity duration-300 "
+    + (ok ? "bg-emerald-600 text-white" : "bg-rose-600 text-white");
+  t.style.opacity = "1";
+  setTimeout(()=>{ t.style.opacity="0"; }, 3000);
+}
+
+function openTokenModal(){
+  const m = document.getElementById("token-modal");
+  m.classList.remove("hidden");
+  m.classList.add("flex");
+  const saved = localStorage.getItem("gh_pat");
+  document.getElementById("token-input").value = saved || "";
+  setTimeout(()=>document.getElementById("token-input").focus(), 50);
+}
+function closeTokenModal(){
+  const m = document.getElementById("token-modal");
+  m.classList.add("hidden");
+  m.classList.remove("flex");
+}
+function saveToken(){
+  const v = document.getElementById("token-input").value.trim();
+  if(!v){ showRunToast("請輸入 Token", false); return; }
+  localStorage.setItem("gh_pat", v);
+  closeTokenModal();
+  dispatchWorkflow(v);
+}
+function clearToken(){
+  localStorage.removeItem("gh_pat");
+  document.getElementById("token-input").value = "";
+  showRunToast("Token 已清除", true);
+}
+
+async function dispatchWorkflow(token){
+  const btn  = document.getElementById("run-btn");
+  const icon = document.getElementById("run-btn-icon");
+  btn.disabled = true;
+  icon.textContent = "…";
+
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/actions/workflows/${GH_WORKFLOW}/dispatches`,
+      {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Accept": "application/vnd.github+json",
+          "X-GitHub-Api-Version": "2022-11-28",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ref: GH_BRANCH }),
+      }
+    );
+    if(res.status === 204){
+      showRunToast("✓ 已觸發！約 30 秒後更新", true);
+      icon.textContent = "✓";
+      setTimeout(()=>{ icon.textContent="▶"; btn.disabled=false; }, 5000);
+    } else {
+      const err = await res.json().catch(()=>({}));
+      if(res.status===401||res.status===403){
+        showRunToast("Token 無效或無 workflow 權限", false);
+        openTokenModal();
+      } else {
+        showRunToast(`失敗 (${res.status}): ${err.message||""}`, false);
+      }
+      icon.textContent = "▶"; btn.disabled = false;
+    }
+  } catch(e){
+    showRunToast("網路錯誤："+e.message, false);
+    icon.textContent = "▶"; btn.disabled = false;
+  }
+}
+
+function triggerBot(){
+  const token = localStorage.getItem("gh_pat");
+  if(token) dispatchWorkflow(token);
+  else openTokenModal();
 }
 
 /* ── History ─────────────────────────────────── */
