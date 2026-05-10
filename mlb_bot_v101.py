@@ -871,7 +871,7 @@ def fetch_game_umpires(today_str):
         "https://statsapi.mlb.com/api/v1/schedule",
         params={"date": today_str, "sportId": 1, "gameType": "R",
                 "hydrate": "officials",
-                "fields": "dates,games,teams,home,away,name,officials,officialType,official,fullName"},
+                "fields": "dates,games,teams,home,away,team,name,officials,officialType,official,fullName"},
         timeout=12,
     )
     if not data: return
