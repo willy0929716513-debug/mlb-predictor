@@ -18,35 +18,63 @@
   <style>
     body { background:#0f172a; color:#e2e8f0; font-family:'Segoe UI',system-ui,sans-serif; }
 
-    /* Cards */
     .card { background:#1e293b; border:1px solid #334155; }
     .tier-diamond { border-left:4px solid #a78bfa; }
     .tier-fire    { border-left:4px solid #f97316; }
     .tier-star    { border-left:4px solid #38bdf8; }
 
-    /* Bet type badges */
     .badge { display:inline-flex; align-items:center; padding:2px 9px; border-radius:9999px; font-size:0.70rem; font-weight:700; letter-spacing:.02em; }
     .badge-ml  { background:#1e3a8a; color:#93c5fd; }
     .badge-rl  { background:#4c1d95; color:#c4b5fd; }
     .badge-tot { background:#064e3b; color:#6ee7b7; }
 
-    /* Stat blocks */
     .stat-box { background:#0f172a; border-radius:0.5rem; padding:0.5rem 0.75rem; }
     .type-pill { background:#1e293b; border:1px solid #334155; border-radius:0.5rem; padding:0.4rem 0.6rem; }
 
-    /* SP detail pills */
     .sp-chip { display:inline-flex; align-items:center; gap:3px;
                background:#0f172a; border:1px solid #334155;
                border-radius:6px; padding:2px 7px; font-size:0.68rem; }
     .sp-warn { border-color:#f97316; color:#fb923c; }
 
-    /* Probability bar */
-    .prob-segment { height:6px; border-radius:2px; }
+    /* Filter tabs */
+    .tab { padding:6px 16px; border-radius:8px; font-size:0.78rem; font-weight:600;
+           cursor:pointer; transition:all .15s; border:1px solid transparent; }
+    .tab-active { background:#38bdf8; color:#0f172a; }
+    .tab-inactive { background:#1e293b; color:#94a3b8; border-color:#334155; }
+    .tab-inactive:hover { background:#263548; color:#e2e8f0; }
 
+    /* Pick card expand */
+    .detail-section { overflow:hidden; transition:max-height .3s ease, opacity .3s ease; }
+    .detail-section.collapsed { max-height:0; opacity:0; }
+    .detail-section.expanded  { max-height:1000px; opacity:1; }
+
+    /* Card fade-in */
+    @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+    .pick-card { animation: fadeUp .25s ease both; }
+
+    /* Copy toast */
+    #copy-toast { transition: opacity .25s ease; }
+
+    /* Refresh ring */
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .spin { animation: spin .7s linear; }
+
+    /* Auto-refresh ring */
+    .refresh-ring { stroke-dasharray: 56.5; stroke-dashoffset: 56.5;
+                    transition: stroke-dashoffset 1s linear; }
+
+    /* Countdown ring SVG */
+    .ring-svg { transform: rotate(-90deg); }
   </style>
 </head>
 <body class="min-h-screen p-4 md:p-6">
 
+<!-- Copy toast -->
+<div id="copy-toast"
+     class="fixed top-5 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0
+            bg-emerald-600 text-white text-sm font-semibold px-4 py-2 rounded-full shadow-xl">
+  ✓ 已複製到剪貼簿
+</div>
 
 <div class="max-w-2xl mx-auto">
 
@@ -56,10 +84,18 @@
       <h1 class="text-xl font-bold text-white">⚾ MLB V2 每日推薦</h1>
       <p id="gen-time" class="text-xs text-slate-500 mt-0.5"></p>
     </div>
-    <button onclick="loadData()"
-            class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg text-slate-300 transition-colors">
-      ↻ 重新整理
-    </button>
+    <div class="flex items-center gap-2">
+      <!-- Countdown ring + refresh -->
+      <div class="relative flex items-center justify-center w-9 h-9 cursor-pointer group" onclick="manualRefresh()" title="重新整理">
+        <svg class="ring-svg w-9 h-9 absolute" viewBox="0 0 20 20">
+          <circle cx="10" cy="10" r="9" fill="none" stroke="#334155" stroke-width="2"/>
+          <circle id="ring-progress" class="refresh-ring" cx="10" cy="10" r="9"
+                  fill="none" stroke="#38bdf8" stroke-width="2"/>
+        </svg>
+        <span id="refresh-icon" class="text-base z-10 group-hover:scale-110 transition-transform select-none">↻</span>
+      </div>
+      <span id="countdown-label" class="text-xs text-slate-600"></span>
+    </div>
   </div>
 
   <!-- ── 整體統計 ──────────────────────────────── -->
@@ -78,11 +114,15 @@
         <div class="text-xs text-slate-500 mt-0.5">勝 / 場</div>
       </div>
     </div>
+    <div class="grid grid-cols-3 gap-2" id="by-type-row"></div>
+  </div>
 
-    <!-- 分類型勝率 -->
-    <div class="grid grid-cols-3 gap-2" id="by-type-row">
-      <!-- JS fills in ML / RL / TOT pills -->
-    </div>
+  <!-- ── Filter tabs ───────────────────────────── -->
+  <div class="flex gap-2 mb-4 flex-wrap" id="filter-tabs">
+    <button class="tab tab-active" data-filter="ALL" onclick="setFilter('ALL',this)">全部 <span id="cnt-ALL" class="ml-1 opacity-70"></span></button>
+    <button class="tab tab-inactive" data-filter="獨贏" onclick="setFilter('獨贏',this)">ML 獨贏 <span id="cnt-ML" class="ml-1 opacity-70"></span></button>
+    <button class="tab tab-inactive" data-filter="讓分" onclick="setFilter('讓分',this)">RL 讓分 <span id="cnt-RL" class="ml-1 opacity-70"></span></button>
+    <button class="tab tab-inactive" data-filter="大小分" onclick="setFilter('大小分',this)">TOT 大小分 <span id="cnt-TOT" class="ml-1 opacity-70"></span></button>
   </div>
 
   <!-- ── Pick cards ────────────────────────────── -->
@@ -97,6 +137,11 @@
 
 <script>
 const JSON_URL = "picks_latest.json";
+const REFRESH_INTERVAL = 300; // seconds
+let allPicks = [];
+let currentFilter = "ALL";
+let countdown = REFRESH_INTERVAL;
+let countdownTimer = null;
 
 /* ── helpers ─────────────────────────────────── */
 function tierClass(tier){
@@ -105,22 +150,26 @@ function tierClass(tier){
   return "tier-star";
 }
 
-function btypeBadge(btype){
-  if(btype==="獨贏") return '<span class="badge badge-ml">ML 獨贏</span>';
-  if(btype==="讓分") return '<span class="badge badge-rl">RL 讓分</span>';
-  if(btype==="大小分") return '<span class="badge badge-tot">TOT 大小分</span>';
+function btypeKey(btype){
+  if(btype==="獨贏") return "badge-ml";
+  if(btype==="讓分") return "badge-rl";
+  if(btype==="大小分") return "badge-tot";
   return "";
+}
+
+function btypeBadge(btype){
+  const cls = btypeKey(btype);
+  const label = btype==="獨贏"?"ML 獨贏":btype==="讓分"?"RL 讓分":btype==="大小分"?"TOT 大小分":btype;
+  return `<span class="badge ${cls}">${label}</span>`;
 }
 
 function pnlColor(v){ return v==null?"text-slate-400":v>=0?"text-emerald-400":"text-rose-400"; }
 function signStr(v,dec=1){ return (v>=0?"+":"")+v.toFixed(dec); }
 
-/* ── SP tag builder ──────────────────────────── */
+/* ── SP chip builder ─────────────────────────── */
 function spChips(name, era, fip, k9, avgip, rest, whip){
   if(!name||name==="TBD") return '<span class="text-slate-600">TBD</span>';
   let chips = `<span class="font-medium text-slate-200">${name}</span>`;
-
-  // ERA chip — highlight bad ERA red, good ERA green
   if(era!=null){
     const col = era<=3.5?"text-emerald-400":era>=4.8?"text-rose-400":"text-slate-300";
     let eraLabel = `ERA ${era.toFixed(2)}`;
@@ -130,163 +179,193 @@ function spChips(name, era, fip, k9, avgip, rest, whip){
     }
     chips += ` <span class="sp-chip ${col}">${eraLabel}</span>`;
   }
-
-  // K/9
-  if(k9!=null && k9>=8.5){
+  if(k9!=null && k9>=8.5)
     chips += ` <span class="sp-chip text-sky-400">K/9 ${k9.toFixed(1)}</span>`;
-  }
-
-  // avgIP
   if(avgip!=null){
     const warn = avgip<5.0;
     chips += ` <span class="sp-chip ${warn?'sp-warn':''}">${avgip.toFixed(1)} IP/G${warn?' ⚠️':''}</span>`;
   }
-
-  // WHIP
-  if(whip!=null && whip>=1.30){
+  if(whip!=null && whip>=1.30)
     chips += ` <span class="sp-chip text-amber-400">WHIP ${whip.toFixed(2)}</span>`;
-  }
-
-  // Rest days
   if(rest!=null){
-    if(rest<=3)
-      chips += ` <span class="sp-chip sp-warn">短休 ${rest}d ⚠️</span>`;
-    else if(rest>=9)
-      chips += ` <span class="sp-chip sp-warn">長休 ${rest}d ⚠️</span>`;
+    if(rest<=3)  chips += ` <span class="sp-chip sp-warn">短休 ${rest}d ⚠️</span>`;
+    else if(rest>=9) chips += ` <span class="sp-chip sp-warn">長休 ${rest}d ⚠️</span>`;
   }
-
   return chips;
 }
 
-/* ── Probability bar (market vs model vs break-even) ── */
+/* ── Probability rows ────────────────────────── */
 function probBar(dvp, model_p, bp){
-  // dvp: devigged market prob (0-1), model_p: model prob (0-100), bp: decimal odds
-  const mkt   = dvp   ? (dvp*100).toFixed(1) : null;
-  const mdl   = model_p != null ? model_p.toFixed(1) : null;
-  const be    = bp     ? (100/bp).toFixed(1) : null;
-
+  const mkt = dvp!=null ? (dvp*100).toFixed(1) : null;
+  const mdl = model_p!=null ? model_p.toFixed(1) : null;
+  const be  = bp ? (100/bp).toFixed(1) : null;
   let rows = "";
-  if(mkt) rows += `<div class="flex justify-between text-xs"><span class="text-slate-500">真實市場概率</span><span class="text-slate-300">${mkt}%</span></div>`;
-  if(mdl) rows += `<div class="flex justify-between text-xs"><span class="text-slate-500">模型勝率</span><span class="font-semibold text-white">${mdl}%</span></div>`;
-  if(be)  rows += `<div class="flex justify-between text-xs"><span class="text-slate-500">盈虧平衡</span><span class="text-slate-400">${be}%</span></div>`;
+  if(mkt) rows+=`<div class="flex justify-between text-xs"><span class="text-slate-500">真實市場概率</span><span class="text-slate-300">${mkt}%</span></div>`;
+  if(mdl) rows+=`<div class="flex justify-between text-xs"><span class="text-slate-500">模型勝率</span><span class="font-semibold text-white">${mdl}%</span></div>`;
+  if(be)  rows+=`<div class="flex justify-between text-xs"><span class="text-slate-500">盈虧平衡</span><span class="text-slate-400">${be}%</span></div>`;
   return rows;
 }
 
-/* ── Pick card renderer ──────────────────────── */
-function renderCard(p){
-  const tc    = tierClass(p.tier);
-  const badge = btypeBadge(p.btype);
-  const conf  = Math.round(p.conf||0);
-  const edgeStr = signStr(p.edge||0)+"%";
-  const confCol = conf>=80?"bg-emerald-500":conf>=70?"bg-amber-400":"bg-sky-400";
+/* ── Copy to clipboard ───────────────────────── */
+function copyBet(text){
+  navigator.clipboard.writeText(text).then(()=>{
+    const t = document.getElementById("copy-toast");
+    t.style.opacity="1";
+    setTimeout(()=>{ t.style.opacity="0"; }, 1800);
+  }).catch(()=>{
+    // fallback
+    const ta = document.createElement("textarea");
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    document.execCommand("copy"); document.body.removeChild(ta);
+    const t = document.getElementById("copy-toast");
+    t.style.opacity="1";
+    setTimeout(()=>{ t.style.opacity="0"; }, 1800);
+  });
+}
 
-  // Score / total section
-  let scoreHtml = "";
-  if(p.btype==="大小分" && p.model_total!=null){
-    const dir  = p.model_total > p.market_total ? "偏OVER" : p.model_total < p.market_total ? "偏UNDER" : "中性";
-    const dirCol = p.model_total > p.market_total ? "text-orange-400" : p.model_total < p.market_total ? "text-sky-400" : "text-slate-400";
-    scoreHtml = `
-      <div class="flex justify-between items-center text-sm">
-        <span class="text-slate-500">模型總分</span>
-        <span><span class="font-bold text-white">${p.model_total}</span>
-              <span class="text-slate-500 text-xs"> / 線 ${p.market_total}</span>
-              <span class="ml-1 text-xs ${dirCol}">(${dir})</span></span>
-      </div>`;
+/* ── Toggle detail section ───────────────────── */
+function toggleDetail(id){
+  const el = document.getElementById(id);
+  const btn = document.getElementById("btn-"+id);
+  if(!el) return;
+  const isOpen = el.classList.contains("expanded");
+  el.classList.toggle("collapsed", isOpen);
+  el.classList.toggle("expanded", !isOpen);
+  btn.textContent = isOpen ? "▼ 展開詳情" : "▲ 收合";
+}
+
+/* ── Pick card renderer ──────────────────────── */
+let cardIdx = 0;
+function renderCard(p){
+  const uid    = "d"+(cardIdx++);
+  const tc     = tierClass(p.tier);
+  const badge  = btypeBadge(p.btype);
+  const conf   = Math.round(p.conf||0);
+  const edgeStr= signStr(p.edge||0)+"%";
+  const confCol= conf>=80?"bg-emerald-500":conf>=70?"bg-amber-400":"bg-sky-400";
+  const delay  = `animation-delay:${cardIdx*60}ms`;
+
+  // Score / total
+  let scoreHtml="";
+  if(p.btype==="大小分"&&p.model_total!=null){
+    const dir    = p.model_total>p.market_total?"偏OVER":p.model_total<p.market_total?"偏UNDER":"中性";
+    const dirCol = p.model_total>p.market_total?"text-orange-400":p.model_total<p.market_total?"text-sky-400":"text-slate-400";
+    scoreHtml=`<div class="flex justify-between items-center text-sm">
+      <span class="text-slate-500">模型總分</span>
+      <span><span class="font-bold text-white">${p.model_total}</span>
+            <span class="text-slate-500 text-xs"> / 線 ${p.market_total}</span>
+            <span class="ml-1 text-xs ${dirCol}">(${dir})</span></span>
+    </div>`;
   } else {
-    scoreHtml = `
-      <div class="flex justify-between items-center text-sm">
-        <span class="text-slate-500">預測得分</span>
-        <span class="font-bold text-white">${p.away_cn} <span class="text-slate-400">${p.pred_away}</span> — <span class="text-slate-400">${p.pred_home}</span> ${p.home_cn}</span>
-      </div>`;
+    scoreHtml=`<div class="flex justify-between items-center text-sm">
+      <span class="text-slate-500">預測得分</span>
+      <span class="font-bold text-white">${p.away_cn} <span class="text-slate-400">${p.pred_away}</span> — <span class="text-slate-400">${p.pred_home}</span> ${p.home_cn}</span>
+    </div>`;
   }
 
   // CLV
   const clvHtml = p.line_clv!=null
-    ? `<span class="font-semibold ${p.line_clv>=0?"text-emerald-400":"text-rose-400"}">${signStr(p.line_clv)}% <span class="font-normal text-slate-500">${p.line_clv>=0?"市場認同↑":"市場反向↓"}</span></span>`
-    : `<span class="text-slate-600">首次出現</span>`;
+    ?`<span class="font-semibold ${p.line_clv>=0?"text-emerald-400":"text-rose-400"}">${signStr(p.line_clv)}% <span class="font-normal text-slate-500">${p.line_clv>=0?"市場認同↑":"市場反向↓"}</span></span>`
+    :`<span class="text-slate-600">首次出現</span>`;
 
-  // Park factor
   const pfHtml = p.park_factor
-    ? `<span class="text-xs text-amber-400 ml-1">🏟️ PF${p.park_factor.toFixed(2)}</span>`
-    : "";
+    ?`<span class="text-xs text-amber-400 ml-1">🏟️ PF${p.park_factor.toFixed(2)}</span>`:"";
 
-  // RS
   const awayRS = p.away_rs!=null
-    ? `<span class="text-emerald-400">RS ${p.away_rs.toFixed(1)}</span>`
-    : p.away_rpg!=null ? `<span class="text-slate-500">隊均 ${p.away_rpg.toFixed(1)}</span>` : "—";
+    ?`<span class="text-emerald-400">RS ${p.away_rs.toFixed(1)}</span>`
+    :p.away_rpg!=null?`<span class="text-slate-500">隊均 ${p.away_rpg.toFixed(1)}</span>`:"—";
   const homeRS = p.home_rs!=null
-    ? `<span class="text-emerald-400">RS ${p.home_rs.toFixed(1)}</span>`
-    : p.home_rpg!=null ? `<span class="text-slate-500">隊均 ${p.home_rpg.toFixed(1)}</span>` : "—";
+    ?`<span class="text-emerald-400">RS ${p.home_rs.toFixed(1)}</span>`
+    :p.home_rpg!=null?`<span class="text-slate-500">隊均 ${p.home_rpg.toFixed(1)}</span>`:"—";
+
+  // Copy text
+  const copyText = `${p.away_cn} @ ${p.home_cn} ｜ ${p.bet_label} @ ${p.bp?p.bp.toFixed(2):"?"} (${p.bk||"—"}) ｜ Kelly $${p.stake}`;
 
   return `
-  <div class="card rounded-xl p-4 mb-4 ${tc}">
+  <div class="card rounded-xl p-4 mb-4 ${tc} pick-card" style="${delay}" data-btype="${p.btype}">
 
     <!-- Header row -->
     <div class="flex items-start justify-between gap-2">
       <div class="min-w-0">
         <div class="flex items-center gap-2 flex-wrap">
           <span class="text-sm font-bold text-white">${p.tier}</span>
-          ${badge}
-          ${pfHtml}
+          ${badge} ${pfHtml}
         </div>
-        <div class="text-lg font-bold text-white mt-0.5 truncate">${p.away_cn} @ ${p.home_cn}</div>
+        <div class="text-lg font-bold text-white mt-0.5">${p.away_cn} @ ${p.home_cn}</div>
         <div class="text-xs text-slate-500">${p.game_date} &nbsp;${p.game_time} 台灣時間</div>
       </div>
       <div class="text-right shrink-0">
         <div class="text-2xl font-bold text-emerald-400">$${p.stake}</div>
         <div class="text-xs text-slate-500">建議下注</div>
-        <div class="text-xs text-slate-400 mt-0.5">@ ${p.bp ? p.bp.toFixed(2) : "—"}</div>
+        <div class="text-xs text-slate-400 mt-0.5">@ ${p.bp?p.bp.toFixed(2):"—"}</div>
       </div>
     </div>
 
-    <!-- Bet label -->
+    <!-- Bet label + copy button -->
     <div class="mt-3 bg-slate-800/60 rounded-lg px-3 py-2 flex items-center justify-between gap-2">
       <span class="text-sm font-semibold text-white">${p.bet_label}</span>
-      <span class="text-xs text-slate-500 shrink-0">${p.bk||""}</span>
-    </div>
-
-    <!-- SP section -->
-    <div class="mt-3 space-y-1.5">
-      <div class="text-xs text-slate-500 font-medium">先發投手</div>
-      <div class="text-xs leading-relaxed">
-        <span class="text-slate-500 mr-1">客隊</span>
-        ${spChips(p.away_sp, p.away_era, p.away_fip, p.away_k9, p.away_avgip, p.away_rest, p.away_whip)}
-      </div>
-      <div class="text-xs leading-relaxed">
-        <span class="text-slate-500 mr-1">主隊</span>
-        ${spChips(p.home_sp, p.home_era, p.home_fip, p.home_k9, p.home_avgip, p.home_rest, p.home_whip)}
-      </div>
-      <div class="grid grid-cols-2 gap-1 text-xs text-slate-500 mt-1">
-        <div>得分支援: ${awayRS}</div>
-        <div>得分支援: ${homeRS}</div>
+      <div class="flex items-center gap-2 shrink-0">
+        <span class="text-xs text-slate-500">${p.bk||""}</span>
+        <button onclick="copyBet(${JSON.stringify(copyText)})"
+                class="text-xs bg-slate-700 hover:bg-slate-600 active:bg-slate-500 px-2.5 py-1 rounded-md
+                       text-slate-300 transition-colors flex items-center gap-1">
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+          </svg>
+          複製
+        </button>
       </div>
     </div>
 
-    <!-- Score -->
-    <div class="mt-3 bg-slate-800/40 rounded-lg px-3 py-2">
-      ${scoreHtml}
-    </div>
-
-    <!-- Probability breakdown -->
-    <div class="mt-3 bg-slate-800/40 rounded-lg px-3 py-2 space-y-1">
-      ${probBar(p.dv_p, p.model_p, p.bp)}
-    </div>
-
-    <!-- Edge / confidence bar -->
-    <div class="mt-3">
-      <div class="flex justify-between text-xs text-slate-400 mb-1">
-        <span>信心 <span class="text-white font-medium">${conf}%</span></span>
-        <span>Edge <span class="font-semibold ${(p.edge||0)>=12?"text-emerald-400":(p.edge||0)>=8?"text-amber-400":"text-sky-400"}">${edgeStr}</span></span>
+    <!-- Quick stats row (always visible) -->
+    <div class="mt-3 grid grid-cols-3 gap-2 text-center">
+      <div class="bg-slate-800/40 rounded-lg py-2">
+        <div class="text-xs text-slate-500">Edge</div>
+        <div class="text-sm font-bold ${(p.edge||0)>=12?"text-emerald-400":(p.edge||0)>=8?"text-amber-400":"text-sky-400"}">${edgeStr}</div>
       </div>
-      <div class="h-1.5 bg-slate-700 rounded-full overflow-hidden">
-        <div class="h-full rounded-full ${confCol}" style="width:${Math.min(conf,100)}%"></div>
+      <div class="bg-slate-800/40 rounded-lg py-2">
+        <div class="text-xs text-slate-500">信心</div>
+        <div class="text-sm font-bold text-white">${conf}%</div>
+      </div>
+      <div class="bg-slate-800/40 rounded-lg py-2">
+        <div class="text-xs text-slate-500">線路 CLV</div>
+        <div class="text-sm">${clvHtml}</div>
       </div>
     </div>
 
-    <!-- CLV -->
-    <div class="mt-2 flex items-center justify-between text-xs">
-      <span class="text-slate-600">線路 CLV</span>
-      ${clvHtml}
+    <!-- Confidence bar -->
+    <div class="mt-2 h-1.5 bg-slate-700 rounded-full overflow-hidden">
+      <div class="h-full rounded-full ${confCol} transition-all duration-700" style="width:${Math.min(conf,100)}%"></div>
+    </div>
+
+    <!-- Expand button -->
+    <button id="btn-${uid}" onclick="toggleDetail('${uid}')"
+            class="mt-3 w-full text-xs text-slate-500 hover:text-slate-300 bg-slate-800/40 hover:bg-slate-800/70
+                   rounded-lg py-1.5 transition-colors">
+      ▼ 展開詳情
+    </button>
+
+    <!-- Collapsible details -->
+    <div id="${uid}" class="detail-section collapsed">
+      <div class="mt-3 space-y-1.5">
+        <div class="text-xs text-slate-500 font-medium">先發投手</div>
+        <div class="text-xs leading-relaxed">
+          <span class="text-slate-500 mr-1">客隊</span>
+          ${spChips(p.away_sp,p.away_era,p.away_fip,p.away_k9,p.away_avgip,p.away_rest,p.away_whip)}
+        </div>
+        <div class="text-xs leading-relaxed">
+          <span class="text-slate-500 mr-1">主隊</span>
+          ${spChips(p.home_sp,p.home_era,p.home_fip,p.home_k9,p.home_avgip,p.home_rest,p.home_whip)}
+        </div>
+        <div class="grid grid-cols-2 gap-1 text-xs text-slate-500 mt-1">
+          <div>得分支援: ${awayRS}</div>
+          <div>得分支援: ${homeRS}</div>
+        </div>
+      </div>
+      <div class="mt-3 bg-slate-800/40 rounded-lg px-3 py-2">${scoreHtml}</div>
+      <div class="mt-2 bg-slate-800/40 rounded-lg px-3 py-2 space-y-1">
+        ${probBar(p.dv_p,p.model_p,p.bp)}
+      </div>
     </div>
 
   </div>`;
@@ -294,26 +373,92 @@ function renderCard(p){
 
 /* ── Type pill renderer ──────────────────────── */
 function renderTypePill(label, data){
-  if(!data) return `
-    <div class="type-pill text-center">
-      <div class="text-xs font-bold text-slate-400">${label}</div>
-      <div class="text-xs text-slate-600 mt-0.5">資料不足</div>
-    </div>`;
-  const wrCol = data.win_rate>=55?"text-emerald-400":data.win_rate>=50?"text-amber-400":"text-rose-400";
+  if(!data) return `<div class="type-pill text-center">
+    <div class="text-xs font-bold text-slate-400">${label}</div>
+    <div class="text-xs text-slate-600 mt-0.5">資料不足</div>
+  </div>`;
+  const wrCol  = data.win_rate>=55?"text-emerald-400":data.win_rate>=50?"text-amber-400":"text-rose-400";
   const roiCol = data.roi!=null?(data.roi>=0?"text-emerald-400":"text-rose-400"):"text-slate-500";
-  const roiStr = data.roi!=null?signStr(data.roi)+"%":"N/A";
-  return `
-    <div class="type-pill text-center">
-      <div class="text-xs font-bold text-slate-300 mb-1">${label}</div>
-      <div class="text-sm font-bold ${wrCol}">${data.win_rate.toFixed(1)}%</div>
-      <div class="text-xs text-slate-500">${data.wins}/${data.settled}</div>
-      <div class="text-xs font-semibold ${roiCol} mt-0.5">ROI ${roiStr}</div>
+  return `<div class="type-pill text-center">
+    <div class="text-xs font-bold text-slate-300 mb-1">${label}</div>
+    <div class="text-sm font-bold ${wrCol}">${data.win_rate.toFixed(1)}%</div>
+    <div class="text-xs text-slate-500">${data.wins}/${data.settled}</div>
+    <div class="text-xs font-semibold ${roiCol} mt-0.5">ROI ${data.roi!=null?signStr(data.roi)+"%":"N/A"}</div>
+  </div>`;
+}
+
+/* ── Filter ──────────────────────────────────── */
+function setFilter(type, btn){
+  currentFilter = type;
+  document.querySelectorAll(".tab").forEach(t=>{
+    t.classList.toggle("tab-active", t===btn);
+    t.classList.toggle("tab-inactive", t!==btn);
+  });
+  renderPicks();
+}
+
+function renderPicks(){
+  cardIdx = 0;
+  const container = document.getElementById("picks-container");
+  const filtered = currentFilter==="ALL"
+    ? allPicks
+    : allPicks.filter(p=>p.btype===currentFilter);
+
+  if(filtered.length===0){
+    container.innerHTML=`<div class="card rounded-xl p-8 text-center text-slate-400">
+      ${allPicks.length===0?"今日無符合條件之推薦":"此類別目前無推薦"}
     </div>`;
+    return;
+  }
+  container.innerHTML = filtered.map(renderCard).join("");
+}
+
+/* ── Update counts on tabs ───────────────────── */
+function updateCounts(){
+  const cnts = { ALL: allPicks.length, ML: 0, RL: 0, TOT: 0 };
+  allPicks.forEach(p=>{
+    if(p.btype==="獨贏") cnts.ML++;
+    else if(p.btype==="讓分") cnts.RL++;
+    else if(p.btype==="大小分") cnts.TOT++;
+  });
+  const fmt = n => n>0 ? `(${n})` : "";
+  document.getElementById("cnt-ALL").textContent = fmt(cnts.ALL);
+  document.getElementById("cnt-ML").textContent  = fmt(cnts.ML);
+  document.getElementById("cnt-RL").textContent  = fmt(cnts.RL);
+  document.getElementById("cnt-TOT").textContent = fmt(cnts.TOT);
+}
+
+/* ── Countdown ring ──────────────────────────── */
+function updateRing(remaining){
+  const pct = remaining / REFRESH_INTERVAL;
+  const circumference = 56.5;
+  const offset = circumference * (1 - pct);
+  const ring = document.getElementById("ring-progress");
+  if(ring) ring.style.strokeDashoffset = offset;
+  const lbl = document.getElementById("countdown-label");
+  if(lbl) lbl.textContent = remaining>0 ? `${remaining}s` : "";
+}
+
+function startCountdown(){
+  clearInterval(countdownTimer);
+  countdown = REFRESH_INTERVAL;
+  updateRing(countdown);
+  countdownTimer = setInterval(()=>{
+    countdown--;
+    updateRing(countdown);
+    if(countdown<=0){
+      clearInterval(countdownTimer);
+      loadData(true);
+    }
+  }, 1000);
 }
 
 /* ── Main loader ─────────────────────────────── */
-async function loadData(){
+async function loadData(auto=false){
   const container = document.getElementById("picks-container");
+  const icon = document.getElementById("refresh-icon");
+  if(!auto){ icon.classList.add("spin"); setTimeout(()=>icon.classList.remove("spin"),700); }
+
   try {
     const res = await fetch(JSON_URL+"?t="+Date.now());
     if(!res.ok) throw new Error("HTTP "+res.status);
@@ -321,33 +466,34 @@ async function loadData(){
 
     document.getElementById("gen-time").textContent = "更新於 "+data.generated_at;
 
-    const s = data.stats;
-
-    // Overall stats
+    const s = data.stats||{};
     const wrEl  = document.getElementById("s-wr");
     const roiEl = document.getElementById("s-roi");
     const recEl = document.getElementById("s-record");
-    wrEl.textContent  = s.win_rate.toFixed(1)+"%";
+    wrEl.textContent  = (s.win_rate||0).toFixed(1)+"%";
     roiEl.textContent = s.roi!=null?signStr(s.roi)+"%":"N/A";
     roiEl.className   = "text-xl font-bold "+(s.roi!=null?(s.roi>=0?"text-emerald-400":"text-rose-400"):"text-slate-400");
-    recEl.textContent = s.wins+" / "+s.settled;
+    recEl.textContent = (s.wins||0)+" / "+(s.settled||0);
 
-    // Per-type pills
     const bt = s.by_type||{};
     document.getElementById("by-type-row").innerHTML =
-      renderTypePill("ML 獨贏", bt["ML"]||null) +
-      renderTypePill("RL 讓分", bt["RL"]||null) +
-      renderTypePill("TOT 大小分", bt["TOT"]||null);
+      renderTypePill("ML 獨贏",bt["ML"]||null)+
+      renderTypePill("RL 讓分",bt["RL"]||null)+
+      renderTypePill("TOT 大小分",bt["TOT"]||null);
 
-    // Picks
-    if(!data.picks||data.picks.length===0){
-      container.innerHTML='<div class="card rounded-xl p-8 text-center text-slate-400">今日無符合條件之推薦</div>';
-      return;
-    }
-    container.innerHTML = data.picks.map(renderCard).join("");
+    allPicks = data.picks||[];
+    updateCounts();
+    renderPicks();
+    startCountdown();
   } catch(e){
     container.innerHTML=`<div class="card rounded-xl p-8 text-center text-rose-400">載入失敗：${e.message}</div>`;
+    startCountdown();
   }
+}
+
+function manualRefresh(){
+  clearInterval(countdownTimer);
+  loadData(false);
 }
 
 loadData();
