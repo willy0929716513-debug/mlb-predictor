@@ -21,7 +21,7 @@ MIN_MODEL_P_TOT = 0.60  # TOT 門檻：避免貼線邊際注單
 ML_BET_CONF_MIN = 0.70  # ML 最低信心門檻（↓0.72→0.70，小幅鬆動；blend過濾仍保護ML品質）
 ML_FAV_PRICE    = 1.65  # ML低賠閾值：低於此賠率視為高損益平衡重注
 ML_FAV_KELLY    = 0.80  # ML低賠Kelly折扣（損益平衡高，縮注20%）
-KELLY_BAYES_W   = 0.35  # Kelly計算時，devigged市場概率混入model_p的比重（貝葉斯收縮）
+KELLY_BAYES_W   = 0.50  # Kelly計算時，devigged市場概率混入model_p的比重（↑0.35→0.50，ML ROI負抑制過信）
 MOD_W          = 0.18
 MKT_W          = 0.82
 TOTAL_STD      = 2.30   # 兩隊合計得分標準差
@@ -1151,7 +1151,7 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
     dyn_std = STD + max(0, (10-games)/10) * 0.15
     model_win_p = win_prob_from_margin(margin, dyn_std)
     # ★ 勝率上限 90%：現實中單場勝率不會超過此值
-    model_win_p = min(model_win_p, 0.82)  # 單場 ML 勝率上限 82%（原 90% 過高）
+    model_win_p = max(0.18, min(0.82, model_win_p))  # 主客場勝率均限制18%~82%（雙向對稱）
 
     pure_total     = h_exp     + a_exp
     pure_total_tot = h_exp_tot + a_exp_tot  # 大小分投注用（降低RS影響）
@@ -1392,6 +1392,10 @@ def run():
             game_dt       = game_tw
         except Exception:
             game_date_str = today_str; game_time_str = commence[:16]; game_dt = None
+
+        # 跳過已開賽的比賽（保留10分鐘緩衝，以防時鐘誤差）
+        if game_dt and game_dt < now_tw - datetime.timedelta(minutes=10):
+            continue
 
         home = norm_team(game.get("home_team",""))
         away = norm_team(game.get("away_team",""))
