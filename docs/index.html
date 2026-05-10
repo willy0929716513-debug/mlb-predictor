@@ -218,6 +218,16 @@ function btypeBadge(btype){
 function pnlColor(v){ return v==null?"text-slate-400":v>=0?"text-emerald-400":"text-rose-400"; }
 function signStr(v,dec=1){ return (v>=0?"+":"")+v.toFixed(dec); }
 
+/* ── Pitcher trend chip ──────────────────────── */
+function trendChip(t){
+  if(t==null) return "";
+  if(t > 1.5) return `<span class="sp-chip text-rose-400">📈 ERA+${t.toFixed(1)} 惡化</span>`;
+  if(t > 0.5) return `<span class="sp-chip text-amber-400">↑ ERA+${t.toFixed(1)}</span>`;
+  if(t <-1.5) return `<span class="sp-chip text-emerald-400">📉 ERA${t.toFixed(1)} 改善</span>`;
+  if(t <-0.5) return `<span class="sp-chip text-emerald-300">↓ ERA${t.toFixed(1)}</span>`;
+  return "";
+}
+
 /* ── SP chip builder ─────────────────────────── */
 function spChips(name, era, fip, k9, avgip, rest, whip){
   if(!name||name==="TBD") return '<span class="text-slate-600">TBD</span>';
@@ -323,6 +333,16 @@ function renderCard(p){
   const pfHtml = p.park_factor
     ?`<span class="text-xs text-amber-400 ml-1">🏟️ PF${p.park_factor.toFixed(2)}</span>`:"";
 
+  const wxFactor = p.weather_factor;
+  const wxHtml = wxFactor != null
+    ? `<span class="text-xs ${wxFactor >= 1 ? 'text-sky-400' : 'text-slate-400'} ml-1">${wxFactor >= 1 ? '🌬️ +' : '🌧️ '}${Math.round((wxFactor-1)*100)}%</span>`
+    : "";
+
+  const umpAdj = p.ump_adj || 0;
+  const umpHtml = (p.ump_name && Math.abs(umpAdj) >= 0.20)
+    ? `<span class="text-xs text-violet-400 ml-1" title="${p.ump_name}">⚖️ ${umpAdj >= 0 ? '+' : ''}${umpAdj.toFixed(2)}</span>`
+    : "";
+
   const awayRS = p.away_rs!=null
     ?`<span class="text-emerald-400">RS ${p.away_rs.toFixed(1)}</span>`
     :p.away_rpg!=null?`<span class="text-slate-500">隊均 ${p.away_rpg.toFixed(1)}</span>`:"—";
@@ -341,7 +361,7 @@ function renderCard(p){
       <div class="min-w-0">
         <div class="flex items-center gap-2 flex-wrap">
           <span class="text-sm font-bold text-white">${p.tier}</span>
-          ${badge} ${pfHtml}
+          ${badge} ${pfHtml}${wxHtml}${umpHtml}
         </div>
         <div class="text-lg font-bold text-white mt-0.5">${p.away_cn} @ ${p.home_cn}</div>
         <div class="text-xs text-slate-500">${p.game_date} &nbsp;${p.game_time} 台灣時間</div>
@@ -404,10 +424,12 @@ function renderCard(p){
         <div class="text-xs leading-relaxed">
           <span class="text-slate-500 mr-1">客隊</span>
           ${spChips(p.away_sp,p.away_era,p.away_fip,p.away_k9,p.away_avgip,p.away_rest,p.away_whip)}
+          ${trendChip(p.away_trend)}
         </div>
         <div class="text-xs leading-relaxed">
           <span class="text-slate-500 mr-1">主隊</span>
           ${spChips(p.home_sp,p.home_era,p.home_fip,p.home_k9,p.home_avgip,p.home_rest,p.home_whip)}
+          ${trendChip(p.home_trend)}
         </div>
         <div class="grid grid-cols-2 gap-1 text-xs text-slate-500 mt-1">
           <div>得分支援: ${awayRS}</div>

@@ -625,6 +625,7 @@ def fetch_weather(team, game_dt):
                 params={"latitude":lat,"longitude":lon,
                         "hourly":"temperature_2m,precipitation_probability,wind_speed_10m,wind_direction_10m",
                         "wind_speed_unit":"ms","timezone":"auto","forecast_days":3},
+                headers={"User-Agent":"mlb-predictor/1.0"},
                 timeout=10,
             )
             if not data: return 1.0
@@ -1425,12 +1426,14 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
     h_exp_tot *= pf; a_exp_tot *= pf
 
     # ⑧ ★ 天氣（Open-Meteo 免費API，無需KEY；室內球場自動跳過）
+    _wf = 1.0
     if game_dt:
-        wf = fetch_weather(home, game_dt)
-        h_exp     *= wf; a_exp     *= wf
-        h_exp_tot *= wf; a_exp_tot *= wf
+        _wf = fetch_weather(home, game_dt)
+        h_exp     *= _wf; a_exp     *= _wf
+        h_exp_tot *= _wf; a_exp_tot *= _wf
 
     # ⑨ ★ 主審裁判跑分偏好（窄好球帶→多保送→+跑分；寬好球帶→多三振→-跑分）
+    _ump_name = None; _ump_adj = 0.0
     ump_info = _GAME_UMP.get((home, away))
     if ump_info:
         _ump_name, _ump_adj = ump_info
@@ -1470,10 +1473,13 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
         "margin":         round(margin, 3),
         "park_factor":    pf,
         "dyn_std":        round(dyn_std, 3),
-        "h_rs":           h_rs,          # 投手專屬 RS/GS（API 有才有，否則 None）
+        "h_rs":           h_rs,
         "a_rs":           a_rs,
         "h_team_rpg":     round(hr.get("off", 4.5), 2),
         "a_team_rpg":     round(ar.get("off", 4.5), 2),
+        "weather_factor": round(_wf, 3),   # 天氣係數（1.0=無影響）
+        "ump_name":       _ump_name,       # 主審姓名（None=未知）
+        "ump_adj":        round(_ump_adj, 2),  # 裁判跑分偏好
     }
 
 def runline_prob(margin, spread, dyn_std):
@@ -1584,7 +1590,12 @@ def write_pages_json(picks, hist, now_tw):
             "pred_home":   p.get("pred_home"),
             "model_total": p.get("model_total"),
             "market_total":p.get("market_total"),
-            "park_factor": p.get("park_factor"),
+            "park_factor":    p.get("park_factor"),
+            "weather_factor": p.get("weather_factor"),
+            "ump_name":       p.get("ump_name"),
+            "ump_adj":        p.get("ump_adj"),
+            "away_trend":     p.get("away_trend"),
+            "home_trend":     p.get("home_trend"),
             "line_clv":    p.get("line_clv"),
             "game_date":   p.get("game_date",""),
             "game_time":   p.get("game_time",""),
@@ -2146,6 +2157,18 @@ def run():
         cf_note=" ⚠️信心%.0f%%"%(bet_conf*100) if bet_conf<0.85 else ""
         stale_note=" ⚠️賠率偏離共識(%.2f→%.2f)"%(con_p,bp) if (con_p and bp and bp/con_p-1 > STALE_PRICE_GAP) else ""
         pf_note=" 🏟️PF%.2f"%pred["park_factor"] if abs(pred["park_factor"]-1.0)>0.05 else ""
+        # 天氣注記（偏差>2%才顯示）
+        _wfv = pred.get("weather_factor", 1.0) or 1.0
+        if   _wfv >= 1.04: weather_note=" 🌬️順風(+%.0f%%)"%((_wfv-1)*100)
+        elif _wfv <= 0.96: weather_note=" 🌧️天氣(%.0f%%)"%((_wfv-1)*100)
+        else:              weather_note=""
+        # 裁判注記（調整值>=0.20才顯示）
+        _ump_adj_v = pred.get("ump_adj", 0.0) or 0.0
+        _ump_nm    = pred.get("ump_name") or ""
+        if abs(_ump_adj_v) >= 0.20:
+            ump_note=" ⚖️裁判%s(%.2f)"%("+" if _ump_adj_v>0 else "", _ump_adj_v)
+        else:
+            ump_note=""
         ou_diff=pred["model_total"]-market_total
         if   ou_diff>1.5:  ou_str="OVER偏向(%.1f/%.1f)"%(pred["model_total"],market_total)
         elif ou_diff<-1.5: ou_str="UNDER偏向(%.1f/%.1f)"%(pred["model_total"],market_total)
@@ -2217,7 +2240,7 @@ def run():
 
         msg_lines=[
             "**%s  %s @ %s**"%(tier,acn,hcn),
-            "🕐 %s %s (台灣時間)%s%s"%(game_date_str[5:].replace("-","/"),game_time_str,pf_note,mkt_tag),
+            "🕐 %s %s (台灣時間)%s%s%s%s"%(game_date_str[5:].replace("-","/"),game_time_str,pf_note,weather_note,ump_note,mkt_tag),
             "⚾ 先發: %s — %s"%(a_sp_str,h_sp_str),
             "💰 推薦: %s"%bet_desc,
             stats_ln,
@@ -2248,6 +2271,11 @@ def run():
                  "model_total":round(pred.get("pure_total_tot",0),1) if btype==BET_TOT else None,
                  "market_total":market_total if btype==BET_TOT else None,
                  "park_factor":round(pred.get("park_factor",1.0),2) if abs(pred.get("park_factor",1.0)-1.0)>0.05 else None,
+                 "weather_factor":round(pred.get("weather_factor",1.0),3) if abs(pred.get("weather_factor",1.0)-1.0)>=0.015 else None,
+                 "ump_name":pred.get("ump_name"),
+                 "ump_adj":round(pred.get("ump_adj",0.0),2) if pred.get("ump_adj") else None,
+                 "away_trend":round(_PITCHER_TREND[away_sp],2) if away_sp and away_sp in _PITCHER_TREND else None,
+                 "home_trend":round(_PITCHER_TREND[home_sp],2) if home_sp and home_sp in _PITCHER_TREND else None,
                  "hist_label":_hist_label,
                  "hist_mkt_total":market_total if btype==BET_TOT else None}
         if ex is not None:
@@ -2346,6 +2374,8 @@ def run():
     era_str  = ("✅近期ERA(%d%s)" % (len(_RECENT_ERA),
                 "/⚠️%d牛棚" % len(_RELIEVER_FLAGS) if _RELIEVER_FLAGS else "")
                 if _RECENT_ERA else "⚠️賽季ERA")
+    ump_str  = ("✅裁判(%d場)" % len(_GAME_UMP)) if _GAME_UMP else "⚠️裁判"
+    wx_str   = "✅天氣" if _WEATHER_CACHE else "⚠️天氣"
 
     # ★ 分類型歷史統計（勝率 + ROI，用於頁尾顯示）
     _type_stats = []
@@ -2364,7 +2394,7 @@ def run():
 
     lines=[
         "⚾ **MLB V2 分析報告**",
-        "🕐 %s | %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str),
+        "🕐 %s | %s %s %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str,ump_str,wx_str),
         "📌 正式記錄 (00–07時)" if official else "🔧 測試模式 (不寫gist)",
         "📊 歷史: %d勝/%d場 (%.1f%%)%s"%(wins,total_settled,wr,
             "  [%s]"%_type_stats_str if _type_stats_str else ""),
@@ -2504,7 +2534,8 @@ def run():
 
     lines+=[
         "═"*20,
-        "• Poisson大小分 · ERA+FIP混合(去BABIP) · K/9 · WHIP · 場均IP · 休息天數 · 球場PF · 傷兵",
+        "• ERA+FIP混合(去BABIP) · K/9 · WHIP · 休息天數 · 投手趨勢 · 球場PF · 傷兵",
+        "• 動態牛棚ERA · 牛棚疲勞 · 球隊OBP · 天氣(Open-Meteo) · 主審裁判跑分偏好",
         "• Devig真實市場概率 · 三市場選優(ML/RL/TOT) · Kelly下注 · 每日最多%d推薦 · 每日曝險≤$%d"%( MAX_PICKS, int(MAX_DAILY_STAKE)),
         "• RL多層保護 · UNDER(TBD/牛棚/低IP/WHIP/K9) · OVER/UNDER相關折 · 低迷縮注 · BM品質過濾",
     ]
