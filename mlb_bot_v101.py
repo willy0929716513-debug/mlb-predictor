@@ -2364,6 +2364,8 @@ def run():
     era_str  = ("✅近期ERA(%d%s)" % (len(_RECENT_ERA),
                 "/⚠️%d牛棚" % len(_RELIEVER_FLAGS) if _RELIEVER_FLAGS else "")
                 if _RECENT_ERA else "⚠️賽季ERA")
+    ump_str  = ("✅裁判(%d場)" % len(_GAME_UMP)) if _GAME_UMP else "⚠️裁判"
+    wx_str   = "✅天氣" if _WEATHER_CACHE else "⚠️天氣"
 
     # ★ 分類型歷史統計（勝率 + ROI，用於頁尾顯示）
     _type_stats = []
@@ -2382,7 +2384,7 @@ def run():
 
     lines=[
         "⚾ **MLB V2 分析報告**",
-        "🕐 %s | %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str),
+        "🕐 %s | %s %s %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str,ump_str,wx_str),
         "📌 正式記錄 (00–07時)" if official else "🔧 測試模式 (不寫gist)",
         "📊 歷史: %d勝/%d場 (%.1f%%)%s"%(wins,total_settled,wr,
             "  [%s]"%_type_stats_str if _type_stats_str else ""),
