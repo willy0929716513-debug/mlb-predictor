@@ -112,26 +112,32 @@
 <div class="max-w-2xl mx-auto">
 
   <!-- ── Header ───────────────────────────────── -->
-  <div class="flex items-center justify-between mb-5">
+  <div class="flex items-center justify-between mb-3">
     <div>
       <h1 class="text-xl font-bold text-white">⚾ MLB V2 每日推薦</h1>
       <p id="gen-time" class="text-xs text-slate-500 mt-0.5"></p>
     </div>
-    <div class="flex items-center gap-2">
-      <button onclick="triggerBot()"
-              id="run-btn"
-              class="text-xs bg-emerald-700 hover:bg-emerald-600 active:bg-emerald-800 px-3 py-1.5 rounded-lg text-white font-semibold transition-colors flex items-center gap-1">
-        <span id="run-btn-icon">▶</span> 執行
-      </button>
-      <button onclick="toggleHistory()"
-              class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg text-slate-300 transition-colors flex items-center gap-1.5">
-        📋 <span id="hist-btn-label">歷史紀錄</span>
-      </button>
-      <button onclick="manualRefresh()"
-              class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg text-slate-300 transition-colors">
-        <span id="refresh-icon">↻</span>
-      </button>
-    </div>
+    <button onclick="manualRefresh()"
+            class="w-9 h-9 flex items-center justify-center bg-slate-800 hover:bg-slate-700
+                   border border-slate-600 rounded-full text-slate-300 text-base transition-colors">
+      <span id="refresh-icon">↻</span>
+    </button>
+  </div>
+
+  <!-- ── Action bar ────────────────────────────── -->
+  <div class="grid grid-cols-2 gap-2 mb-5">
+    <button onclick="triggerBot()" id="run-btn"
+            class="flex items-center justify-center gap-2 py-2.5 rounded-xl
+                   bg-emerald-700 hover:bg-emerald-600 active:bg-emerald-800
+                   text-white text-sm font-bold transition-colors">
+      <span id="run-btn-icon" class="text-base">▶</span> 立即執行
+    </button>
+    <button onclick="toggleHistory()"
+            class="flex items-center justify-center gap-2 py-2.5 rounded-xl
+                   bg-slate-700 hover:bg-slate-600 border border-slate-600
+                   text-slate-300 text-sm font-semibold transition-colors">
+      📋 <span id="hist-btn-label">歷史紀錄</span>
+    </button>
   </div>
 
   <!-- ── 整體統計 ──────────────────────────────── -->
