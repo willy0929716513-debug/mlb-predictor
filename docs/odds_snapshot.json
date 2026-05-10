@@ -2,35 +2,35 @@
   "2026-05-11|marlins|nationals": {
     "ts": "2026-05-10",
     "home_ml": 1.77,
-    "away_ml": 2.23,
+    "away_ml": 2.18,
     "rl_h": 2.6,
     "rl_a": 1.59,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 1.98,
-    "under": 1.91
+    "over": 1.95,
+    "under": 1.93
   },
   "2026-05-11|orioles|athletics": {
     "ts": "2026-05-10",
-    "home_ml": 1.95,
-    "away_ml": 1.95,
-    "rl_h": 1.59,
-    "rl_a": 2.5,
+    "home_ml": 2.0,
+    "away_ml": 1.93,
+    "rl_h": 1.63,
+    "rl_a": 2.43,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 1.96,
-    "under": 2.01
+    "over": 2.0,
+    "under": 2.03
   },
   "2026-05-11|red sox|rays": {
     "ts": "2026-05-10",
-    "home_ml": 1.8,
-    "away_ml": 2.14,
+    "home_ml": 1.84,
+    "away_ml": 2.12,
     "rl_h": 2.65,
-    "rl_a": 1.56,
+    "rl_a": 1.54,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 2.03,
-    "under": 2.0
+    "over": 2.09,
+    "under": 1.98
   },
   "2026-05-11|phillies|rockies": {
     "ts": "2026-05-10",
@@ -41,7 +41,7 @@
     "rl_h_25": null,
     "rl_a_25": null,
     "over": 1.95,
-    "under": 2.12
+    "under": 2.15
   },
   "2026-05-11|blue jays|angels": {
     "ts": "2026-05-10",
@@ -68,12 +68,12 @@
   "2026-05-11|guardians|twins": {
     "ts": "2026-05-10",
     "home_ml": 1.7,
-    "away_ml": 2.24,
+    "away_ml": 2.39,
     "rl_h": 2.55,
-    "rl_a": 1.59,
+    "rl_a": 1.62,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 1.92,
+    "over": 1.93,
     "under": 1.95
   },
   "2026-05-11|white sox|mariners": {
@@ -113,16 +113,16 @@
     "ts": "2026-05-10",
     "home_ml": 1.89,
     "away_ml": 2.05,
-    "rl_h": 1.52,
+    "rl_h": 1.53,
     "rl_a": 2.63,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 1.9,
+    "over": 1.88,
     "under": 2.03
   },
   "2026-05-11|diamondbacks|mets": {
     "ts": "2026-05-10",
-    "home_ml": 1.94,
+    "home_ml": 1.95,
     "away_ml": 1.96,
     "rl_h": 1.59,
     "rl_a": 2.6,
@@ -136,10 +136,10 @@
     "home_ml": 1.78,
     "away_ml": 2.17,
     "rl_h": 2.63,
-    "rl_a": 1.56,
+    "rl_a": 1.59,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 2.05,
+    "over": 2.0,
     "under": 2.02
   },
   "2026-05-11|padres|cardinals": {
