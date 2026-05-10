@@ -1297,16 +1297,21 @@ def era_adj(key):
     return round((get_pitcher_era(key) - LEAGUE_ERA) * 0.35, 3)
 
 def bullpen_adj(team):
+    """返回牛棚對對手得分的壓制量（正值=壓制得分；負值=容易被打）。
+    在 predict 中以 h_exp -= bullpen_adj(away) 形式使用：
+    好牛棚→正值→對手得分減少；爛牛棚→負值→對手得分增加。"""
     t = team.lower()
     static_era = BULLPEN_ERA.get(t, LEAGUE_BULL_ERA)
     dyn_era    = _BULLPEN_ERA_DYN.get(t)
     # 動態ERA可用時：靜態50% + 動態50%，更即時反映牛棚狀態
     era = (static_era*(1-BULLPEN_DYN_W) + dyn_era*BULLPEN_DYN_W) if dyn_era else static_era
     depth = BULLPEN_DEPTH.get(t, 1.0)
-    # 昨日疲勞懲罰：牛棚使用局數超出基準值 → ERA等效上升
-    recent_ip    = _BULLPEN_LOAD.get(t, 0.0)
-    fatigue_era  = max(0.0, (recent_ip - BULL_FATIGUE_IP) * BULL_FATIGUE_ERA)
-    return round(((era + fatigue_era) - LEAGUE_BULL_ERA) * 0.20 * depth, 3)
+    # 昨日疲勞懲罰：牛棚使用局數超出基準值 → ERA等效上升（壓制力下降）
+    recent_ip   = _BULLPEN_LOAD.get(t, 0.0)
+    fatigue_era = max(0.0, (recent_ip - BULL_FATIGUE_IP) * BULL_FATIGUE_ERA)
+    effective_era = era + fatigue_era
+    # ★ 修正符號：好牛棚（ERA < 聯盟均值）→ 正值 → 對手得分減少
+    return round((LEAGUE_BULL_ERA - effective_era) * 0.20 * depth, 3)
 
 def pitcher_confidence(key):
     era = get_pitcher_era(key)
