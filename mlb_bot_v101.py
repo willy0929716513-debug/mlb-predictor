@@ -89,6 +89,11 @@ MAX_DAILY_STAKE  = 400.0 # 單日總曝險上限（↑300→400，配合每注$5
 SLUMP_WINDOW     = 10    # 低迷偵測近N注
 SLUMP_WR_THRESH  = 0.40  # 近N注勝率低於此值視為低迷期
 SLUMP_KELLY_MUL  = 0.75  # 低迷期全局Kelly折扣
+# ── ★ 新增多因素模型 ──────────────────────────────────────
+PITCHER_TREND_W  = 0.10  # 投手趨勢：近2場vs前3場ERA差 → 對手得分調整係數
+OBP_W            = 0.15  # 球隊OBP偏離聯盟均值對打擊得分的調整比重
+LEAGUE_OBP       = 0.315 # MLB聯盟平均上壘率
+BULLPEN_DYN_W    = 0.50  # 動態牛棚ERA混入比重（靜態50% + 動態50%）
 # ── ★ 校正 ───────────────────────────────────────────────
 MIN_SAMPLE_CALIB = 20    # 分類型勝率校正所需最少樣本
 
@@ -337,6 +342,9 @@ _PITCHER_LAST   = {}  # pitcher_key -> last start date (YYYY-MM-DD)
 _RELIEVER_FLAGS = set()  # 偵測為牛棚型：有出賽紀錄但無任何IP≥4.0先發
 _LIVE_SP_ERA    = {}  # pitcher_key -> 本賽季整體ERA（MLB Stats API即時）
 _WEATHER_CACHE  = {}
+_PITCHER_TREND   = {}  # pitcher_key → era_trend（近2場ERA − 前3場ERA，>0=惡化）
+_TEAM_OBP        = {}  # team_key → OBP float（MLB API動態本賽季）
+_BULLPEN_ERA_DYN = {}  # team_key → 本賽季牛棚ERA（MLB API動態）
 
 
 # ══════════════════════════════════════════════
@@ -394,14 +402,14 @@ def _fetch_recent_era(pitcher_id, last_n=3):
     K9 = 每9局三振數：高K9是UNDER的強烈正向信號。
     last_start = 最近先發日期 YYYY-MM-DD，用於計算休息天數。
     is_reliever = 有出賽紀錄但無任何IP≥4.0先發。"""
-    _NONE8 = (None, None, None, None, None, None, None, False)
+    _NONE9 = (None, None, None, None, None, None, None, False, None)
     year = datetime.date.today().year
     data = safe_get(
         "https://statsapi.mlb.com/api/v1/people/%d/stats" % pitcher_id,
         params={"stats":"gameLog","group":"pitching","season":year,"gameType":"R"},
         timeout=10,
     )
-    if not data: return _NONE8
+    if not data: return _NONE9
     splits = []
     for s in data.get("stats",[]): splits = s.get("splits",[]); break
 
@@ -413,13 +421,13 @@ def _fetch_recent_era(pitcher_id, last_n=3):
     is_reliever = (len(any_apps) > 0 and len(proper_starts) == 0)
 
     recent = proper_starts[-last_n:] if len(proper_starts) >= last_n else proper_starts
-    if not recent: return (None, None, None, None, None, None, None, is_reliever)
+    if not recent: return (None, None, None, None, None, None, None, is_reliever, None)
 
     def _f(key, default="0"):
         return sum(float(s.get("stat",{}).get(key, default) or default) for s in recent)
 
     total_ip  = _f("inningsPitched")
-    if total_ip < 4: return (None, None, None, None, None, None, None, is_reliever)
+    if total_ip < 4: return (None, None, None, None, None, None, None, is_reliever, None)
 
     total_er  = _f("earnedRuns")
     total_bb  = _f("baseOnBalls")
@@ -449,6 +457,19 @@ def _fetch_recent_era(pitcher_id, last_n=3):
     dates = [s.get("game",{}).get("gameDate","")[:10] for s in recent if s.get("game",{}).get("gameDate")]
     last_start_ret = max(dates) if dates else None
 
+    # ── 投手趨勢（近2場ERA vs 前3場ERA，需≥5場先發）─────
+    era_trend = None
+    last5 = proper_starts[-5:]
+    if len(last5) >= 4:
+        def _era_of(lst):
+            ip = sum(float(s.get("stat",{}).get("inningsPitched","0") or 0) for s in lst)
+            er = sum(float(s.get("stat",{}).get("earnedRuns","0") or 0) for s in lst)
+            return round(er / ip * 9, 2) if ip >= 1 else None
+        t2_era = _era_of(last5[-2:])   # 近2場ERA
+        p3_era = _era_of(last5[:-2])   # 前3場ERA
+        if t2_era is not None and p3_era is not None:
+            era_trend = round(t2_era - p3_era, 2)  # >0=近期惡化，<0=近期改善
+
     # ── Run Support：從各場 boxscore 取隊伍得分 ──
     rs_vals = []
     for s in recent:
@@ -470,13 +491,13 @@ def _fetch_recent_era(pitcher_id, last_n=3):
                     except: pass
                 break
     rs_ret = round(min(sum(rs_vals)/len(rs_vals), 8.0), 2) if rs_vals else None
-    return era_ret, rs_ret, avg_ip, whip_ret, fip_ret, k9_ret, last_start_ret, is_reliever
+    return era_ret, rs_ret, avg_ip, whip_ret, fip_ret, k9_ret, last_start_ret, is_reliever, era_trend
 
 def build_recent_era_cache(pitchers_dict):
     global _RECENT_ERA, _PITCHER_RS, _PITCHER_IP, _PITCHER_WHIP
-    global _PITCHER_FIP, _PITCHER_K9, _PITCHER_LAST, _RELIEVER_FLAGS
+    global _PITCHER_FIP, _PITCHER_K9, _PITCHER_LAST, _RELIEVER_FLAGS, _PITCHER_TREND
     cache={}; rs_cache={}; ip_cache={}; whip_cache={}
-    fip_cache={}; k9_cache={}; last_cache={}; reliever_set=set()
+    fip_cache={}; k9_cache={}; last_cache={}; reliever_set=set(); trend_cache={}
     seen = set()
     for (home, away), info in pitchers_dict.items():
         for key, full, direct_id in [
@@ -502,22 +523,24 @@ def build_recent_era_cache(pitchers_dict):
                             pid = p.get("id"); break
 
             if not pid: continue
-            era, rs, avg_ip, whip, fip, k9, last_start, is_reliever = _fetch_recent_era(pid)
+            era, rs, avg_ip, whip, fip, k9, last_start, is_reliever, era_trend = _fetch_recent_era(pid)
             if is_reliever:
                 reliever_set.add(key)
                 log.info("Reliever: %s (no IP≥4.0 starts)", key)
             if era is not None:
                 cache[key] = era
-                log.info("ERA %s: %.2f (FIP=%.2f K9=%.1f avgIP=%.1f WHIP=%.2f)",
+                log.info("ERA %s: %.2f (FIP=%.2f K9=%.1f avgIP=%.1f WHIP=%.2f trend=%+.2f)",
                          key, era,
                          fip if fip else 0, k9 if k9 else 0,
-                         avg_ip if avg_ip else 0, whip if whip else 0)
-            if rs is not None:      rs_cache[key]   = rs
-            if avg_ip is not None:  ip_cache[key]   = avg_ip
-            if whip is not None:    whip_cache[key] = whip
-            if fip is not None:     fip_cache[key]  = fip
-            if k9 is not None:      k9_cache[key]   = k9
-            if last_start:          last_cache[key] = last_start
+                         avg_ip if avg_ip else 0, whip if whip else 0,
+                         era_trend if era_trend is not None else 0)
+            if rs is not None:         rs_cache[key]    = rs
+            if avg_ip is not None:     ip_cache[key]    = avg_ip
+            if whip is not None:       whip_cache[key]  = whip
+            if fip is not None:        fip_cache[key]   = fip
+            if k9 is not None:         k9_cache[key]    = k9
+            if last_start:             last_cache[key]  = last_start
+            if era_trend is not None:  trend_cache[key] = era_trend
     _RECENT_ERA     = cache
     _PITCHER_RS     = rs_cache
     _PITCHER_IP     = ip_cache
@@ -526,9 +549,10 @@ def build_recent_era_cache(pitchers_dict):
     _PITCHER_K9     = k9_cache
     _PITCHER_LAST   = last_cache
     _RELIEVER_FLAGS = reliever_set
-    log.info("ERA:%d FIP:%d K9:%d RS:%d IP:%d Relievers:%d",
+    _PITCHER_TREND  = trend_cache
+    log.info("ERA:%d FIP:%d K9:%d RS:%d IP:%d Relievers:%d Trend:%d",
              len(cache), len(fip_cache), len(k9_cache),
-             len(rs_cache), len(ip_cache), len(reliever_set))
+             len(rs_cache), len(ip_cache), len(reliever_set), len(trend_cache))
 
 
 # ══════════════════════════════════════════════
@@ -753,6 +777,82 @@ def fetch_live_sp_era():
     if live:
         _LIVE_SP_ERA = live
         log.info("Live SP ERA: %d pitchers (IP≥20)", len(live))
+        return True
+    return False
+
+
+def fetch_bullpen_era_live():
+    """動態拉取本賽季各隊牛棚ERA（MLB Stats API）。
+    中繼條件：gamesStarted/gamesPitched < 0.20 且 IP≥5。
+    以IP加權計算各隊牛棚ERA，存入 _BULLPEN_ERA_DYN。"""
+    global _BULLPEN_ERA_DYN
+    year = datetime.date.today().year
+    data = safe_get(
+        "https://statsapi.mlb.com/api/v1/stats",
+        params={"stats":"season","group":"pitching","gameType":"R",
+                "season":year,"limit":2000,"sportId":1,
+                "fields":"stats,splits,player,fullName,team,name,stat,era,inningsPitched,gamesStarted,gamesPitched"},
+        timeout=15,
+    )
+    if not data: return False
+    team_ip = {}; team_er = {}
+    for split in data.get("stats",[{}])[0].get("splits",[]):
+        stat  = split.get("stat",{})
+        ip_s  = str(stat.get("inningsPitched","0"))
+        gs    = int(stat.get("gamesStarted",0) or 0)
+        gp    = int(stat.get("gamesPitched",0) or 0)
+        era_s = stat.get("era","")
+        tname = split.get("team",{}).get("name","").lower()
+        try:
+            ip_parts = ip_s.split(".")
+            ip_total = int(ip_parts[0]) + (int(ip_parts[1])/3 if len(ip_parts)>1 and ip_parts[1] else 0)
+            if ip_total < 5: continue
+            if gp > 0 and gs/gp >= 0.20: continue  # 濾掉先發型投手
+            era = float(era_s)
+            if era < 0.5 or era > 9.5: continue
+            # 標準化球隊名
+            t = norm_team(tname.split()[-1] if tname else "")
+            if not t: continue
+            team_ip[t] = team_ip.get(t, 0) + ip_total
+            team_er[t] = team_er.get(t, 0) + era * ip_total / 9
+        except: pass
+    dyn = {}
+    for t, ip in team_ip.items():
+        if ip >= 20:
+            dyn[t] = round(team_er[t] / ip * 9, 2)
+    if dyn:
+        _BULLPEN_ERA_DYN = dyn
+        log.info("Live Bullpen ERA: %d teams", len(dyn))
+        return True
+    return False
+
+
+def fetch_team_batting_stats():
+    """動態拉取本賽季各隊打擊OBP（MLB Stats API）。
+    存入 _TEAM_OBP，用於修正 predict() 中的打擊得分預測。"""
+    global _TEAM_OBP
+    year = datetime.date.today().year
+    data = safe_get(
+        "https://statsapi.mlb.com/api/v1/teams/stats",
+        params={"season":year,"group":"hitting","gameType":"R","stats":"season","sportIds":1},
+        timeout=12,
+    )
+    if not data: return False
+    obp_map = {}
+    for split in data.get("stats",[{}])[0].get("splits",[]):
+        tname = split.get("team",{}).get("name","").lower()
+        stat  = split.get("stat",{})
+        obp_s = stat.get("obp","")
+        try:
+            obp = float(obp_s)
+            if obp < 0.200 or obp > 0.420: continue
+            t = norm_team(tname.split()[-1] if tname else "")
+            if t: obp_map[t] = round(obp, 3)
+        except: pass
+    if obp_map:
+        _TEAM_OBP = obp_map
+        log.info("Team OBP: %d teams (range %.3f-%.3f)",
+                 len(obp_map), min(obp_map.values()), max(obp_map.values()))
         return True
     return False
 
@@ -1040,7 +1140,10 @@ def era_adj(key):
 
 def bullpen_adj(team):
     t = team.lower()
-    era   = BULLPEN_ERA.get(t, LEAGUE_BULL_ERA)
+    static_era = BULLPEN_ERA.get(t, LEAGUE_BULL_ERA)
+    dyn_era    = _BULLPEN_ERA_DYN.get(t)
+    # 動態ERA可用時：靜態50% + 動態50%，更即時反映牛棚狀態
+    era = (static_era*(1-BULLPEN_DYN_W) + dyn_era*BULLPEN_DYN_W) if dyn_era else static_era
     depth = BULLPEN_DEPTH.get(t, 1.0)
     # 深度好的牛棚：ERA 優勢放大；陣容薄：ERA 優勢縮水
     return round((era - LEAGUE_BULL_ERA) * 0.20 * depth, 3)
@@ -1090,10 +1193,15 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
     h_sp_adj = era_adj(home_sp)
     a_sp_adj = era_adj(away_sp)
 
-    # ① 延伸：休息天數懲罰（短休/長休 → 有效ERA上升 → 對手得分微增）
+    # ① 延伸a：休息天數懲罰（短休/長休 → 有效ERA上升 → 對手得分微增）
     # era_adj 的轉換係數 0.35：ERA 增加 1.0 → scoring adjustment 增加 0.35
     h_rest_pen = rest_era_penalty(home_sp) * 0.35  # 主隊SP短休 → 客隊得分小幅增加
     a_rest_pen = rest_era_penalty(away_sp) * 0.35  # 客隊SP短休 → 主隊得分小幅增加
+
+    # ① 延伸b：投手近期趨勢（近2場ERA vs 前3場ERA）
+    # trend>0（ERA上升=惡化）→ 對方打者得分機會提升；trend<0（ERA下降=改善）→ 得分機會降低
+    h_trend = _PITCHER_TREND.get(home_sp, 0.0) if home_sp else 0.0
+    a_trend = _PITCHER_TREND.get(away_sp, 0.0) if away_sp else 0.0
 
     # ② 動態主場優勢
     ha = 0.07 + hr.get("form", 0.0) * 0.3
@@ -1101,6 +1209,10 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
     # ③ 基礎期望得分（含休息天數調整）
     h_exp = hr["off"] + a_sp_adj + a_rest_pen + ha
     a_exp = ar["off"] + h_sp_adj + h_rest_pen
+
+    # ③ 延伸：投手趨勢修正（主隊SP惡化→客隊得分增；客隊SP惡化→主隊得分增）
+    if h_trend: a_exp = round(a_exp + h_trend * PITCHER_TREND_W, 3)
+    if a_trend: h_exp = round(h_exp + a_trend * PITCHER_TREND_W, 3)
 
     # ④ 傷兵
     h_exp -= injury_penalty(home) * 0.4
@@ -1116,7 +1228,15 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
     h_exp = round(h_exp * (1.0 + h_sf * SCORING_FORM_W), 3)
     a_exp = round(a_exp * (1.0 + a_sf * SCORING_FORM_W), 3)
 
-    # ⑥b ★ 投手隊友得分支援（run support/GS vs 隊伍場均）
+    # ⑥b ★ 動態OBP修正（偏離聯盟均值越大→打擊得分調整越顯著）
+    h_obp = _TEAM_OBP.get(home.lower())
+    a_obp = _TEAM_OBP.get(away.lower())
+    if h_obp:
+        h_exp = round(h_exp * (1.0 + (h_obp - LEAGUE_OBP) / LEAGUE_OBP * OBP_W), 3)
+    if a_obp:
+        a_exp = round(a_exp * (1.0 + (a_obp - LEAGUE_OBP) / LEAGUE_OBP * OBP_W), 3)
+
+    # ⑥d ★ 投手隊友得分支援（run support/GS vs 隊伍場均）
     # 若這投手先發時隊伍習慣多/少得分，微調期望得分
     # ML/RL使用完整RS_BLEND_W；大小分使用極低RS_BLEND_W_TOT（防RS拉高Over）
     h_rs = _PITCHER_RS.get(home_sp)
@@ -1394,6 +1514,12 @@ def run():
     # ★ 即時賽季 ERA（補強靜態 PITCHER_ERA 字典）
     try: fetch_live_sp_era()
     except Exception as e: log.warning("Live SP ERA fetch failed: %s", e)
+    # ★ 動態牛棚ERA（即時更新 bullpen_adj）
+    try: fetch_bullpen_era_live()
+    except Exception as e: log.warning("Live Bullpen ERA fetch failed: %s", e)
+    # ★ 動態球隊打擊OBP（即時更新 predict 打擊得分）
+    try: fetch_team_batting_stats()
+    except Exception as e: log.warning("Team OBP fetch failed: %s", e)
 
     odds_data = fetch_odds()
     if not odds_data: log.error("No odds data"); return
