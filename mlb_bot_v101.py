@@ -1293,6 +1293,28 @@ def write_pages_json(picks, hist, now_tw):
             "game_date":   p.get("game_date",""),
             "game_time":   p.get("game_time",""),
         })
+    # ★ 最近 10 筆歷史（含 pending），供網頁歷史紀錄面板使用
+    _hist_sorted = sorted(
+        [r for r in hist if r.get("date")],
+        key=lambda r: (r.get("date",""), r.get("bet_type","")),
+        reverse=True
+    )[:10]
+    recent_history = []
+    for r in _hist_sorted:
+        _h = r.get("home",""); _a = r.get("away","")
+        recent_history.append({
+            "date":     r.get("date",""),
+            "home":     _h, "away": _a,
+            "home_cn":  CN.get(_h, _h.title()),
+            "away_cn":  CN.get(_a, _a.title()),
+            "bet_type": r.get("bet_type",""),
+            "label":    r.get("label",""),
+            "price":    r.get("price"),
+            "stake":    r.get("stake"),
+            "edge":     round(r.get("edge",0)*100, 1),
+            "result":   r.get("result"),  # "W", "L", "P", None(pending)
+        })
+
     payload = {
         "generated_at": now_tw.strftime("%Y-%m-%d %H:%M") + " (台灣時間)",
         "date":         now_tw.strftime("%Y-%m-%d"),
@@ -1303,6 +1325,7 @@ def write_pages_json(picks, hist, now_tw):
             "by_type":   by_type,      # ★ 分類型勝率（ML/RL/TOT）
         },
         "picks": records,
+        "recent_history": recent_history,
     }
     os.makedirs("docs", exist_ok=True)
     with open("docs/picks_latest.json", "w", encoding="utf-8") as f:

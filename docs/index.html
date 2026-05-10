@@ -55,16 +55,13 @@
     /* Copy toast */
     #copy-toast { transition: opacity .25s ease; }
 
-    /* Refresh ring */
     @keyframes spin { to { transform:rotate(360deg); } }
     .spin { animation: spin .7s linear; }
 
-    /* Auto-refresh ring */
-    .refresh-ring { stroke-dasharray: 56.5; stroke-dashoffset: 56.5;
-                    transition: stroke-dashoffset 1s linear; }
-
-    /* Countdown ring SVG */
-    .ring-svg { transform: rotate(-90deg); }
+    /* History panel slide-down */
+    #history-panel { overflow:hidden; transition:max-height .35s ease, opacity .3s ease; }
+    #history-panel.closed { max-height:0; opacity:0; }
+    #history-panel.open   { max-height:2000px; opacity:1; }
   </style>
 </head>
 <body class="min-h-screen p-4 md:p-6">
@@ -85,16 +82,14 @@
       <p id="gen-time" class="text-xs text-slate-500 mt-0.5"></p>
     </div>
     <div class="flex items-center gap-2">
-      <!-- Countdown ring + refresh -->
-      <div class="relative flex items-center justify-center w-9 h-9 cursor-pointer group" onclick="manualRefresh()" title="重新整理">
-        <svg class="ring-svg w-9 h-9 absolute" viewBox="0 0 20 20">
-          <circle cx="10" cy="10" r="9" fill="none" stroke="#334155" stroke-width="2"/>
-          <circle id="ring-progress" class="refresh-ring" cx="10" cy="10" r="9"
-                  fill="none" stroke="#38bdf8" stroke-width="2"/>
-        </svg>
-        <span id="refresh-icon" class="text-base z-10 group-hover:scale-110 transition-transform select-none">↻</span>
-      </div>
-      <span id="countdown-label" class="text-xs text-slate-600"></span>
+      <button onclick="toggleHistory()"
+              class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg text-slate-300 transition-colors flex items-center gap-1.5">
+        📋 <span id="hist-btn-label">歷史紀錄</span>
+      </button>
+      <button onclick="manualRefresh()"
+              class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg text-slate-300 transition-colors">
+        <span id="refresh-icon">↻</span>
+      </button>
     </div>
   </div>
 
@@ -117,6 +112,17 @@
     <div class="grid grid-cols-3 gap-2" id="by-type-row"></div>
   </div>
 
+  <!-- ── History panel ───────────────────────────── -->
+  <div id="history-panel" class="closed">
+    <div class="card rounded-xl p-4 mb-4">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-sm font-bold text-white">📋 最近 10 場紀錄</h2>
+        <span id="hist-summary" class="text-xs text-slate-500"></span>
+      </div>
+      <div id="hist-list" class="space-y-2"></div>
+    </div>
+  </div>
+
   <!-- ── Filter tabs ───────────────────────────── -->
   <div class="flex gap-2 mb-4 flex-wrap" id="filter-tabs">
     <button class="tab tab-active" data-filter="ALL" onclick="setFilter('ALL',this)">全部 <span id="cnt-ALL" class="ml-1 opacity-70"></span></button>
@@ -137,11 +143,10 @@
 
 <script>
 const JSON_URL = "picks_latest.json";
-const REFRESH_INTERVAL = 300; // seconds
 let allPicks = [];
 let currentFilter = "ALL";
-let countdown = REFRESH_INTERVAL;
-let countdownTimer = null;
+let historyOpen = false;
+let recentHistory = [];
 
 /* ── helpers ─────────────────────────────────── */
 function tierClass(tier){
@@ -413,6 +418,64 @@ function renderPicks(){
   container.innerHTML = filtered.map(renderCard).join("");
 }
 
+/* ── History ─────────────────────────────────── */
+function toggleHistory(){
+  historyOpen = !historyOpen;
+  const panel = document.getElementById("history-panel");
+  const lbl   = document.getElementById("hist-btn-label");
+  panel.classList.toggle("open", historyOpen);
+  panel.classList.toggle("closed", !historyOpen);
+  lbl.textContent = historyOpen ? "收合紀錄" : "歷史紀錄";
+  if(historyOpen) renderHistory();
+}
+
+function renderHistory(){
+  const list = document.getElementById("hist-list");
+  const summary = document.getElementById("hist-summary");
+  if(!recentHistory.length){
+    list.innerHTML='<div class="text-slate-500 text-sm text-center py-3">尚無歷史紀錄</div>';
+    return;
+  }
+  const settled = recentHistory.filter(r=>r.result==="W"||r.result==="L");
+  const wins    = settled.filter(r=>r.result==="W").length;
+  summary.textContent = settled.length ? `${wins}勝${settled.length-wins}負 / 最近${recentHistory.length}場` : "";
+
+  list.innerHTML = recentHistory.map(r=>{
+    const resultHtml = r.result==="W"
+      ? '<span class="text-xs font-bold text-emerald-400 bg-emerald-900/40 px-2 py-0.5 rounded-full">✓ 贏</span>'
+      : r.result==="L"
+      ? '<span class="text-xs font-bold text-rose-400 bg-rose-900/40 px-2 py-0.5 rounded-full">✗ 輸</span>'
+      : r.result==="P"
+      ? '<span class="text-xs font-bold text-slate-400 bg-slate-700 px-2 py-0.5 rounded-full">— 平</span>'
+      : '<span class="text-xs text-amber-400 bg-amber-900/30 px-2 py-0.5 rounded-full">待結算</span>';
+
+    const btBadge = r.bet_type==="獨贏"
+      ? '<span class="badge badge-ml">ML</span>'
+      : r.bet_type==="讓分"
+      ? '<span class="badge badge-rl">RL</span>'
+      : '<span class="badge badge-tot">TOT</span>';
+
+    const pnl = r.result==="W" && r.stake && r.price
+      ? `<span class="text-emerald-400 text-xs">+$${(r.stake*(r.price-1)).toFixed(1)}</span>`
+      : r.result==="L" && r.stake
+      ? `<span class="text-rose-400 text-xs">-$${r.stake}</span>`
+      : r.stake ? `<span class="text-slate-500 text-xs">$${r.stake}</span>` : "";
+
+    return `
+    <div class="flex items-center gap-2 bg-slate-800/50 rounded-lg px-3 py-2">
+      <div class="shrink-0">${resultHtml}</div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-1.5 flex-wrap">
+          ${btBadge}
+          <span class="text-xs font-medium text-white truncate">${r.away_cn} @ ${r.home_cn}</span>
+        </div>
+        <div class="text-xs text-slate-500 mt-0.5">${r.date} · ${r.label||r.bet_type} · @${r.price||"—"} · Edge ${signStr(r.edge||0)}%</div>
+      </div>
+      <div class="text-right shrink-0">${pnl}</div>
+    </div>`;
+  }).join("");
+}
+
 /* ── Update counts on tabs ───────────────────── */
 function updateCounts(){
   const cnts = { ALL: allPicks.length, ML: 0, RL: 0, TOT: 0 };
@@ -428,36 +491,12 @@ function updateCounts(){
   document.getElementById("cnt-TOT").textContent = fmt(cnts.TOT);
 }
 
-/* ── Countdown ring ──────────────────────────── */
-function updateRing(remaining){
-  const pct = remaining / REFRESH_INTERVAL;
-  const circumference = 56.5;
-  const offset = circumference * (1 - pct);
-  const ring = document.getElementById("ring-progress");
-  if(ring) ring.style.strokeDashoffset = offset;
-  const lbl = document.getElementById("countdown-label");
-  if(lbl) lbl.textContent = remaining>0 ? `${remaining}s` : "";
-}
-
-function startCountdown(){
-  clearInterval(countdownTimer);
-  countdown = REFRESH_INTERVAL;
-  updateRing(countdown);
-  countdownTimer = setInterval(()=>{
-    countdown--;
-    updateRing(countdown);
-    if(countdown<=0){
-      clearInterval(countdownTimer);
-      loadData(true);
-    }
-  }, 1000);
-}
-
 /* ── Main loader ─────────────────────────────── */
-async function loadData(auto=false){
+async function loadData(){
   const container = document.getElementById("picks-container");
   const icon = document.getElementById("refresh-icon");
-  if(!auto){ icon.classList.add("spin"); setTimeout(()=>icon.classList.remove("spin"),700); }
+  icon.classList.add("spin");
+  setTimeout(()=>icon.classList.remove("spin"), 700);
 
   try {
     const res = await fetch(JSON_URL+"?t="+Date.now());
@@ -482,19 +521,16 @@ async function loadData(auto=false){
       renderTypePill("TOT 大小分",bt["TOT"]||null);
 
     allPicks = data.picks||[];
+    recentHistory = data.recent_history||[];
     updateCounts();
     renderPicks();
-    startCountdown();
+    if(historyOpen) renderHistory();
   } catch(e){
     container.innerHTML=`<div class="card rounded-xl p-8 text-center text-rose-400">載入失敗：${e.message}</div>`;
-    startCountdown();
   }
 }
 
-function manualRefresh(){
-  clearInterval(countdownTimer);
-  loadData(false);
-}
+function manualRefresh(){ loadData(); }
 
 loadData();
 if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
