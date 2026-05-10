@@ -876,14 +876,22 @@ def fetch_game_umpires(today_str):
     )
     if not data: return
     result = {}
+    total_games = sum(len(db.get("games",[])) for db in data.get("dates",[]))
+    log.info("Umpire API: %d games returned", total_games)
     for db in data.get("dates", []):
         for game in db.get("games", []):
             home_raw = game.get("teams",{}).get("home",{}).get("team",{}).get("name","").lower()
             away_raw = game.get("teams",{}).get("away",{}).get("team",{}).get("name","").lower()
             hk = norm_team(home_raw.split()[-1] if home_raw else "")
             ak = norm_team(away_raw.split()[-1] if away_raw else "")
-            if not hk or not ak: continue
-            for off in game.get("officials", []):
+            officials = game.get("officials", [])
+            if not hk or not ak:
+                log.info("Umpire skip: home_raw=%r away_raw=%r hk=%r ak=%r", home_raw, away_raw, hk, ak)
+                continue
+            if not officials:
+                log.info("Umpire no officials yet: %s@%s", ak, hk)
+                continue
+            for off in officials:
                 if off.get("officialType","").lower() in ("home plate","plate"):
                     name = off.get("official",{}).get("fullName","").lower().strip()
                     adj  = UMP_RUN_ADJ.get(name, 0.0)
