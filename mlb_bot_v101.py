@@ -2407,7 +2407,7 @@ def run():
     lines=[
         "⚾ **MLB V2 分析報告**",
         "🕐 %s | %s %s %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str,ump_str,wx_str),
-        "📌 正式記錄 (00–07時)" if official else "🔧 測試模式 (不寫gist)",
+        "📌 正式記錄 (23–07時)" if official else "🔧 測試模式 (不寫gist)",
         "📊 歷史: %d勝/%d場 (%.1f%%)%s"%(wins,total_settled,wr,
             "  [%s]"%_type_stats_str if _type_stats_str else ""),
         "",
