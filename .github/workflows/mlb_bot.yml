@@ -1,8 +1,6 @@
 name: MLB Bot Daily
 
 on:
-  schedule:
-    - cron: '20 15 * * *'
   workflow_dispatch:
 
 permissions:
