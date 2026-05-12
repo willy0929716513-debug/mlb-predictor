@@ -101,6 +101,28 @@ UMP_W            = 1.0   # 裁判run調整使用倍率（1.0=直接使用dict值
 # ── ★ 校正 ───────────────────────────────────────────────
 MIN_SAMPLE_CALIB = 20    # 分類型勝率校正所需最少樣本
 
+# ── ★ 左右投手相剋 ───────────────────────────────────────────
+LR_OPS_W        = 0.14   # 球隊打擊 vs 左/右投 OPS 調整幅度（相對聯盟均值）
+LG_OPS_AVG      = 0.720  # 聯盟平均 OPS（基準）
+PITCHER_HAND_DEF= "R"    # 未知投手慣用手預設右投（MLB ~70% 為右投）
+
+# ── ★ BABIP/LOB% 幸運修正 ────────────────────────────────────
+BABIP_LG_AVG    = 0.300  # 聯盟平均 BABIP（投手運氣中性值）
+LOB_LG_AVG      = 72.0   # 聯盟平均殘壘率%（中性值）
+BABIP_FIP_BONUS = 0.20   # BABIP 每偏 0.030 時，FIP 混合比增加此幅度
+LOB_FIP_BONUS   = 0.15   # LOB% 每偏 5% 時，FIP 混合比增加此幅度
+
+# ── ★ 旅行疲勞/連戰疲勞 ──────────────────────────────────────
+TRAVEL_ROAD_PEN    = 0.035  # 每天連續客場 ERA 懲罰（轉換為對手得分）
+TRAVEL_TZ_PEN      = 0.10   # 跨三個時區額外懲罰（東西岸）
+TRAVEL_MAX_PEN     = 0.28   # 旅行疲勞 ERA 懲罰上限
+TRAVEL_LOOKBACK    = 7      # 往回查幾天的賽程
+CONS_GAME_THRESH   = 7      # 連戰超過此天數後啟動打線疲勞
+CONS_GAME_OFF_PEN  = 0.025  # 每超額一天的打線得分懲罰
+
+# ── ★ 主客場實際勝率 ─────────────────────────────────────────
+HOME_ROAD_WRAT_W   = 0.07   # 主/客場實際勝率偏離0.500時的得分修正幅度
+
 # ── ★ 球場係數（FanGraphs Park Factors 2024）──
 PARK_FACTOR = {
     "rockies":1.30,"rangers":1.12,"red sox":1.10,"cubs":1.08,"reds":1.07,
@@ -381,6 +403,17 @@ _BULLPEN_ERA_DYN = {}  # team_key → 本賽季牛棚ERA（MLB API動態）
 _BULLPEN_LOAD    = {}  # team_key → 昨日牛棚使用局數（疲勞度代理指標）
 _GAME_UMP        = {}  # (home_key, away_key) → (ump_name, run_adj)（主審裁判偏好）
 _ALL_GAME_PREDS  = {}  # (home_key, away_key) → 預測結果 dict（供場中推薦使用）
+_PITCHER_HAND      = {}  # pitcher_key -> "L" or "R"
+_PITCHER_LHB_ERA   = {}  # pitcher_key -> ERA vs LHB (season)
+_PITCHER_RHB_ERA   = {}  # pitcher_key -> ERA vs RHB (season)
+_PITCHER_BABIP     = {}  # pitcher_key -> BABIP (近期，運氣指標)
+_PITCHER_LOB_PCT   = {}  # pitcher_key -> LOB% (殘壘率，運氣指標)
+_PITCHER_BB9       = {}  # pitcher_key -> BB/9 (控球指標)
+_TEAM_VS_LHP_OPS   = {}  # team_key -> OPS vs LHP
+_TEAM_VS_RHP_OPS   = {}  # team_key -> OPS vs RHP
+_TEAM_HOME_WPCT    = {}  # team_key -> 主場勝率 (float 0.0-1.0)
+_TEAM_ROAD_WPCT    = {}  # team_key -> 客場勝率 (float 0.0-1.0)
+_TRAVEL_CONTEXT    = {}  # team_key -> {"road_days": int, "tz_cross": bool}
 
 
 # ══════════════════════════════════════════════
@@ -433,19 +466,22 @@ def get_star_injuries(team):
 # ══════════════════════════════════════════════
 
 def _fetch_recent_era(pitcher_id, last_n=3):
-    """返回 (ERA, RS, avg_ip, WHIP, FIP, K9, last_start, is_reliever) 8-tuple。
+    """返回 (ERA, RS, avg_ip, WHIP, FIP, K9, last_start, is_reliever, era_trend, babip, lob_pct, bb9) 12-tuple。
     FIP = Fielding Independent Pitching：消除打者運氣的純投手指標。
     K9 = 每9局三振數：高K9是UNDER的強烈正向信號。
     last_start = 最近先發日期 YYYY-MM-DD，用於計算休息天數。
-    is_reliever = 有出賽紀錄但無任何IP≥4.0先發。"""
-    _NONE9 = (None, None, None, None, None, None, None, False, None)
+    is_reliever = 有出賽紀錄但無任何IP≥4.0先發。
+    babip = BABIP（投手命中球場運氣指標）。
+    lob_pct = LOB%（殘壘率）。
+    bb9 = BB/9（控球指標）。"""
+    _NONE12 = (None, None, None, None, None, None, None, False, None, None, None, None)
     year = datetime.date.today().year
     data = safe_get(
         "https://statsapi.mlb.com/api/v1/people/%d/stats" % pitcher_id,
         params={"stats":"gameLog","group":"pitching","season":year,"gameType":"R"},
         timeout=10,
     )
-    if not data: return _NONE9
+    if not data: return _NONE12
     splits = []
     for s in data.get("stats",[]): splits = s.get("splits",[]); break
 
@@ -457,13 +493,13 @@ def _fetch_recent_era(pitcher_id, last_n=3):
     is_reliever = (len(any_apps) > 0 and len(proper_starts) == 0)
 
     recent = proper_starts[-last_n:] if len(proper_starts) >= last_n else proper_starts
-    if not recent: return (None, None, None, None, None, None, None, is_reliever, None)
+    if not recent: return (None, None, None, None, None, None, None, is_reliever, None, None, None, None)
 
     def _f(key, default="0"):
         return sum(float(s.get("stat",{}).get(key, default) or default) for s in recent)
 
     total_ip  = _f("inningsPitched")
-    if total_ip < 4: return (None, None, None, None, None, None, None, is_reliever, None)
+    if total_ip < 4: return (None, None, None, None, None, None, None, is_reliever, None, None, None, None)
 
     total_er  = _f("earnedRuns")
     total_bb  = _f("baseOnBalls")
@@ -506,6 +542,19 @@ def _fetch_recent_era(pitcher_id, last_n=3):
         if t2_era is not None and p3_era is not None:
             era_trend = round(t2_era - p3_era, 2)  # >0=近期惡化，<0=近期改善
 
+    # ── BABIP（投手命中球場運氣指標：H-HR / AB-K-HR+SF ≈ (H-HR)/(IP*BF/9-K-HR)）──
+    # 簡化：BABIP ≈ (H - HR) / (H + BB + K - HR) 近似
+    babip_den = total_h + total_bb + total_k - total_hr
+    babip_ret = round((total_h - total_hr) / babip_den, 3) if babip_den > 0 else None
+
+    # ── LOB%（殘壘率：(H+BB+HBP-R) / (H+BB+HBP - 1.4×HR)）────
+    lob_num = total_h + total_bb + total_hbp - total_er  # ≈ baserunners - runs
+    lob_den = total_h + total_bb + total_hbp - 1.4 * total_hr
+    lob_ret = round(lob_num / lob_den * 100, 1) if lob_den > 1 else None  # in %
+
+    # ── BB/9 ──────────────────────────────────────────────────
+    bb9_ret = round(total_bb / total_ip * 9, 1) if total_ip > 0 else None
+
     # ── Run Support：從各場 boxscore 取隊伍得分 ──
     rs_vals = []
     for s in recent:
@@ -527,7 +576,7 @@ def _fetch_recent_era(pitcher_id, last_n=3):
                     except: pass
                 break
     rs_ret = round(min(sum(rs_vals)/len(rs_vals), 8.0), 2) if rs_vals else None
-    return era_ret, rs_ret, avg_ip, whip_ret, fip_ret, k9_ret, last_start_ret, is_reliever, era_trend
+    return era_ret, rs_ret, avg_ip, whip_ret, fip_ret, k9_ret, last_start_ret, is_reliever, era_trend, babip_ret, lob_ret, bb9_ret
 
 def build_recent_era_cache(pitchers_dict):
     global _RECENT_ERA, _PITCHER_RS, _PITCHER_IP, _PITCHER_WHIP
