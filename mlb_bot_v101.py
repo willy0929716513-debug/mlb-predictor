@@ -792,8 +792,20 @@ def fetch_injury_list():
 # 先發投手
 # ══════════════════════════════════════════════
 
+ESPN_TEAM_ABBR = {
+    "lad":"dodgers","sf":"giants","nyy":"yankees","bos":"red sox","nym":"mets",
+    "atl":"braves","phi":"phillies","sea":"mariners","mil":"brewers","pit":"pirates",
+    "tor":"blue jays","det":"tigers","hou":"astros","tex":"rangers","chc":"cubs",
+    "bal":"orioles","kc":"royals","tb":"rays","ari":"diamondbacks","cin":"reds",
+    "sd":"padres","cle":"guardians","mia":"marlins","min":"twins",
+    "oak":"athletics","sac":"athletics","stl":"cardinals","laa":"angels",
+    "cws":"white sox","wsh":"nationals","col":"rockies",
+}
+
 def fetch_probable_pitchers():
     today = datetime.date.today().isoformat()
+
+    # ── 第一來源：MLB probablePitcher ──────────────────────────
     data = safe_get(
         "https://statsapi.mlb.com/api/v1/schedule",
         params={"sportId":1,"date":today,"hydrate":"probablePitcher(note),team",
@@ -807,18 +819,101 @@ def fetch_probable_pitchers():
             ad  = game.get("teams",{}).get("away",{})
             hs  = MLB_TEAM_ID.get(hd.get("team",{}).get("id")) or norm_team(hd.get("team",{}).get("name",""))
             as_ = MLB_TEAM_ID.get(ad.get("team",{}).get("id")) or norm_team(ad.get("team",{}).get("name",""))
-            hp     = hd.get("probablePitcher",{}).get("fullName")
-            ap     = ad.get("probablePitcher",{}).get("fullName")
-            hp_id  = hd.get("probablePitcher",{}).get("id")   # ★ 直接 MLB ID，省去重複 name-search
-            ap_id  = ad.get("probablePitcher",{}).get("id")
+            hp    = hd.get("probablePitcher",{}).get("fullName")
+            ap    = ad.get("probablePitcher",{}).get("fullName")
+            hp_id = hd.get("probablePitcher",{}).get("id")
+            ap_id = ad.get("probablePitcher",{}).get("id")
             if hs and as_:
                 result[(hs, as_)] = {
                     "home_pitcher":_name_to_key(hp),"away_pitcher":_name_to_key(ap),
                     "home_name":hp or "TBD","away_name":ap or "TBD",
-                    "home_pitcher_id": hp_id,
-                    "away_pitcher_id": ap_id,
+                    "home_pitcher_id": hp_id, "away_pitcher_id": ap_id,
+                    "_src": "probable",
                 }
-                log.info("SP: %s vs %s | H=%s A=%s", hs, as_, _name_to_key(hp), _name_to_key(ap))
+                log.info("SP(probable): %s vs %s | H=%s A=%s", hs, as_, _name_to_key(hp), _name_to_key(ap))
+
+    # ── 第二來源：ESPN Scoreboard probables（往往更即時）──────
+    try:
+        espn = safe_get(
+            "http://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard",
+            params={"dates": today.replace("-","")},
+            timeout=10,
+        )
+        for event in (espn or {}).get("events", []):
+            for comp in event.get("competitions", []):
+                home_k = away_k = home_sp = away_sp = None
+                for cmp in comp.get("competitors", []):
+                    abbr = cmp.get("team",{}).get("abbreviation","").lower()
+                    tk   = ESPN_TEAM_ABBR.get(abbr)
+                    if not tk: continue
+                    probs = cmp.get("probables", [])
+                    sp    = probs[0].get("athlete",{}).get("fullName") if probs else None
+                    if cmp.get("homeAway") == "home":
+                        home_k, home_sp = tk, sp
+                    else:
+                        away_k, away_sp = tk, sp
+                key = (home_k, away_k)
+                if key not in result: continue
+                entry = result[key]
+                changed = []
+                if home_sp and home_sp != entry["home_name"]:
+                    entry["home_name"]    = home_sp
+                    entry["home_pitcher"] = _name_to_key(home_sp)
+                    entry["home_pitcher_id"] = None
+                    changed.append("H:" + home_sp)
+                if away_sp and away_sp != entry["away_name"]:
+                    entry["away_name"]    = away_sp
+                    entry["away_pitcher"] = _name_to_key(away_sp)
+                    entry["away_pitcher_id"] = None
+                    changed.append("A:" + away_sp)
+                if changed:
+                    entry["_src"] = "espn"
+                    log.info("SP(ESPN override): %s vs %s | %s", home_k, away_k, ", ".join(changed))
+    except Exception as e:
+        log.warning("ESPN scoreboard SP failed: %s", e)
+
+    # ── 第三來源：MLB confirmed lineups（最準確，開賽前約 60 分鐘可用）
+    try:
+        ldata = safe_get(
+            "https://statsapi.mlb.com/api/v1/schedule",
+            params={"sportId":1,"date":today,"hydrate":"lineups,team"},
+            timeout=10,
+        )
+        for de in (ldata or {}).get("dates",[]):
+            for game in de.get("games",[]):
+                hd  = game.get("teams",{}).get("home",{})
+                ad  = game.get("teams",{}).get("away",{})
+                hs  = MLB_TEAM_ID.get(hd.get("team",{}).get("id")) or norm_team(hd.get("team",{}).get("name",""))
+                as_ = MLB_TEAM_ID.get(ad.get("team",{}).get("id")) or norm_team(ad.get("team",{}).get("name",""))
+                lineups = game.get("lineups", {})
+                if not lineups or (hs, as_) not in result: continue
+                def _find_pitcher(players):
+                    for p in (players or []):
+                        if p.get("primaryPosition",{}).get("abbreviation") == "P":
+                            return p.get("fullName"), p.get("id")
+                    return None, None
+                hp_c, hp_c_id = _find_pitcher(lineups.get("homePlayers",[]))
+                ap_c, ap_c_id = _find_pitcher(lineups.get("awayPlayers",[]))
+                entry   = result[(hs, as_)]
+                changed = []
+                if hp_c and hp_c != entry["home_name"]:
+                    entry["home_name"]       = hp_c
+                    entry["home_pitcher"]    = _name_to_key(hp_c)
+                    entry["home_pitcher_id"] = hp_c_id
+                    changed.append("H:" + hp_c)
+                if ap_c and ap_c != entry["away_name"]:
+                    entry["away_name"]       = ap_c
+                    entry["away_pitcher"]    = _name_to_key(ap_c)
+                    entry["away_pitcher_id"] = ap_c_id
+                    changed.append("A:" + ap_c)
+                if changed:
+                    entry["_src"] = "lineup"
+                    log.info("SP(lineup confirmed): %s vs %s | %s", hs, as_, ", ".join(changed))
+    except Exception as e:
+        log.warning("MLB lineup SP failed: %s", e)
+
+    for k, v in result.items():
+        log.info("SP(final/%s): %s vs %s | H=%s A=%s", v.get("_src","probable"), k[0], k[1], v["home_pitcher"], v["away_pitcher"])
     log.info("Pitchers resolved: %d games", len(result))
     return result
 
@@ -2223,8 +2318,10 @@ def run():
             _hist_label = ""
 
         acn=CN.get(away,away); hcn=CN.get(home,home)
-        h_sp_n = sp_info.get("home_name","TBD") if sp_info else "TBD"
-        a_sp_n = sp_info.get("away_name","TBD") if sp_info else "TBD"
+        h_sp_n  = sp_info.get("home_name","TBD") if sp_info else "TBD"
+        a_sp_n  = sp_info.get("away_name","TBD") if sp_info else "TBD"
+        _sp_src = sp_info.get("_src","probable") if sp_info else "probable"
+        sp_src_tag = {"lineup":"✅確認打線","espn":"📡ESPN確認","probable":"⚠️先發待確認"}.get(_sp_src,"")
         h_era=get_pitcher_era(home_sp); a_era=get_pitcher_era(away_sp)
         def _sp_tag(sp_key, era, rs_pitcher, team_rpg, in_recent):
             if not sp_key: return ""
@@ -2351,7 +2448,7 @@ def run():
         msg_lines=[
             "**%s  %s @ %s**"%(tier,acn,hcn),
             "🕐 %s %s (台灣時間)%s%s%s%s"%(game_date_str[5:].replace("-","/"),game_time_str,pf_note,weather_note,ump_note,mkt_tag),
-            "⚾ 先發: %s — %s"%(a_sp_str,h_sp_str),
+            "⚾ 先發 [%s]: %s — %s"%(sp_src_tag,a_sp_str,h_sp_str),
             "💰 推薦: %s"%bet_desc,
             stats_ln,
             "> Edge: **%+.1f%%**%s%s | Kelly: $%.1f%s"%(
@@ -2650,9 +2747,21 @@ def run():
         "• RL多層保護 · UNDER(TBD/牛棚/低IP/WHIP/K9) · OVER/UNDER相關折 · 低迷縮注 · BM品質過濾",
     ]
 
-    out="\n".join(lines)
-    _live = fetch_live_scores(today_str)
+    _live       = fetch_live_scores(today_str)
     _live_picks = generate_live_picks(_live)
+    if _live_picks:
+        _bets = [lp for lp in _live_picks if lp.get("bet")]
+        lines += ["", "📡 場中分析: %d場進行中 | %d個推薦（詳見網頁）" % (len(_live_picks), len(_bets))]
+        for lp in _live_picks:
+            _half = "▲" if lp["top_inning"] else "▼"
+            _bstr = " → %s" % lp["bet"] if lp.get("bet") else ""
+            lines.append("  • %s @ %s %s%s局 [%d:%d]%s" % (
+                lp["away_cn"], lp["home_cn"], _half, lp["inning"],
+                lp["away_runs"], lp["home_runs"], _bstr))
+    else:
+        lines += ["", "📡 場中分析: 目前沒有場中推薦"]
+
+    out="\n".join(lines)
     write_pages_json(picks, hist, now_tw, live_games=_live_picks)
     save_odds_snapshot(new_snap)
     if official and today_records: save_hist(hist+today_records)
