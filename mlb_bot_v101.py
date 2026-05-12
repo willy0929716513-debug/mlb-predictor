@@ -484,6 +484,8 @@ def _fetch_recent_era(pitcher_id, last_n=3, expected_key=None, expected_full=Non
     if not data: return _NONE12
     splits = []
     for s in data.get("stats",[]): splits = s.get("splits",[]); break
+    # 只保留 MLB（sportId=1）比賽，排除 AAA 等小聯盟出賽
+    splits = [s for s in splits if s.get("sport", {}).get("id", 1) == 1]
 
     # ── 身份驗證：全名比對，防止同姓不同人的ID錯誤 ─────────────
     if splits and expected_full:
@@ -1151,6 +1153,8 @@ def _fetch_pitcher_season_era(pitcher_id):
     if not data: return None
     try:
         splits = data.get("stats",[{}])[0].get("splits",[])
+        # 只保留 MLB（sportId=1），排除小聯盟賽季統計
+        splits = [s for s in splits if s.get("sport", {}).get("id", 1) == 1]
         if not splits: return None
         stat   = splits[0].get("stat",{})
         era    = float(stat.get("era","0") or "0")
