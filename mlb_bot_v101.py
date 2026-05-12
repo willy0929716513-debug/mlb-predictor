@@ -470,15 +470,9 @@ def get_star_injuries(team):
 # ★ 投手近期 ERA
 # ══════════════════════════════════════════════
 
-def _fetch_recent_era(pitcher_id, last_n=3):
+def _fetch_recent_era(pitcher_id, last_n=3, expected_key=None):
     """返回 (ERA, RS, avg_ip, WHIP, FIP, K9, last_start, is_reliever, era_trend, babip, lob_pct, bb9) 12-tuple。
-    FIP = Fielding Independent Pitching：消除打者運氣的純投手指標。
-    K9 = 每9局三振數：高K9是UNDER的強烈正向信號。
-    last_start = 最近先發日期 YYYY-MM-DD，用於計算休息天數。
-    is_reliever = 有出賽紀錄但無任何IP≥4.0先發。
-    babip = BABIP（投手命中球場運氣指標）。
-    lob_pct = LOB%（殘壘率）。
-    bb9 = BB/9（控球指標）。"""
+    expected_key: 預期的投手 key（_name_to_key結果），用於驗證API回傳球員是否正確。"""
     _NONE12 = (None, None, None, None, None, None, None, False, None, None, None, None)
     year = datetime.date.today().year
     data = safe_get(
@@ -489,6 +483,15 @@ def _fetch_recent_era(pitcher_id, last_n=3):
     if not data: return _NONE12
     splits = []
     for s in data.get("stats",[]): splits = s.get("splits",[]); break
+
+    # ── 身份驗證：確認API回傳的球員名字與預期吻合 ──────────────
+    if expected_key and splits:
+        returned_name = splits[0].get("player", {}).get("fullName", "")
+        returned_key  = _name_to_key(returned_name) if returned_name else None
+        if returned_key and returned_key != expected_key:
+            log.warning("PitcherID mismatch! id=%s expected=%s got=%s (%s) — ERA discarded",
+                        pitcher_id, expected_key, returned_key, returned_name)
+            return _NONE12
 
     # 完整先發（IP ≥ 4.0，過濾開場型中繼與牛棚短局出賽）
     proper_starts = [s for s in splits
@@ -620,7 +623,7 @@ def build_recent_era_cache(pitchers_dict):
 
             if not pid: continue
             if pid: pitcher_id_map[key] = pid
-            era, rs, avg_ip, whip, fip, k9, last_start, is_reliever, era_trend, babip, lob_pct, bb9 = _fetch_recent_era(pid)
+            era, rs, avg_ip, whip, fip, k9, last_start, is_reliever, era_trend, babip, lob_pct, bb9 = _fetch_recent_era(pid, expected_key=key)
             if is_reliever:
                 reliever_set.add(key)
                 log.info("Reliever: %s (no IP≥4.0 starts)", key)
