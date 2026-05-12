@@ -654,6 +654,8 @@ def build_recent_era_cache(pitchers_dict):
              len(cache), len(fip_cache), len(k9_cache),
              len(rs_cache), len(ip_cache), len(reliever_set), len(trend_cache),
              len(babip_cache), len(lob_cache), len(bb9_cache))
+    # 賽季ERA缺口偵測：在fetch_live_sp_era後呼叫此函數，此時_LIVE_SP_ERA尚未填入
+    # 留到run()中在fetch_live_sp_era後再檢查（參見 _check_season_era_gaps）
     # ★ 投手左/右打者 ERA 分組（在ERA快取建立後呼叫）
     try:
         fetch_pitcher_lr_splits(pitcher_id_map)
@@ -1135,8 +1137,7 @@ def fetch_live_sp_era():
     data = safe_get(
         "https://statsapi.mlb.com/api/v1/stats",
         params={"stats":"season","group":"pitching","gameType":"R",
-                "season":year,"limit":1000,
-                "fields":"stats,splits,player,fullName,stat,era,inningsPitched"},
+                "season":year,"limit":1000},
         timeout=15,
     )
     if not data: return False
@@ -1796,18 +1797,23 @@ def get_pitcher_era(key):
 
     # ── Step 2：FIP幸運修正（套在賽季ERA上）────────────────────
     if fip is not None:
-        _gap = fip - base
-        if   _gap >  1.50: _fw = FIP_BLEND_MAX
-        elif _gap >  1.00: _fw = FIP_BLEND_HIGH
-        elif _gap >  0.50: _fw = FIP_BLEND_MID
-        elif _gap < -1.50: _fw = FIP_BLEND_MAX
-        elif _gap < -1.00: _fw = FIP_BLEND_HIGH
-        elif _gap < -0.50: _fw = FIP_BLEND_MID
-        else:              _fw = FIP_BLEND_W
-        # 極端缺口(>3.0)：FIP來自近3場小樣本，可信度低，限制最大影響力
-        if abs(_gap) > 3.0: _fw = min(_fw, FIP_EXTREME_CAP)
-        if fip <= 0.80 and _fw > 0.65: _fw = 0.65
-        base = round(base*(1-_fw) + fip*_fw, 2)
+        if season_era is None:
+            # 無賽季ERA錨點：FIP也來自小樣本，最多25%影響，地板2.50
+            base = round(base * 0.75 + fip * 0.25, 2)
+            base = max(ERA_FLOOR_NO_FIP, base)
+        else:
+            _gap = fip - base
+            if   _gap >  1.50: _fw = FIP_BLEND_MAX
+            elif _gap >  1.00: _fw = FIP_BLEND_HIGH
+            elif _gap >  0.50: _fw = FIP_BLEND_MID
+            elif _gap < -1.50: _fw = FIP_BLEND_MAX
+            elif _gap < -1.00: _fw = FIP_BLEND_HIGH
+            elif _gap < -0.50: _fw = FIP_BLEND_MID
+            else:              _fw = FIP_BLEND_W
+            # 極端缺口(>3.0)：FIP來自近3場小樣本，限制最大影響力
+            if abs(_gap) > 3.0: _fw = min(_fw, FIP_EXTREME_CAP)
+            if fip <= 0.80 and _fw > 0.65: _fw = 0.65
+            base = round(base*(1-_fw) + fip*_fw, 2)
     else:
         base = round(base*(1-FIP_MISSING_REGRESS) + LEAGUE_ERA*FIP_MISSING_REGRESS, 2)
         base = max(ERA_FLOOR_NO_FIP, base)
@@ -2311,6 +2317,11 @@ def run():
     # ★ 即時賽季 ERA（補強靜態 PITCHER_ERA 字典）
     try: fetch_live_sp_era()
     except Exception as e: log.warning("Live SP ERA fetch failed: %s", e)
+    # 賽季ERA缺口偵測：列出今日先發中找不到賽季ERA的投手
+    if _RECENT_ERA and _LIVE_SP_ERA is not None:
+        missing = [k for k in _RECENT_ERA if not (_LIVE_SP_ERA.get(k) or PITCHER_ERA.get(k))]
+        if missing:
+            log.warning("SeasonERA missing (will use LEAGUE_ERA fallback): %s", ", ".join(missing))
     # ★ 動態牛棚ERA（即時更新 bullpen_adj）
     try: fetch_bullpen_era_live()
     except Exception as e: log.warning("Live Bullpen ERA fetch failed: %s", e)
