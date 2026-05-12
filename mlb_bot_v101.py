@@ -1149,15 +1149,15 @@ def fetch_live_sp_era():
             # MLB API IP格式："123.1" = 123又1/3局
             ip_parts = ip_s.split(".")
             ip_total = int(ip_parts[0]) + (int(ip_parts[1])/3 if len(ip_parts)>1 and ip_parts[1] else 0)
-            if ip_total < 20: continue
+            if ip_total < 10: continue
             era = float(era_s)
-            if era < 0.5 or era > 9.5: continue
+            if era < 0.1 or era > 12.0: continue
             key = _name_to_key(pname)
             if key: live[key] = round(era, 2)
         except: pass
     if live:
         _LIVE_SP_ERA = live
-        log.info("Live SP ERA: %d pitchers (IP≥20)", len(live))
+        log.info("Live SP ERA: %d pitchers (IP≥10)", len(live))
         return True
     return False
 
@@ -1804,7 +1804,9 @@ def get_pitcher_era(key):
             # FIP無資料：ERA可靠性未知，向聯盟均值保守回歸，且不低於下限
             adj_recent = round(recent_era*(1-FIP_MISSING_REGRESS) + LEAGUE_ERA*FIP_MISSING_REGRESS, 2)
             adj_recent = max(ERA_FLOOR_NO_FIP, adj_recent)
-        era_out = round(adj_recent*SP_RECENT_W + season_era*SP_SEASON_W, 2) if season_era is not None else adj_recent
+        # season_era 不存在時用聯盟平均當錨，防止小樣本極端值直接輸出
+        _anchor = season_era if season_era is not None else LEAGUE_ERA
+        era_out = round(adj_recent*SP_RECENT_W + _anchor*SP_SEASON_W, 2)
     else:
         era_out = season_era if season_era is not None else LEAGUE_ERA+0.60
     # 牛棚型先發：先發表現難以預測，50%回歸聯盟均值降低過度依賴
