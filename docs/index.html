@@ -176,10 +176,11 @@
     <button class="tab tab-inactive" data-filter="獨贏" onclick="setFilter('獨贏',this)">ML 獨贏 <span id="cnt-ML" class="ml-1 opacity-70"></span></button>
     <button class="tab tab-inactive" data-filter="讓分" onclick="setFilter('讓分',this)">RL 讓分 <span id="cnt-RL" class="ml-1 opacity-70"></span></button>
     <button class="tab tab-inactive" data-filter="大小分" onclick="setFilter('大小分',this)">TOT 大小分 <span id="cnt-TOT" class="ml-1 opacity-70"></span></button>
+    <button class="tab tab-inactive relative" data-filter="場中" onclick="setFilter('場中',this)">⚾ 場中 <span id="cnt-LIVE" class="ml-1 opacity-70"></span><span id="live-dot" class="hidden absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span></button>
   </div>
 
-  <!-- ── Live game section ─────────────────────── -->
-  <div id="live-section"></div>
+  <!-- ── Live game section (hidden until 場中 tab active) ── -->
+  <div id="live-section" style="display:none"></div>
 
   <!-- ── Pick cards ────────────────────────────── -->
   <div id="picks-container">
@@ -212,24 +213,36 @@ const CN_TO_KEY = {
 
 /* ── Live game card renderer ─────────────────── */
 function renderLiveSection(liveGames) {
-  const el = document.getElementById("live-section");
+  const el   = document.getElementById("live-section");
+  const dot  = document.getElementById("live-dot");
+  const cnt  = document.getElementById("cnt-LIVE");
   if (!el) return;
-  if (!liveGames || liveGames.length === 0) {
-    el.innerHTML = `<div class="text-xs text-slate-600 text-center py-1 mb-2">⚾ 目前沒有場中推薦</div>`;
+
+  const count = (liveGames || []).length;
+  if (cnt)  cnt.textContent  = count > 0 ? `(${count})` : "";
+  if (dot)  dot.classList.toggle("hidden", count === 0);
+
+  if (count === 0) {
+    el.innerHTML = `
+      <div class="card rounded-xl p-6 text-center">
+        <div class="text-2xl mb-2">⚾</div>
+        <div class="text-sm text-slate-400">目前沒有場中推薦</div>
+        <div class="text-xs text-slate-600 mt-1">比賽開始後重新執行 Bot 即可更新</div>
+      </div>`;
     return;
   }
+
   const half = g => g.top_inning ? "▲" : "▼";
   const cards = liveGames.map(g => {
-    const hasBet = !!g.bet;
     const projDiff = g.projected_total - g.market_total;
-    const projCol = Math.abs(projDiff) < 1 ? "text-slate-400"
-                  : projDiff < 0 ? "text-sky-400" : "text-orange-400";
-    const betHtml = hasBet
+    const projCol  = Math.abs(projDiff) < 1 ? "text-slate-400"
+                   : projDiff < 0 ? "text-sky-400" : "text-orange-400";
+    const betHtml  = g.bet
       ? `<div class="mt-2 rounded-lg bg-emerald-900/40 border border-emerald-700/40 px-3 py-1.5">
            <span class="text-xs font-bold text-emerald-400">📡 ${g.bet}</span>
            <span class="text-xs text-slate-400 ml-2">${g.reason||""}</span>
          </div>`
-      : "";
+      : `<div class="mt-2 text-xs text-slate-600">無推薦（持續觀察）</div>`;
     return `
     <div class="card rounded-xl p-3 mb-3 border border-slate-700/50">
       <div class="flex items-center justify-between">
@@ -246,9 +259,12 @@ function renderLiveSection(liveGames) {
       ${betHtml}
     </div>`;
   }).join("");
+
   el.innerHTML = `
     <div class="mb-4">
-      <div class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">⚾ 場中分析</div>
+      <div class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">
+        ⚾ 場中分析 — 資料來自上次執行 Bot
+      </div>
       ${cards}
     </div>`;
 }
@@ -526,7 +542,16 @@ function setFilter(type, btn){
     t.classList.toggle("tab-active", t===btn);
     t.classList.toggle("tab-inactive", t!==btn);
   });
-  renderPicks();
+  const liveEl   = document.getElementById("live-section");
+  const picksEl  = document.getElementById("picks-container");
+  if (type === "場中") {
+    liveEl.style.display  = "block";
+    picksEl.style.display = "none";
+  } else {
+    liveEl.style.display  = "none";
+    picksEl.style.display = "";
+    renderPicks();
+  }
 }
 
 function renderPicks(){
@@ -740,10 +765,6 @@ async function loadData(){
     renderPicks();
     renderLiveSection(data.live_games);
     if(historyOpen) renderHistory();
-    // 有場中比賽時每 90 秒自動刷新
-    if (data.live_games && data.live_games.length > 0) {
-      setTimeout(() => location.reload(), 90000);
-    }
   } catch(e){
     container.innerHTML=`<div class="card rounded-xl p-8 text-center text-rose-400">載入失敗：${e.message}</div>`;
   }
