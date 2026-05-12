@@ -178,6 +178,9 @@
     <button class="tab tab-inactive" data-filter="大小分" onclick="setFilter('大小分',this)">TOT 大小分 <span id="cnt-TOT" class="ml-1 opacity-70"></span></button>
   </div>
 
+  <!-- ── Live game section ─────────────────────── -->
+  <div id="live-section"></div>
+
   <!-- ── Pick cards ────────────────────────────── -->
   <div id="picks-container">
     <div class="text-center text-slate-400 py-12">載入中…</div>
@@ -194,6 +197,61 @@ let allPicks = [];
 let currentFilter = "ALL";
 let historyOpen = false;
 let recentHistory = [];
+
+/* ── Team key mapping ────────────────────────── */
+const CN_TO_KEY = {
+  "運動家":"athletics","太空人":"astros","藍鳥":"blue jays","勇士":"braves",
+  "釀酒人":"brewers","紅雀":"cardinals","小熊":"cubs","響尾蛇":"diamondbacks",
+  "道奇":"dodgers","巨人":"giants","守護者":"guardians","水手":"mariners",
+  "馬林魚":"marlins","大都會":"mets","國民":"nationals","金鶯":"orioles",
+  "教士":"padres","費城人":"phillies","海盜":"pirates","遊騎兵":"rangers",
+  "光芒":"rays","紅襪":"red sox","紅人":"reds","落磯":"rockies",
+  "皇家":"royals","老虎":"tigers","雙城":"twins","白襪":"white sox",
+  "洋基":"yankees","天使":"angels",
+};
+
+/* ── Live game card renderer ─────────────────── */
+function renderLiveSection(liveGames) {
+  const el = document.getElementById("live-section");
+  if (!el) return;
+  if (!liveGames || liveGames.length === 0) {
+    el.innerHTML = "";
+    return;
+  }
+  const half = g => g.top_inning ? "▲" : "▼";
+  const cards = liveGames.map(g => {
+    const hasBet = !!g.bet;
+    const projDiff = g.projected_total - g.market_total;
+    const projCol = Math.abs(projDiff) < 1 ? "text-slate-400"
+                  : projDiff < 0 ? "text-sky-400" : "text-orange-400";
+    const betHtml = hasBet
+      ? `<div class="mt-2 rounded-lg bg-emerald-900/40 border border-emerald-700/40 px-3 py-1.5">
+           <span class="text-xs font-bold text-emerald-400">📡 ${g.bet}</span>
+           <span class="text-xs text-slate-400 ml-2">${g.reason||""}</span>
+         </div>`
+      : "";
+    return `
+    <div class="card rounded-xl p-3 mb-3 border border-slate-700/50">
+      <div class="flex items-center justify-between">
+        <span class="text-sm font-bold text-white">${g.away_cn} @ ${g.home_cn}</span>
+        <span class="text-xs bg-red-600 text-white px-2 py-0.5 rounded-full font-bold animate-pulse">
+          ${half(g)}${g.inning}局 進行中
+        </span>
+      </div>
+      <div class="mt-1.5 flex items-center gap-3">
+        <span class="text-2xl font-bold text-white">${g.away_runs} : ${g.home_runs}</span>
+        <span class="text-xs text-slate-500">盤口 ${g.market_total}</span>
+        <span class="text-xs ${projCol}">預計終局 ${g.projected_total}</span>
+      </div>
+      ${betHtml}
+    </div>`;
+  }).join("");
+  el.innerHTML = `
+    <div class="mb-4">
+      <div class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">⚾ 場中分析</div>
+      ${cards}
+    </div>`;
+}
 
 /* ── helpers ─────────────────────────────────── */
 function tierClass(tier){
@@ -680,7 +738,12 @@ async function loadData(){
     recentHistory = data.recent_history||[];
     updateCounts();
     renderPicks();
+    renderLiveSection(data.live_games);
     if(historyOpen) renderHistory();
+    // 有場中比賽時每 90 秒自動刷新
+    if (data.live_games && data.live_games.length > 0) {
+      setTimeout(() => location.reload(), 90000);
+    }
   } catch(e){
     container.innerHTML=`<div class="card rounded-xl p-8 text-center text-rose-400">載入失敗：${e.message}</div>`;
   }

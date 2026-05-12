@@ -380,6 +380,7 @@ _TEAM_OBP        = {}  # team_key → OBP float（MLB API動態本賽季）
 _BULLPEN_ERA_DYN = {}  # team_key → 本賽季牛棚ERA（MLB API動態）
 _BULLPEN_LOAD    = {}  # team_key → 昨日牛棚使用局數（疲勞度代理指標）
 _GAME_UMP        = {}  # (home_key, away_key) → (ump_name, run_adj)（主審裁判偏好）
+_ALL_GAME_PREDS  = {}  # (home_key, away_key) → 預測結果 dict（供場中推薦使用）
 
 
 # ══════════════════════════════════════════════
@@ -946,6 +947,97 @@ def fetch_bullpen_load():
         log.info("Bullpen load(1d): %s",
                  {k:round(v,1) for k,v in sorted(load.items(),key=lambda x:-x[1])[:8]})
     return bool(load)
+
+
+def fetch_live_scores(today_str):
+    """獲取進行中比賽的即時比分，用於場中推薦。"""
+    data = safe_get(
+        "https://statsapi.mlb.com/api/v1/schedule",
+        params={"date": today_str, "sportId": 1, "gameType": "R",
+                "hydrate": "linescore"},
+        timeout=10,
+    )
+    live = []
+    for db in (data or {}).get("dates", []):
+        for game in db.get("games", []):
+            if game.get("status", {}).get("abstractGameState") != "Live":
+                continue
+            home_raw = game.get("teams",{}).get("home",{}).get("team",{}).get("name","").lower()
+            away_raw = game.get("teams",{}).get("away",{}).get("team",{}).get("name","").lower()
+            hk = norm_team(TEAM_ALIAS.get(home_raw, home_raw.split()[-1] if home_raw else ""))
+            ak = norm_team(TEAM_ALIAS.get(away_raw, away_raw.split()[-1] if away_raw else ""))
+            if not hk or not ak:
+                continue
+            ls         = game.get("linescore", {})
+            inning     = int(ls.get("currentInning") or 1)
+            top_inning = bool(ls.get("isTopInning", True))
+            home_runs  = int(ls.get("teams",{}).get("home",{}).get("runs") or 0)
+            away_runs  = int(ls.get("teams",{}).get("away",{}).get("runs") or 0)
+            live.append({
+                "home": hk, "away": ak,
+                "home_cn": CN.get(hk, hk), "away_cn": CN.get(ak, ak),
+                "inning": inning, "top_inning": top_inning,
+                "home_runs": home_runs, "away_runs": away_runs,
+            })
+    log.info("Live games: %d in progress", len(live))
+    return live
+
+
+def generate_live_picks(live_games):
+    """根據場中比分+局數生成即時推薦，參照 _ALL_GAME_PREDS 的賽前預測。"""
+    result = []
+    for lg in live_games:
+        home, away = lg["home"], lg["away"]
+        inning     = lg["inning"]
+        top_inning = lg["top_inning"]
+        home_r     = lg["home_runs"]
+        away_r     = lg["away_runs"]
+        current_total = home_r + away_r
+        diff = home_r - away_r
+
+        innings_done = float(inning) - (1.0 if top_inning else 0.5)
+        innings_left = max(0.0, 9.0 - innings_done)
+
+        pred         = _ALL_GAME_PREDS.get((home, away), {})
+        market_total = pred.get("market_total") or 8.5
+        p_home       = pred.get("home_win_prob", 0.5)
+
+        if innings_done > 0.5:
+            run_rate = current_total / innings_done
+        else:
+            run_rate = market_total / 9.0
+        projected = round(current_total + run_rate * innings_left, 1)
+
+        bet = None
+        reason = None
+
+        if inning >= 6 and projected < market_total - 1.5:
+            bet    = "大小分 UNDER"
+            reason = "第%d局 %d:%d → 預計終局%.1f分 < 盤口%.1f" % (inning, away_r, home_r, projected, market_total)
+        elif inning <= 4 and projected > market_total + 1.5:
+            bet    = "大小分 OVER"
+            reason = "第%d局 %d:%d → 預計終局%.1f分 > 盤口%.1f" % (inning, away_r, home_r, projected, market_total)
+        elif 4 <= inning <= 7:
+            if diff == -1 and p_home >= 0.55:
+                bet    = "主隊讓分(+1.5)"
+                reason = "主隊落後1分 第%d局，賽前主隊勝率%d%%" % (inning, round(p_home*100))
+            elif diff == 1 and p_home <= 0.45:
+                bet    = "客隊讓分(+1.5)"
+                reason = "客隊落後1分 第%d局，賽前客隊勝率%d%%" % (inning, round((1-p_home)*100))
+
+        result.append({
+            "home_cn":        lg["home_cn"],
+            "away_cn":        lg["away_cn"],
+            "inning":         inning,
+            "top_inning":     top_inning,
+            "home_runs":      home_r,
+            "away_runs":      away_r,
+            "projected_total": projected,
+            "market_total":   market_total,
+            "bet":            bet,
+            "reason":         reason,
+        })
+    return result
 
 
 def fetch_bullpen_era_live():
@@ -1539,7 +1631,7 @@ def calc_perf_by_type(hist):
         for bt, v in buckets.items()
     }
 
-def write_pages_json(picks, hist, now_tw):
+def write_pages_json(picks, hist, now_tw, live_games=None):
     total_settled, wins, wr = calc_perf(hist)
     total_in, total_pnl     = calc_pnl(hist)
     roi = round(total_pnl / total_in * 100, 1) if total_in > 0 else None
@@ -1645,6 +1737,7 @@ def write_pages_json(picks, hist, now_tw):
         },
         "picks": records,
         "recent_history": recent_history,
+        "live_games":   live_games or [],
     }
     os.makedirs("docs", exist_ok=True)
     with open("docs/picks_latest.json", "w", encoding="utf-8") as f:
@@ -1865,6 +1958,11 @@ def run():
         con_un_p   = round(sum(con_under)/len(con_under),3) if con_under else under_price
 
         pred    = predict(home,away,home_sp,away_sp,market_total=market_total,game_dt=game_dt)
+        _ALL_GAME_PREDS[(home, away)] = {
+            "home_win_prob": pred.get("home_win_prob", 0.5),
+            "market_total":  market_total,
+            "pure_total_tot": pred.get("pure_total_tot"),
+        }
         margin  = pred["margin"]
         dyn_std = pred["dyn_std"]
         h_model   = pred["home_win_prob"]; a_model = pred["away_win_prob"]
@@ -2553,7 +2651,9 @@ def run():
     ]
 
     out="\n".join(lines)
-    write_pages_json(picks, hist, now_tw)
+    _live = fetch_live_scores(today_str)
+    _live_picks = generate_live_picks(_live)
+    write_pages_json(picks, hist, now_tw, live_games=_live_picks)
     save_odds_snapshot(new_snap)
     if official and today_records: save_hist(hist+today_records)
     log.info("Sending %d chars",len(out))
