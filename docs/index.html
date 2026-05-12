@@ -303,9 +303,13 @@ function trendChip(t){
 }
 
 /* ── SP chip builder ─────────────────────────── */
-function spChips(name, era, fip, k9, avgip, rest, whip){
+function spChips(name, era, fip, k9, avgip, rest, whip, hand, babip, lob){
   if(!name||name==="TBD") return '<span class="text-slate-600">TBD</span>';
-  let chips = `<span class="font-medium text-slate-200">${name}</span>`;
+  // 慣用手標籤
+  const handBadge = hand==="L"
+    ? `<span class="sp-chip text-indigo-300 font-bold">左</span> `
+    : hand==="R" ? `<span class="sp-chip text-slate-400">右</span> ` : "";
+  let chips = handBadge + `<span class="font-medium text-slate-200">${name}</span>`;
   if(era!=null){
     const col = era<=3.5?"text-emerald-400":era>=4.8?"text-rose-400":"text-slate-300";
     let eraLabel = `ERA ${era.toFixed(2)}`;
@@ -314,6 +318,16 @@ function spChips(name, era, fip, k9, avgip, rest, whip){
       eraLabel += ` <span class="${fipCol}">FIP ${fip.toFixed(2)}</span>`;
     }
     chips += ` <span class="sp-chip ${col}">${eraLabel}</span>`;
+  }
+  // BABIP 運氣指標（>0.330 幸運低ERA；<0.270 倒楣高ERA）
+  if(babip!=null){
+    if(babip>0.330) chips+=` <span class="sp-chip text-amber-400" title="BABIP偏高，ERA可能偏低（運氣）">BABIP ${babip.toFixed(3)} ⚠️</span>`;
+    else if(babip<0.270) chips+=` <span class="sp-chip text-rose-400" title="BABIP偏低，ERA可能偏高（倒楣）">BABIP ${babip.toFixed(3)} ↑</span>`;
+  }
+  // LOB% 異常提示（<65% 留底率差；>80% 幸運逃脫跑者）
+  if(lob!=null){
+    if(lob<65) chips+=` <span class="sp-chip text-rose-400" title="殘壘率偏低，跑者得分效率差">LOB ${lob.toFixed(0)}%↓</span>`;
+    else if(lob>80) chips+=` <span class="sp-chip text-amber-400" title="殘壘率偏高，運氣成分高">LOB ${lob.toFixed(0)}%↑</span>`;
   }
   if(k9!=null && k9>=8.5)
     chips += ` <span class="sp-chip text-sky-400">K/9 ${k9.toFixed(1)}</span>`;
@@ -417,6 +431,31 @@ function renderCard(p){
     ? `<span class="text-xs text-violet-400 ml-1" title="${p.ump_name}">⚖️ ${umpAdj >= 0 ? '+' : ''}${umpAdj.toFixed(2)}</span>`
     : "";
 
+  // 先發來源標示
+  const srcMap = {"gamefeed":"✅確認","lineup":"✅打線","rotowire":"📋RotoWire","espn":"📡ESPN","probable":"⚠️待確認"};
+  const spSrcHtml = p.sp_src
+    ? `<span class="text-xs ml-1 ${p.sp_src==='probable'?'text-amber-400':'text-emerald-400'}">${srcMap[p.sp_src]||'⚠️'}</span>`
+    : "";
+
+  // 旅行疲勞標示（客隊）
+  const roadDays = p.away_road_days;
+  const tzCross  = p.away_tz_cross;
+  const travelHtml = roadDays
+    ? `<span class="sp-chip ${roadDays>=4?'sp-warn':'text-slate-400'}" title="客隊連續客場${roadDays}天${tzCross?'（跨時區）':''}">
+        ✈️ 連客${roadDays}天${tzCross?' ⏰':''}
+       </span>`
+    : "";
+
+  // 主客場勝率
+  function wpctChip(wpct, label){
+    if(wpct==null) return "";
+    const dev = wpct - 0.500;
+    const col = dev>=0.05?"text-emerald-400":dev<=-0.05?"text-rose-400":"text-slate-400";
+    return `<span class="${col} text-xs">${label} ${Math.round(wpct*100)}%</span>`;
+  }
+  const homeWpctHtml = wpctChip(p.home_wpct, "主場");
+  const awayWpctHtml = wpctChip(p.away_road_wpct, "客場");
+
   const awayRS = p.away_rs!=null
     ?`<span class="text-emerald-400">RS ${p.away_rs.toFixed(1)}</span>`
     :p.away_rpg!=null?`<span class="text-slate-500">隊均 ${p.away_rpg.toFixed(1)}</span>`:"—";
@@ -435,7 +474,7 @@ function renderCard(p){
       <div class="min-w-0">
         <div class="flex items-center gap-2 flex-wrap">
           <span class="text-sm font-bold text-white">${p.tier}</span>
-          ${badge} ${pfHtml}${wxHtml}${umpHtml}
+          ${badge} ${pfHtml}${wxHtml}${umpHtml}${spSrcHtml}
         </div>
         <div class="text-lg font-bold text-white mt-0.5">${p.away_cn} @ ${p.home_cn}</div>
         <div class="text-xs text-slate-500">${p.game_date} &nbsp;${p.game_time} 台灣時間</div>
@@ -497,18 +536,19 @@ function renderCard(p){
         <div class="text-xs text-slate-500 font-medium">先發投手</div>
         <div class="text-xs leading-relaxed">
           <span class="text-slate-500 mr-1">客隊</span>
-          ${spChips(p.away_sp,p.away_era,p.away_fip,p.away_k9,p.away_avgip,p.away_rest,p.away_whip)}
+          ${spChips(p.away_sp,p.away_era,p.away_fip,p.away_k9,p.away_avgip,p.away_rest,p.away_whip,p.away_hand,p.away_babip,p.away_lob)}
           ${trendChip(p.away_trend)}
         </div>
         <div class="text-xs leading-relaxed">
           <span class="text-slate-500 mr-1">主隊</span>
-          ${spChips(p.home_sp,p.home_era,p.home_fip,p.home_k9,p.home_avgip,p.home_rest,p.home_whip)}
+          ${spChips(p.home_sp,p.home_era,p.home_fip,p.home_k9,p.home_avgip,p.home_rest,p.home_whip,p.home_hand,p.home_babip,p.home_lob)}
           ${trendChip(p.home_trend)}
         </div>
         <div class="grid grid-cols-2 gap-1 text-xs text-slate-500 mt-1">
-          <div>得分支援: ${awayRS}</div>
-          <div>得分支援: ${homeRS}</div>
+          <div>得分支援: ${awayRS} ${awayWpctHtml}</div>
+          <div>得分支援: ${homeRS} ${homeWpctHtml}</div>
         </div>
+        ${travelHtml ? `<div class="mt-1.5 flex flex-wrap gap-1">${travelHtml}</div>` : ""}
       </div>
       <div class="mt-3 bg-slate-800/40 rounded-lg px-3 py-2">${scoreHtml}</div>
       <div class="mt-2 bg-slate-800/40 rounded-lg px-3 py-2 space-y-1">
