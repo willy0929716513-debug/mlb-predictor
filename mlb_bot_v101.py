@@ -755,13 +755,20 @@ def fetch_roto_probable_pitchers():
     global _ROTO_SP
     import re
     try:
-        r = requests.get(
+        # RotoWire 已改為無 .php 副檔名的路由
+        for rw_url in [
+            "https://www.rotowire.com/baseball/probable-pitchers/",
             "https://www.rotowire.com/baseball/probable-pitchers.php",
-            headers={"User-Agent":
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"},
-            timeout=15,
-        )
+        ]:
+            r = requests.get(
+                rw_url,
+                headers={"User-Agent":
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"},
+                timeout=15,
+            )
+            if r.status_code == 200:
+                break
         r.raise_for_status()
         html = r.text
 
@@ -869,12 +876,11 @@ def fetch_probable_pitchers():
     now_utc = datetime.datetime.utcnow()
 
     # ── 第一來源：MLB probablePitcher ─────────────────────────
+    # 不用 fields 過濾，確保 gameDateTime（含時區）和 status.detailedState 都能拿到
     data = safe_get(
         "https://statsapi.mlb.com/api/v1/schedule",
         params={"sportId":1,"date":today,
-                "hydrate":"probablePitcher(note),team",
-                "fields":"dates,games,gamePk,status,detailedState,gameDate,"
-                         "teams,home,away,probablePitcher,fullName,id,team,name"},
+                "hydrate":"probablePitcher(note),team"},
     )
     result   = {}
     game_pks = {}  # (hs, as_) -> (gamePk, detailedState, commence_utc)
@@ -891,7 +897,8 @@ def fetch_probable_pitchers():
             ap_id = ad.get("probablePitcher",{}).get("id")
             gpk   = game.get("gamePk")
             state = game.get("status",{}).get("detailedState","Scheduled")
-            ct_str = game.get("gameDate","")
+            # gameDateTime 包含時間（ISO 8601 with Z），gameDate 僅有日期字串
+            ct_str = game.get("gameDateTime","") or game.get("gameDate","")
             try:
                 ct_utc = datetime.datetime.fromisoformat(ct_str.replace("Z","+00:00")).replace(tzinfo=None)
             except Exception:
