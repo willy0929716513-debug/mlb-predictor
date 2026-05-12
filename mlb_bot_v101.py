@@ -58,7 +58,10 @@ GAP1, GAP2, GAP3 = 1.5, 2.5, 3.5
 ESPN_ALPHA_MAX = 0.65
 TREND_DELTA_W  = 0.25   # 近期趨勢權重（近期ERA偏差的25%作為調整量）
 TREND_MAX_ADJ  = 1.50   # 近期趨勢最大調整量（±1.5 ERA點）
-FIP_EXTREME_CAP = 0.35  # FIP-賽季ERA缺口>3.0時，FIP最大權重（小樣本保護）
+FIP_EXTREME_CAP  = 0.35  # FIP-賽季ERA缺口>3.0時，FIP最大權重（小樣本保護）
+FIP_EXTREME_CAP2 = 0.10  # FIP-賽季ERA缺口>5.0時，FIP最大權重（極端小樣本）
+TREND_EXTREME_THRESH = 4.0   # 近期趨勢delta超過此值→視為極端小樣本噪音
+TREND_EXTREME_SCALE  = 0.33  # 極端趨勢時最大調整量縮減為1/3（約±0.5 ERA點）
 SCORING_FORM_W = 0.10   # 近期打擊得分調整幅度（±10%）
 MIN_SP_IP_UNDER    = 5.0   # 先發場均局數門檻：低於此值UNDER需更高概率（開場/短局投手保護）
 UNDER_LOW_IP_EXTRA = 0.10  # 低局數先發UNDER額外概率門檻（+10%）
@@ -482,24 +485,8 @@ def _fetch_recent_era(pitcher_id, last_n=3, expected_key=None, expected_full=Non
         timeout=10,
     )
     if not data: return _NONE12
-    # 先找 sport.id=1（MLB）的 stats group；API 可能同時回傳多個聯盟層級
     splits = []
-    for s in data.get("stats", []):
-        if s.get("sport", {}).get("id") == 1:
-            splits = s.get("splits", [])
-            break
-    if not splits:  # fallback：取第一個 group（無 sport 標記時）
-        for s in data.get("stats", []): splits = s.get("splits", []); break
-
-    # ── 暫時診斷 log：印出 API 回應結構（確認 sport/league 欄位） ──
-    if pitcher_id == 837227:
-        log.warning("IMAI_DEBUG groups: %s",
-                    [(g.get("sport"), g.get("league"), len(g.get("splits",[])))
-                     for g in data.get("stats",[])])
-        if splits:
-            log.warning("IMAI_DEBUG split[0] keys=%s sport=%s league=%s",
-                        sorted(splits[0].keys()),
-                        splits[0].get("sport"), splits[0].get("league"))
+    for s in data.get("stats",[]): splits = s.get("splits",[]); break
 
     # ── 身份驗證：全名比對，防止同姓不同人的ID錯誤 ─────────────
     if splits and expected_full:
@@ -1869,6 +1856,8 @@ def get_pitcher_era(key):
             else:              _fw = FIP_BLEND_W
             # 極端缺口(>3.0)：FIP來自近3場小樣本，限制最大影響力
             if abs(_gap) > 3.0: _fw = min(_fw, FIP_EXTREME_CAP)
+            # 更極端缺口(>5.0)：近期數據幾乎肯定是小樣本/單場爆發，幾乎全信賽季ERA
+            if abs(_gap) > 5.0: _fw = min(_fw, FIP_EXTREME_CAP2)
             if fip <= 0.80 and _fw > 0.65: _fw = 0.65
             base = round(base*(1-_fw) + fip*_fw, 2)
     else:
@@ -1878,7 +1867,10 @@ def get_pitcher_era(key):
     # ── Step 3：近期趨勢微調（上限±1.5，防止3場熱身/崩盤主導預測）──
     if recent_era is not None and season_era is not None:
         trend_delta = recent_era - season_era          # 正=近期變差，負=近期改善
-        trend_adj   = max(-TREND_MAX_ADJ, min(TREND_MAX_ADJ, trend_delta * TREND_DELTA_W))
+        # 極端趨勢（>4 ERA點）：delta 太大代表小樣本或單場爆炸，縮減最大調整量
+        _tmax = TREND_MAX_ADJ if abs(trend_delta) <= TREND_EXTREME_THRESH \
+                else TREND_MAX_ADJ * TREND_EXTREME_SCALE
+        trend_adj   = max(-_tmax, min(_tmax, trend_delta * TREND_DELTA_W))
         era_out = round(base + trend_adj, 2)
     else:
         era_out = base
