@@ -1,4 +1,4 @@
-import os, json, math, logging, datetime, re, requests, unicodedata
+import os, json, math, logging, datetime, re, time, requests, unicodedata
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger("MLB_V123")
@@ -649,7 +649,6 @@ def fetch_weather(team, game_dt):
 
         # ── 風向分量：計算吹向外野的順風強度 ─────────────────
         cf_dir  = PARK_CF_DIR.get(t, 0)
-        import math
         # 氣象風向：風吹來的方向（FROM direction）。朝外野方向 = wind_dir ≈ cf_dir + 180
         angle   = math.radians(wind_dir - (cf_dir + 180))
         wind_out = wind_speed * math.cos(angle)  # >0=順風出牆，<0=逆風
@@ -753,24 +752,28 @@ def fetch_roto_probable_pitchers():
     """從 RotoWire probable-pitchers 頁面抓取先發（比 MLB API 即時）。
     RotoWire 編輯團隊會在輪值更動後快速更新，不依賴 MLB 官方 probablePitcher 資料庫。"""
     global _ROTO_SP
-    import re
+    RW_URLS = [
+        "https://www.rotowire.com/baseball/probable-pitchers/",
+        "https://www.rotowire.com/baseball/probable-pitchers.php",
+    ]
+    RW_HEADERS = {"User-Agent":
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"}
     try:
-        # RotoWire 已改為無 .php 副檔名的路由
-        for rw_url in [
-            "https://www.rotowire.com/baseball/probable-pitchers/",
-            "https://www.rotowire.com/baseball/probable-pitchers.php",
-        ]:
-            r = requests.get(
-                rw_url,
-                headers={"User-Agent":
-                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"},
-                timeout=15,
-            )
-            if r.status_code == 200:
-                break
-        r.raise_for_status()
-        html = r.text
+        resp = None
+        for rw_url in RW_URLS:
+            try:
+                r = requests.get(rw_url, headers=RW_HEADERS, timeout=15)
+                if r.status_code == 200:
+                    resp = r
+                    break
+                log.debug("RotoWire SP URL %s → %d", rw_url, r.status_code)
+            except Exception as e:
+                log.debug("RotoWire SP URL %s error: %s", rw_url, e)
+        if resp is None:
+            log.info("RotoWire probable pitchers: all URLs unavailable, skipping")
+            return False
+        html = resp.text
 
         # RotoWire 格式：每場比賽一個 lineup__matchup，
         # 客隊 (away) 在左、主隊 (home) 在右
@@ -1161,7 +1164,7 @@ def fetch_live_scores(today_str):
     data = safe_get(
         "https://statsapi.mlb.com/api/v1/schedule",
         params={"date": today_str, "sportId": 1, "gameType": "R",
-                "hydrate": "linescore"},
+                "hydrate": "linescore,team"},
         timeout=10,
     )
     live = []
@@ -1380,8 +1383,7 @@ def settle_hist(hist):
     for date_str, records in sorted(by_date.items()):
         data = safe_get(
             "https://statsapi.mlb.com/api/v1/schedule",
-            params={"sportId":1,"date":date_str,
-                    "fields":"dates,games,teams,home,away,team,name,score,status,detailedState"},
+            params={"sportId":1,"date":date_str},
             timeout=10,
         )
         if not data: log.warning("settle_hist: no API data for %s", date_str); continue
@@ -1516,7 +1518,6 @@ def save_hist(records):
     except Exception as e:
         log.warning("save_hist: %s", e); return
     gid = _find_gid(gists)
-    import time as _time
     pl  = {"description":GIST_DESC,"public":False,"files":{"history.json":{"content":body}}}
     for attempt in range(1, 4):
         try:
@@ -1527,7 +1528,7 @@ def save_hist(records):
             log.info("Hist saved (%d records)", len(records)); return
         except Exception as e:
             log.warning("save_hist %d/3: %s", attempt, e)
-            if attempt < 3: _time.sleep(2 ** attempt)  # 指數退避：2s, 4s
+            if attempt < 3: time.sleep(2 ** attempt)  # 指數退避：2s, 4s
 
 
 # ══════════════════════════════════════════════
@@ -2718,7 +2719,7 @@ def run():
     lines=[
         "⚾ **MLB V2 分析報告**",
         "🕐 %s | %s %s %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str,ump_str,wx_str),
-        "📌 正式記錄 (23–07時)" if official else "🔧 測試模式 (不寫gist)",
+        "📌 正式記錄 (23–08前)" if official else "🔧 測試模式 (不寫gist)",
         "📊 歷史: %d勝/%d場 (%.1f%%)%s"%(wins,total_settled,wr,
             "  [%s]"%_type_stats_str if _type_stats_str else ""),
         "",
