@@ -2176,6 +2176,17 @@ def write_pages_json(picks, hist, now_tw, live_games=None):
             "line_clv":    p.get("line_clv"),
             "game_date":   p.get("game_date",""),
             "game_time":   p.get("game_time",""),
+            "sp_src":      p.get("sp_src","probable"),
+            "home_hand":   _PITCHER_HAND.get(hsk),
+            "away_hand":   _PITCHER_HAND.get(ask),
+            "home_babip":  round(_PITCHER_BABIP[hsk],3) if hsk in _PITCHER_BABIP else None,
+            "away_babip":  round(_PITCHER_BABIP[ask],3) if ask in _PITCHER_BABIP else None,
+            "home_lob":    round(_PITCHER_LOB_PCT[hsk],1) if hsk in _PITCHER_LOB_PCT else None,
+            "away_lob":    round(_PITCHER_LOB_PCT[ask],1) if ask in _PITCHER_LOB_PCT else None,
+            "away_road_days": _TRAVEL_CONTEXT.get(p.get("away",""),{}).get("road_days") or None,
+            "away_tz_cross":  _TRAVEL_CONTEXT.get(p.get("away",""),{}).get("tz_cross") or None,
+            "home_wpct":   _TEAM_HOME_WPCT.get(p.get("home","")),
+            "away_road_wpct": _TEAM_ROAD_WPCT.get(p.get("away","")),
         })
     # ★ 最近 10 筆歷史（含 pending），供網頁歷史紀錄面板使用
     _hist_sorted = sorted(
@@ -2875,6 +2886,7 @@ def run():
                  "ump_adj":round(pred.get("ump_adj",0.0),2) if pred.get("ump_adj") else None,
                  "away_trend":round(_PITCHER_TREND[away_sp],2) if away_sp and away_sp in _PITCHER_TREND else None,
                  "home_trend":round(_PITCHER_TREND[home_sp],2) if home_sp and home_sp in _PITCHER_TREND else None,
+                 "sp_src":    _sp_src,
                  "hist_label":_hist_label,
                  "hist_mkt_total":market_total if btype==BET_TOT else None}
         if ex is not None:
