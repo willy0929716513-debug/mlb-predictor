@@ -215,7 +215,7 @@ function renderLiveSection(liveGames) {
   const el = document.getElementById("live-section");
   if (!el) return;
   if (!liveGames || liveGames.length === 0) {
-    el.innerHTML = "";
+    el.innerHTML = `<div class="text-xs text-slate-600 text-center py-1 mb-2">⚾ 目前沒有場中推薦</div>`;
     return;
   }
   const half = g => g.top_inning ? "▲" : "▼";

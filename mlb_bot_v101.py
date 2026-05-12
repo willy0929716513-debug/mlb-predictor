@@ -913,8 +913,7 @@ def fetch_probable_pitchers():
         log.warning("MLB lineup SP failed: %s", e)
 
     for k, v in result.items():
-        src = v.pop("_src", "probable")
-        log.info("SP(final/%s): %s vs %s | H=%s A=%s", src, k[0], k[1], v["home_pitcher"], v["away_pitcher"])
+        log.info("SP(final/%s): %s vs %s | H=%s A=%s", v.get("_src","probable"), k[0], k[1], v["home_pitcher"], v["away_pitcher"])
     log.info("Pitchers resolved: %d games", len(result))
     return result
 
@@ -2319,8 +2318,10 @@ def run():
             _hist_label = ""
 
         acn=CN.get(away,away); hcn=CN.get(home,home)
-        h_sp_n = sp_info.get("home_name","TBD") if sp_info else "TBD"
-        a_sp_n = sp_info.get("away_name","TBD") if sp_info else "TBD"
+        h_sp_n  = sp_info.get("home_name","TBD") if sp_info else "TBD"
+        a_sp_n  = sp_info.get("away_name","TBD") if sp_info else "TBD"
+        _sp_src = sp_info.get("_src","probable") if sp_info else "probable"
+        sp_src_tag = {"lineup":"✅確認打線","espn":"📡ESPN確認","probable":"⚠️先發待確認"}.get(_sp_src,"")
         h_era=get_pitcher_era(home_sp); a_era=get_pitcher_era(away_sp)
         def _sp_tag(sp_key, era, rs_pitcher, team_rpg, in_recent):
             if not sp_key: return ""
@@ -2447,7 +2448,7 @@ def run():
         msg_lines=[
             "**%s  %s @ %s**"%(tier,acn,hcn),
             "🕐 %s %s (台灣時間)%s%s%s%s"%(game_date_str[5:].replace("-","/"),game_time_str,pf_note,weather_note,ump_note,mkt_tag),
-            "⚾ 先發: %s — %s"%(a_sp_str,h_sp_str),
+            "⚾ 先發 [%s]: %s — %s"%(sp_src_tag,a_sp_str,h_sp_str),
             "💰 推薦: %s"%bet_desc,
             stats_ln,
             "> Edge: **%+.1f%%**%s%s | Kelly: $%.1f%s"%(
@@ -2746,9 +2747,21 @@ def run():
         "• RL多層保護 · UNDER(TBD/牛棚/低IP/WHIP/K9) · OVER/UNDER相關折 · 低迷縮注 · BM品質過濾",
     ]
 
-    out="\n".join(lines)
-    _live = fetch_live_scores(today_str)
+    _live       = fetch_live_scores(today_str)
     _live_picks = generate_live_picks(_live)
+    if _live_picks:
+        _bets = [lp for lp in _live_picks if lp.get("bet")]
+        lines += ["", "📡 場中分析: %d場進行中 | %d個推薦（詳見網頁）" % (len(_live_picks), len(_bets))]
+        for lp in _live_picks:
+            _half = "▲" if lp["top_inning"] else "▼"
+            _bstr = " → %s" % lp["bet"] if lp.get("bet") else ""
+            lines.append("  • %s @ %s %s%s局 [%d:%d]%s" % (
+                lp["away_cn"], lp["home_cn"], _half, lp["inning"],
+                lp["away_runs"], lp["home_runs"], _bstr))
+    else:
+        lines += ["", "📡 場中分析: 目前沒有場中推薦"]
+
+    out="\n".join(lines)
     write_pages_json(picks, hist, now_tw, live_games=_live_picks)
     save_odds_snapshot(new_snap)
     if official and today_records: save_hist(hist+today_records)
