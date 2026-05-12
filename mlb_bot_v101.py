@@ -297,6 +297,10 @@ ESPN_ABBR = {
     "sd":"padres","det":"tigers","kc":"royals","pit":"pirates","cin":"reds",
     "col":"rockies","oak":"athletics","laa":"angels","mia":"marlins",
     "wsh":"nationals","chw":"white sox",
+    # ESPN 備用縮寫
+    "cws":"white sox","was":"nationals","ath":"athletics","sac":"athletics",
+    "kcr":"royals","tbr":"rays","sfg":"giants","wsn":"nationals","cle":"guardians",
+    "chisox":"white sox",
 }
 
 ROSTER = {
@@ -510,7 +514,7 @@ def _fetch_recent_era(pitcher_id, last_n=3):
 
     # ── ERA ──────────────────────────────────────────────────
     era     = round(total_er / total_ip * 9, 2)
-    era_ret = None if era < 0.50 else min(era, 10.0)
+    era_ret = round(min(max(era, 0.50), 10.0), 2)  # floor 0.50 避免 0 ERA 造成極端預測
 
     # ── FIP（防守獨立投球指標）──────────────────────────────
     # FIP = (13×HR + 3×(BB+HBP) - 2×K) / IP + FIP_CONST
@@ -761,7 +765,9 @@ def fetch_espn_ratings():
             for e in grp.get("standings",{}).get("entries",[]):
                 abbr  = e.get("team",{}).get("abbreviation","").lower()
                 short = ESPN_ABBR.get(abbr)
-                if not short: continue
+                if not short:
+                    log.debug("ESPN unknown abbr: %s", abbr)
+                    continue
                 base  = BASE.get(short, DEF_BASE)
                 st    = {(s.get("name") or s.get("shortDisplayName","")): to_f(s)
                          for s in e.get("stats",[]) if s.get("name") or s.get("shortDisplayName")}
