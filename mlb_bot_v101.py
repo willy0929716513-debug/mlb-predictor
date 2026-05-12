@@ -56,8 +56,9 @@ LEAGUE_ERA     = 4.20
 HIST_TTL       = 90
 GAP1, GAP2, GAP3 = 1.5, 2.5, 3.5
 ESPN_ALPHA_MAX = 0.65
-SP_RECENT_W    = 0.80   # 本賽季 ERA 權重（80%）
-SP_SEASON_W    = 0.20   # 四年歷史均值 ERA 權重（20%）
+TREND_DELTA_W  = 0.25   # 近期趨勢權重（近期ERA偏差的25%作為調整量）
+TREND_MAX_ADJ  = 1.50   # 近期趨勢最大調整量（±1.5 ERA點）
+FIP_EXTREME_CAP = 0.35  # FIP-賽季ERA缺口>3.0時，FIP最大權重（小樣本保護）
 SCORING_FORM_W = 0.10   # 近期打擊得分調整幅度（±10%）
 MIN_SP_IP_UNDER    = 5.0   # 先發場均局數門檻：低於此值UNDER需更高概率（開場/短局投手保護）
 UNDER_LOW_IP_EXTRA = 0.10  # 低局數先發UNDER額外概率門檻（+10%）
@@ -1775,58 +1776,69 @@ def injury_penalty(team):
     return round(min(penalty, 1.2), 3)
 
 def get_pitcher_era(key):
-    """ERA 估計：近期ERA+FIP 混合（消除BABIP），再與賽季基準融合。
-    有效公式：0.48×近期ERA + 0.32×近期FIP + 0.20×賽季基準
-    賽季基準優先序：_LIVE_SP_ERA（MLB API即時）> PITCHER_ERA（靜態字典）"""
+    """ERA 估計：賽季整體ERA（MLB官方）為基準，FIP修正運氣，近期3場趨勢微調。
+
+    舊邏輯（錯誤）：近期ERA×80% + 賽季ERA×20% → 3場爆發完全蓋過真實賽季表現
+    新邏輯（正確）：
+      base    = 賽季整體ERA（MLB官方，最可靠）
+      step2   = FIP幸運修正（套用在賽季ERA，極端缺口視為小樣本，限制影響）
+      step3   = 近期趨勢微調：(近期ERA − 賽季ERA) × 0.25，上限±1.5
+      step4   = BABIP/LOB% 再修正
+    """
     if not key: return LEAGUE_ERA + 0.60
     k = key.lower().strip()
     recent_era = _RECENT_ERA.get(k)
-    # 賽季基準：優先即時API，靜態字典次之（新投手/未收錄者自動補）
     season_era = _LIVE_SP_ERA.get(k) or PITCHER_ERA.get(k)
     fip        = _PITCHER_FIP.get(k)
-    if recent_era is not None:
-        # FIP 動態混合：FIP-ERA缺口越大 → FIP權重越高（幸運ERA回歸修正）
-        if fip:
-            _gap = fip - recent_era
-            if   _gap >  1.50: _fw = FIP_BLEND_MAX   # 極端幸運ERA
-            elif _gap >  1.00: _fw = FIP_BLEND_HIGH   # 嚴重幸運ERA
-            elif _gap >  0.50: _fw = FIP_BLEND_MID    # 輕度幸運ERA
-            elif _gap < -1.50: _fw = FIP_BLEND_MAX   # FIP遠低於ERA：投手被低估
-            elif _gap < -1.00: _fw = FIP_BLEND_HIGH  # 投手表現優於ERA
-            elif _gap < -0.50: _fw = FIP_BLEND_MID   # 輕度低估
-            else:              _fw = FIP_BLEND_W      # ERA可信，基準混合
-            # FIP 觸底保護：FIP ≤ 0.80 為程式下限截斷值，小樣本可信度低
-            # 避免極端低FIP以85%權重過度壓低混合ERA，上限65%
-            if fip <= 0.80 and _fw > 0.65:
-                _fw = 0.65
-            adj_recent = round(recent_era*(1-_fw) + fip*_fw, 2)
-        else:
-            # FIP無資料：ERA可靠性未知，向聯盟均值保守回歸，且不低於下限
-            adj_recent = round(recent_era*(1-FIP_MISSING_REGRESS) + LEAGUE_ERA*FIP_MISSING_REGRESS, 2)
-            adj_recent = max(ERA_FLOOR_NO_FIP, adj_recent)
-        # season_era 不存在時用聯盟平均當錨，防止小樣本極端值直接輸出
-        _anchor = season_era if season_era is not None else LEAGUE_ERA
-        era_out = round(adj_recent*SP_RECENT_W + _anchor*SP_SEASON_W, 2)
+
+    # ── Step 1：基準 = 賽季ERA（官方），無資料退回聯盟均值 ──────
+    base = season_era if season_era is not None else LEAGUE_ERA
+
+    # ── Step 2：FIP幸運修正（套在賽季ERA上）────────────────────
+    if fip is not None:
+        _gap = fip - base
+        if   _gap >  1.50: _fw = FIP_BLEND_MAX
+        elif _gap >  1.00: _fw = FIP_BLEND_HIGH
+        elif _gap >  0.50: _fw = FIP_BLEND_MID
+        elif _gap < -1.50: _fw = FIP_BLEND_MAX
+        elif _gap < -1.00: _fw = FIP_BLEND_HIGH
+        elif _gap < -0.50: _fw = FIP_BLEND_MID
+        else:              _fw = FIP_BLEND_W
+        # 極端缺口(>3.0)：FIP來自近3場小樣本，可信度低，限制最大影響力
+        if abs(_gap) > 3.0: _fw = min(_fw, FIP_EXTREME_CAP)
+        if fip <= 0.80 and _fw > 0.65: _fw = 0.65
+        base = round(base*(1-_fw) + fip*_fw, 2)
     else:
-        era_out = season_era if season_era is not None else LEAGUE_ERA+0.60
-    # 牛棚型先發：先發表現難以預測，50%回歸聯盟均值降低過度依賴
+        base = round(base*(1-FIP_MISSING_REGRESS) + LEAGUE_ERA*FIP_MISSING_REGRESS, 2)
+        base = max(ERA_FLOOR_NO_FIP, base)
+
+    # ── Step 3：近期趨勢微調（上限±1.5，防止3場熱身/崩盤主導預測）──
+    if recent_era is not None and season_era is not None:
+        trend_delta = recent_era - season_era          # 正=近期變差，負=近期改善
+        trend_adj   = max(-TREND_MAX_ADJ, min(TREND_MAX_ADJ, trend_delta * TREND_DELTA_W))
+        era_out = round(base + trend_adj, 2)
+    else:
+        era_out = base
+
+    # ── 牛棚型先發：回歸聯盟均值 ────────────────────────────────
     if k in _RELIEVER_FLAGS:
-        era_out = round(era_out * (1 - RELIEVER_SP_REGRESS) + LEAGUE_ERA * RELIEVER_SP_REGRESS, 2)
-    # ★ BABIP/LOB% 運氣修正：若投手 BABIP 明顯異常 → 增加 FIP 混合比（ERA 為幸運值）
+        era_out = round(era_out*(1-RELIEVER_SP_REGRESS) + LEAGUE_ERA*RELIEVER_SP_REGRESS, 2)
+
+    # ── Step 4：BABIP/LOB% 運氣修正 ──────────────────────────────
     babip = _PITCHER_BABIP.get(k)
     lob   = _PITCHER_LOB_PCT.get(k)
     extra_fip_w = 0.0
     if babip is not None:
-        babip_dev = abs(babip - BABIP_LG_AVG) / 0.030   # 每偏0.030一個單位
+        babip_dev = abs(babip - BABIP_LG_AVG) / 0.030
         extra_fip_w += babip_dev * BABIP_FIP_BONUS
     if lob is not None:
-        lob_dev = abs(lob - LOB_LG_AVG) / 5.0   # 每偏5%一個單位
+        lob_dev = abs(lob - LOB_LG_AVG) / 5.0
         extra_fip_w += lob_dev * LOB_FIP_BONUS
-    extra_fip_w = min(extra_fip_w, 0.30)  # 上限30%額外FIP混入
-    # 重新計算最終ERA（增加FIP權重後）
+    extra_fip_w = min(extra_fip_w, 0.30)
     if extra_fip_w > 0 and fip is not None:
-        era_out = round(era_out * (1 - extra_fip_w) + fip * extra_fip_w, 2)
-    return era_out
+        era_out = round(era_out*(1-extra_fip_w) + fip*extra_fip_w, 2)
+
+    return max(0.50, era_out)
 
 def get_rest_days(sp_key):
     """計算投手從最後先發到今天的休息天數；無資料返回 None。"""
