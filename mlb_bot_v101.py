@@ -581,9 +581,12 @@ def _fetch_recent_era(pitcher_id, last_n=3):
 def build_recent_era_cache(pitchers_dict):
     global _RECENT_ERA, _PITCHER_RS, _PITCHER_IP, _PITCHER_WHIP
     global _PITCHER_FIP, _PITCHER_K9, _PITCHER_LAST, _RELIEVER_FLAGS, _PITCHER_TREND
+    global _PITCHER_BABIP, _PITCHER_LOB_PCT, _PITCHER_BB9
     cache={}; rs_cache={}; ip_cache={}; whip_cache={}
     fip_cache={}; k9_cache={}; last_cache={}; reliever_set=set(); trend_cache={}
+    babip_cache={}; lob_cache={}; bb9_cache={}
     seen = set()
+    pitcher_id_map = {}  # pitcher_key -> pitcher_id (for L/R splits)
     for (home, away), info in pitchers_dict.items():
         for key, full, direct_id in [
             (info.get("home_pitcher"), info.get("home_name"), info.get("home_pitcher_id")),
@@ -608,7 +611,8 @@ def build_recent_era_cache(pitchers_dict):
                             pid = p.get("id"); break
 
             if not pid: continue
-            era, rs, avg_ip, whip, fip, k9, last_start, is_reliever, era_trend = _fetch_recent_era(pid)
+            if pid: pitcher_id_map[key] = pid
+            era, rs, avg_ip, whip, fip, k9, last_start, is_reliever, era_trend, babip, lob_pct, bb9 = _fetch_recent_era(pid)
             if is_reliever:
                 reliever_set.add(key)
                 log.info("Reliever: %s (no IP≥4.0 starts)", key)
@@ -626,6 +630,9 @@ def build_recent_era_cache(pitchers_dict):
             if k9 is not None:         k9_cache[key]    = k9
             if last_start:             last_cache[key]  = last_start
             if era_trend is not None:  trend_cache[key] = era_trend
+            if babip is not None:      babip_cache[key] = babip
+            if lob_pct is not None:    lob_cache[key]   = lob_pct
+            if bb9 is not None:        bb9_cache[key]   = bb9
     _RECENT_ERA     = cache
     _PITCHER_RS     = rs_cache
     _PITCHER_IP     = ip_cache
@@ -635,9 +642,18 @@ def build_recent_era_cache(pitchers_dict):
     _PITCHER_LAST   = last_cache
     _RELIEVER_FLAGS = reliever_set
     _PITCHER_TREND  = trend_cache
-    log.info("ERA:%d FIP:%d K9:%d RS:%d IP:%d Relievers:%d Trend:%d",
+    _PITCHER_BABIP  = babip_cache
+    _PITCHER_LOB_PCT = lob_cache
+    _PITCHER_BB9    = bb9_cache
+    log.info("ERA:%d FIP:%d K9:%d RS:%d IP:%d Relievers:%d Trend:%d BABIP:%d LOB:%d BB9:%d",
              len(cache), len(fip_cache), len(k9_cache),
-             len(rs_cache), len(ip_cache), len(reliever_set), len(trend_cache))
+             len(rs_cache), len(ip_cache), len(reliever_set), len(trend_cache),
+             len(babip_cache), len(lob_cache), len(bb9_cache))
+    # ★ 投手左/右打者 ERA 分組（在ERA快取建立後呼叫）
+    try:
+        fetch_pitcher_lr_splits(pitcher_id_map)
+    except Exception as e:
+        log.warning("Pitcher L/R splits (from build_recent_era_cache) failed: %s", e)
 
 
 # ══════════════════════════════════════════════
@@ -782,6 +798,16 @@ def fetch_espn_ratings():
                     "games": t,
                     "scoring_form": scoring_form,
                 }
+                # ★ 主/客場實際勝率（ESPN standings records 陣列）
+                for rec in e.get("records", []):
+                    rtype = rec.get("name","").lower()
+                    rw = rec.get("wins", 0); rl = rec.get("losses", 0)
+                    total_g = rw + rl
+                    if total_g > 0:
+                        if rtype == "home":
+                            _TEAM_HOME_WPCT[short] = round(rw / total_g, 3)
+                        elif rtype == "road":
+                            _TEAM_ROAD_WPCT[short] = round(rw / total_g, 3)
     except Exception as e:
         log.warning("ESPN parse: %s", e)
     if ratings:
@@ -947,6 +973,8 @@ def fetch_probable_pitchers():
             ap    = ad.get("probablePitcher",{}).get("fullName")
             hp_id = hd.get("probablePitcher",{}).get("id")
             ap_id = ad.get("probablePitcher",{}).get("id")
+            hp_hand = hd.get("probablePitcher",{}).get("pitchHand",{}).get("code","R")
+            ap_hand = ad.get("probablePitcher",{}).get("pitchHand",{}).get("code","R")
             gpk   = game.get("gamePk")
             state = game.get("status",{}).get("detailedState","Scheduled")
             # gameDateTime 包含時間（ISO 8601 with Z），gameDate 僅有日期字串
@@ -962,6 +990,11 @@ def fetch_probable_pitchers():
                     "home_pitcher_id": hp_id, "away_pitcher_id": ap_id,
                     "_src": "probable",
                 }
+                # ★ 儲存投手慣用手（L/R）
+                if hp and hp_hand:
+                    _PITCHER_HAND[_name_to_key(hp)] = hp_hand
+                if ap and ap_hand:
+                    _PITCHER_HAND[_name_to_key(ap)] = ap_hand
                 game_pks[(hs, as_)] = (gpk, state, ct_utc)
                 log.info("SP(probable): %s vs %s | H=%s A=%s", hs, as_, _name_to_key(hp), _name_to_key(ap))
 
@@ -1206,6 +1239,143 @@ def fetch_bullpen_load():
         log.info("Bullpen load(1d): %s",
                  {k:round(v,1) for k,v in sorted(load.items(),key=lambda x:-x[1])[:8]})
     return bool(load)
+
+
+def fetch_pitcher_lr_splits(pitcher_id_map):
+    """批次抓取先發投手的左打者/右打者分組ERA（使用 MLB Stats API sitCodes）。
+    在 build_recent_era_cache 完成後呼叫，補充 _PITCHER_LHB_ERA / _PITCHER_RHB_ERA。"""
+    global _PITCHER_LHB_ERA, _PITCHER_RHB_ERA
+    if not pitcher_id_map: return
+    year = datetime.date.today().year
+    ids_str = ",".join(str(v) for v in pitcher_id_map.values() if v)
+    if not ids_str: return
+    for sitcode, dest in [("vl", _PITCHER_LHB_ERA), ("vr", _PITCHER_RHB_ERA)]:
+        data = safe_get(
+            "https://statsapi.mlb.com/api/v1/stats",
+            params={"stats":"season","group":"pitching","gameType":"R",
+                    "season":year,"sportId":1,"playerId":ids_str,
+                    "sitCodes":sitcode,"limit":500},
+            timeout=12,
+        )
+        for s in (data or {}).get("stats",[{}])[0].get("splits",[]):
+            pid  = s.get("player",{}).get("id")
+            era_s = s.get("stat",{}).get("era","")
+            ip_s  = str(s.get("stat",{}).get("inningsPitched","0") or "0")
+            try:
+                ip_parts = ip_s.split(".")
+                ip_total = int(ip_parts[0]) + (int(ip_parts[1])/3 if len(ip_parts)>1 and ip_parts[1] else 0)
+                era_v = float(era_s) if era_s and era_s not in ("-.--","") else None
+                if era_v is None or ip_total < 5: continue
+            except (ValueError, TypeError):
+                continue
+            # 找回 pitcher_key
+            for pk, pid2 in pitcher_id_map.items():
+                if pid2 == pid:
+                    dest[pk] = round(era_v, 2)
+                    break
+    log.info("Pitcher L/R splits: LHB=%d RHB=%d", len(_PITCHER_LHB_ERA), len(_PITCHER_RHB_ERA))
+
+
+def fetch_team_batting_splits():
+    """抓取各隊面對左/右投手的打擊 OPS（MLB Stats API sitCodes=vl/vr）。
+    vl = vs Left-Handed Pitchers, vr = vs Right-Handed Pitchers。"""
+    global _TEAM_VS_LHP_OPS, _TEAM_VS_RHP_OPS
+    year = datetime.date.today().year
+    for sitcode, dest in [("vl", _TEAM_VS_LHP_OPS), ("vr", _TEAM_VS_RHP_OPS)]:
+        data = safe_get(
+            "https://statsapi.mlb.com/api/v1/stats",
+            params={"stats":"season","group":"hitting","gameType":"R",
+                    "season":year,"sportId":1,"sitCodes":sitcode,
+                    "playerPool":"All","limit":2000},
+            timeout=12,
+        )
+        team_ops = {}   # team_id -> (ops_sum, ab_sum) for weighted avg
+        for s in (data or {}).get("stats",[{}])[0].get("splits",[]):
+            tid = s.get("team",{}).get("id")
+            if not tid: continue
+            stat = s.get("stat",{})
+            ops_s = stat.get("ops","")
+            ab_s  = stat.get("atBats","0")
+            try:
+                ops_v = float(ops_s) if ops_s and ops_s not in ("-.---","") else None
+                ab_v  = int(ab_s) if ab_s else 0
+                if ops_v is None or ab_v < 10: continue
+            except (ValueError, TypeError):
+                continue
+            old_ops, old_ab = team_ops.get(tid, (0.0, 0))
+            team_ops[tid] = (old_ops + ops_v * ab_v, old_ab + ab_v)
+        for tid, (ops_sum, ab_sum) in team_ops.items():
+            if ab_sum == 0: continue
+            tk = MLB_TEAM_ID.get(tid)
+            if not tk: continue
+            dest[tk] = round(ops_sum / ab_sum, 3)
+    log.info("Team batting splits vs LHP: %d, vs RHP: %d", len(_TEAM_VS_LHP_OPS), len(_TEAM_VS_RHP_OPS))
+
+
+# 各城市時區 (hours behind UTC)
+_CITY_TZ_UTC = {
+    "yankees":-4,"mets":-4,"red sox":-4,"phillies":-4,"blue jays":-4,"orioles":-4,
+    "braves":-4,"marlins":-4,"rays":-4,"nationals":-4,"pirates":-4,
+    "guardians":-4,"tigers":-4,"cubs":-5,"white sox":-5,"brewers":-5,
+    "cardinals":-5,"reds":-5,"twins":-5,"royals":-5,"astros":-5,
+    "rangers":-5,"rockies":-6,"athletics":-7,"diamondbacks":-7,
+    "dodgers":-7,"padres":-7,"angels":-7,"giants":-7,"mariners":-7,
+}
+
+def fetch_schedule_context(today_str, teams_today):
+    """分析近 TRAVEL_LOOKBACK 天的賽程，計算每支球隊的旅行疲勞與連戰天數。
+    teams_today: set of team_key that play today。"""
+    global _TRAVEL_CONTEXT
+    if not teams_today: return
+    start = (datetime.date.today() - datetime.timedelta(days=TRAVEL_LOOKBACK)).isoformat()
+    data = safe_get(
+        "https://statsapi.mlb.com/api/v1/schedule",
+        params={"sportId":1,"startDate":start,"endDate":today_str,"gameType":"R"},
+        timeout=12,
+    )
+    # Build per-team game history: [(date_str, home_team_key, away_team_key)]
+    game_hist = []
+    for de in (data or {}).get("dates",[]):
+        d = de.get("date","")
+        for g in de.get("games",[]):
+            hd = g.get("teams",{}).get("home",{}).get("team",{}).get("name","")
+            ad = g.get("teams",{}).get("away",{}).get("team",{}).get("name","")
+            hk = norm_team(TEAM_ALIAS.get(hd.lower(), hd.lower().split()[-1] if hd else ""))
+            ak = norm_team(TEAM_ALIAS.get(ad.lower(), ad.lower().split()[-1] if ad else ""))
+            if hk and ak:
+                game_hist.append((d, hk, ak))
+    game_hist.sort()
+    today = datetime.date.today().isoformat()
+    for team in teams_today:
+        # Get ordered list of (date, is_home) for this team
+        appearances = []
+        for (d, hk, ak) in game_hist:
+            if d >= today: continue  # only past days
+            if hk == team: appearances.append((d, True))
+            elif ak == team: appearances.append((d, False))
+        if not appearances:
+            _TRAVEL_CONTEXT[team] = {"road_days": 0, "tz_cross": False}
+            continue
+        # Count consecutive road days ending yesterday
+        road_days = 0
+        tz_cross = False
+        for (d, is_home) in reversed(appearances):
+            if is_home: break
+            road_days += 1
+        # Check timezone crossing: compare yesterday's city vs today's city
+        if appearances:
+            last_d, last_home = appearances[-1]
+            if not last_home:
+                # Yesterday was away game; find the home team (venue) of that game
+                for (d, hk, ak) in game_hist:
+                    if d == last_d and ak == team:
+                        last_tz = _CITY_TZ_UTC.get(hk, -5)
+                        home_tz = _CITY_TZ_UTC.get(team, -5)
+                        if abs(last_tz - home_tz) >= 3:
+                            tz_cross = True
+                        break
+        _TRAVEL_CONTEXT[team] = {"road_days": road_days, "tz_cross": tz_cross}
+    log.info("Travel context: %d teams analyzed", len(_TRAVEL_CONTEXT))
 
 
 def fetch_live_scores(today_str):
@@ -1634,6 +1804,20 @@ def get_pitcher_era(key):
     # 牛棚型先發：先發表現難以預測，50%回歸聯盟均值降低過度依賴
     if k in _RELIEVER_FLAGS:
         era_out = round(era_out * (1 - RELIEVER_SP_REGRESS) + LEAGUE_ERA * RELIEVER_SP_REGRESS, 2)
+    # ★ BABIP/LOB% 運氣修正：若投手 BABIP 明顯異常 → 增加 FIP 混合比（ERA 為幸運值）
+    babip = _PITCHER_BABIP.get(k)
+    lob   = _PITCHER_LOB_PCT.get(k)
+    extra_fip_w = 0.0
+    if babip is not None:
+        babip_dev = abs(babip - BABIP_LG_AVG) / 0.030   # 每偏0.030一個單位
+        extra_fip_w += babip_dev * BABIP_FIP_BONUS
+    if lob is not None:
+        lob_dev = abs(lob - LOB_LG_AVG) / 5.0   # 每偏5%一個單位
+        extra_fip_w += lob_dev * LOB_FIP_BONUS
+    extra_fip_w = min(extra_fip_w, 0.30)  # 上限30%額外FIP混入
+    # 重新計算最終ERA（增加FIP權重後）
+    if extra_fip_w > 0 and fip is not None:
+        era_out = round(era_out * (1 - extra_fip_w) + fip * extra_fip_w, 2)
     return era_out
 
 def get_rest_days(sp_key):
@@ -1763,6 +1947,19 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
     if a_obp:
         a_exp = round(a_exp * (1.0 + (a_obp - LEAGUE_OBP) / LEAGUE_OBP * OBP_W), 3)
 
+    # ⑥c ★ 左右投手相剋（pitcher hand vs team batting split OPS）
+    # 若主隊SP為左投，而客隊對左投OPS很高 → 客隊得分增加，反之亦然
+    h_hand = _PITCHER_HAND.get(home_sp, PITCHER_HAND_DEF)
+    a_hand = _PITCHER_HAND.get(away_sp, PITCHER_HAND_DEF)
+    # 客隊打擊 vs 主隊SP手路 → 影響客隊得分
+    away_ops_vs_h = (_TEAM_VS_LHP_OPS.get(away) if h_hand=="L" else _TEAM_VS_RHP_OPS.get(away))
+    if away_ops_vs_h and LG_OPS_AVG > 0:
+        a_exp = round(a_exp * (1.0 + (away_ops_vs_h - LG_OPS_AVG) / LG_OPS_AVG * LR_OPS_W), 3)
+    # 主隊打擊 vs 客隊SP手路 → 影響主隊得分
+    home_ops_vs_a = (_TEAM_VS_LHP_OPS.get(home) if a_hand=="L" else _TEAM_VS_RHP_OPS.get(home))
+    if home_ops_vs_a and LG_OPS_AVG > 0:
+        h_exp = round(h_exp * (1.0 + (home_ops_vs_a - LG_OPS_AVG) / LG_OPS_AVG * LR_OPS_W), 3)
+
     # ⑥d ★ 投手隊友得分支援（run support/GS vs 隊伍場均）
     # 若這投手先發時隊伍習慣多/少得分，微調期望得分
     # ML/RL使用完整RS_BLEND_W；大小分使用極低RS_BLEND_W_TOT（防RS拉高Over）
@@ -1803,6 +2000,25 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
         a_exp     = round(a_exp     + half, 3)
         h_exp_tot = round(h_exp_tot + half, 3)
         a_exp_tot = round(a_exp_tot + half, 3)
+
+    # ⑩ ★ 旅行疲勞（客隊連續客場天數 + 時差）→ 先發投手有效ERA上升
+    # 疲勞效應主要透過打線得分降低體現（疲勞球隊得分減少）
+    away_travel = _TRAVEL_CONTEXT.get(away, {})
+    road_days   = away_travel.get("road_days", 0)
+    tz_cross    = away_travel.get("tz_cross", False)
+    if road_days > 0:
+        travel_pen = min(road_days * TRAVEL_ROAD_PEN + (TRAVEL_TZ_PEN if tz_cross else 0),
+                         TRAVEL_MAX_PEN)
+        a_exp = round(a_exp - travel_pen * 0.35, 3)  # 換算為得分懲罰（ERA的0.35係數）
+        a_exp_tot = round(a_exp_tot - travel_pen * 0.35, 3)
+
+    # ⑪ ★ 主客場實際勝率偏離修正
+    h_hwpct = _TEAM_HOME_WPCT.get(home)
+    a_rwpct = _TEAM_ROAD_WPCT.get(away)
+    if h_hwpct is not None:
+        h_exp = round(h_exp + (h_hwpct - 0.500) * HOME_ROAD_WRAT_W, 3)
+    if a_rwpct is not None:
+        a_exp = round(a_exp + (a_rwpct - 0.500) * HOME_ROAD_WRAT_W, 3)
 
     h_exp = max(2.5, h_exp); a_exp = max(2.5, a_exp)
     h_exp_tot = max(2.5, h_exp_tot); a_exp_tot = max(2.5, a_exp_tot)
@@ -2070,6 +2286,16 @@ def run():
     # ★ 動態球隊打擊OBP（即時更新 predict 打擊得分）
     try: fetch_team_batting_stats()
     except Exception as e: log.warning("Team OBP fetch failed: %s", e)
+    # ★ 球隊打擊 vs 左/右投手 OPS
+    try: fetch_team_batting_splits()
+    except Exception as e: log.warning("Team L/R batting failed: %s", e)
+    # ★ 旅行疲勞/連戰分析
+    try:
+        _teams_today = set()
+        for (hk, ak) in pitchers.keys():
+            _teams_today.add(hk); _teams_today.add(ak)
+        fetch_schedule_context(today_str, _teams_today)
+    except Exception as e: log.warning("Schedule context failed: %s", e)
     # ★ 主審裁判（今日比賽分配）
     try: fetch_game_umpires(today_str)
     except Exception as e: log.warning("Umpire fetch failed: %s", e)
@@ -2749,6 +2975,8 @@ def run():
                 if _RECENT_ERA else "⚠️賽季ERA")
     ump_str  = ("✅裁判(%d場)" % len(_GAME_UMP)) if _GAME_UMP else "⚠️裁判"
     wx_str   = "✅天氣" if _WEATHER_CACHE else "⚠️天氣"
+    lr_str   = "✅L/R打擊" if (_TEAM_VS_LHP_OPS or _TEAM_VS_RHP_OPS) else "⚠️L/R"
+    trav_str = "✅旅行" if _TRAVEL_CONTEXT else "⚠️旅行"
 
     # ★ 分類型歷史統計（勝率 + ROI，用於頁尾顯示）
     _type_stats = []
@@ -2767,7 +2995,7 @@ def run():
 
     lines=[
         "⚾ **MLB V2 分析報告**",
-        "🕐 %s | %s %s %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str,ump_str,wx_str),
+        "🕐 %s | %s %s %s %s %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str,ump_str,wx_str,lr_str,trav_str),
         "📌 正式記錄 (23–08前)" if official else "🔧 測試模式 (不寫gist)",
         "📊 歷史: %d勝/%d場 (%.1f%%)%s"%(wins,total_settled,wr,
             "  [%s]"%_type_stats_str if _type_stats_str else ""),
