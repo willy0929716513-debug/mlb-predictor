@@ -491,6 +491,16 @@ def _fetch_recent_era(pitcher_id, last_n=3, expected_key=None, expected_full=Non
     if not splits:  # fallback：取第一個 group（無 sport 標記時）
         for s in data.get("stats", []): splits = s.get("splits", []); break
 
+    # ── 暫時診斷 log：印出 API 回應結構（確認 sport/league 欄位） ──
+    if pitcher_id == 837227:
+        log.warning("IMAI_DEBUG groups: %s",
+                    [(g.get("sport"), g.get("league"), len(g.get("splits",[])))
+                     for g in data.get("stats",[])])
+        if splits:
+            log.warning("IMAI_DEBUG split[0] keys=%s sport=%s league=%s",
+                        sorted(splits[0].keys()),
+                        splits[0].get("sport"), splits[0].get("league"))
+
     # ── 身份驗證：全名比對，防止同姓不同人的ID錯誤 ─────────────
     if splits and expected_full:
         returned_name = splits[0].get("player", {}).get("fullName", "")
