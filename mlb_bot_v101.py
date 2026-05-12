@@ -498,7 +498,10 @@ def _fetch_recent_era(pitcher_id, last_n=3):
     is_reliever = (len(any_apps) > 0 and len(proper_starts) == 0)
 
     recent = proper_starts[-last_n:] if len(proper_starts) >= last_n else proper_starts
-    if not recent: return (None, None, None, None, None, None, None, is_reliever, None, None, None, None)
+    if not recent:
+        log.debug("ERA fetch id=%s: 0 proper starts (total apps=%d)", pitcher_id, len(any_apps))
+        return (None, None, None, None, None, None, None, is_reliever, None, None, None, None)
+    log.debug("ERA fetch id=%s: using %d/%d proper starts", pitcher_id, len(recent), len(proper_starts))
 
     def _f(key, default="0"):
         return sum(float(s.get("stat",{}).get(key, default) or default) for s in recent)
@@ -623,11 +626,13 @@ def build_recent_era_cache(pitchers_dict):
                 log.info("Reliever: %s (no IP≥4.0 starts)", key)
             if era is not None:
                 cache[key] = era
-                log.info("ERA %s: %.2f (FIP=%.2f K9=%.1f avgIP=%.1f WHIP=%.2f trend=%+.2f)",
-                         key, era,
+                log.info("ERA %s(id=%s): %.2f (FIP=%.2f K9=%.1f avgIP=%.1f WHIP=%.2f trend=%+.2f)",
+                         key, pid, era,
                          fip if fip else 0, k9 if k9 else 0,
                          avg_ip if avg_ip else 0, whip if whip else 0,
                          era_trend if era_trend is not None else 0)
+            elif not is_reliever:
+                log.info("ERA %s(id=%s): no recent starts (IP<4.0 or no data)", key, pid)
             if rs is not None:         rs_cache[key]    = rs
             if avg_ip is not None:     ip_cache[key]    = avg_ip
             if whip is not None:       whip_cache[key]  = whip
