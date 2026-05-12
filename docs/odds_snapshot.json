@@ -1,25 +1,25 @@
 {
   "2026-05-13|guardians|angels": {
     "ts": "2026-05-12",
-    "home_ml": 1.74,
+    "home_ml": 1.76,
     "away_ml": 2.22,
     "rl_h": 2.6,
     "rl_a": 1.58,
     "rl_h_25": null,
     "rl_a_25": null,
     "over": 1.93,
-    "under": 1.94
+    "under": 1.93
   },
   "2026-05-13|orioles|yankees": {
     "ts": "2026-05-12",
     "home_ml": 2.43,
     "away_ml": 1.63,
-    "rl_h": 1.88,
+    "rl_h": 1.9,
     "rl_a": 2.03,
     "rl_h_25": null,
     "rl_a_25": null,
     "over": 1.88,
-    "under": 1.99
+    "under": 1.98
   },
   "2026-05-13|reds|nationals": {
     "ts": "2026-05-12",
@@ -29,7 +29,7 @@
     "rl_a": 1.65,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 1.94,
+    "over": 1.92,
     "under": 1.95
   },
   "2026-05-13|pirates|rockies": {
@@ -52,14 +52,14 @@
     "rl_h_25": null,
     "rl_a_25": null,
     "over": 2.03,
-    "under": 1.85
+    "under": 1.86
   },
   "2026-05-13|blue jays|rays": {
     "ts": "2026-05-12",
     "home_ml": 2.09,
     "away_ml": 1.83,
     "rl_h": 1.61,
-    "rl_a": 2.49,
+    "rl_a": 2.51,
     "rl_h_25": null,
     "rl_a_25": null,
     "over": 1.95,
@@ -85,14 +85,14 @@
     "rl_h_25": null,
     "rl_a_25": null,
     "over": 2.02,
-    "under": 2.0
+    "under": 1.95
   },
   "2026-05-13|white sox|royals": {
     "ts": "2026-05-12",
     "home_ml": 2.11,
-    "away_ml": 1.83,
+    "away_ml": 1.88,
     "rl_h": 1.67,
-    "rl_a": 2.35,
+    "rl_a": 2.4,
     "rl_h_25": null,
     "rl_a_25": null,
     "over": 2.0,
@@ -102,12 +102,12 @@
     "ts": "2026-05-12",
     "home_ml": 1.94,
     "away_ml": 1.98,
-    "rl_h": 1.59,
+    "rl_h": 1.58,
     "rl_a": 2.55,
     "rl_h_25": null,
     "rl_a_25": null,
     "over": 2.01,
-    "under": 1.87
+    "under": 1.89
   },
   "2026-05-13|brewers|padres": {
     "ts": "2026-05-12",
@@ -133,10 +133,10 @@
   },
   "2026-05-13|astros|mariners": {
     "ts": "2026-05-12",
-    "home_ml": 2.3,
+    "home_ml": 2.38,
     "away_ml": 1.7,
-    "rl_h": 1.78,
-    "rl_a": 2.2,
+    "rl_h": 1.83,
+    "rl_a": 2.13,
     "rl_h_25": null,
     "rl_a_25": null,
     "over": 2.01,
@@ -157,7 +157,7 @@
     "ts": "2026-05-12",
     "home_ml": 1.35,
     "away_ml": 3.53,
-    "rl_h": 2.1,
+    "rl_h": 2.05,
     "rl_a": 2.23,
     "rl_h_25": null,
     "rl_a_25": null,
