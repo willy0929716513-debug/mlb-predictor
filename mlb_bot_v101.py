@@ -408,6 +408,7 @@ _BULLPEN_ERA_DYN = {}  # team_key → 本賽季牛棚ERA（MLB API動態）
 _BULLPEN_LOAD    = {}  # team_key → 昨日牛棚使用局數（疲勞度代理指標）
 _GAME_UMP        = {}  # (home_key, away_key) → (ump_name, run_adj)（主審裁判偏好）
 _ALL_GAME_PREDS  = {}  # (home_key, away_key) → 預測結果 dict（供場中推薦使用）
+_PITCHER_ID_MAP  = {}  # pitcher_key → MLB pitcher_id（用於賽季ERA補抓）
 _PITCHER_HAND      = {}  # pitcher_key -> "L" or "R"
 _PITCHER_LHB_ERA   = {}  # pitcher_key -> ERA vs LHB (season)
 _PITCHER_RHB_ERA   = {}  # pitcher_key -> ERA vs RHB (season)
@@ -470,9 +471,9 @@ def get_star_injuries(team):
 # ★ 投手近期 ERA
 # ══════════════════════════════════════════════
 
-def _fetch_recent_era(pitcher_id, last_n=3, expected_key=None):
+def _fetch_recent_era(pitcher_id, last_n=3, expected_key=None, expected_full=None):
     """返回 (ERA, RS, avg_ip, WHIP, FIP, K9, last_start, is_reliever, era_trend, babip, lob_pct, bb9) 12-tuple。
-    expected_key: 預期的投手 key（_name_to_key結果），用於驗證API回傳球員是否正確。"""
+    expected_full: 預期的完整投手姓名，用於全名比對驗證（同姓異人問題）。"""
     _NONE12 = (None, None, None, None, None, None, None, False, None, None, None, None)
     year = datetime.date.today().year
     data = safe_get(
@@ -484,14 +485,16 @@ def _fetch_recent_era(pitcher_id, last_n=3, expected_key=None):
     splits = []
     for s in data.get("stats",[]): splits = s.get("splits",[]); break
 
-    # ── 身份驗證：確認API回傳的球員名字與預期吻合 ──────────────
-    if expected_key and splits:
+    # ── 身份驗證：全名比對，防止同姓不同人的ID錯誤 ─────────────
+    if splits and expected_full:
         returned_name = splits[0].get("player", {}).get("fullName", "")
-        returned_key  = _name_to_key(returned_name) if returned_name else None
-        if returned_key and returned_key != expected_key:
-            log.warning("PitcherID mismatch! id=%s expected=%s got=%s (%s) — ERA discarded",
-                        pitcher_id, expected_key, returned_key, returned_name)
-            return _NONE12
+        if returned_name:
+            def _norm(n):
+                return unicodedata.normalize("NFKD", n).encode("ascii","ignore").decode("ascii").lower().strip()
+            if _norm(returned_name) != _norm(expected_full):
+                log.warning("PitcherID mismatch! id=%s expected='%s' got='%s' — ERA discarded",
+                            pitcher_id, expected_full, returned_name)
+                return _NONE12
 
     # 完整先發（IP ≥ 4.0，過濾開場型中繼與牛棚短局出賽）
     proper_starts = [s for s in splits
@@ -623,7 +626,7 @@ def build_recent_era_cache(pitchers_dict):
 
             if not pid: continue
             if pid: pitcher_id_map[key] = pid
-            era, rs, avg_ip, whip, fip, k9, last_start, is_reliever, era_trend, babip, lob_pct, bb9 = _fetch_recent_era(pid, expected_key=key)
+            era, rs, avg_ip, whip, fip, k9, last_start, is_reliever, era_trend, babip, lob_pct, bb9 = _fetch_recent_era(pid, expected_key=key, expected_full=full)
             if is_reliever:
                 reliever_set.add(key)
                 log.info("Reliever: %s (no IP≥4.0 starts)", key)
@@ -658,6 +661,7 @@ def build_recent_era_cache(pitchers_dict):
     _PITCHER_BABIP  = babip_cache
     _PITCHER_LOB_PCT = lob_cache
     _PITCHER_BB9    = bb9_cache
+    _PITCHER_ID_MAP.update(pitcher_id_map)   # 全域保存，供 season ERA 補抓使用
     log.info("ERA:%d FIP:%d K9:%d RS:%d IP:%d Relievers:%d Trend:%d BABIP:%d LOB:%d BB9:%d",
              len(cache), len(fip_cache), len(k9_cache),
              len(rs_cache), len(ip_cache), len(reliever_set), len(trend_cache),
@@ -1135,6 +1139,29 @@ def fetch_probable_pitchers():
 # ══════════════════════════════════════════════
 # ★ 即時先發投手賽季ERA（MLB Stats API）
 # ══════════════════════════════════════════════
+
+def _fetch_pitcher_season_era(pitcher_id):
+    """針對單一投手ID，直接抓取本賽季整體ERA。比 bulk API 更可靠（保證ID對應正確）。"""
+    year = datetime.date.today().year
+    data = safe_get(
+        "https://statsapi.mlb.com/api/v1/people/%d/stats" % pitcher_id,
+        params={"stats":"season","group":"pitching","season":year,"gameType":"R"},
+        timeout=8,
+    )
+    if not data: return None
+    try:
+        splits = data.get("stats",[{}])[0].get("splits",[])
+        if not splits: return None
+        stat   = splits[0].get("stat",{})
+        era    = float(stat.get("era","0") or "0")
+        ip_s   = str(stat.get("inningsPitched","0"))
+        ip_p   = ip_s.split(".")
+        ip     = int(ip_p[0]) + (int(ip_p[1])/3 if len(ip_p)>1 and ip_p[1] else 0)
+        if ip >= 0.1 and 0.01 <= era <= 15.0:
+            return round(era, 2)
+    except: pass
+    return None
+
 
 def fetch_live_sp_era():
     """從 MLB Stats API 拉取本賽季全部投手ERA，
@@ -2322,14 +2349,28 @@ def run():
     if pitchers:
         try: build_recent_era_cache(pitchers)
         except Exception as e: log.warning("Recent ERA failed: %s", e)
-    # ★ 即時賽季 ERA（補強靜態 PITCHER_ERA 字典）
+    # ★ 即時賽季 ERA（bulk API，74+投手）
     try: fetch_live_sp_era()
     except Exception as e: log.warning("Live SP ERA fetch failed: %s", e)
-    # 賽季ERA缺口偵測：列出今日先發中找不到賽季ERA的投手
-    if _RECENT_ERA and _LIVE_SP_ERA is not None:
+    # ★ 賽季ERA補抓：針對今日先發中 bulk API 遺漏的投手，逐一用ID直接抓
+    if _RECENT_ERA:
         missing = [k for k in _RECENT_ERA if not (_LIVE_SP_ERA.get(k) or PITCHER_ERA.get(k))]
         if missing:
-            log.warning("SeasonERA missing (will use LEAGUE_ERA fallback): %s", ", ".join(missing))
+            log.info("SeasonERA topup: %d pitchers not in bulk — fetching individually", len(missing))
+            filled = 0
+            for k in missing:
+                pid = _PITCHER_ID_MAP.get(k)
+                if not pid: continue
+                era = _fetch_pitcher_season_era(pid)
+                if era is not None:
+                    _LIVE_SP_ERA[k] = era
+                    filled += 1
+                    log.info("SeasonERA filled: %s=%.2f (id=%s)", k, era, pid)
+            still = [k for k in missing if not _LIVE_SP_ERA.get(k)]
+            if still:
+                log.warning("SeasonERA still missing (new/no-IP pitcher, fallback LEAGUE_ERA): %s", ", ".join(still))
+            else:
+                log.info("SeasonERA topup complete: all %d filled", len(missing))
     # ★ 動態牛棚ERA（即時更新 bullpen_adj）
     try: fetch_bullpen_era_live()
     except Exception as e: log.warning("Live Bullpen ERA fetch failed: %s", e)
