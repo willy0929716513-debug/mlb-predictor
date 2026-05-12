@@ -747,6 +747,68 @@ def fetch_espn_ratings():
 # 傷兵
 # ══════════════════════════════════════════════
 
+_ROTO_SP = {}  # (home_key, away_key) -> {"home": name, "away": name}
+
+def fetch_roto_probable_pitchers():
+    """從 RotoWire probable-pitchers 頁面抓取先發（比 MLB API 即時）。
+    RotoWire 編輯團隊會在輪值更動後快速更新，不依賴 MLB 官方 probablePitcher 資料庫。"""
+    global _ROTO_SP
+    import re
+    try:
+        r = requests.get(
+            "https://www.rotowire.com/baseball/probable-pitchers.php",
+            headers={"User-Agent":
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"},
+            timeout=15,
+        )
+        r.raise_for_status()
+        html = r.text
+
+        # RotoWire 格式：每場比賽一個 lineup__matchup，
+        # 客隊 (away) 在左、主隊 (home) 在右
+        # 投手名稱在 class="lineup__player" 的第一個 <a> 裡
+        matchup_blocks = re.findall(
+            r'class="lineup__matchup".*?(?=class="lineup__matchup"|$)',
+            html, re.S
+        )
+        if not matchup_blocks:
+            # 備用：直接找所有 lineup__team 區塊
+            matchup_blocks = re.findall(
+                r'class="lineup__game.*?(?=class="lineup__game|$)',
+                html, re.S
+            )
+
+        found = 0
+        for block in matchup_blocks:
+            # 找隊伍名稱（title 屬性或 lineup__abbr）
+            teams = re.findall(
+                r'(?:lineup__abbr[^>]*>|data-team=")\s*([A-Za-z ]{2,25}?)(?:\s*<|\s*")',
+                block
+            )
+            # 找投手名稱（lineup__player 下的連結或文字）
+            pitchers = re.findall(
+                r'lineup__player[^>]*>.*?<a[^>]*>([A-Z][a-z]+(?:\s[A-Z][a-z]+)+)',
+                block, re.S
+            )
+            if len(teams) >= 2 and len(pitchers) >= 2:
+                away_raw = teams[0].strip().lower()
+                home_raw = teams[1].strip().lower()
+                away_k = norm_team(TEAM_ALIAS.get(away_raw, away_raw.split()[-1]))
+                home_k = norm_team(TEAM_ALIAS.get(home_raw, home_raw.split()[-1]))
+                if away_k and home_k:
+                    _ROTO_SP[(home_k, away_k)] = {
+                        "home": pitchers[1].strip(),
+                        "away": pitchers[0].strip(),
+                    }
+                    found += 1
+        log.info("RotoWire probable pitchers: %d games parsed", found)
+        return found > 0
+    except Exception as e:
+        log.warning("RotoWire probable pitchers failed: %s", e)
+        return False
+
+
 def fetch_injury_list():
     global _DYN_OUT, _DYN_LTD
     try:
@@ -844,7 +906,24 @@ def fetch_probable_pitchers():
                 game_pks[(hs, as_)] = (gpk, state, ct_utc)
                 log.info("SP(probable): %s vs %s | H=%s A=%s", hs, as_, _name_to_key(hp), _name_to_key(ap))
 
-    # ── 第二來源：ESPN Scoreboard probables ───────────────────
+    # ── 第二來源：RotoWire probable pitchers（編輯維護，更新比 MLB API 快）
+    for key, roto in _ROTO_SP.items():
+        if key not in result: continue
+        entry   = result[key]
+        changed = []
+        for side, is_home in [("home",True),("away",False)]:
+            rname = roto.get("home" if is_home else "away")
+            if rname and rname != entry["home_name" if is_home else "away_name"]:
+                if is_home:
+                    entry.update({"home_name":rname,"home_pitcher":_name_to_key(rname),"home_pitcher_id":None})
+                else:
+                    entry.update({"away_name":rname,"away_pitcher":_name_to_key(rname),"away_pitcher_id":None})
+                changed.append(("H" if is_home else "A")+":"+rname)
+        if changed:
+            entry["_src"] = "rotowire"
+            log.info("SP(RotoWire override): %s vs %s | %s", key[0], key[1], ", ".join(changed))
+
+    # ── 第三來源：ESPN Scoreboard probables ───────────────────
     try:
         espn = safe_get(
             "http://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard",
@@ -1919,6 +1998,8 @@ def run():
 
     espn_ok   = fetch_espn_ratings()
     il_src    = fetch_injury_list()
+    try: fetch_roto_probable_pitchers()
+    except Exception as e: log.warning("RotoWire SP failed: %s", e)
     pitchers  = fetch_probable_pitchers()
     if pitchers:
         try: build_recent_era_cache(pitchers)
@@ -2347,7 +2428,9 @@ def run():
         h_sp_n  = sp_info.get("home_name","TBD") if sp_info else "TBD"
         a_sp_n  = sp_info.get("away_name","TBD") if sp_info else "TBD"
         _sp_src = sp_info.get("_src","probable") if sp_info else "probable"
-        sp_src_tag = {"lineup":"✅確認打線","espn":"📡ESPN確認","probable":"⚠️先發待確認"}.get(_sp_src,"")
+        sp_src_tag = {"gamefeed":"✅確認先發","lineup":"✅確認打線",
+                      "rotowire":"📋RotoWire","espn":"📡ESPN",
+                      "probable":"⚠️先發待確認"}.get(_sp_src,"⚠️先發待確認")
         h_era=get_pitcher_era(home_sp); a_era=get_pitcher_era(away_sp)
         def _sp_tag(sp_key, era, rs_pitcher, team_rpg, in_recent):
             if not sp_key: return ""
