@@ -478,7 +478,7 @@ def _fetch_recent_era(pitcher_id, last_n=3, expected_key=None, expected_full=Non
     year = datetime.date.today().year
     data = safe_get(
         "https://statsapi.mlb.com/api/v1/people/%d/stats" % pitcher_id,
-        params={"stats":"gameLog","group":"pitching","season":year,"gameType":"R"},
+        params={"stats":"gameLog","group":"pitching","season":year,"gameType":"R","sportId":1},
         timeout=10,
     )
     if not data: return _NONE12
@@ -1145,7 +1145,7 @@ def _fetch_pitcher_season_era(pitcher_id):
     year = datetime.date.today().year
     data = safe_get(
         "https://statsapi.mlb.com/api/v1/people/%d/stats" % pitcher_id,
-        params={"stats":"season","group":"pitching","season":year,"gameType":"R"},
+        params={"stats":"season","group":"pitching","season":year,"gameType":"R","sportId":1},
         timeout=8,
     )
     if not data: return None
@@ -1172,7 +1172,7 @@ def fetch_live_sp_era():
     data = safe_get(
         "https://statsapi.mlb.com/api/v1/stats",
         params={"stats":"season","group":"pitching","gameType":"R",
-                "season":year,"limit":1000},
+                "season":year,"limit":1000,"sportId":1},
         timeout=15,
     )
     if not data: return False
