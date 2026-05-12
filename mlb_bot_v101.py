@@ -1867,7 +1867,7 @@ def run():
     now_tw    = datetime.datetime.utcnow() + datetime.timedelta(hours=8)
     today_str = now_tw.strftime("%Y-%m-%d")
     log.info("TW time: %s", now_tw.strftime("%Y-%m-%d %H:%M"))
-    official = (now_tw.hour >= 23 or now_tw.hour < 7)  # 台灣時間 23:00–07:00
+    official = (now_tw.hour >= 23 or now_tw.hour < 8)  # 台灣時間 23:00–08:00
 
     if not ODDS_API_KEY: log.error("ODDS_API_KEY not set"); return
 
