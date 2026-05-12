@@ -1,7 +1,7 @@
 {
   "2026-05-12|dodgers|giants": {
     "ts": "2026-05-12",
-    "home_ml": 1.55,
+    "home_ml": 1.56,
     "away_ml": 2.7,
     "rl_h": 2.15,
     "rl_a": 1.81,
@@ -48,7 +48,7 @@
     "home_ml": 2.26,
     "away_ml": 1.7,
     "rl_h": 1.75,
-    "rl_a": 2.18,
+    "rl_a": 2.2,
     "rl_h_25": null,
     "rl_a_25": null,
     "over": 2.0,
@@ -122,9 +122,9 @@
   },
   "2026-05-13|rangers|diamondbacks": {
     "ts": "2026-05-12",
-    "home_ml": 1.75,
+    "home_ml": 1.8,
     "away_ml": 2.21,
-    "rl_h": 2.62,
+    "rl_h": 2.65,
     "rl_a": 1.54,
     "rl_h_25": null,
     "rl_a_25": null,
@@ -144,9 +144,9 @@
   },
   "2026-05-13|athletics|cardinals": {
     "ts": "2026-05-12",
-    "home_ml": 1.68,
-    "away_ml": 2.36,
-    "rl_h": 2.36,
+    "home_ml": 1.69,
+    "away_ml": 2.31,
+    "rl_h": 2.41,
     "rl_a": 1.67,
     "rl_h_25": null,
     "rl_a_25": null,
