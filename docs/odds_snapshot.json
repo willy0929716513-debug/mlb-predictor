@@ -13,12 +13,12 @@
   "2026-05-13|orioles|yankees": {
     "ts": "2026-05-12",
     "home_ml": 2.42,
-    "away_ml": 1.65,
+    "away_ml": 1.67,
     "rl_h": 1.9,
-    "rl_a": 2.06,
+    "rl_a": 2.08,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 1.87,
+    "over": 1.91,
     "under": 2.02
   },
   "2026-05-13|reds|nationals": {
@@ -139,7 +139,7 @@
     "rl_a": 2.06,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 2.01,
+    "over": 2.02,
     "under": 2.03
   },
   "2026-05-13|athletics|cardinals": {

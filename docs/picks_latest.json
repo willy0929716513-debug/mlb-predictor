@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-12 22:37 (台灣時間)",
+  "generated_at": "2026-05-12 22:42 (台灣時間)",
   "date": "2026-05-12",
   "stats": {
     "settled": 88,
@@ -101,7 +101,7 @@
       "bp": 1.71,
       "con_p": 1.685,
       "dv_p": 0.5717,
-      "edge": 17.3,
+      "edge": 17.4,
       "conf": 75.5,
       "stake": 50.0,
       "model_p": 74.5,
@@ -128,7 +128,7 @@
       "model_total": null,
       "market_total": null,
       "park_factor": 1.1,
-      "weather_factor": 0.964,
+      "weather_factor": 0.965,
       "ump_name": null,
       "ump_adj": null,
       "away_trend": null,
