@@ -803,15 +803,19 @@ ESPN_TEAM_ABBR = {
 }
 
 def fetch_probable_pitchers():
-    today = datetime.date.today().isoformat()
+    today   = datetime.date.today().isoformat()
+    now_utc = datetime.datetime.utcnow()
 
-    # ── 第一來源：MLB probablePitcher ──────────────────────────
+    # ── 第一來源：MLB probablePitcher ─────────────────────────
     data = safe_get(
         "https://statsapi.mlb.com/api/v1/schedule",
-        params={"sportId":1,"date":today,"hydrate":"probablePitcher(note),team",
-                "fields":"dates,games,gamePk,teams,home,away,probablePitcher,fullName,id,team,name"},
+        params={"sportId":1,"date":today,
+                "hydrate":"probablePitcher(note),team",
+                "fields":"dates,games,gamePk,status,detailedState,gameDate,"
+                         "teams,home,away,probablePitcher,fullName,id,team,name"},
     )
-    result = {}
+    result   = {}
+    game_pks = {}  # (hs, as_) -> (gamePk, detailedState, commence_utc)
     if not data: return result
     for de in data.get("dates",[]):
         for game in de.get("games",[]):
@@ -823,6 +827,13 @@ def fetch_probable_pitchers():
             ap    = ad.get("probablePitcher",{}).get("fullName")
             hp_id = hd.get("probablePitcher",{}).get("id")
             ap_id = ad.get("probablePitcher",{}).get("id")
+            gpk   = game.get("gamePk")
+            state = game.get("status",{}).get("detailedState","Scheduled")
+            ct_str = game.get("gameDate","")
+            try:
+                ct_utc = datetime.datetime.fromisoformat(ct_str.replace("Z","+00:00")).replace(tzinfo=None)
+            except Exception:
+                ct_utc = None
             if hs and as_:
                 result[(hs, as_)] = {
                     "home_pitcher":_name_to_key(hp),"away_pitcher":_name_to_key(ap),
@@ -830,9 +841,10 @@ def fetch_probable_pitchers():
                     "home_pitcher_id": hp_id, "away_pitcher_id": ap_id,
                     "_src": "probable",
                 }
+                game_pks[(hs, as_)] = (gpk, state, ct_utc)
                 log.info("SP(probable): %s vs %s | H=%s A=%s", hs, as_, _name_to_key(hp), _name_to_key(ap))
 
-    # ── 第二來源：ESPN Scoreboard probables（往往更即時）──────
+    # ── 第二來源：ESPN Scoreboard probables ───────────────────
     try:
         espn = safe_get(
             "http://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard",
@@ -857,66 +869,80 @@ def fetch_probable_pitchers():
                 entry = result[key]
                 changed = []
                 if home_sp and home_sp != entry["home_name"]:
-                    entry["home_name"]    = home_sp
-                    entry["home_pitcher"] = _name_to_key(home_sp)
-                    entry["home_pitcher_id"] = None
-                    changed.append("H:" + home_sp)
+                    entry.update({"home_name":home_sp,"home_pitcher":_name_to_key(home_sp),"home_pitcher_id":None})
+                    changed.append("H:"+home_sp)
                 if away_sp and away_sp != entry["away_name"]:
-                    entry["away_name"]    = away_sp
-                    entry["away_pitcher"] = _name_to_key(away_sp)
-                    entry["away_pitcher_id"] = None
-                    changed.append("A:" + away_sp)
+                    entry.update({"away_name":away_sp,"away_pitcher":_name_to_key(away_sp),"away_pitcher_id":None})
+                    changed.append("A:"+away_sp)
                 if changed:
                     entry["_src"] = "espn"
                     log.info("SP(ESPN override): %s vs %s | %s", home_k, away_k, ", ".join(changed))
     except Exception as e:
         log.warning("ESPN scoreboard SP failed: %s", e)
 
-    # ── 第三來源：MLB confirmed lineups（最準確，開賽前約 60 分鐘可用）
-    try:
-        ldata = safe_get(
-            "https://statsapi.mlb.com/api/v1/schedule",
-            params={"sportId":1,"date":today,"hydrate":"lineups,team"},
-            timeout=10,
-        )
-        for de in (ldata or {}).get("dates",[]):
-            for game in de.get("games",[]):
-                hd  = game.get("teams",{}).get("home",{})
-                ad  = game.get("teams",{}).get("away",{})
-                hs  = MLB_TEAM_ID.get(hd.get("team",{}).get("id")) or norm_team(hd.get("team",{}).get("name",""))
-                as_ = MLB_TEAM_ID.get(ad.get("team",{}).get("id")) or norm_team(ad.get("team",{}).get("name",""))
-                lineups = game.get("lineups", {})
-                if not lineups or (hs, as_) not in result: continue
-                def _find_pitcher(players):
-                    for p in (players or []):
-                        if p.get("primaryPosition",{}).get("abbreviation") == "P":
-                            return p.get("fullName"), p.get("id")
-                    return None, None
-                hp_c, hp_c_id = _find_pitcher(lineups.get("homePlayers",[]))
-                ap_c, ap_c_id = _find_pitcher(lineups.get("awayPlayers",[]))
-                entry   = result[(hs, as_)]
-                changed = []
-                if hp_c and hp_c != entry["home_name"]:
-                    entry["home_name"]       = hp_c
-                    entry["home_pitcher"]    = _name_to_key(hp_c)
-                    entry["home_pitcher_id"] = hp_c_id
-                    changed.append("H:" + hp_c)
-                if ap_c and ap_c != entry["away_name"]:
-                    entry["away_name"]       = ap_c
-                    entry["away_pitcher"]    = _name_to_key(ap_c)
-                    entry["away_pitcher_id"] = ap_c_id
-                    changed.append("A:" + ap_c)
-                if changed:
-                    entry["_src"] = "lineup"
-                    log.info("SP(lineup confirmed): %s vs %s | %s", hs, as_, ", ".join(changed))
-    except Exception as e:
-        log.warning("MLB lineup SP failed: %s", e)
+    # ── 第三來源：MLB game feed（Pre-Game / 進行中 / 完賽）────
+    # DH 制度下 lineups hydration 只含打序，投手不在裡面。
+    # game feed 的 boxscore.teams.*.pitchers 是最可靠的確認來源：
+    #   - 比賽進行中：pitchers[0] = 先發投手 ID
+    #   - Pre-Game（打線卡已送出）：players 裡有無打序位置的 code=1 投手
+    CONFIRM_STATES = {"Pre-Game","Warmup","In Progress","Game Over","Final","Completed Early","Delayed"}
+    for key, (gpk, state, ct_utc) in game_pks.items():
+        if not gpk: continue
+        is_close = ct_utc and abs((ct_utc - now_utc).total_seconds()) < 7200
+        if state not in CONFIRM_STATES and not is_close:
+            continue
+        try:
+            feed = safe_get(
+                "https://statsapi.mlb.com/api/v1.1/game/%d/feed/live" % gpk,
+                params={"fields":
+                    "liveData,boxscore,teams,home,away,pitchers,players,"
+                    "person,fullName,id,position,abbreviation,code,"
+                    "battingOrder,gameStatus,isOnBench"},
+                timeout=8,
+            )
+            if not feed: continue
+            bs    = feed.get("liveData",{}).get("boxscore",{}).get("teams",{})
+            entry = result[key]
+            changed = []
+            for side, is_home in [("home",True),("away",False)]:
+                t            = bs.get(side,{})
+                pitchers_ids = t.get("pitchers",[])
+                players      = t.get("players",{})
+                name = pid_found = None
+                if pitchers_ids:
+                    # 比賽已開始 → 第一個就是先發
+                    pk_key   = "ID%d" % pitchers_ids[0]
+                    name     = players.get(pk_key,{}).get("person",{}).get("fullName")
+                    pid_found = pitchers_ids[0]
+                else:
+                    # Pre-Game → 找 position code=1 且沒有打序的投手
+                    for pk_key, pdata in players.items():
+                        pos = pdata.get("position",{})
+                        if pos.get("code") == "1" or pos.get("abbreviation") == "P":
+                            bo = str(pdata.get("battingOrder") or "").strip()
+                            if bo in ("","0","null","None"):
+                                name      = pdata.get("person",{}).get("fullName")
+                                pid_found = pdata.get("person",{}).get("id")
+                                break
+                if name:
+                    old = entry["home_name"] if is_home else entry["away_name"]
+                    if name != old:
+                        if is_home:
+                            entry.update({"home_name":name,"home_pitcher":_name_to_key(name),"home_pitcher_id":pid_found})
+                        else:
+                            entry.update({"away_name":name,"away_pitcher":_name_to_key(name),"away_pitcher_id":pid_found})
+                        changed.append(("H" if is_home else "A")+":"+name)
+            if changed:
+                entry["_src"] = "gamefeed"
+                log.info("SP(gamefeed ✅): %s vs %s | %s", key[0], key[1], ", ".join(changed))
+        except Exception as e:
+            log.warning("Game feed SP failed gpk=%s: %s", gpk, e)
 
     for k, v in result.items():
-        log.info("SP(final/%s): %s vs %s | H=%s A=%s", v.get("_src","probable"), k[0], k[1], v["home_pitcher"], v["away_pitcher"])
+        log.info("SP(final/%s): %s vs %s | H=%s A=%s",
+                 v.get("_src","probable"), k[0], k[1], v["home_pitcher"], v["away_pitcher"])
     log.info("Pitchers resolved: %d games", len(result))
     return result
-
 
 # ══════════════════════════════════════════════
 # ★ 即時先發投手賽季ERA（MLB Stats API）
