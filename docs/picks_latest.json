@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-15 06:09 (台灣時間)",
+  "generated_at": "2026-05-15 06:38 (台灣時間)",
   "date": "2026-05-15",
   "stats": {
     "settled": 90,
@@ -29,7 +29,163 @@
       }
     }
   },
-  "picks": [],
+  "picks": [
+    {
+      "tier": "⭐ 穩定",
+      "btype": "獨贏",
+      "away": "giants",
+      "home": "dodgers",
+      "away_cn": "巨人",
+      "home_cn": "道奇",
+      "bet_label": "道奇 獨贏",
+      "bk": "FanDuel",
+      "bp": 1.58,
+      "con_p": 1.568,
+      "dv_p": 0.6143,
+      "edge": 14.6,
+      "conf": 71.2,
+      "stake": 10.1,
+      "model_p": 76.0,
+      "away_sp": "Landen Roupp",
+      "home_sp": "Emmet Sheehan",
+      "away_era": 3.37,
+      "home_era": 2.58,
+      "away_fip": 2.71,
+      "home_fip": 2.51,
+      "away_k9": 11.8,
+      "home_k9": 13.5,
+      "away_avgip": 5.1,
+      "home_avgip": 4.8,
+      "away_whip": 1.31,
+      "home_whip": 1.38,
+      "away_rest": null,
+      "home_rest": null,
+      "away_rs": 3.33,
+      "home_rs": 3.0,
+      "away_rpg": 3.67,
+      "home_rpg": 4.99,
+      "pred_away": 2.9,
+      "pred_home": 4.7,
+      "model_total": null,
+      "market_total": null,
+      "park_factor": null,
+      "weather_factor": 0.97,
+      "ump_name": null,
+      "ump_adj": null,
+      "away_trend": 3.58,
+      "home_trend": 2.2,
+      "line_clv": 0.0,
+      "game_date": "2026-05-15",
+      "game_time": "10:11",
+      "sp_src": "probable",
+      "home_hand": "R",
+      "away_hand": "R",
+      "home_babip": 0.372,
+      "away_babip": 0.308,
+      "home_lob": 82.4,
+      "away_lob": 64.5,
+      "away_road_days": 3,
+      "away_tz_cross": null,
+      "home_wpct": null,
+      "away_road_wpct": null,
+      "home_l10_wpct": 0.5,
+      "away_l10_wpct": 0.5,
+      "home_lineup": [
+        {
+          "order": 1,
+          "name": "Will Smith",
+          "pos": "DH"
+        },
+        {
+          "order": 2,
+          "name": "Freddie Freeman",
+          "pos": "1B"
+        },
+        {
+          "order": 3,
+          "name": "Kyle Tucker",
+          "pos": "RF"
+        },
+        {
+          "order": 4,
+          "name": "Andy Pages",
+          "pos": "CF"
+        },
+        {
+          "order": 5,
+          "name": "Max Muncy",
+          "pos": "3B"
+        },
+        {
+          "order": 6,
+          "name": "Teoscar Hernández",
+          "pos": "LF"
+        },
+        {
+          "order": 7,
+          "name": "Dalton Rushing",
+          "pos": "C"
+        },
+        {
+          "order": 8,
+          "name": "Hyeseong Kim",
+          "pos": "2B"
+        },
+        {
+          "order": 9,
+          "name": "Miguel Rojas",
+          "pos": "SS"
+        }
+      ],
+      "away_lineup": [
+        {
+          "order": 1,
+          "name": "Jung Hoo Lee",
+          "pos": "RF"
+        },
+        {
+          "order": 2,
+          "name": "Luis Arraez",
+          "pos": "2B"
+        },
+        {
+          "order": 3,
+          "name": "Casey Schmitt",
+          "pos": "DH"
+        },
+        {
+          "order": 4,
+          "name": "Rafael Devers",
+          "pos": "1B"
+        },
+        {
+          "order": 5,
+          "name": "Heliot Ramos",
+          "pos": "LF"
+        },
+        {
+          "order": 6,
+          "name": "Willy Adames",
+          "pos": "SS"
+        },
+        {
+          "order": 7,
+          "name": "Matt Chapman",
+          "pos": "3B"
+        },
+        {
+          "order": 8,
+          "name": "Drew Gilbert",
+          "pos": "CF"
+        },
+        {
+          "order": 9,
+          "name": "Eric Haase",
+          "pos": "C"
+        }
+      ]
+    }
+  ],
   "recent_history": [
     {
       "date": "2026-05-15",
