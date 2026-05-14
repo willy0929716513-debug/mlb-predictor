@@ -849,8 +849,7 @@ def fetch_espn_ratings():
                             _TEAM_HOME_WPCT[short] = round(rw / total_g, 3)
                         elif rtype == "road":
                             _TEAM_ROAD_WPCT[short] = round(rw / total_g, 3)
-                        elif any(x in rtype for x in ("last10","last 10","l10","lasttenl")):
-                            _TEAM_L10_WPCT[short] = round(rw / total_g, 3)
+                        # L10 record not available from ESPN; computed separately via fetch_team_l10()
     except Exception as e:
         log.warning("ESPN parse: %s", e)
     if ratings:
@@ -1517,6 +1516,54 @@ def fetch_schedule_context(today_str, teams_today):
                         break
         _TRAVEL_CONTEXT[team] = {"road_days": road_days, "tz_cross": tz_cross}
     log.info("Travel context: %d teams analyzed", len(_TRAVEL_CONTEXT))
+
+
+def fetch_team_l10():
+    """從 MLB schedule API 計算各隊近10場完賽勝負，存入 _TEAM_L10_WPCT。
+    MLB schedule 含 teams.home/away.isWinner 布林值，無需額外 hydrate。
+    往回查 20 天以確保抓到至少 10 場完賽。"""
+    global _TEAM_L10_WPCT
+    end   = datetime.date.today().isoformat()
+    start = (datetime.date.today() - datetime.timedelta(days=20)).isoformat()
+    data  = safe_get(
+        "https://statsapi.mlb.com/api/v1/schedule",
+        params={"sportId": 1, "startDate": start, "endDate": end,
+                "gameType": "R",
+                "fields": "dates,date,games,status,abstractGameState,teams,"
+                          "home,away,team,name,isWinner"},
+        timeout=12,
+    )
+    if not data:
+        return
+    # team_key -> [(date, is_win)] sorted ascending
+    results: dict = {}
+    for de in data.get("dates", []):
+        d = de.get("date", "")
+        for g in de.get("games", []):
+            if g.get("status", {}).get("abstractGameState") != "Final":
+                continue
+            for side in ("home", "away"):
+                td    = g.get("teams", {}).get(side, {})
+                tname = td.get("team", {}).get("name", "").lower()
+                tkey  = norm_team(tname.split()[-1] if tname else "")
+                if not tkey:
+                    continue
+                won = td.get("isWinner")
+                if won is None:
+                    continue
+                results.setdefault(tkey, []).append((d, bool(won)))
+    l10 = {}
+    for tkey, games in results.items():
+        games.sort()
+        last10 = games[-10:]
+        if len(last10) >= 5:  # 至少5場才有意義
+            wins = sum(1 for _, w in last10 if w)
+            l10[tkey] = round(wins / len(last10), 3)
+    if l10:
+        _TEAM_L10_WPCT = l10
+        log.info("L10 wpct: %d teams (sample: %s)",
+                 len(l10),
+                 ", ".join("%s=%.0f-%d"%(k, v*10, 10-round(v*10)) for k, v in list(l10.items())[:4]))
 
 
 def fetch_live_scores(today_str):
@@ -2629,6 +2676,9 @@ def run():
     # ★ 牛棚昨日使用量（疲勞度）
     try: fetch_bullpen_load()
     except Exception as e: log.warning("Bullpen load fetch failed: %s", e)
+    # ★ 近10場勝率（MLB schedule isWinner，比ESPN更可靠）
+    try: fetch_team_l10()
+    except Exception as e: log.warning("Team L10 fetch failed: %s", e)
     # ★ 打線順序（Pre-Game後才有，用於網頁顯示和打線品質評分）
     try: fetch_lineup()
     except Exception as e: log.warning("Lineup fetch failed: %s", e)
