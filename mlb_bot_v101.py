@@ -127,6 +127,10 @@ CONS_GAME_OFF_PEN  = 0.025  # 每超額一天的打線得分懲罰
 # ── ★ 主客場實際勝率 ─────────────────────────────────────────
 HOME_ROAD_WRAT_W   = 0.07   # 主/客場實際勝率偏離0.500時的得分修正幅度
 
+# ── ★ 蒙地卡羅模擬 ────────────────────────────────────────────
+MC_SIMS   = 5000   # 每場比賽的模擬次數（越高越準但越慢）
+MC_WIN_W  = 0.55   # MC勝率 vs norm_cdf 混合權重（MC更真實，稍多權重）
+
 # ── ★ 球場係數（FanGraphs Park Factors 2024）──
 PARK_FACTOR = {
     "rockies":1.30,"rangers":1.12,"red sox":1.10,"cubs":1.08,"reds":1.07,
@@ -1999,6 +2003,57 @@ def over_prob(exp_total, line):
     k = int(line)  # floor: P(X > line) = P(X >= k+1) = 1 - P(X <= k)
     return max(0.02, min(0.98, 1.0 - poisson_cdf(k, max(0.1, exp_total))))
 
+def _era_sigma(key):
+    """投手ERA估算的標準誤差（換算為每場期望得分的不確定性）。
+    小樣本（avgIP低）→ ERA不可靠 → 需要更寬廣的模擬分佈。"""
+    avg_ip = _PITCHER_IP.get(key, 6.0)
+    if avg_ip < 4.5:   return 1.20   # 極小樣本（<4.5局/場均）
+    elif avg_ip < 5.5: return 0.80   # 小樣本（4.5-5.5局）
+    elif avg_ip < 6.0: return 0.50   # 中等樣本（5.5-6.0局）
+    else:              return 0.30   # 足夠樣本（≥6.0局）
+
+def monte_carlo_game(h_exp, a_exp, h_sigma=0.0, a_sigma=0.0,
+                     market_total=None, n_sims=MC_SIMS):
+    """蒙地卡羅模擬：Poisson泊松離散得分 + 投手ERA估算不確定性。
+
+    h_sigma/a_sigma：主/客隊得分的不確定性（由對方投手樣本大小決定）。
+    Returns: (home_win_prob, over_prob_mc, mean_total, std_total)
+    """
+    try:
+        import numpy as np
+        rng = np.random.default_rng()
+        # 客隊投手不確定性影響主隊得分；主隊投手不確定性影響客隊得分
+        h_lam = np.clip(h_exp + (rng.normal(0, a_sigma, n_sims) if a_sigma > 0 else 0.0), 1.0, 15.0)
+        a_lam = np.clip(a_exp + (rng.normal(0, h_sigma, n_sims) if h_sigma > 0 else 0.0), 1.0, 15.0)
+        h_runs = rng.poisson(h_lam)
+        a_runs = rng.poisson(a_lam)
+        ties = h_runs == a_runs
+        home_wins = (h_runs > a_runs) | (ties & (rng.random(n_sims) < 0.5))
+        totals = h_runs + a_runs
+        over_p = float(np.mean(totals > market_total)) if market_total is not None else None
+        return float(np.mean(home_wins)), over_p, float(np.mean(totals)), float(np.std(totals))
+    except ImportError:
+        # 純Python備援：Knuth泊松採樣
+        import random
+        wins = 0; total_sum = 0; over_cnt = 0
+        def _pois(lam):
+            lam = max(1.0, min(float(lam), 20.0))
+            L = math.exp(-lam); k = 0; p = 1.0
+            while p > L:
+                k += 1; p *= random.random()
+            return k - 1
+        for _ in range(n_sims):
+            h_n = random.gauss(0, a_sigma) if a_sigma > 0 else 0.0
+            a_n = random.gauss(0, h_sigma) if h_sigma > 0 else 0.0
+            h_r = _pois(max(1.0, h_exp + h_n))
+            a_r = _pois(max(1.0, a_exp + a_n))
+            if h_r > a_r or (h_r == a_r and random.random() < 0.5): wins += 1
+            tr = h_r + a_r; total_sum += tr
+            if market_total is not None and tr > market_total: over_cnt += 1
+        mean_t = total_sum / n_sims
+        over_p = over_cnt / n_sims if market_total is not None else None
+        return wins / n_sims, over_p, mean_t, 0.0
+
 def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
     hr = get_rating(home)
     ar = get_rating(away)
@@ -2129,9 +2184,22 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
     margin = h_exp - a_exp
 
     dyn_std = STD + max(0, (10-games)/10) * 0.15
-    model_win_p = win_prob_from_margin(margin, dyn_std)
-    # ★ 勝率上限 90%：現實中單場勝率不會超過此值
-    model_win_p = max(0.22, min(0.76, model_win_p))  # 主客場勝率均限制22%~76%（雙向對稱，防止小樣本過度自信）
+
+    # ── ★ 蒙地卡羅模擬 ──────────────────────────────────────────
+    # 客隊投手ERA不確定性 → 主隊得分標準差；主隊投手ERA不確定性 → 客隊得分標準差
+    _h_sigma = _era_sigma(away_sp) if away_sp else 0.50
+    _a_sigma = _era_sigma(home_sp) if home_sp else 0.50
+    mc_home_wp, mc_over_p, mc_mean_tot, mc_std_tot = monte_carlo_game(
+        h_exp, a_exp, _h_sigma, _a_sigma, market_total
+    )
+    log.info("MC %s@%s: win=%.3f over=%.3f meanTot=%.2f std=%.2f (σh=%.2f σa=%.2f)",
+             away, home, mc_home_wp, mc_over_p or 0, mc_mean_tot, mc_std_tot,
+             _h_sigma, _a_sigma)
+
+    # norm_cdf 估計 + MC模擬加權混合（MC考慮離散Poisson和ERA不確定性，更真實）
+    norm_win_p  = win_prob_from_margin(margin, dyn_std)
+    model_win_p = MC_WIN_W * mc_home_wp + (1 - MC_WIN_W) * norm_win_p
+    model_win_p = max(0.22, min(0.76, model_win_p))  # 雙向對稱上限，防小樣本過度自信
 
     pure_total     = h_exp     + a_exp
     pure_total_tot = h_exp_tot + a_exp_tot  # 大小分投注用（降低RS影響）
@@ -2161,6 +2229,11 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
         "weather_factor": round(_wf, 3),   # 天氣係數（1.0=無影響）
         "ump_name":       _ump_name,       # 主審姓名（None=未知）
         "ump_adj":        round(_ump_adj, 2),  # 裁判跑分偏好
+        "mc_home_wp":     round(mc_home_wp, 4),    # MC主場勝率（未封頂）
+        "mc_over_p":      round(mc_over_p, 4) if mc_over_p is not None else None,
+        "mc_mean_total":  round(mc_mean_tot, 2),   # MC期望大小分
+        "mc_std_total":   round(mc_std_tot, 2),    # MC大小分標準差
+        "norm_win_p":     round(norm_win_p, 4),    # norm_cdf純模型勝率（供比較）
     }
 
 def runline_prob(margin, spread, dyn_std):
@@ -2623,10 +2696,14 @@ def run():
             p_h_rl_25 = max(0.20, min(0.75, p_h_rl_25))
             p_a_rl_25 = 1.0 - p_h_rl_25
 
-        # ── ★ 大小分概率（50% 模型 + 50% 市場混合）─────────
+        # ── ★ 大小分概率（模型Poisson + MC + 市場三方混合）─────────
         # 使用 pure_total_tot（RS權重極低），防止高RS誤拉高Over概率
         _tot_blend = pred["pure_total_tot"] * 0.50 + market_total * 0.50
-        p_over  = over_prob(_tot_blend, market_total)
+        _poisson_over = over_prob(_tot_blend, market_total)
+        _mc_ov = pred.get("mc_over_p")
+        # MC over概率：同時考慮Poisson離散和ERA不確定性，比點估計更準
+        p_over  = (_poisson_over * 0.50 + _mc_ov * 0.50) if _mc_ov is not None else _poisson_over
+        p_over  = max(0.02, min(0.98, p_over))
         p_under = 1.0 - p_over
 
         # ── ★ Devig：從共識賠率移除 bookmaker vig，得到真實市場隱含概率 ──
