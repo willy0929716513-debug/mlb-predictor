@@ -58,8 +58,8 @@ GAP1, GAP2, GAP3 = 1.5, 2.5, 3.5
 ESPN_ALPHA_MAX = 0.65
 TREND_DELTA_W  = 0.25   # 近期趨勢權重（近期ERA偏差的25%作為調整量）
 TREND_MAX_ADJ  = 1.50   # 近期趨勢最大調整量（±1.5 ERA點）
-FIP_EXTREME_CAP  = 0.35  # FIP-賽季ERA缺口>3.0時，FIP最大權重（小樣本保護）
-FIP_EXTREME_CAP2 = 0.10  # FIP-賽季ERA缺口>5.0時，FIP最大權重（極端小樣本）
+FIP_EXTREME_CAP  = 0.25  # FIP-賽季ERA缺口>3.0時，FIP最大權重（小樣本保護）
+FIP_EXTREME_CAP2 = 0.07  # FIP-賽季ERA缺口>5.0時，FIP最大權重（極端小樣本）
 TREND_EXTREME_THRESH = 4.0   # 近期趨勢delta超過此值→視為極端小樣本噪音
 TREND_EXTREME_SCALE  = 0.33  # 極端趨勢時最大調整量縮減為1/3（約±0.5 ERA點）
 SCORING_FORM_W = 0.10   # 近期打擊得分調整幅度（±10%）
@@ -532,11 +532,15 @@ def _fetch_recent_era(pitcher_id, last_n=3, expected_key=None, expected_full=Non
     # ── FIP（防守獨立投球指標）──────────────────────────────
     # FIP = (13×HR + 3×(BB+HBP) - 2×K) / IP + FIP_CONST
     # 消除守備/BABIP運氣，更能預測未來表現
-    fip_raw = (13*total_hr + 3*(total_bb+total_hbp) - 2*total_k) / total_ip + FIP_CONST
+    # K9上限13.5：防止小樣本超高三振率(如K9=15.6)造成FIP極端低估
+    K9_MAX_FIP = 13.5
+    total_k_adj = min(total_k, total_ip / 9 * K9_MAX_FIP)
+    fip_raw = (13*total_hr + 3*(total_bb+total_hbp) - 2*total_k_adj) / total_ip + FIP_CONST
     fip_ret = round(max(0.50, min(fip_raw, 10.0)), 2)
 
     # ── K/9（每9局三振數）────────────────────────────────────
-    k9_ret   = round(total_k / total_ip * 9, 1)
+    # 同樣上限13.5，防止小樣本極端K9觸發UNDER信心加成
+    k9_ret   = round(min(total_k / total_ip * 9, 13.5), 1)
 
     # ── 場均局數 + WHIP ──────────────────────────────────────
     avg_ip   = round(total_ip / len(recent), 1)
@@ -635,11 +639,16 @@ def build_recent_era_cache(pitchers_dict):
                 log.info("Reliever: %s (no IP≥4.0 starts)", key)
             if era is not None:
                 cache[key] = era
-                log.info("ERA %s(id=%s): %.2f (FIP=%.2f K9=%.1f avgIP=%.1f WHIP=%.2f trend=%+.2f)",
+                _avgip = avg_ip if avg_ip else 0
+                _suffix = " ⚠️ 小樣本(avgIP<5.5)" if _avgip < 5.5 else ""
+                log.info("ERA %s(id=%s): %.2f (FIP=%.2f K9=%.1f avgIP=%.1f WHIP=%.2f trend=%+.2f)%s",
                          key, pid, era,
                          fip if fip else 0, k9 if k9 else 0,
-                         avg_ip if avg_ip else 0, whip if whip else 0,
-                         era_trend if era_trend is not None else 0)
+                         _avgip, whip if whip else 0,
+                         era_trend if era_trend is not None else 0, _suffix)
+                if _avgip < 5.5:
+                    log.warning("⚠️ SMALL SAMPLE pitcher %s(id=%s): avg %.1f IP/start — ERA reliability LOW",
+                                key, pid, _avgip)
             elif not is_reliever:
                 log.info("ERA %s(id=%s): no recent starts (IP<4.0 or no data)", key, pid)
             if rs is not None:         rs_cache[key]    = rs
@@ -1880,16 +1889,19 @@ def get_pitcher_era(key):
         era_out = round(era_out*(1-RELIEVER_SP_REGRESS) + LEAGUE_ERA*RELIEVER_SP_REGRESS, 2)
 
     # ── Step 4：BABIP/LOB% 運氣修正 ──────────────────────────────
-    babip = _PITCHER_BABIP.get(k)
-    lob   = _PITCHER_LOB_PCT.get(k)
+    # 僅在 avgIP≥5.5 時啟用：小樣本的BABIP/LOB波動極大，不代表真實運氣
+    babip   = _PITCHER_BABIP.get(k)
+    lob     = _PITCHER_LOB_PCT.get(k)
+    avg_ip  = _PITCHER_IP.get(k, 6.0)
     extra_fip_w = 0.0
-    if babip is not None:
-        babip_dev = abs(babip - BABIP_LG_AVG) / 0.030
-        extra_fip_w += babip_dev * BABIP_FIP_BONUS
-    if lob is not None:
-        lob_dev = abs(lob - LOB_LG_AVG) / 5.0
-        extra_fip_w += lob_dev * LOB_FIP_BONUS
-    extra_fip_w = min(extra_fip_w, 0.30)
+    if avg_ip >= 5.5:  # 只有足夠局數樣本才信任BABIP/LOB
+        if babip is not None:
+            babip_dev = abs(babip - BABIP_LG_AVG) / 0.030
+            extra_fip_w += babip_dev * BABIP_FIP_BONUS
+        if lob is not None:
+            lob_dev = abs(lob - LOB_LG_AVG) / 5.0
+            extra_fip_w += lob_dev * LOB_FIP_BONUS
+        extra_fip_w = min(extra_fip_w, 0.20)  # 小樣本保護：上限從0.30降至0.20
     if extra_fip_w > 0 and fip is not None:
         era_out = round(era_out*(1-extra_fip_w) + fip*extra_fip_w, 2)
 
@@ -1936,11 +1948,18 @@ def bullpen_adj(team):
 
 def pitcher_confidence(key):
     era = get_pitcher_era(key)
-    if era <= 2.5:   return 1.0
-    elif era <= 3.2: return 0.92
-    elif era <= 4.0: return 0.82
-    elif era <= 4.5: return 0.72
-    else:            return 0.62
+    avg_ip = _PITCHER_IP.get(key, 6.0)
+    # ERA-based confidence tier
+    if era <= 2.5:   era_conf = 1.0
+    elif era <= 3.2: era_conf = 0.92
+    elif era <= 4.0: era_conf = 0.82
+    elif era <= 4.5: era_conf = 0.72
+    else:            era_conf = 0.62
+    # 小樣本懲罰：avgIP<5.5 表示近期先發局數不足，ERA可靠性低
+    if avg_ip < 4.5:   ip_mult = 0.70
+    elif avg_ip < 5.5: ip_mult = 0.82
+    else:              ip_mult = 1.0
+    return round(era_conf * ip_mult, 3)
 
 def total_confidence(pure_total, market_total):
     gap = abs(pure_total - market_total)
@@ -2102,7 +2121,7 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
     dyn_std = STD + max(0, (10-games)/10) * 0.15
     model_win_p = win_prob_from_margin(margin, dyn_std)
     # ★ 勝率上限 90%：現實中單場勝率不會超過此值
-    model_win_p = max(0.18, min(0.82, model_win_p))  # 主客場勝率均限制18%~82%（雙向對稱）
+    model_win_p = max(0.22, min(0.76, model_win_p))  # 主客場勝率均限制22%~76%（雙向對稱，防止小樣本過度自信）
 
     pure_total     = h_exp     + a_exp
     pure_total_tot = h_exp_tot + a_exp_tot  # 大小分投注用（降低RS影響）
@@ -2140,6 +2159,11 @@ def runline_prob(margin, spread, dyn_std):
 
 def kelly_stake(edge, model_p, price, conf=1.0, dv_p=None):
     if edge<=0 or price<=1.0: return 0.0
+    # 超高邊際（>20%）通常代表模型過度自信，記錄警告並縮限
+    if edge > 0.20:
+        log.warning("⚠️ HIGH EDGE %.1f%% (model_p=%.3f price=%.2f) — likely model overconfidence, capping at 20%%",
+                    edge*100, model_p, price)
+        edge = 0.20
     b = price-1.0
     # 貝葉斯收縮：model_p 混入 devigged 市場概率，避免過信模型高估
     kp = (model_p*(1-KELLY_BAYES_W) + dv_p*KELLY_BAYES_W) if dv_p else model_p
