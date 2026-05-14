@@ -2871,6 +2871,7 @@ def run():
             # ★ TOT使用conf_tot（pure_total_tot基礎，RS影響更低）；ML/RL用conf
             _base_conf = conf_tot if btype == BET_TOT else conf
             bet_conf = _base_conf*conf_mult
+            raw_edge = model_p - _dv.get(bside, 1/bp)  # ★ Devigged edge
             # ★ 分類型歷史勝率校正（需 ≥MIN_SAMPLE_CALIB 才生效，防小樣本過擬合）
             _wr_hist = wr_by_type.get(btype)
             if _wr_hist is not None:
@@ -2886,7 +2887,6 @@ def run():
                 if   _wr_hist < 0.50: bet_conf = round(bet_conf * 0.92, 4)
                 elif _wr_hist < 0.55: bet_conf = round(bet_conf * 0.97, 4)
                 elif _wr_hist > 0.68: bet_conf = round(min(1.0, bet_conf * 1.05), 4)
-            raw_edge = model_p - _dv.get(bside, 1/bp)  # ★ Devigged edge
             # 統一用 edge×conf ≥ threshold（所有注單類型一致，低信心高edge也會被過濾）
             edge_ok = raw_edge * bet_conf >= edge_min
             if not edge_ok: continue
