@@ -2026,11 +2026,12 @@ def _era_sigma(key):
     else:              return 0.30   # 足夠樣本（≥6.0局）
 
 def monte_carlo_game(h_exp, a_exp, h_sigma=0.0, a_sigma=0.0,
-                     market_total=None, n_sims=MC_SIMS):
+                     market_total=None, n_sims=MC_SIMS, rl_spreads=None):
     """蒙地卡羅模擬：Poisson泊松離散得分 + 投手ERA估算不確定性。
 
     h_sigma/a_sigma：主/客隊得分的不確定性（由對方投手樣本大小決定）。
-    Returns: (home_win_prob, over_prob_mc, mean_total, std_total)
+    rl_spreads: list of spread values to compute P(h_runs - a_runs > spread).
+    Returns: (home_win_prob, over_prob_mc, mean_total, std_total, rl_probs_dict)
     """
     try:
         import numpy as np
@@ -2043,12 +2044,18 @@ def monte_carlo_game(h_exp, a_exp, h_sigma=0.0, a_sigma=0.0,
         ties = h_runs == a_runs
         home_wins = (h_runs > a_runs) | (ties & (rng.random(n_sims) < 0.5))
         totals = h_runs + a_runs
+        diff = h_runs - a_runs  # 主客得分差，用於讓分MC計算
         over_p = float(np.mean(totals > market_total)) if market_total is not None else None
-        return float(np.mean(home_wins)), over_p, float(np.mean(totals)), float(np.std(totals))
+        rl_probs = {}
+        if rl_spreads:
+            for sp in rl_spreads:
+                rl_probs[sp] = round(float(np.mean(diff > sp)), 4)
+        return float(np.mean(home_wins)), over_p, float(np.mean(totals)), float(np.std(totals)), rl_probs
     except ImportError:
         # 純Python備援：Knuth泊松採樣
         import random
         wins = 0; total_sum = 0; over_cnt = 0
+        rl_cnts = {sp: 0 for sp in (rl_spreads or [])}
         def _pois(lam):
             lam = max(1.0, min(float(lam), 20.0))
             L = math.exp(-lam); k = 0; p = 1.0
@@ -2063,9 +2070,13 @@ def monte_carlo_game(h_exp, a_exp, h_sigma=0.0, a_sigma=0.0,
             if h_r > a_r or (h_r == a_r and random.random() < 0.5): wins += 1
             tr = h_r + a_r; total_sum += tr
             if market_total is not None and tr > market_total: over_cnt += 1
+            d = h_r - a_r
+            for sp in rl_cnts:
+                if d > sp: rl_cnts[sp] += 1
         mean_t = total_sum / n_sims
         over_p = over_cnt / n_sims if market_total is not None else None
-        return wins / n_sims, over_p, mean_t, 0.0
+        rl_probs = {sp: round(cnt / n_sims, 4) for sp, cnt in rl_cnts.items()}
+        return wins / n_sims, over_p, mean_t, 0.0, rl_probs
 
 def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
     hr = get_rating(home)
@@ -2202,8 +2213,9 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
     # 客隊投手ERA不確定性 → 主隊得分標準差；主隊投手ERA不確定性 → 客隊得分標準差
     _h_sigma = _era_sigma(away_sp) if away_sp else 0.50
     _a_sigma = _era_sigma(home_sp) if home_sp else 0.50
-    mc_home_wp, mc_over_p, mc_mean_tot, mc_std_tot = monte_carlo_game(
-        h_exp, a_exp, _h_sigma, _a_sigma, market_total
+    mc_home_wp, mc_over_p, mc_mean_tot, mc_std_tot, mc_rl_probs = monte_carlo_game(
+        h_exp, a_exp, _h_sigma, _a_sigma, market_total,
+        rl_spreads=[1.5, -1.5, 2.5, -2.5]
     )
     log.info("MC %s@%s: win=%.3f over=%.3f meanTot=%.2f std=%.2f (σh=%.2f σa=%.2f)",
              away, home, mc_home_wp, mc_over_p or 0, mc_mean_tot, mc_std_tot,
@@ -2247,6 +2259,7 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
         "mc_mean_total":  round(mc_mean_tot, 2),   # MC期望大小分
         "mc_std_total":   round(mc_std_tot, 2),    # MC大小分標準差
         "norm_win_p":     round(norm_win_p, 4),    # norm_cdf純模型勝率（供比較）
+        "mc_rl_probs":    mc_rl_probs,             # MC讓分概率: {spread: P(h-a > spread)}
     }
 
 def runline_prob(margin, spread, dyn_std):
@@ -2689,10 +2702,15 @@ def run():
         rl_dyn_std = dyn_std * RL_STD_MULT
         h_gives = (rl_h_pts is None or rl_h_pts < 0)
         spread_val = abs(rl_h_pts) if rl_h_pts is not None else 1.5
-        if h_gives:
-            p_h_rl = runline_prob(margin, spread_val, rl_dyn_std)
+        _mc_rl_probs = pred.get("mc_rl_probs", {})
+        _rl_norm = runline_prob(margin, spread_val if h_gives else -spread_val, rl_dyn_std)
+        _rl_mc_key = spread_val if h_gives else -spread_val
+        _rl_mc = _mc_rl_probs.get(_rl_mc_key)
+        if _rl_mc is not None:
+            # MC讓分：70%蒙地卡羅離散Poisson + 30%連續常態近似
+            p_h_rl = MC_WIN_W * _rl_mc + (1 - MC_WIN_W) * _rl_norm
         else:
-            p_h_rl = runline_prob(margin, -spread_val, rl_dyn_std)
+            p_h_rl = _rl_norm
         p_h_rl = max(0.25, min(0.72, p_h_rl))
         p_a_rl = 1.0 - p_h_rl
 
@@ -2702,10 +2720,13 @@ def run():
         if rl_h_price_25 is not None or rl_a_price_25 is not None:
             h_gives_25 = (rl_h_pts_25 is None or rl_h_pts_25 < 0)
             spread_val_25 = abs(rl_h_pts_25) if rl_h_pts_25 is not None else 2.5
-            if h_gives_25:
-                p_h_rl_25 = runline_prob(margin, spread_val_25, rl_dyn_std)
+            _rl_norm_25 = runline_prob(margin, spread_val_25 if h_gives_25 else -spread_val_25, rl_dyn_std)
+            _rl_mc_key_25 = spread_val_25 if h_gives_25 else -spread_val_25
+            _rl_mc_25 = _mc_rl_probs.get(_rl_mc_key_25)
+            if _rl_mc_25 is not None:
+                p_h_rl_25 = MC_WIN_W * _rl_mc_25 + (1 - MC_WIN_W) * _rl_norm_25
             else:
-                p_h_rl_25 = runline_prob(margin, -spread_val_25, rl_dyn_std)
+                p_h_rl_25 = _rl_norm_25
             p_h_rl_25 = max(0.20, min(0.75, p_h_rl_25))
             p_a_rl_25 = 1.0 - p_h_rl_25
 
