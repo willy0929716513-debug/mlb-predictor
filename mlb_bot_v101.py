@@ -1661,25 +1661,35 @@ def settle_hist(hist):
 
     updated = 0
     for date_str, records in sorted(by_date.items()):
-        data = safe_get(
-            "https://statsapi.mlb.com/api/v1/schedule",
-            params={"sportId":1,"date":date_str},
-            timeout=10,
-        )
-        if not data: log.warning("settle_hist: no API data for %s", date_str); continue
+        # 台灣時間存儲的日期可能比ET日期晚一天（TW 07:10 = ET 前一天 23:10）
+        # 同時查詢 date_str 和 date_str-1天，確保能查到正確ET賽程
+        try:
+            prev_day = (datetime.date.fromisoformat(date_str) - datetime.timedelta(days=1)).isoformat()
+        except Exception:
+            prev_day = None
+        dates_to_try = [date_str] + ([prev_day] if prev_day else [])
 
-        # 建立 (home隊名key, away隊名key) -> (h_score, a_score) 查找表
         score_map = {}
-        for d in data.get("dates",[]):
-            for g in d.get("games",[]):
-                if "Final" not in g.get("status",{}).get("detailedState",""):
-                    continue
-                hd = g.get("teams",{}).get("home",{}); ad = g.get("teams",{}).get("away",{})
-                hs = hd.get("score"); as_ = ad.get("score")
-                if hs is None or as_ is None: continue
-                hk = _tkey(hd.get("team",{}).get("name",""))
-                ak = _tkey(ad.get("team",{}).get("name",""))
-                score_map[(hk, ak)] = (int(hs), int(as_))
+        for try_date in dates_to_try:
+            data = safe_get(
+                "https://statsapi.mlb.com/api/v1/schedule",
+                params={"sportId":1,"date":try_date},
+                timeout=10,
+            )
+            if not data:
+                log.warning("settle_hist: no API data for %s", try_date); continue
+            # 建立 (home隊名key, away隊名key) -> (h_score, a_score) 查找表
+            for d in data.get("dates",[]):
+                for g in d.get("games",[]):
+                    if "Final" not in g.get("status",{}).get("detailedState",""):
+                        continue
+                    hd = g.get("teams",{}).get("home",{}); ad = g.get("teams",{}).get("away",{})
+                    hs = hd.get("score"); as_ = ad.get("score")
+                    if hs is None or as_ is None: continue
+                    hk = _tkey(hd.get("team",{}).get("name",""))
+                    ak = _tkey(ad.get("team",{}).get("name",""))
+                    if (hk, ak) not in score_map:  # 先找到的優先（date_str優先於prev_day）
+                        score_map[(hk, ak)] = (int(hs), int(as_))
         log.info("settle_hist %s: %d final games, %d pending picks", date_str, len(score_map), len(records))
 
         for r in records:
@@ -3073,15 +3083,19 @@ def run():
                               "Kelly: $%.1f [🔒限額]"%p["stake"], p["msg"], count=1)
 
     # ★ 歷史紀錄只寫入最終顯示的注單（過濾後），避免被拒之注單汙染勝率統計
+    # 23:00 TW後，比賽的TW日期已是明天（game_date="次日"），但ET日期仍是今天
+    # → 允許今明兩天TW日期的比賽都寫入，用 game_date 作去重key（防跨午夜重複）
     if official:
+        tomorrow_str = (now_tw + datetime.timedelta(days=1)).strftime("%Y-%m-%d")
         for p in picks:
-            if p["game_date"] != today_str: continue
-            rk = (p["home"], p["away"], today_str)
+            if p["game_date"] not in (today_str, tomorrow_str): continue
+            record_date = p["game_date"]   # 用TW比賽日期存儲（settle有fallback到前一天）
+            rk = (p["home"], p["away"], record_date)
             already_in_hist  = any((r.get("home"),r.get("away"),r.get("date"))==rk for r in hist)
             already_in_today = any((r.get("home"),r.get("away"),r.get("date"))==rk for r in today_records)
             if not already_in_hist and not already_in_today:
                 today_records.append({
-                    "date":    today_str,
+                    "date":    record_date,
                     "team":    p["team"],
                     "home":    p["home"],
                     "away":    p["away"],
