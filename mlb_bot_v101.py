@@ -127,6 +127,7 @@ CONS_GAME_OFF_PEN  = 0.025  # 每超額一天的打線得分懲罰
 
 # ── ★ 主客場實際勝率 ─────────────────────────────────────────
 HOME_ROAD_WRAT_W   = 0.07   # 主/客場實際勝率偏離0.500時的得分修正幅度
+L10_FORM_W         = 0.06   # 近10場勝率偏離0.500時的得分修正幅度（熱手效應）
 
 # ── ★ 蒙地卡羅模擬 ────────────────────────────────────────────
 MC_SIMS   = 5000   # 每場比賽的模擬次數（越高越準但越慢）
@@ -427,6 +428,8 @@ _TEAM_VS_LHP_OPS   = {}  # team_key -> OPS vs LHP
 _TEAM_VS_RHP_OPS   = {}  # team_key -> OPS vs RHP
 _TEAM_HOME_WPCT    = {}  # team_key -> 主場勝率 (float 0.0-1.0)
 _TEAM_ROAD_WPCT    = {}  # team_key -> 客場勝率 (float 0.0-1.0)
+_TEAM_L10_WPCT     = {}  # team_key -> 近10場勝率 (float 0.0-1.0)
+_TEAM_LINEUP       = {}  # team_key -> [{"order":int,"name":str,"pos":str}] 打線順序
 _TRAVEL_CONTEXT    = {}  # team_key -> {"road_days": int, "tz_cross": bool}
 
 
@@ -846,6 +849,8 @@ def fetch_espn_ratings():
                             _TEAM_HOME_WPCT[short] = round(rw / total_g, 3)
                         elif rtype == "road":
                             _TEAM_ROAD_WPCT[short] = round(rw / total_g, 3)
+                        elif any(x in rtype for x in ("last10","last 10","l10","lasttenl")):
+                            _TEAM_L10_WPCT[short] = round(rw / total_g, 3)
     except Exception as e:
         log.warning("ESPN parse: %s", e)
     if ratings:
@@ -1305,6 +1310,76 @@ def fetch_bullpen_load():
         log.info("Bullpen load(1d): %s",
                  {k:round(v,1) for k,v in sorted(load.items(),key=lambda x:-x[1])[:8]})
     return bool(load)
+
+
+def fetch_lineup():
+    """從 MLB game feed 抓取今日各隊打線順序（Pre-Game 後才有資料）。
+    結果存入 _TEAM_LINEUP: team_key -> [{"order":int,"name":str,"pos":str}]
+    MLB battingOrder 值：100=第1棒, 200=第2棒 … 900=第9棒。"""
+    global _TEAM_LINEUP
+    today = datetime.date.today().isoformat()
+    sched = safe_get(
+        "https://statsapi.mlb.com/api/v1/schedule",
+        params={"sportId": 1, "date": today, "gameType": "R",
+                "fields": "dates,games,gamePk,status,detailedState,teams,home,away,team,id,name"},
+        timeout=10,
+    )
+    if not sched:
+        return
+    LINEUP_STATES = {"Pre-Game","Warmup","In Progress","Game Over","Final",
+                     "Completed Early","Delayed","Delayed Start","Preview"}
+    lineup_tmp = {}
+    for de in sched.get("dates", []):
+        for game in de.get("games", []):
+            state = game.get("status", {}).get("detailedState", "")
+            gpk   = game.get("gamePk")
+            if not gpk or state not in LINEUP_STATES:
+                continue
+            hname = game.get("teams", {}).get("home", {}).get("team", {}).get("name", "")
+            aname = game.get("teams", {}).get("away", {}).get("team", {}).get("name", "")
+            hk = norm_team(TEAM_ALIAS.get(hname.lower().split()[-1] if hname else "",
+                                          hname.lower().split()[-1] if hname else ""))
+            ak = norm_team(TEAM_ALIAS.get(aname.lower().split()[-1] if aname else "",
+                                          aname.lower().split()[-1] if aname else ""))
+            try:
+                feed = safe_get(
+                    "https://statsapi.mlb.com/api/v1.1/game/%d/feed/live" % gpk,
+                    params={"fields":
+                        "liveData,boxscore,teams,home,away,players,"
+                        "person,fullName,id,position,abbreviation,battingOrder"},
+                    timeout=8,
+                )
+                if not feed:
+                    continue
+                bs = feed.get("liveData", {}).get("boxscore", {}).get("teams", {})
+                for side, tkey in [("home", hk), ("away", ak)]:
+                    if not tkey:
+                        continue
+                    players = bs.get(side, {}).get("players", {})
+                    batters = []
+                    for pdata in players.values():
+                        bo = pdata.get("battingOrder")
+                        if not bo:
+                            continue
+                        try:
+                            order = int(str(bo)) // 100
+                        except (ValueError, TypeError):
+                            continue
+                        if order < 1 or order > 9:
+                            continue
+                        name = pdata.get("person", {}).get("fullName", "")
+                        pos  = pdata.get("position", {}).get("abbreviation", "")
+                        if name:
+                            batters.append({"order": order, "name": name, "pos": pos})
+                    if batters:
+                        batters.sort(key=lambda x: x["order"])
+                        lineup_tmp[tkey] = batters[:9]
+                        log.info("Lineup %s(%s): %d batters", tkey, state, len(batters))
+            except Exception as e:
+                log.warning("fetch_lineup gpk=%s: %s", gpk, e)
+    if lineup_tmp:
+        _TEAM_LINEUP.update(lineup_tmp)
+        log.info("Lineup fetched: %d teams", len(lineup_tmp))
 
 
 def fetch_pitcher_lr_splits(pitcher_id_map):
@@ -2195,7 +2270,15 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
         a_exp = round(a_exp - travel_pen * 0.35, 3)  # 換算為得分懲罰（ERA的0.35係數）
         a_exp_tot = round(a_exp_tot - travel_pen * 0.35, 3)
 
-    # ⑪ ★ 主客場實際勝率偏離修正
+    # ⑪ ★ 近10場勝率修正（熱手/冷手效應，比賽季整體勝率更即時）
+    h_l10 = _TEAM_L10_WPCT.get(home.lower())
+    a_l10 = _TEAM_L10_WPCT.get(away.lower())
+    if h_l10 is not None:
+        h_exp = round(h_exp * (1.0 + (h_l10 - 0.500) * L10_FORM_W), 3)
+    if a_l10 is not None:
+        a_exp = round(a_exp * (1.0 + (a_l10 - 0.500) * L10_FORM_W), 3)
+
+    # ⑫ ★ 主客場實際勝率偏離修正
     h_hwpct = _TEAM_HOME_WPCT.get(home)
     a_rwpct = _TEAM_ROAD_WPCT.get(away)
     if h_hwpct is not None:
@@ -2260,6 +2343,8 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
         "mc_std_total":   round(mc_std_tot, 2),    # MC大小分標準差
         "norm_win_p":     round(norm_win_p, 4),    # norm_cdf純模型勝率（供比較）
         "mc_rl_probs":    mc_rl_probs,             # MC讓分概率: {spread: P(h-a > spread)}
+        "h_l10_wpct":     h_l10,                   # 主隊近10場勝率
+        "a_l10_wpct":     a_l10,                   # 客隊近10場勝率
     }
 
 def runline_prob(margin, spread, dyn_std):
@@ -2393,8 +2478,12 @@ def write_pages_json(picks, hist, now_tw, live_games=None):
             "away_lob":    round(_PITCHER_LOB_PCT[ask],1) if ask in _PITCHER_LOB_PCT else None,
             "away_road_days": _TRAVEL_CONTEXT.get(p.get("away",""),{}).get("road_days") or None,
             "away_tz_cross":  _TRAVEL_CONTEXT.get(p.get("away",""),{}).get("tz_cross") or None,
-            "home_wpct":   _TEAM_HOME_WPCT.get(p.get("home","")),
+            "home_wpct":      _TEAM_HOME_WPCT.get(p.get("home","")),
             "away_road_wpct": _TEAM_ROAD_WPCT.get(p.get("away","")),
+            "home_l10_wpct":  _TEAM_L10_WPCT.get(p.get("home","")),
+            "away_l10_wpct":  _TEAM_L10_WPCT.get(p.get("away","")),
+            "home_lineup":    _TEAM_LINEUP.get(p.get("home",""), []),
+            "away_lineup":    _TEAM_LINEUP.get(p.get("away",""), []),
         })
     # ★ 最近 10 筆歷史（含 pending），供網頁歷史紀錄面板使用
     _hist_sorted = sorted(
@@ -2540,6 +2629,9 @@ def run():
     # ★ 牛棚昨日使用量（疲勞度）
     try: fetch_bullpen_load()
     except Exception as e: log.warning("Bullpen load fetch failed: %s", e)
+    # ★ 打線順序（Pre-Game後才有，用於網頁顯示和打線品質評分）
+    try: fetch_lineup()
+    except Exception as e: log.warning("Lineup fetch failed: %s", e)
 
     odds_data = fetch_odds()
     if not odds_data: log.error("No odds data"); return

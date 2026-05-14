@@ -36,6 +36,14 @@
                border-radius:6px; padding:2px 7px; font-size:0.68rem; }
     .sp-warn { border-color:#f97316; color:#fb923c; }
 
+    /* Lineup table */
+    .lineup-row { display:grid; grid-template-columns:1.2rem 2.2rem 1fr; gap:4px;
+                  align-items:center; padding:2px 0; font-size:0.68rem; }
+    .lineup-order { color:#64748b; font-weight:700; text-align:right; }
+    .lineup-pos   { color:#94a3b8; background:#0f172a; border-radius:3px;
+                    padding:0 3px; text-align:center; font-weight:600; font-size:0.62rem; }
+    .lineup-name  { color:#e2e8f0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
     /* Filter tabs */
     .tab { padding:6px 16px; border-radius:8px; font-size:0.78rem; font-weight:600;
            cursor:pointer; transition:all .15s; border:1px solid transparent; }
@@ -299,6 +307,35 @@ function toAmerican(dec){
   return String(Math.round(-100/(dec-1)));
 }
 
+/* ── L10 win-rate chip ───────────────────────── */
+function l10Chip(wpct, label){
+  if(wpct==null) return "";
+  const wins = Math.round(wpct * 10);
+  const losses = 10 - wins;
+  const col = wpct >= 0.70 ? "text-emerald-400" :
+              wpct >= 0.60 ? "text-emerald-300" :
+              wpct <= 0.30 ? "text-rose-400"    :
+              wpct <= 0.40 ? "text-rose-300"    : "text-slate-400";
+  return `<span class="${col} text-xs" title="${label}近10場 ${wins}勝${losses}負">${label}L10 ${wins}-${losses}</span>`;
+}
+
+/* ── Lineup column renderer ──────────────────── */
+function lineupCol(lineup, label){
+  if(!lineup || lineup.length === 0)
+    return `<div><div class="text-xs text-slate-600 mb-1 font-medium">${label}打線</div><div class="text-xs text-slate-700">打線未公告</div></div>`;
+  const rows = lineup.map(b =>
+    `<div class="lineup-row">
+       <div class="lineup-order">${b.order}</div>
+       <div class="lineup-pos">${b.pos||"—"}</div>
+       <div class="lineup-name">${b.name}</div>
+     </div>`
+  ).join("");
+  return `<div>
+    <div class="text-xs text-slate-500 font-medium mb-1">${label}打線</div>
+    ${rows}
+  </div>`;
+}
+
 /* ── Pitcher trend chip ──────────────────────── */
 function trendChip(t){
   if(t==null) return "";
@@ -462,6 +499,8 @@ function renderCard(p){
   }
   const homeWpctHtml = wpctChip(p.home_wpct, "主場");
   const awayWpctHtml = wpctChip(p.away_road_wpct, "客場");
+  const homeL10Html  = l10Chip(p.home_l10_wpct, "主");
+  const awayL10Html  = l10Chip(p.away_l10_wpct, "客");
 
   const awayRS = p.away_rs!=null
     ?`<span class="text-emerald-400">RS ${p.away_rs.toFixed(1)}</span>`
@@ -555,12 +594,24 @@ function renderCard(p){
           ${trendChip(p.home_trend)}
         </div>
         <div class="grid grid-cols-2 gap-1 text-xs text-slate-500 mt-1">
-          <div>得分支援: ${awayRS} ${awayWpctHtml}</div>
-          <div>得分支援: ${homeRS} ${homeWpctHtml}</div>
+          <div>得分支援: ${awayRS} ${awayWpctHtml} ${awayL10Html}</div>
+          <div>得分支援: ${homeRS} ${homeWpctHtml} ${homeL10Html}</div>
         </div>
         ${travelHtml ? `<div class="mt-1.5 flex flex-wrap gap-1">${travelHtml}</div>` : ""}
       </div>
-      <div class="mt-3 bg-slate-800/40 rounded-lg px-3 py-2">${scoreHtml}</div>
+
+      <!-- 打線 -->
+      <div class="mt-3">
+        <div class="bg-slate-800/40 rounded-lg px-3 py-2">
+          <div class="text-xs text-slate-500 font-medium mb-2">⚾ 打線順序</div>
+          <div class="grid grid-cols-2 gap-x-4">
+            ${lineupCol(p.away_lineup, p.away_cn+" ")}
+            ${lineupCol(p.home_lineup, p.home_cn+" ")}
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-2 bg-slate-800/40 rounded-lg px-3 py-2">${scoreHtml}</div>
       <div class="mt-2 bg-slate-800/40 rounded-lg px-3 py-2 space-y-1">
         ${probBar(p.dv_p,p.model_p,p.bp)}
       </div>
