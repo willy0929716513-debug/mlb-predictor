@@ -532,7 +532,10 @@ def _fetch_recent_era(pitcher_id, last_n=3, expected_key=None, expected_full=Non
     # ── FIP（防守獨立投球指標）──────────────────────────────
     # FIP = (13×HR + 3×(BB+HBP) - 2×K) / IP + FIP_CONST
     # 消除守備/BABIP運氣，更能預測未來表現
-    fip_raw = (13*total_hr + 3*(total_bb+total_hbp) - 2*total_k) / total_ip + FIP_CONST
+    # K9上限13.5：防止小樣本超高三振率(如K9=15.6)造成FIP極端低估
+    K9_MAX_FIP = 13.5
+    total_k_adj = min(total_k, total_ip / 9 * K9_MAX_FIP)
+    fip_raw = (13*total_hr + 3*(total_bb+total_hbp) - 2*total_k_adj) / total_ip + FIP_CONST
     fip_ret = round(max(0.50, min(fip_raw, 10.0)), 2)
 
     # ── K/9（每9局三振數）────────────────────────────────────
@@ -2102,7 +2105,7 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
     dyn_std = STD + max(0, (10-games)/10) * 0.15
     model_win_p = win_prob_from_margin(margin, dyn_std)
     # ★ 勝率上限 90%：現實中單場勝率不會超過此值
-    model_win_p = max(0.18, min(0.82, model_win_p))  # 主客場勝率均限制18%~82%（雙向對稱）
+    model_win_p = max(0.22, min(0.76, model_win_p))  # 主客場勝率均限制22%~76%（雙向對稱，防止小樣本過度自信）
 
     pure_total     = h_exp     + a_exp
     pure_total_tot = h_exp_tot + a_exp_tot  # 大小分投注用（降低RS影響）
