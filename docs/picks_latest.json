@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-14 20:24 (台灣時間)",
+  "generated_at": "2026-05-14 20:33 (台灣時間)",
   "date": "2026-05-14",
   "stats": {
     "settled": 90,
@@ -42,10 +42,10 @@
       "bp": 1.6,
       "con_p": 1.573,
       "dv_p": 0.6122,
-      "edge": 14.4,
+      "edge": 14.5,
       "conf": 71.2,
-      "stake": 10.7,
-      "model_p": 75.6,
+      "stake": 10.9,
+      "model_p": 75.8,
       "away_sp": "Landen Roupp",
       "home_sp": "Emmet Sheehan",
       "away_era": 3.37,
@@ -74,7 +74,7 @@
       "ump_adj": null,
       "away_trend": 3.58,
       "home_trend": 2.2,
-      "line_clv": 0.77,
+      "line_clv": 0.0,
       "game_date": "2026-05-15",
       "game_time": "10:11",
       "sp_src": "probable",
@@ -88,8 +88,8 @@
       "away_tz_cross": null,
       "home_wpct": null,
       "away_road_wpct": null,
-      "home_l10_wpct": null,
-      "away_l10_wpct": null,
+      "home_l10_wpct": 0.5,
+      "away_l10_wpct": 0.5,
       "home_lineup": [],
       "away_lineup": []
     }
