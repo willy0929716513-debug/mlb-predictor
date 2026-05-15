@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-05-15 22:46 (台灣時間)",
-  "date": "2026-05-15",
+  "generated_at": "2026-05-16 07:07 (台灣時間)",
+  "date": "2026-05-16",
   "stats": {
     "settled": 91,
     "wins": 61,
@@ -32,20 +32,20 @@
   "picks": [
     {
       "tier": "⭐ 穩定",
-      "btype": "獨贏",
+      "btype": "讓分",
       "away": "red sox",
       "home": "braves",
       "away_cn": "紅襪",
       "home_cn": "勇士",
-      "bet_label": "勇士 獨贏",
-      "bk": "LowVig.ag",
-      "bp": 1.69,
-      "con_p": 1.658,
-      "dv_p": 0.5808,
-      "edge": 17.9,
-      "conf": 78.7,
-      "stake": 18.2,
-      "model_p": 76.0,
+      "bet_label": "勇士 讓分(-1.5)",
+      "bk": "FanDuel",
+      "bp": 2.62,
+      "con_p": 2.56,
+      "dv_p": 0.3733,
+      "edge": 29.7,
+      "conf": 65.5,
+      "stake": 12.7,
+      "model_p": 65.7,
       "away_sp": "Connelly Early",
       "home_sp": "Spencer Strider",
       "away_era": 4.59,
@@ -65,7 +65,7 @@
       "away_rpg": 3.99,
       "home_rpg": 5.17,
       "pred_away": 2.5,
-      "pred_home": 5.1,
+      "pred_home": 5.2,
       "model_total": null,
       "market_total": null,
       "park_factor": null,
@@ -74,8 +74,8 @@
       "ump_adj": null,
       "away_trend": 0.97,
       "home_trend": null,
-      "line_clv": 0.0,
-      "game_date": "2026-05-16",
+      "line_clv": null,
+      "game_date": "2026-05-17",
       "game_time": "07:16",
       "sp_src": "probable",
       "home_hand": "R",
@@ -90,7 +90,53 @@
       "away_road_wpct": null,
       "home_l10_wpct": 0.6,
       "away_l10_wpct": null,
-      "home_lineup": [],
+      "home_lineup": [
+        {
+          "order": 1,
+          "name": "Mauricio Dubón",
+          "pos": "LF"
+        },
+        {
+          "order": 2,
+          "name": "Drake Baldwin",
+          "pos": "DH"
+        },
+        {
+          "order": 3,
+          "name": "Ozzie Albies",
+          "pos": "2B"
+        },
+        {
+          "order": 4,
+          "name": "Matt Olson",
+          "pos": "1B"
+        },
+        {
+          "order": 5,
+          "name": "Austin Riley",
+          "pos": "3B"
+        },
+        {
+          "order": 6,
+          "name": "Michael Harris II",
+          "pos": "CF"
+        },
+        {
+          "order": 7,
+          "name": "Ha-Seong Kim",
+          "pos": "SS"
+        },
+        {
+          "order": 8,
+          "name": "Sandy León",
+          "pos": "C"
+        },
+        {
+          "order": 9,
+          "name": "José Azócar",
+          "pos": "RF"
+        }
+      ],
       "away_lineup": []
     }
   ],
