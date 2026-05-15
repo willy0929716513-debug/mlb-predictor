@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-16 07:07 (台灣時間)",
+  "generated_at": "2026-05-16 07:19 (台灣時間)",
   "date": "2026-05-16",
   "stats": {
     "settled": 91,
@@ -42,10 +42,10 @@
       "bp": 2.62,
       "con_p": 2.56,
       "dv_p": 0.3733,
-      "edge": 29.7,
+      "edge": 29.5,
       "conf": 65.5,
-      "stake": 12.7,
-      "model_p": 65.7,
+      "stake": 12.6,
+      "model_p": 65.4,
       "away_sp": "Connelly Early",
       "home_sp": "Spencer Strider",
       "away_era": 4.59,
@@ -74,7 +74,7 @@
       "ump_adj": null,
       "away_trend": 0.97,
       "home_trend": null,
-      "line_clv": null,
+      "line_clv": 0.0,
       "game_date": "2026-05-17",
       "game_time": "07:16",
       "sp_src": "probable",
@@ -141,6 +141,19 @@
     }
   ],
   "recent_history": [
+    {
+      "date": "2026-05-17",
+      "home": "braves",
+      "away": "red sox",
+      "home_cn": "勇士",
+      "away_cn": "紅襪",
+      "bet_type": "讓分",
+      "label": "-1.5",
+      "price": 2.62,
+      "stake": 12.7,
+      "edge": 29.7,
+      "result": null
+    },
     {
       "date": "2026-05-15",
       "home": "dodgers",
@@ -256,19 +269,6 @@
       "price": 1.68,
       "stake": 10.2,
       "edge": 12.4,
-      "result": "W"
-    },
-    {
-      "date": "2026-05-07",
-      "home": "phillies",
-      "away": "athletics",
-      "home_cn": "費城人",
-      "away_cn": "運動家",
-      "bet_type": "獨贏",
-      "label": "",
-      "price": 1.6,
-      "stake": 31.8,
-      "edge": 14.4,
       "result": "W"
     }
   ],
