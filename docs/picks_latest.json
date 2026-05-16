@@ -584,50 +584,98 @@
   ],
   "live_games": [
     {
-      "home_cn": "國民",
-      "away_cn": "金鶯",
-      "inning": 8,
-      "top_inning": true,
-      "home_runs": 11,
-      "away_runs": 3,
-      "projected_total": 18.0,
-      "market_total": 10.0,
-      "bet": null,
-      "reason": null
-    },
-    {
-      "home_cn": "海盜",
-      "away_cn": "費城人",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 0,
-      "away_runs": 6,
-      "projected_total": 6.8,
-      "market_total": 7.0,
-      "bet": null,
-      "reason": null
-    },
-    {
       "home_cn": "光芒",
       "away_cn": "馬林魚",
-      "inning": 9,
+      "inning": 10,
       "top_inning": false,
-      "home_runs": 1,
-      "away_runs": 2,
-      "projected_total": 3.2,
+      "home_runs": 5,
+      "away_runs": 10,
+      "projected_total": 15.0,
       "market_total": 7.5,
-      "bet": "大小分 UNDER",
-      "reason": "第9局 2:1 → 預計終局3.2分 < 盤口7.5"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "守護者",
       "away_cn": "紅人",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
+      "home_runs": 2,
+      "away_runs": 1,
+      "projected_total": 9.0,
+      "market_total": 8.5,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "太空人",
+      "away_cn": "遊騎兵",
+      "inning": 1,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 0.0,
+      "projected_total": 8.5,
       "market_total": 8.5,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "白襪",
+      "away_cn": "小熊",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 8.5,
+      "market_total": 8.5,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "雙城",
+      "away_cn": "釀酒人",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 8.5,
+      "market_total": 8.5,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "水手",
+      "away_cn": "教士",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 7.5,
+      "market_total": 7.5,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "勇士",
+      "away_cn": "紅襪",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 7.5,
+      "market_total": 7.5,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "大都會",
+      "away_cn": "洋基",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 8.0,
+      "market_total": 8.0,
       "bet": null,
       "reason": null
     }
@@ -693,5 +741,6 @@
       "home_win_prob": 0.22,
       "market_total": 11.0
     }
-  }
+  },
+  "live_updated_at": "2026-05-17 07:11 (台灣時間)"
 }
