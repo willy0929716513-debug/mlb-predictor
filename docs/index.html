@@ -245,32 +245,69 @@ function renderLiveSection(liveGames) {
     const projDiff = g.projected_total - g.market_total;
     const projCol  = Math.abs(projDiff) < 1 ? "text-slate-400"
                    : projDiff < 0 ? "text-sky-400" : "text-orange-400";
-    const betHtml  = g.bet
-      ? `<div class="mt-2 rounded-lg bg-emerald-900/40 border border-emerald-700/40 px-3 py-1.5">
-           <span class="text-xs font-bold text-emerald-400">📡 ${g.bet}</span>
-           <span class="text-xs text-slate-400 ml-2">${g.reason||""}</span>
+    const projArrow = projDiff >= 1 ? "↑" : projDiff <= -1 ? "↓" : "≈";
+
+    const betHtml = g.bet
+      ? `<div class="mt-3 rounded-lg bg-emerald-900/50 border border-emerald-600/40 px-4 py-3">
+           <div class="flex items-start gap-2">
+             <span class="text-emerald-400 mt-0.5">📡</span>
+             <div>
+               <div class="text-sm font-bold text-emerald-300">${g.bet}</div>
+               <div class="text-xs text-slate-400 mt-1 leading-relaxed">${g.reason||""}</div>
+             </div>
+           </div>
          </div>`
-      : `<div class="mt-2 text-xs text-slate-600">無推薦（持續觀察）</div>`;
+      : `<div class="mt-3 rounded bg-slate-800/40 px-3 py-2 text-center">
+           <span class="text-xs text-slate-600">持續觀察中，暫無推薦</span>
+         </div>`;
+
     return `
-    <div class="card rounded-xl p-3 mb-3 border border-slate-700/50">
-      <div class="flex items-center justify-between">
-        <span class="text-sm font-bold text-white">${g.away_cn} @ ${g.home_cn}</span>
-        <span class="text-xs bg-red-600 text-white px-2 py-0.5 rounded-full font-bold animate-pulse">
-          ${half(g)}${g.inning}局 進行中
+    <div class="card rounded-xl p-4 mb-3 border border-slate-700/40">
+      <!-- 頂行：狀態 + 局數 -->
+      <div class="flex items-center justify-between mb-3">
+        <span class="flex items-center gap-1.5 text-xs font-bold text-red-400 tracking-wide">
+          <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse inline-block"></span>
+          LIVE
+        </span>
+        <span class="text-xs bg-slate-700/60 text-slate-300 px-2.5 py-0.5 rounded-full font-bold">
+          ${half(g)} ${g.inning} 局
         </span>
       </div>
-      <div class="mt-1.5 flex items-center gap-3">
-        <span class="text-2xl font-bold text-white">${g.away_runs} : ${g.home_runs}</span>
-        <span class="text-xs text-slate-500">盤口 ${g.market_total}</span>
-        <span class="text-xs ${projCol}">預計終局 ${g.projected_total}</span>
+
+      <!-- 計分板：客隊 比分 主隊 -->
+      <div class="flex items-center justify-between px-2 py-1">
+        <div class="text-center w-28">
+          <div class="text-[0.65rem] text-slate-500 mb-1 uppercase tracking-widest">客隊</div>
+          <div class="text-sm font-bold text-white leading-tight">${g.away_cn}</div>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="text-3xl font-black text-white tabular-nums">${g.away_runs}</span>
+          <span class="text-slate-600 text-lg font-light">:</span>
+          <span class="text-3xl font-black text-white tabular-nums">${g.home_runs}</span>
+        </div>
+        <div class="text-center w-28">
+          <div class="text-[0.65rem] text-slate-500 mb-1 uppercase tracking-widest">主隊</div>
+          <div class="text-sm font-bold text-white leading-tight">${g.home_cn}</div>
+        </div>
       </div>
+
+      <!-- 大小分資訊 -->
+      <div class="flex items-center justify-center gap-4 mt-3 pt-2.5 border-t border-slate-700/40 text-xs">
+        <span class="text-slate-500">盤口 <span class="text-slate-200 font-bold">${g.market_total}</span></span>
+        <span class="text-slate-700">│</span>
+        <span class="text-slate-500">預計終局
+          <span class="${projCol} font-bold">${g.projected_total} ${projArrow}</span>
+        </span>
+      </div>
+
+      <!-- 推薦 -->
       ${betHtml}
     </div>`;
   }).join("");
 
   el.innerHTML = `
     <div class="mb-4">
-      <div class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">
+      <div class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">
         ⚾ 場中分析 — 資料來自上次執行 Bot
       </div>
       ${cards}
