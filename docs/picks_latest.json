@@ -289,7 +289,20 @@
       "result": "W"
     }
   ],
-  "live_games": [],
+  "live_games": [
+    {
+      "home_cn": "老虎",
+      "away_cn": "藍鳥",
+      "inning": 3,
+      "top_inning": false,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 0.0,
+      "market_total": 8.5,
+      "bet": null,
+      "reason": null
+    }
+  ],
   "game_preds": {
     "tigers|blue jays": {
       "home_win_prob": 0.6372,
@@ -351,5 +364,6 @@
       "home_win_prob": 0.6058,
       "market_total": 9.5
     }
-  }
+  },
+  "live_updated_at": "2026-05-17 01:54 (台灣時間)"
 }
