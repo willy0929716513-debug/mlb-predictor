@@ -1616,14 +1616,21 @@ def generate_live_picks(live_games):
         innings_left = max(0.0, 9.0 - innings_done)
 
         pred         = _ALL_GAME_PREDS.get((home, away), {})
+        has_pred     = bool(pred)
         market_total = pred.get("market_total") or 8.5
         p_home       = pred.get("home_win_prob", 0.5)
+        log.info("Live %s@%s: %s%d局 %d:%d diff=%+d proj=? mt=%.1f p_home=%.2f pred=%s",
+                 away, home, "▲" if top_inning else "▼", inning,
+                 away_r, home_r, diff, market_total, p_home,
+                 "有賽前預測" if has_pred else "無賽前預測(p_home預設0.5)")
 
         if innings_done > 0.5:
             run_rate = current_total / innings_done
         else:
             run_rate = market_total / 9.0
         projected = round(current_total + run_rate * innings_left, 1)
+        log.info("  → 預計終局%.1f分 (門檻 UNDER<%.1f / OVER>%.1f)",
+                 projected, market_total - 1.0, market_total + 1.0)
 
         bet = None
         reason = None
@@ -2708,9 +2715,8 @@ def run():
         except Exception:
             game_date_str = today_str; game_time_str = commence[:16]; game_dt = None
 
-        # 跳過已開賽的比賽（保留10分鐘緩衝，以防時鐘誤差）
-        if game_dt and game_dt < now_tw - datetime.timedelta(minutes=10):
-            continue
+        # 已開賽的比賽仍繼續解析並建立預測（供場中分析使用），但不生成賽前注單
+        game_started = bool(game_dt and game_dt < now_tw - datetime.timedelta(minutes=10))
 
         home = norm_team(game.get("home_team",""))
         away = norm_team(game.get("away_team",""))
@@ -2831,6 +2837,9 @@ def run():
             "market_total":  market_total,
             "pure_total_tot": pred.get("pure_total_tot"),
         }
+        # 已開賽：只需預測供場中分析使用，不進入注單評估
+        if game_started:
+            continue
         margin  = pred["margin"]
         dyn_std = pred["dyn_std"]
         h_model   = pred["home_win_prob"]; a_model = pred["away_win_prob"]
