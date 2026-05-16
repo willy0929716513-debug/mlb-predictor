@@ -385,12 +385,36 @@
     {
       "home_cn": "老虎",
       "away_cn": "藍鳥",
-      "inning": 4,
+      "inning": 8,
+      "top_inning": true,
+      "home_runs": 1,
+      "away_runs": 1,
+      "projected_total": 2.6,
+      "market_total": 5.0,
+      "bet": "大小分 UNDER",
+      "reason": "第8局 1:1 → 預計終局2.6分 < 盤口5.0"
+    },
+    {
+      "home_cn": "紅雀",
+      "away_cn": "皇家",
+      "inning": 1,
       "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 0.0,
-      "market_total": 5.0,
+      "projected_total": 9.0,
+      "market_total": 9.0,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "落磯",
+      "away_cn": "響尾蛇",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 11.5,
+      "market_total": 11.5,
       "bet": null,
       "reason": null
     }
@@ -456,5 +480,6 @@
       "home_win_prob": 0.6053,
       "market_total": 9.5
     }
-  }
+  },
+  "live_updated_at": "2026-05-17 03:03 (台灣時間)"
 }
