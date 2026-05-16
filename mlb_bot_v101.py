@@ -1628,19 +1628,22 @@ def generate_live_picks(live_games):
         bet = None
         reason = None
 
-        if inning >= 6 and projected < market_total - 1.5:
+        # UNDER: 第6局起，預計終局比盤口少1分以上
+        if inning >= 6 and projected < market_total - 1.0:
             bet    = "大小分 UNDER"
             reason = "第%d局 %d:%d → 預計終局%.1f分 < 盤口%.1f" % (inning, away_r, home_r, projected, market_total)
-        elif inning <= 4 and projected > market_total + 1.5:
+        # OVER: 第5局前，預計終局比盤口多1分以上
+        elif inning <= 5 and projected > market_total + 1.0:
             bet    = "大小分 OVER"
             reason = "第%d局 %d:%d → 預計終局%.1f分 > 盤口%.1f" % (inning, away_r, home_r, projected, market_total)
-        elif 4 <= inning <= 7:
-            if diff == -1 and p_home >= 0.55:
+        # RL: 第4-8局，賽前強隊落後1-2分時買讓分+1.5
+        elif 4 <= inning <= 8:
+            if -2 <= diff <= -1 and p_home >= 0.54:
                 bet    = "主隊讓分(+1.5)"
-                reason = "主隊落後1分 第%d局，賽前主隊勝率%d%%" % (inning, round(p_home*100))
-            elif diff == 1 and p_home <= 0.45:
+                reason = "主隊落後%d分 第%d局，賽前主隊勝率%d%%" % (abs(diff), inning, round(p_home*100))
+            elif 1 <= diff <= 2 and p_home <= 0.46:
                 bet    = "客隊讓分(+1.5)"
-                reason = "客隊落後1分 第%d局，賽前客隊勝率%d%%" % (inning, round((1-p_home)*100))
+                reason = "客隊落後%d分 第%d局，賽前客隊勝率%d%%" % (diff, inning, round((1-p_home)*100))
 
         result.append({
             "home_cn":        lg["home_cn"],
@@ -2600,7 +2603,7 @@ def run():
     now_tw    = datetime.datetime.utcnow() + datetime.timedelta(hours=8)
     today_str = now_tw.strftime("%Y-%m-%d")
     log.info("TW time: %s", now_tw.strftime("%Y-%m-%d %H:%M"))
-    official = (now_tw.hour >= 23 or now_tw.hour < 9)  # 台灣時間 23:00–09:00
+    official = True  # 所有時段都正式記錄（去重由 already_in_hist 保護）
 
     if not ODDS_API_KEY: log.error("ODDS_API_KEY not set"); return
 
@@ -3424,7 +3427,7 @@ def run():
     lines=[
         "⚾ **MLB V2 分析報告**",
         "🕐 %s | %s %s %s %s %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str,ump_str,wx_str,lr_str,trav_str),
-        "📌 正式記錄 (23–09前)" if official else "🔧 測試模式 (不寫gist)",
+        "📌 正式記錄",
         "📊 歷史: %d勝/%d場 (%.1f%%)%s"%(wins,total_settled,wr,
             "  [%s]"%_type_stats_str if _type_stats_str else ""),
         "",
