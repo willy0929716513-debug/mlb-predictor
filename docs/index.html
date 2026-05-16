@@ -189,6 +189,7 @@
 
   <!-- ── Live game section (hidden until 場中 tab active) ── -->
   <div id="live-section" style="display:none"></div>
+  <div id="live-auto-label" class="text-center text-xs text-slate-700 mt-2 pb-1" style="display:none"></div>
 
   <!-- ── Pick cards ────────────────────────────── -->
   <div id="picks-container">
@@ -240,6 +241,7 @@ function renderLiveSection(liveGames) {
     return;
   }
 
+  const liveTs = liveGames._updated_at || "";   // 由外層 render 時注入
   const half = g => g.top_inning ? "▲" : "▼";
   const cards = liveGames.map(g => {
     const projDiff = g.projected_total - g.market_total;
@@ -307,8 +309,9 @@ function renderLiveSection(liveGames) {
 
   el.innerHTML = `
     <div class="mb-4">
-      <div class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">
-        ⚾ 場中分析 — 資料來自上次執行 Bot
+      <div class="flex items-center justify-between mb-3">
+        <div class="text-xs font-bold text-slate-500 uppercase tracking-widest">⚾ 場中分析</div>
+        <div class="text-xs text-slate-600" id="live-ts-label"></div>
       </div>
       ${cards}
     </div>`;
@@ -680,13 +683,16 @@ function setFilter(type, btn){
     t.classList.toggle("tab-active", t===btn);
     t.classList.toggle("tab-inactive", t!==btn);
   });
-  const liveEl   = document.getElementById("live-section");
-  const picksEl  = document.getElementById("picks-container");
+  const liveEl  = document.getElementById("live-section");
+  const lblEl   = document.getElementById("live-auto-label");
+  const picksEl = document.getElementById("picks-container");
   if (type === "場中") {
     liveEl.style.display  = "block";
+    lblEl.style.display   = "block";
     picksEl.style.display = "none";
   } else {
     liveEl.style.display  = "none";
+    lblEl.style.display   = "none";
     picksEl.style.display = "";
     renderPicks();
   }
@@ -902,6 +908,8 @@ async function loadData(){
     updateCounts();
     renderPicks();
     renderLiveSection(data.live_games);
+    const tsEl = document.getElementById("live-ts-label");
+    if (tsEl) tsEl.textContent = "更新 " + (data.live_updated_at || data.generated_at || "");
     if(historyOpen) renderHistory();
   } catch(e){
     container.innerHTML=`<div class="card rounded-xl p-8 text-center text-rose-400">載入失敗：${e.message}</div>`;
@@ -910,7 +918,37 @@ async function loadData(){
 
 function manualRefresh(){ loadData(); }
 
+/* ── 場中自動輕量刷新（只更新 live_games，不重繪整頁）────── */
+const LIVE_REFRESH_SEC = 3 * 60;   // 3 分鐘
+let _nextRefresh = Date.now() + LIVE_REFRESH_SEC * 1000;
+
+async function refreshLiveOnly(){
+  try {
+    const res  = await fetch(JSON_URL + "?t=" + Date.now());
+    if (!res.ok) return;
+    const data = await res.json();
+    renderLiveSection(data.live_games);
+    const tsEl = document.getElementById("live-ts-label");
+    if (tsEl) tsEl.textContent = "更新 " + (data.live_updated_at || data.generated_at || "");
+  } catch(e){ /* 靜默失敗 */ }
+  _nextRefresh = Date.now() + LIVE_REFRESH_SEC * 1000;
+}
+
+// 每 3 分鐘拉一次 JSON（只重繪場中區塊）
+setInterval(refreshLiveOnly, LIVE_REFRESH_SEC * 1000);
+
+// 每秒更新倒數標籤
+setInterval(()=>{
+  const el = document.getElementById("live-auto-label");
+  if (!el || el.style.display === "none") return;
+  const secs = Math.max(0, Math.round((_nextRefresh - Date.now()) / 1000));
+  const m = Math.floor(secs / 60);
+  const s = String(secs % 60).padStart(2, "0");
+  el.textContent = `↻ ${m}:${s} 後自動更新`;
+}, 1000);
+
 loadData();
+_nextRefresh = Date.now() + LIVE_REFRESH_SEC * 1000;
 if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
 </script>
 </body>
