@@ -3379,12 +3379,22 @@ def run():
                               "Kelly: $%.1f [🔒限額]"%p["stake"], p["msg"], count=1)
 
     # ★ 歷史紀錄只寫入最終顯示的注單（過濾後），避免被拒之注單汙染勝率統計
-    # 23:00 TW後，比賽的TW日期已是明天（game_date="次日"），但ET日期仍是今天
-    # → 允許今明兩天TW日期的比賽都寫入，用 game_date 作去重key（防跨午夜重複）
+    # 篩選條件：比賽的美東時間(ET)日期 = 今天的ET日期
+    # 原因：TW早上08-09點跑時，odds API同時回傳今天ET（進行中）
+    # 和明天ET（盤口尚未穩定，不應記錄）兩批比賽。
+    # TW = ET + 12小時，所以比賽ET日期 = game_dt(TW) - 12小時
     if official:
-        tomorrow_str = (now_tw + datetime.timedelta(days=1)).strftime("%Y-%m-%d")
+        _et_now      = datetime.datetime.utcnow() - datetime.timedelta(hours=4)
+        _et_today    = _et_now.strftime("%Y-%m-%d")
         for p in picks:
-            if p["game_date"] not in (today_str, tomorrow_str): continue
+            game_dt_tw = p.get("game_dt")
+            if game_dt_tw:
+                _et_game_date = (game_dt_tw - datetime.timedelta(hours=12)).strftime("%Y-%m-%d")
+            else:
+                _et_game_date = _et_today   # 解析失敗時視為今天ET
+            if _et_game_date != _et_today:
+                log.info("Skip Gist (ET明天比賽): %s@%s ET日期=%s", p["away"], p["home"], _et_game_date)
+                continue   # 明天ET的比賽等開賽當天再記錄
             record_date = p["game_date"]   # 用TW比賽日期存儲（settle有fallback到前一天）
             rk = (p["home"], p["away"], record_date)
             already_in_hist  = any((r.get("home"),r.get("away"),r.get("date"))==rk for r in hist)
