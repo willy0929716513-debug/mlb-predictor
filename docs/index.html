@@ -241,6 +241,7 @@ function renderLiveSection(liveGames) {
     return;
   }
 
+  const liveTs = liveGames._updated_at || "";   // 由外層 render 時注入
   const half = g => g.top_inning ? "▲" : "▼";
   const cards = liveGames.map(g => {
     const projDiff = g.projected_total - g.market_total;
@@ -308,8 +309,9 @@ function renderLiveSection(liveGames) {
 
   el.innerHTML = `
     <div class="mb-4">
-      <div class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">
-        ⚾ 場中分析 — 資料來自上次執行 Bot
+      <div class="flex items-center justify-between mb-3">
+        <div class="text-xs font-bold text-slate-500 uppercase tracking-widest">⚾ 場中分析</div>
+        <div class="text-xs text-slate-600" id="live-ts-label"></div>
       </div>
       ${cards}
     </div>`;
@@ -906,6 +908,8 @@ async function loadData(){
     updateCounts();
     renderPicks();
     renderLiveSection(data.live_games);
+    const tsEl = document.getElementById("live-ts-label");
+    if (tsEl) tsEl.textContent = "更新 " + (data.live_updated_at || data.generated_at || "");
     if(historyOpen) renderHistory();
   } catch(e){
     container.innerHTML=`<div class="card rounded-xl p-8 text-center text-rose-400">載入失敗：${e.message}</div>`;
@@ -924,6 +928,8 @@ async function refreshLiveOnly(){
     if (!res.ok) return;
     const data = await res.json();
     renderLiveSection(data.live_games);
+    const tsEl = document.getElementById("live-ts-label");
+    if (tsEl) tsEl.textContent = "更新 " + (data.live_updated_at || data.generated_at || "");
   } catch(e){ /* 靜默失敗 */ }
   _nextRefresh = Date.now() + LIVE_REFRESH_SEC * 1000;
 }

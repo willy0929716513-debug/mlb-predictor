@@ -2571,11 +2571,19 @@ def write_pages_json(picks, hist, now_tw, live_games=None):
             "settled":   total_settled, "wins": wins,
             "win_rate":  round(wr,1),
             "total_in":  round(total_in,1), "total_pnl": round(total_pnl,1), "roi": roi,
-            "by_type":   by_type,      # ★ 分類型勝率（ML/RL/TOT）
+            "by_type":   by_type,
         },
         "picks": records,
         "recent_history": recent_history,
         "live_games":   live_games or [],
+        # 供 live_update.py 使用（輕量場中更新不重跑 Odds API）
+        "game_preds": {
+            "%s|%s" % (h, a): {
+                "home_win_prob": round(v.get("home_win_prob", 0.5), 4),
+                "market_total":  v.get("market_total", 8.5),
+            }
+            for (h, a), v in _ALL_GAME_PREDS.items()
+        },
     }
     os.makedirs("docs", exist_ok=True)
     with open("docs/picks_latest.json", "w", encoding="utf-8") as f:
