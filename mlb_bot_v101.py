@@ -2603,7 +2603,7 @@ def run():
     now_tw    = datetime.datetime.utcnow() + datetime.timedelta(hours=8)
     today_str = now_tw.strftime("%Y-%m-%d")
     log.info("TW time: %s", now_tw.strftime("%Y-%m-%d %H:%M"))
-    official = (now_tw.hour >= 23 or now_tw.hour < 9)  # 台灣時間 23:00–09:00
+    official = True  # 所有時段都正式記錄（去重由 already_in_hist 保護）
 
     if not ODDS_API_KEY: log.error("ODDS_API_KEY not set"); return
 
@@ -3427,7 +3427,7 @@ def run():
     lines=[
         "⚾ **MLB V2 分析報告**",
         "🕐 %s | %s %s %s %s %s %s %s %s"%(now_str,espn_str,il_str,sp_str,era_str,ump_str,wx_str,lr_str,trav_str),
-        "📌 正式記錄 (23–09前)" if official else "🔧 測試模式 (不寫gist)",
+        "📌 正式記錄",
         "📊 歷史: %d勝/%d場 (%.1f%%)%s"%(wins,total_settled,wr,
             "  [%s]"%_type_stats_str if _type_stats_str else ""),
         "",
