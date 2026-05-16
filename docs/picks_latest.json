@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-16 13:51 (台灣時間)",
+  "generated_at": "2026-05-16 15:13 (台灣時間)",
   "date": "2026-05-16",
   "stats": {
     "settled": 91,
@@ -40,11 +40,11 @@
       "bet_label": "太空人 讓分(+1.5)",
       "bk": "FanDuel",
       "bp": 1.75,
-      "con_p": 1.71,
-      "dv_p": 0.5611,
+      "con_p": 1.711,
+      "dv_p": 0.5606,
       "edge": 16.7,
       "conf": 76.9,
-      "stake": 11.2,
+      "stake": 11.1,
       "model_p": 72.0,
       "away_sp": "Jacob deGrom",
       "home_sp": "Kai-Wei Teng",
@@ -103,12 +103,12 @@
       "bet_label": "光芒 獨贏",
       "bk": "FanDuel",
       "bp": 1.74,
-      "con_p": 1.716,
-      "dv_p": 0.5619,
-      "edge": 13.0,
+      "con_p": 1.714,
+      "dv_p": 0.5624,
+      "edge": 14.0,
       "conf": 82.0,
-      "stake": 12.1,
-      "model_p": 69.2,
+      "stake": 13.3,
+      "model_p": 70.2,
       "away_sp": "Sandy Alcantara",
       "home_sp": "Nick Martinez",
       "away_era": 3.92,
@@ -137,7 +137,7 @@
       "ump_adj": null,
       "away_trend": 4.31,
       "home_trend": 0.42,
-      "line_clv": 0.97,
+      "line_clv": 0.0,
       "game_date": "2026-05-17",
       "game_time": "04:11",
       "sp_src": "probable",
@@ -166,12 +166,12 @@
       "bet_label": "勇士 獨贏",
       "bk": "BetOnline.ag",
       "bp": 1.74,
-      "con_p": 1.709,
-      "dv_p": 0.5637,
-      "edge": 11.7,
+      "con_p": 1.71,
+      "dv_p": 0.5634,
+      "edge": 12.4,
       "conf": 83.3,
-      "stake": 11.1,
-      "model_p": 68.0,
+      "stake": 11.9,
+      "model_p": 68.7,
       "away_sp": "Payton Tolle",
       "home_sp": "Bryce Elder",
       "away_era": 2.78,
@@ -227,13 +227,13 @@
       "away_cn": "小熊",
       "home_cn": "白襪",
       "bet_label": "白襪 讓分(+1.5)",
-      "bk": "DraftKings",
+      "bk": "LowVig.ag",
       "bp": 1.57,
-      "con_p": 1.559,
-      "dv_p": 0.6169,
-      "edge": 10.8,
+      "con_p": 1.562,
+      "dv_p": 0.6151,
+      "edge": 11.0,
       "conf": 74.4,
-      "stake": 5.8,
+      "stake": 5.6,
       "model_p": 72.0,
       "away_sp": "Jameson Taillon",
       "home_sp": "Davis Martin",
@@ -418,11 +418,11 @@
   "live_games": [],
   "game_preds": {
     "tigers|blue jays": {
-      "home_win_prob": 0.6403,
+      "home_win_prob": 0.6452,
       "market_total": 8.5
     },
     "cardinals|royals": {
-      "home_win_prob": 0.6487,
+      "home_win_prob": 0.6544,
       "market_total": 9.0
     },
     "rockies|diamondbacks": {
@@ -430,15 +430,15 @@
       "market_total": 11.5
     },
     "nationals|orioles": {
-      "home_win_prob": 0.4903,
+      "home_win_prob": 0.48,
       "market_total": 10.0
     },
     "pirates|phillies": {
-      "home_win_prob": 0.3532,
+      "home_win_prob": 0.3528,
       "market_total": 8.0
     },
     "rays|marlins": {
-      "home_win_prob": 0.692,
+      "home_win_prob": 0.7021,
       "market_total": 7.5
     },
     "guardians|reds": {
@@ -446,35 +446,35 @@
       "market_total": 8.5
     },
     "white sox|cubs": {
-      "home_win_prob": 0.6183,
+      "home_win_prob": 0.6196,
       "market_total": 8.5
     },
     "astros|rangers": {
-      "home_win_prob": 0.5868,
+      "home_win_prob": 0.5949,
       "market_total": 7.5
     },
     "twins|brewers": {
-      "home_win_prob": 0.3741,
+      "home_win_prob": 0.3714,
       "market_total": 8.5
     },
     "braves|red sox": {
-      "home_win_prob": 0.6804,
+      "home_win_prob": 0.6872,
       "market_total": 8.0
     },
     "mets|yankees": {
-      "home_win_prob": 0.5852,
+      "home_win_prob": 0.5916,
       "market_total": 8.5
     },
     "mariners|padres": {
-      "home_win_prob": 0.5357,
+      "home_win_prob": 0.5406,
       "market_total": 7.0
     },
     "angels|dodgers": {
-      "home_win_prob": 0.3696,
+      "home_win_prob": 0.3619,
       "market_total": 8.5
     },
     "athletics|giants": {
-      "home_win_prob": 0.6026,
+      "home_win_prob": 0.6121,
       "market_total": 9.5
     }
   }
