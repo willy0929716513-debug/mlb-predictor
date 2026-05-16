@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-16 10:19 (台灣時間)",
+  "generated_at": "2026-05-16 12:23 (台灣時間)",
   "date": "2026-05-16",
   "stats": {
     "settled": 91,
@@ -40,9 +40,9 @@
       "bet_label": "太空人 讓分(+1.5)",
       "bk": "FanDuel",
       "bp": 1.75,
-      "con_p": 1.709,
-      "dv_p": 0.5609,
-      "edge": 16.7,
+      "con_p": 1.704,
+      "dv_p": 0.5626,
+      "edge": 16.5,
       "conf": 76.9,
       "stake": 11.2,
       "model_p": 72.0,
@@ -62,8 +62,8 @@
       "home_rest": null,
       "away_rs": 3.0,
       "home_rs": null,
-      "away_rpg": 4.03,
-      "home_rpg": 4.63,
+      "away_rpg": 3.97,
+      "home_rpg": 4.59,
       "pred_away": 3.7,
       "pred_home": 4.2,
       "model_total": null,
@@ -88,7 +88,7 @@
       "away_tz_cross": null,
       "home_wpct": null,
       "away_road_wpct": null,
-      "home_l10_wpct": 0.3,
+      "home_l10_wpct": 0.4,
       "away_l10_wpct": 0.5,
       "home_lineup": [],
       "away_lineup": []
@@ -103,12 +103,12 @@
       "bet_label": "光芒 獨贏",
       "bk": "FanDuel",
       "bp": 1.77,
-      "con_p": 1.744,
-      "dv_p": 0.552,
-      "edge": 14.2,
+      "con_p": 1.721,
+      "dv_p": 0.5595,
+      "edge": 13.8,
       "conf": 82.0,
-      "stake": 13.1,
-      "model_p": 69.4,
+      "stake": 14.3,
+      "model_p": 69.7,
       "away_sp": "Sandy Alcantara",
       "home_sp": "Nick Martinez",
       "away_era": 3.92,
@@ -166,12 +166,12 @@
       "bet_label": "勇士 獨贏",
       "bk": "FanDuel",
       "bp": 1.72,
-      "con_p": 1.699,
-      "dv_p": 0.5672,
-      "edge": 11.1,
-      "conf": 75.0,
-      "stake": 8.9,
-      "model_p": 67.8,
+      "con_p": 1.696,
+      "dv_p": 0.5681,
+      "edge": 11.6,
+      "conf": 83.3,
+      "stake": 10.7,
+      "model_p": 68.4,
       "away_sp": "Payton Tolle",
       "home_sp": "Bryce Elder",
       "away_era": 2.78,
@@ -190,12 +190,12 @@
       "home_rs": 4.0,
       "away_rpg": 3.97,
       "home_rpg": 5.13,
-      "pred_away": 2.6,
+      "pred_away": 2.7,
       "pred_home": 3.8,
       "model_total": null,
       "market_total": null,
       "park_factor": null,
-      "weather_factor": null,
+      "weather_factor": 1.022,
       "ump_name": null,
       "ump_adj": null,
       "away_trend": -2.78,
@@ -227,13 +227,13 @@
       "away_cn": "小熊",
       "home_cn": "白襪",
       "bet_label": "白襪 讓分(+1.5)",
-      "bk": "LowVig.ag",
+      "bk": "Bovada",
       "bp": 1.57,
-      "con_p": 1.562,
-      "dv_p": 0.6145,
-      "edge": 11.1,
+      "con_p": 1.556,
+      "dv_p": 0.6173,
+      "edge": 10.8,
       "conf": 74.4,
-      "stake": 5.6,
+      "stake": 5.8,
       "model_p": 72.0,
       "away_sp": "Jameson Taillon",
       "home_sp": "Davis Martin",
@@ -251,14 +251,14 @@
       "home_rest": null,
       "away_rs": 2.67,
       "home_rs": 4.33,
-      "away_rpg": 4.84,
-      "home_rpg": 4.32,
-      "pred_away": 3.5,
-      "pred_home": 4.2,
+      "away_rpg": 4.91,
+      "home_rpg": 4.33,
+      "pred_away": 3.6,
+      "pred_home": 4.3,
       "model_total": null,
       "market_total": null,
       "park_factor": null,
-      "weather_factor": null,
+      "weather_factor": 1.022,
       "ump_name": null,
       "ump_adj": null,
       "away_trend": -1.38,
@@ -415,79 +415,67 @@
       "result": "W"
     }
   ],
-  "live_games": [
-    {
-      "home_cn": "白襪",
-      "away_cn": "小熊",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 5,
-      "away_runs": 10,
-      "projected_total": 15.9,
-      "market_total": 8.5,
-      "bet": null,
-      "reason": null
+  "live_games": [],
+  "game_preds": {
+    "angels|dodgers": {
+      "home_win_prob": 0.357,
+      "market_total": 8.5
     },
-    {
-      "home_cn": "紅雀",
-      "away_cn": "皇家",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 3,
-      "away_runs": 3,
-      "projected_total": 6.4,
-      "market_total": 8.5,
-      "bet": "大小分 UNDER",
-      "reason": "第9局 3:3 → 預計終局6.4分 < 盤口8.5"
+    "tigers|blue jays": {
+      "home_win_prob": 0.6383,
+      "market_total": 8.5
     },
-    {
-      "home_cn": "落磯",
-      "away_cn": "響尾蛇",
-      "inning": 8,
-      "top_inning": true,
-      "home_runs": 1,
-      "away_runs": 9,
-      "projected_total": 12.9,
-      "market_total": 8.5,
-      "bet": null,
-      "reason": null
+    "cardinals|royals": {
+      "home_win_prob": 0.6509,
+      "market_total": 9.0
     },
-    {
-      "home_cn": "天使",
-      "away_cn": "道奇",
-      "inning": 4,
-      "top_inning": false,
-      "home_runs": 0,
-      "away_runs": 4,
-      "projected_total": 10.3,
-      "market_total": 8.5,
-      "bet": "大小分 OVER",
-      "reason": "第4局 4:0 → 預計終局10.3分 > 盤口8.5"
+    "rockies|diamondbacks": {
+      "home_win_prob": 0.22,
+      "market_total": 11.5
     },
-    {
-      "home_cn": "水手",
-      "away_cn": "教士",
-      "inning": 5,
-      "top_inning": true,
-      "home_runs": 0,
-      "away_runs": 1,
-      "projected_total": 2.2,
-      "market_total": 8.5,
-      "bet": null,
-      "reason": null
+    "nationals|orioles": {
+      "home_win_prob": 0.4886,
+      "market_total": 10.0
     },
-    {
-      "home_cn": "運動家",
-      "away_cn": "巨人",
-      "inning": 5,
-      "top_inning": true,
-      "home_runs": 1,
-      "away_runs": 2,
-      "projected_total": 6.8,
-      "market_total": 8.5,
-      "bet": null,
-      "reason": null
+    "pirates|phillies": {
+      "home_win_prob": 0.3547,
+      "market_total": 8.0
+    },
+    "rays|marlins": {
+      "home_win_prob": 0.697,
+      "market_total": 7.5
+    },
+    "guardians|reds": {
+      "home_win_prob": 0.6088,
+      "market_total": 8.5
+    },
+    "white sox|cubs": {
+      "home_win_prob": 0.6197,
+      "market_total": 8.5
+    },
+    "astros|rangers": {
+      "home_win_prob": 0.5886,
+      "market_total": 7.5
+    },
+    "twins|brewers": {
+      "home_win_prob": 0.3693,
+      "market_total": 8.5
+    },
+    "braves|red sox": {
+      "home_win_prob": 0.6841,
+      "market_total": 8.0
+    },
+    "mets|yankees": {
+      "home_win_prob": 0.5776,
+      "market_total": 8.5
+    },
+    "mariners|padres": {
+      "home_win_prob": 0.5384,
+      "market_total": 7.0
+    },
+    "athletics|giants": {
+      "home_win_prob": 0.6083,
+      "market_total": 9.5
     }
-  ],
-  "live_updated_at": "2026-05-16 10:48 (台灣時間)"
+  }
 }
