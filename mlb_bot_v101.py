@@ -3581,7 +3581,12 @@ def run():
         "• RL多層保護 · UNDER(TBD/牛棚/低IP/WHIP/K9) · OVER/UNDER相關折 · 低迷縮注 · BM品質過濾",
     ]
 
-    _live       = fetch_live_scores(today_str)
+    # MLB schedule API 使用美東時間日期（ET = UTC-4）
+    # TW 比 ET 快 12 小時，TW 凌晨 00:00-11:59 對應前一天 ET 日期
+    _et_now      = datetime.datetime.utcnow() - datetime.timedelta(hours=4)
+    _et_date_str = _et_now.strftime("%Y-%m-%d")
+    log.info("Fetching live games for ET date: %s", _et_date_str)
+    _live       = fetch_live_scores(_et_date_str)
     _live_picks = generate_live_picks(_live)
     if _live_picks:
         _bets = [lp for lp in _live_picks if lp.get("bet")]
