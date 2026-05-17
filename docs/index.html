@@ -924,14 +924,23 @@ async function loadData(){
 function manualRefresh(){ loadData(); }
 
 /* ── 場中自動輕量刷新 ──────────────────────────────────────
-   有場中比賽才倒數並自動刷新，沒有比賽時隱藏倒數、停止刷新。
-   以 live_updated_ts（Server Unix 時間戳）+ 5分30秒 計算下次抓取時刻。 */
+   每 5 分鐘 poll 一次（不管有沒有場中比賽），確保比賽開始後立即抓到。
+   以 live_updated_ts + 5m30s 計算下次時刻；無 ts 時退回整 5 分鐘時鐘。
+   倒數顯示只在有場中比賽時才顯示。                                    */
 
-let _nextRefreshMs  = 0;
-let _hasLiveGames   = false;
+let _nextRefreshMs = 0;
+let _hasLiveGames  = false;
 
 function setNextRefreshFromTs(ts){
-  if (ts && _hasLiveGames) _nextRefreshMs = ts * 1000 + 5 * 60 * 1000 + 30 * 1000;
+  const STALE_MS = 15 * 60 * 1000; // 超過 15 分鐘視為過期，不信任
+  if (ts && (Date.now() - ts * 1000) < STALE_MS) {
+    _nextRefreshMs = ts * 1000 + 5 * 60 * 1000 + 30 * 1000;
+  } else if (_nextRefreshMs === 0 || Date.now() > _nextRefreshMs) {
+    // 退回：同步到下一個整 5 分鐘時鐘點 + 30 秒緩衝
+    const now = new Date();
+    const secsToTick = 5 * 60 - ((now.getMinutes() % 5) * 60 + now.getSeconds());
+    _nextRefreshMs = Date.now() + secsToTick * 1000 + 30 * 1000;
+  }
 }
 
 async function refreshLiveOnly(){
@@ -948,25 +957,24 @@ async function refreshLiveOnly(){
 }
 
 setInterval(async ()=>{
-  if (!_hasLiveGames) {
-    const cd = document.getElementById("refresh-countdown");
-    if (cd) cd.textContent = "";
-    const lb = document.getElementById("live-auto-label");
-    if (lb) lb.textContent = "";
-    return;
-  }
+  // 永遠檢查是否到時，不因無場中比賽而跳過 — 才能在比賽開始時即時抓到
   if (_nextRefreshMs > 0 && Date.now() >= _nextRefreshMs) {
     _nextRefreshMs = Date.now() + 5 * 60 * 1000; // 暫置避免重複觸發
     await refreshLiveOnly();
   }
-  const secs = _nextRefreshMs > 0 ? Math.max(0, Math.round((_nextRefreshMs - Date.now()) / 1000)) : 0;
-  const m = Math.floor(secs / 60);
-  const s = String(secs % 60).padStart(2, "0");
-  const txt = secs > 0 ? `${m}:${s}` : "--:--";
-  const cd = document.getElementById("refresh-countdown");
-  if (cd) cd.textContent = txt;
-  const lb = document.getElementById("live-auto-label");
-  if (lb && lb.style.display !== "none") lb.textContent = secs > 0 ? `↻ ${txt} 後自動更新` : "↻ 即將更新...";
+  // 倒數顯示：只在有場中比賽時才顯示
+  const secs = (_hasLiveGames && _nextRefreshMs > 0)
+    ? Math.max(0, Math.round((_nextRefreshMs - Date.now()) / 1000))
+    : 0;
+  const m   = Math.floor(secs / 60);
+  const s   = String(secs % 60).padStart(2, "0");
+  const cd  = document.getElementById("refresh-countdown");
+  if (cd) cd.textContent = (_hasLiveGames && secs > 0) ? `${m}:${s}` : "";
+  const lb  = document.getElementById("live-auto-label");
+  if (lb && lb.style.display !== "none")
+    lb.textContent = _hasLiveGames
+      ? (secs > 0 ? `↻ ${m}:${s} 後自動更新` : "↻ 即將更新...")
+      : "";
 }, 1000);
 
 loadData();
