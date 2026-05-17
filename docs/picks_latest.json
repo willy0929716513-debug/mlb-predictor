@@ -231,23 +231,11 @@
       "home_cn": "白襪",
       "away_cn": "小熊",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 7,
       "away_runs": 7,
-      "projected_total": 15.8,
+      "projected_total": 14.8,
       "market_total": 9.0,
-      "bet": null,
-      "reason": null
-    },
-    {
-      "home_cn": "雙城",
-      "away_cn": "釀酒人",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 5,
-      "away_runs": 4,
-      "projected_total": 10.1,
-      "market_total": 8.0,
       "bet": null,
       "reason": null
     },
@@ -281,14 +269,14 @@
       "inning": 4,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 2,
-      "projected_total": 6.0,
+      "away_runs": 4,
+      "projected_total": 12.0,
       "market_total": 9.5,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第4局 4:0 → 預計終局12.0分 > 盤口9.5"
     }
   ],
-  "live_updated_ts": 1779051957,
+  "live_updated_ts": 1779052258,
   "game_preds": {
     "rays|marlins": {
       "home_win_prob": 0.6688,
@@ -351,5 +339,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-05-18 05:05 (台灣時間)"
+  "live_updated_at": "2026-05-18 05:10 (台灣時間)"
 }
