@@ -245,14 +245,14 @@
       "inning": 1,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 7.5,
+      "away_runs": 1,
+      "projected_total": 8.5,
       "market_total": 7.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1779060394,
+  "live_updated_ts": 1779060669,
   "game_preds": {
     "rays|marlins": {
       "home_win_prob": 0.6688,
@@ -315,5 +315,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-05-18 07:26 (台灣時間)"
+  "live_updated_at": "2026-05-18 07:31 (台灣時間)"
 }
