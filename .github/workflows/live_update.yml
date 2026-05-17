@@ -3,9 +3,9 @@ name: MLB Live Update
 on:
   workflow_dispatch:
   schedule:
-    # 每 20 分鐘，只在比賽時段執行（UTC 17-23 = ET 下午場；UTC 0-3 = ET 晚間場）
-    - cron: '0,20,40 17-23 * * *'
-    - cron: '0,20,40 0-3 * * *'
+    # 每 5 分鐘，只在比賽時段執行（UTC 17-23 = ET 下午場；UTC 0-3 = ET 晚間場）
+    - cron: '*/5 17-23 * * *'
+    - cron: '*/5 0-3 * * *'
 
 permissions:
   contents: write

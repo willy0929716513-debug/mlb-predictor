@@ -125,11 +125,14 @@
       <h1 class="text-xl font-bold text-white">⚾ MLB V2 每日推薦</h1>
       <p id="gen-time" class="text-xs text-slate-500 mt-0.5"></p>
     </div>
-    <button onclick="manualRefresh()"
-            class="w-9 h-9 flex items-center justify-center bg-slate-800 hover:bg-slate-700
-                   border border-slate-600 rounded-full text-slate-300 text-base transition-colors">
-      <span id="refresh-icon">↻</span>
-    </button>
+    <div class="flex items-center gap-2">
+      <span id="refresh-countdown" class="text-xs text-slate-600 tabular-nums"></span>
+      <button onclick="manualRefresh()"
+              class="w-9 h-9 flex items-center justify-center bg-slate-800 hover:bg-slate-700
+                     border border-slate-600 rounded-full text-slate-300 text-base transition-colors">
+        <span id="refresh-icon">↻</span>
+      </button>
+    </div>
   </div>
 
   <!-- ── Action bar ────────────────────────────── -->
@@ -919,7 +922,7 @@ async function loadData(){
 function manualRefresh(){ loadData(); }
 
 /* ── 場中自動輕量刷新（只更新 live_games，不重繪整頁）────── */
-const LIVE_REFRESH_SEC = 3 * 60;   // 3 分鐘
+const LIVE_REFRESH_SEC = 5 * 60;   // 5 分鐘
 let _nextRefresh = Date.now() + LIVE_REFRESH_SEC * 1000;
 
 async function refreshLiveOnly(){
@@ -939,12 +942,14 @@ setInterval(refreshLiveOnly, LIVE_REFRESH_SEC * 1000);
 
 // 每秒更新倒數標籤
 setInterval(()=>{
-  const el = document.getElementById("live-auto-label");
-  if (!el || el.style.display === "none") return;
   const secs = Math.max(0, Math.round((_nextRefresh - Date.now()) / 1000));
   const m = Math.floor(secs / 60);
   const s = String(secs % 60).padStart(2, "0");
-  el.textContent = `↻ ${m}:${s} 後自動更新`;
+  const txt = `${m}:${s}`;
+  const cd = document.getElementById("refresh-countdown");
+  if (cd) cd.textContent = txt;
+  const lb = document.getElementById("live-auto-label");
+  if (lb && lb.style.display !== "none") lb.textContent = `↻ ${txt} 後自動更新`;
 }, 1000);
 
 loadData();
