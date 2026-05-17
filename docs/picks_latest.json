@@ -231,7 +231,7 @@
       "home_cn": "大都會",
       "away_cn": "洋基",
       "inning": 10,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 6,
       "away_runs": 6,
       "projected_total": 12.0,
@@ -244,9 +244,9 @@
       "away_cn": "小熊",
       "inning": 8,
       "top_inning": false,
-      "home_runs": 4,
+      "home_runs": 7,
       "away_runs": 4,
-      "projected_total": 9.6,
+      "projected_total": 13.2,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -256,33 +256,33 @@
       "away_cn": "釀酒人",
       "inning": 8,
       "top_inning": false,
-      "home_runs": 4,
+      "home_runs": 5,
       "away_runs": 3,
-      "projected_total": 8.4,
+      "projected_total": 9.6,
       "market_total": 8.0,
       "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後1分 第8局，賽前客隊勝率56%"
+      "reason": "客隊落後2分 第8局，賽前客隊勝率56%"
     },
     {
       "home_cn": "紅雀",
       "away_cn": "皇家",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 2.2,
+      "projected_total": 2.1,
       "market_total": 9.0,
       "bet": "大小分 UNDER",
-      "reason": "第9局 2:0 → 預計終局2.2分 < 盤口9.0"
+      "reason": "第9局 2:0 → 預計終局2.1分 < 盤口9.0"
     },
     {
       "home_cn": "運動家",
       "away_cn": "巨人",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 4.5,
+      "projected_total": 3.6,
       "market_total": 9.5,
       "bet": null,
       "reason": null
@@ -290,17 +290,17 @@
     {
       "home_cn": "天使",
       "away_cn": "道奇",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 12.0,
+      "projected_total": 9.0,
       "market_total": 9.5,
-      "bet": "大小分 OVER",
-      "reason": "第2局 2:0 → 預計終局12.0分 > 盤口9.5"
+      "bet": null,
+      "reason": null
     }
   ],
-  "live_updated_ts": 1779050752,
+  "live_updated_ts": 1779051053,
   "game_preds": {
     "rays|marlins": {
       "home_win_prob": 0.6688,
@@ -363,5 +363,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-05-18 04:45 (台灣時間)"
+  "live_updated_at": "2026-05-18 04:50 (台灣時間)"
 }
