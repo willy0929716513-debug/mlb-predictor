@@ -919,7 +919,7 @@ async function loadData(){
 function manualRefresh(){ loadData(); }
 
 /* ── 場中自動輕量刷新（只更新 live_games，不重繪整頁）────── */
-const LIVE_REFRESH_SEC = 3 * 60;   // 3 分鐘
+const LIVE_REFRESH_SEC = 5 * 60;   // 5 分鐘
 let _nextRefresh = Date.now() + LIVE_REFRESH_SEC * 1000;
 
 async function refreshLiveOnly(){
