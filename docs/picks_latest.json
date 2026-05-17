@@ -252,7 +252,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779058887,
+  "live_updated_ts": 1779059188,
   "game_preds": {
     "rays|marlins": {
       "home_win_prob": 0.6688,
@@ -315,5 +315,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-05-18 07:01 (台灣時間)"
+  "live_updated_at": "2026-05-18 07:06 (台灣時間)"
 }
