@@ -921,9 +921,15 @@ async function loadData(){
 
 function manualRefresh(){ loadData(); }
 
-/* ── 場中自動輕量刷新（只更新 live_games，不重繪整頁）────── */
-const LIVE_REFRESH_SEC = 5 * 60;   // 5 分鐘
-let _nextRefresh = Date.now() + LIVE_REFRESH_SEC * 1000;
+/* ── 場中自動輕量刷新 ────────────────────────────────────────
+   用 localStorage 儲存上次刷新的真實時間戳，
+   這樣分頁被切走再回來，倒數是從真實經過時間算，不會重置。  */
+const LIVE_REFRESH_SEC = 5 * 60;
+const LS_KEY = "mlb_live_last_refresh";
+
+function _getLastRefresh(){ return parseInt(localStorage.getItem(LS_KEY)||"0",10); }
+function _setLastRefresh(){ localStorage.setItem(LS_KEY, String(Date.now())); }
+function _nextRefreshAt(){ return _getLastRefresh() + LIVE_REFRESH_SEC * 1000; }
 
 async function refreshLiveOnly(){
   try {
@@ -934,15 +940,13 @@ async function refreshLiveOnly(){
     const tsEl = document.getElementById("live-ts-label");
     if (tsEl) tsEl.textContent = "更新 " + (data.live_updated_at || data.generated_at || "");
   } catch(e){ /* 靜默失敗 */ }
-  _nextRefresh = Date.now() + LIVE_REFRESH_SEC * 1000;
+  _setLastRefresh();
 }
 
-// 每 3 分鐘拉一次 JSON（只重繪場中區塊）
-setInterval(refreshLiveOnly, LIVE_REFRESH_SEC * 1000);
-
-// 每秒更新倒數標籤
-setInterval(()=>{
-  const secs = Math.max(0, Math.round((_nextRefresh - Date.now()) / 1000));
+// 每秒檢查：時間到就刷新，並更新倒數顯示
+setInterval(async ()=>{
+  if (Date.now() >= _nextRefreshAt()) await refreshLiveOnly();
+  const secs = Math.max(0, Math.round((_nextRefreshAt() - Date.now()) / 1000));
   const m = Math.floor(secs / 60);
   const s = String(secs % 60).padStart(2, "0");
   const txt = `${m}:${s}`;
@@ -951,6 +955,14 @@ setInterval(()=>{
   const lb = document.getElementById("live-auto-label");
   if (lb && lb.style.display !== "none") lb.textContent = `↻ ${txt} 後自動更新`;
 }, 1000);
+
+// 分頁切回來時，如果已超時就立即刷新
+document.addEventListener("visibilitychange", ()=>{
+  if (!document.hidden && Date.now() >= _nextRefreshAt()) refreshLiveOnly();
+});
+
+// 初始化：第一次開啟時若沒有紀錄就寫入現在
+if (!localStorage.getItem(LS_KEY)) _setLastRefresh();
 
 loadData();
 _nextRefresh = Date.now() + LIVE_REFRESH_SEC * 1000;
