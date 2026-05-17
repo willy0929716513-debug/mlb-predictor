@@ -922,10 +922,15 @@ async function loadData(){
 function manualRefresh(){ loadData(); }
 
 /* ── 場中自動輕量刷新 ──────────────────────────────────────
-   Server 端（GitHub Actions）每 5 分鐘更新 picks_latest.json。
-   網頁端每 5 分鐘重新讀取，每次開網頁從 5:00 重新倒數。     */
-const LIVE_REFRESH_SEC = 5 * 60;
-let _secsLeft = LIVE_REFRESH_SEC;
+   Server cron 每個整 5 分鐘更新（:00/:05/:10...）。
+   網頁從系統時鐘算出距下一個 5 分鐘整點還剩幾秒，
+   開網頁就自動同步，不需要 localStorage。
+   整點過後等 30 秒讓 server 跑完再抓新資料。            */
+
+function secsUntilNextTick(){
+  const now = new Date();
+  return 5 * 60 - ((now.getMinutes() % 5) * 60 + now.getSeconds());
+}
 
 async function refreshLiveOnly(){
   try {
@@ -936,15 +941,14 @@ async function refreshLiveOnly(){
     const tsEl = document.getElementById("live-ts-label");
     if (tsEl) tsEl.textContent = "更新 " + (data.live_updated_at || data.generated_at || "");
   } catch(e){ /* 靜默失敗 */ }
-  _secsLeft = LIVE_REFRESH_SEC;
 }
 
-// 每秒倒數，歸零時刷新
 setInterval(async ()=>{
-  _secsLeft = Math.max(0, _secsLeft - 1);
-  if (_secsLeft === 0) await refreshLiveOnly();
-  const m = Math.floor(_secsLeft / 60);
-  const s = String(_secsLeft % 60).padStart(2, "0");
+  const secs = secsUntilNextTick();
+  // 整點剛過（secs 重置到 300）→ 等 30 秒讓 server 跑完再抓
+  if (secs === 300) setTimeout(refreshLiveOnly, 30000);
+  const m = Math.floor(secs / 60);
+  const s = String(secs % 60).padStart(2, "0");
   const txt = `${m}:${s}`;
   const cd = document.getElementById("refresh-countdown");
   if (cd) cd.textContent = txt;
