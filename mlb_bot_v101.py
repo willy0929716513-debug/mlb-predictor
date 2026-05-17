@@ -11,9 +11,9 @@ WEATHER_API_KEY = os.getenv("WEATHER_API_KEY", "")  # OpenWeatherMap（選用）
 GIST_DESC = "mlb_bot_history"
 
 # ── 模型參數 ──────────────────────────────────
-EDGE_MIN       = 0.06
-EDGE_MIN_RL    = 0.08   # 讓分 edge×conf 門檻（改為與ML同邏輯，用信心乘積過濾）
-EDGE_MIN_TOT   = 0.07   # 大小分（totals）edge 門檻（↓0.09→0.07）
+EDGE_MIN       = 0.08   # ↑0.06→0.08，每注最低 $50，門檻更嚴才合理
+EDGE_MIN_RL    = 0.10   # ↑0.08→0.10
+EDGE_MIN_TOT   = 0.09   # ↑0.07→0.09
 EDGE_MIN_ML_FAV= 0.14   # ML低賠（賠率<1.65）額外edge門檻：損益平衡高，需更大優勢
 MIN_MODEL_P_ML  = 0.63  # ML 模型勝率門檻（↓0.65→0.63，P=1.87損益平衡53%，63%仍有buffer）
 MIN_MODEL_P_RL  = 0.65  # RL 門檻（↓0.67→0.65，與ML更一致）
@@ -34,9 +34,9 @@ MIN_P          = 1.35
 MAX_P          = 2.80  # 上限放寬（↑2.50→2.80），讓高賠RL好注進來
 BANK           = 1000.0
 KELLY          = 0.12
-KELLY_MAX      = 100.0  # 每注上限 $100
-KELLY_FLOOR    = 0.0    # 下限移除（讓Kelly自然輸出，不強制最低注額）
-KELLY_MIN      = 5.0    # 最低有效注額（低於此值直接排除，不值得下注）
+KELLY_MAX      = 150.0  # 每注上限 $150（本金 $1000 的 15%）
+KELLY_FLOOR    = 50.0   # 最低注額 $50（本金 $1000 的 5%）
+KELLY_MIN      = 50.0   # 低於此值直接排除，不值得下注
 MAX_PICKS      = 5      # CLV 排序後只取前 N 名，讓推薦穩定
 MAX_RL_PICKS   = 2      # 每日RL推薦上限（防止同日過度集中）
 RL_BET_CONF_MIN= 0.68  # RL 最低信心門檻（↓0.70→0.68，RL ROI+71%，小幅鬆動增加穩定性）
@@ -3084,8 +3084,8 @@ def run():
                 # ML低賠（損益平衡高）：Kelly縮水20%
                 stake = round(max(0.0, stake * ML_FAV_KELLY), 1)
             if stake <= 0: continue   # Kelly建議不下（負期望值），排除
-            stake = round(min(KELLY_MAX, stake), 1)
-            if stake < KELLY_MIN: continue  # 注額過小（<$5），不值得下注
+            stake = round(min(KELLY_MAX, max(KELLY_FLOOR, stake)), 1)
+            if stake < KELLY_MIN: continue  # 注額低於最低門檻，排除
             score = raw_edge * bet_conf
             # ④ 菁英對決中RL降分，讓TOT注單更容易獲選（偏好UNDER而非RL）
             if btype == BET_RL and _h_era_v < ELITE_ERA_DUAL and _a_era_v < ELITE_ERA_DUAL:
