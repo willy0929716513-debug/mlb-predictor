@@ -2619,7 +2619,11 @@ def run():
     now_tw    = datetime.datetime.utcnow() + datetime.timedelta(hours=8)
     today_str = now_tw.strftime("%Y-%m-%d")
     log.info("TW time: %s", now_tw.strftime("%Y-%m-%d %H:%M"))
-    official = True  # 所有時段都正式記錄（去重由 already_in_hist 保護）
+    # 官方記錄時段：TW 21:00–隔日11:59（含排程的 23/01/03/06/09/11 時跑法）
+    # TW 12:00–20:59 不記錄，避免白天隨手跑汙染 Gist
+    tw_hour  = now_tw.hour
+    official = (tw_hour >= 21 or tw_hour < 12)
+    log.info("official=%s (TW %02d:xx)", official, tw_hour)
 
     if not ODDS_API_KEY: log.error("ODDS_API_KEY not set"); return
 
