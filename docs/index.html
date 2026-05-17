@@ -913,6 +913,7 @@ async function loadData(){
     renderLiveSection(data.live_games);
     const tsEl = document.getElementById("live-ts-label");
     if (tsEl) tsEl.textContent = "更新 " + (data.live_updated_at || data.generated_at || "");
+    setNextRefreshFromTs(data.live_updated_ts);
     if(historyOpen) renderHistory();
   } catch(e){
     container.innerHTML=`<div class="card rounded-xl p-8 text-center text-rose-400">載入失敗：${e.message}</div>`;
@@ -922,14 +923,13 @@ async function loadData(){
 function manualRefresh(){ loadData(); }
 
 /* ── 場中自動輕量刷新 ──────────────────────────────────────
-   Server cron 每個整 5 分鐘更新（:00/:05/:10...）。
-   網頁從系統時鐘算出距下一個 5 分鐘整點還剩幾秒，
-   開網頁就自動同步，不需要 localStorage。
-   整點過後等 30 秒讓 server 跑完再抓新資料。            */
+   以 live_updated_ts（Server Unix 時間戳）+ 5分30秒 計算下次抓取時刻，
+   開網頁時立即同步 Server 剩餘倒數，無需 localStorage。              */
 
-function secsUntilNextTick(){
-  const now = new Date();
-  return 5 * 60 - ((now.getMinutes() % 5) * 60 + now.getSeconds());
+let _nextRefreshMs = 0;
+
+function setNextRefreshFromTs(ts){
+  if (ts) _nextRefreshMs = ts * 1000 + 5 * 60 * 1000 + 30 * 1000;
 }
 
 async function refreshLiveOnly(){
@@ -940,24 +940,26 @@ async function refreshLiveOnly(){
     renderLiveSection(data.live_games);
     const tsEl = document.getElementById("live-ts-label");
     if (tsEl) tsEl.textContent = "更新 " + (data.live_updated_at || data.generated_at || "");
+    setNextRefreshFromTs(data.live_updated_ts);
   } catch(e){ /* 靜默失敗 */ }
 }
 
 setInterval(async ()=>{
-  const secs = secsUntilNextTick();
-  // 整點剛過（secs 重置到 300）→ 等 30 秒讓 server 跑完再抓
-  if (secs === 300) setTimeout(refreshLiveOnly, 30000);
+  if (_nextRefreshMs > 0 && Date.now() >= _nextRefreshMs) {
+    _nextRefreshMs = Date.now() + 5 * 60 * 1000; // 暫置避免重複觸發
+    await refreshLiveOnly();
+  }
+  const secs = _nextRefreshMs > 0 ? Math.max(0, Math.round((_nextRefreshMs - Date.now()) / 1000)) : 0;
   const m = Math.floor(secs / 60);
   const s = String(secs % 60).padStart(2, "0");
-  const txt = `${m}:${s}`;
+  const txt = secs > 0 ? `${m}:${s}` : "--:--";
   const cd = document.getElementById("refresh-countdown");
   if (cd) cd.textContent = txt;
   const lb = document.getElementById("live-auto-label");
-  if (lb && lb.style.display !== "none") lb.textContent = `↻ ${txt} 後自動更新`;
+  if (lb && lb.style.display !== "none") lb.textContent = secs > 0 ? `↻ ${txt} 後自動更新` : "↻ 即將更新...";
 }, 1000);
 
 loadData();
-_nextRefresh = Date.now() + LIVE_REFRESH_SEC * 1000;
 if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
 </script>
 </body>

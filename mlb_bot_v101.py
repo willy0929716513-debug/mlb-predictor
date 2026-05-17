@@ -2575,7 +2575,8 @@ def write_pages_json(picks, hist, now_tw, live_games=None):
         },
         "picks": records,
         "recent_history": recent_history,
-        "live_games":   live_games or [],
+        "live_games":      live_games or [],
+        "live_updated_ts": int(time.time()),
         # 供 live_update.py 使用（輕量場中更新不重跑 Odds API）
         "game_preds": {
             "%s|%s" % (h, a): {

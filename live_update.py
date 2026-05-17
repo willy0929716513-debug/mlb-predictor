@@ -7,6 +7,7 @@ import datetime
 import json
 import logging
 import os
+import time
 
 import requests
 
@@ -190,8 +191,9 @@ def main():
     live_picks  = generate_live_picks(live_games, game_preds)
 
     now_tw = datetime.datetime.utcnow() + datetime.timedelta(hours=8)
-    data["live_games"]      = live_picks
-    data["live_updated_at"] = now_tw.strftime("%Y-%m-%d %H:%M") + " (台灣時間)"
+    data["live_games"]       = live_picks
+    data["live_updated_at"]  = now_tw.strftime("%Y-%m-%d %H:%M") + " (台灣時間)"
+    data["live_updated_ts"]  = int(time.time())
 
     with open(JSON_PATH, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
