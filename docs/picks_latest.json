@@ -230,11 +230,11 @@
     {
       "home_cn": "國民",
       "away_cn": "金鶯",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 6,
-      "projected_total": 12.5,
+      "projected_total": 11.6,
       "market_total": 10.0,
       "bet": null,
       "reason": null
@@ -242,11 +242,11 @@
     {
       "home_cn": "海盜",
       "away_cn": "費城人",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 6,
-      "projected_total": 7.2,
+      "projected_total": 6.8,
       "market_total": 7.0,
       "bet": null,
       "reason": null
@@ -254,11 +254,11 @@
     {
       "home_cn": "勇士",
       "away_cn": "紅襪",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 7,
       "away_runs": 0,
-      "projected_total": 11.5,
+      "projected_total": 10.5,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -268,9 +268,9 @@
       "away_cn": "紅人",
       "inning": 8,
       "top_inning": false,
-      "home_runs": 8,
+      "home_runs": 10,
       "away_runs": 2,
-      "projected_total": 12.0,
+      "projected_total": 14.4,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -291,10 +291,10 @@
       "home_cn": "大都會",
       "away_cn": "洋基",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 6,
-      "projected_total": 13.5,
+      "projected_total": 12.5,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -305,8 +305,8 @@
       "inning": 7,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 6,
-      "projected_total": 9.0,
+      "away_runs": 7,
+      "projected_total": 10.5,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -314,14 +314,14 @@
     {
       "home_cn": "白襪",
       "away_cn": "小熊",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 4,
       "away_runs": 4,
-      "projected_total": 16.0,
+      "projected_total": 14.4,
       "market_total": 9.0,
-      "bet": "大小分 OVER",
-      "reason": "第5局 4:4 → 預計終局16.0分 > 盤口9.0"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "雙城",
@@ -372,7 +372,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779047738,
+  "live_updated_ts": 1779048040,
   "game_preds": {
     "rays|marlins": {
       "home_win_prob": 0.6688,
@@ -435,5 +435,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-05-18 03:55 (台灣時間)"
+  "live_updated_at": "2026-05-18 04:00 (台灣時間)"
 }
