@@ -230,17 +230,29 @@
     {
       "home_cn": "落磯",
       "away_cn": "響尾蛇",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 8,
-      "projected_total": 16.4,
+      "projected_total": 15.0,
       "market_total": 10.5,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "水手",
+      "away_cn": "教士",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 7.5,
+      "market_total": 7.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1779058585,
+  "live_updated_ts": 1779058887,
   "game_preds": {
     "rays|marlins": {
       "home_win_prob": 0.6688,
@@ -303,5 +315,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-05-18 06:56 (台灣時間)"
+  "live_updated_at": "2026-05-18 07:01 (台灣時間)"
 }
