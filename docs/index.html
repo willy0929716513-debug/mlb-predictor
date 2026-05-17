@@ -910,6 +910,7 @@ async function loadData(){
     recentHistory = data.recent_history||[];
     updateCounts();
     renderPicks();
+    _hasLiveGames = (data.live_games || []).length > 0;
     renderLiveSection(data.live_games);
     const tsEl = document.getElementById("live-ts-label");
     if (tsEl) tsEl.textContent = "更新 " + (data.live_updated_at || data.generated_at || "");
@@ -923,13 +924,14 @@ async function loadData(){
 function manualRefresh(){ loadData(); }
 
 /* ── 場中自動輕量刷新 ──────────────────────────────────────
-   以 live_updated_ts（Server Unix 時間戳）+ 5分30秒 計算下次抓取時刻，
-   開網頁時立即同步 Server 剩餘倒數，無需 localStorage。              */
+   有場中比賽才倒數並自動刷新，沒有比賽時隱藏倒數、停止刷新。
+   以 live_updated_ts（Server Unix 時間戳）+ 5分30秒 計算下次抓取時刻。 */
 
-let _nextRefreshMs = 0;
+let _nextRefreshMs  = 0;
+let _hasLiveGames   = false;
 
 function setNextRefreshFromTs(ts){
-  if (ts) _nextRefreshMs = ts * 1000 + 5 * 60 * 1000 + 30 * 1000;
+  if (ts && _hasLiveGames) _nextRefreshMs = ts * 1000 + 5 * 60 * 1000 + 30 * 1000;
 }
 
 async function refreshLiveOnly(){
@@ -937,6 +939,7 @@ async function refreshLiveOnly(){
     const res  = await fetch(JSON_URL + "?t=" + Date.now());
     if (!res.ok) return;
     const data = await res.json();
+    _hasLiveGames = (data.live_games || []).length > 0;
     renderLiveSection(data.live_games);
     const tsEl = document.getElementById("live-ts-label");
     if (tsEl) tsEl.textContent = "更新 " + (data.live_updated_at || data.generated_at || "");
@@ -945,6 +948,13 @@ async function refreshLiveOnly(){
 }
 
 setInterval(async ()=>{
+  if (!_hasLiveGames) {
+    const cd = document.getElementById("refresh-countdown");
+    if (cd) cd.textContent = "";
+    const lb = document.getElementById("live-auto-label");
+    if (lb) lb.textContent = "";
+    return;
+  }
   if (_nextRefreshMs > 0 && Date.now() >= _nextRefreshMs) {
     _nextRefreshMs = Date.now() + 5 * 60 * 1000; // 暫置避免重複觸發
     await refreshLiveOnly();
