@@ -2455,6 +2455,16 @@ def calc_perf_by_type(hist):
     }
 
 def write_pages_json(picks, hist, now_tw, live_games=None):
+    # 保留 live_update.py 寫入的 live_updated_ts，不讓 bot 預賽跑時蓋掉
+    _prev_live_ts = 0
+    _json_path = "docs/picks_latest.json"
+    if os.path.exists(_json_path):
+        try:
+            with open(_json_path, encoding="utf-8") as _f:
+                _prev_live_ts = json.load(_f).get("live_updated_ts", 0)
+        except Exception:
+            pass
+
     total_settled, wins, wr = calc_perf(hist)
     total_in, total_pnl     = calc_pnl(hist)
     roi = round(total_pnl / total_in * 100, 1) if total_in > 0 else None
@@ -2576,7 +2586,7 @@ def write_pages_json(picks, hist, now_tw, live_games=None):
         "picks": records,
         "recent_history": recent_history,
         "live_games":      live_games or [],
-        "live_updated_ts": int(time.time()),
+        "live_updated_ts": _prev_live_ts or None,  # 由 live_update.py 維護，bot 不覆寫
         # 供 live_update.py 使用（輕量場中更新不重跑 Odds API）
         "game_preds": {
             "%s|%s" % (h, a): {
@@ -2619,11 +2629,11 @@ def run():
     now_tw    = datetime.datetime.utcnow() + datetime.timedelta(hours=8)
     today_str = now_tw.strftime("%Y-%m-%d")
     log.info("TW time: %s", now_tw.strftime("%Y-%m-%d %H:%M"))
-    # 官方記錄時段：TW 21:00–隔日11:59（含排程的 23/01/03/06/09/11 時跑法）
-    # TW 12:00–20:59 不記錄，避免白天隨手跑汙染 Gist
-    tw_hour  = now_tw.hour
-    official = (tw_hour >= 21 or tw_hour < 12)
-    log.info("official=%s (TW %02d:xx)", official, tw_hour)
+    # 官方記錄時段：TW 21:30–隔日11:29（前後各縮短30分鐘）
+    # TW 11:30–21:29 不記錄，避免白天隨手跑汙染 Gist
+    tw_mins  = now_tw.hour * 60 + now_tw.minute
+    official = (tw_mins >= 21 * 60 + 30) or (tw_mins < 11 * 60 + 30)
+    log.info("official=%s (TW %02d:%02d)", official, now_tw.hour, now_tw.minute)
 
     if not ODDS_API_KEY: log.error("ODDS_API_KEY not set"); return
 

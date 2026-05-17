@@ -932,9 +932,10 @@ let _nextRefreshMs = 0;
 let _hasLiveGames  = false;
 
 function setNextRefreshFromTs(ts){
-  if (ts) {
+  const STALE_MS = 15 * 60 * 1000; // 超過 15 分鐘視為過期，不信任
+  if (ts && (Date.now() - ts * 1000) < STALE_MS) {
     _nextRefreshMs = ts * 1000 + 5 * 60 * 1000 + 30 * 1000;
-  } else if (_nextRefreshMs === 0) {
+  } else if (_nextRefreshMs === 0 || Date.now() > _nextRefreshMs) {
     // 退回：同步到下一個整 5 分鐘時鐘點 + 30 秒緩衝
     const now = new Date();
     const secsToTick = 5 * 60 - ((now.getMinutes() % 5) * 60 + now.getSeconds());
