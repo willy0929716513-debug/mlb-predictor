@@ -44,5 +44,6 @@ jobs:
             echo "No changes"
           else
             git commit -m "chore: live score update [skip ci]"
+            git pull --rebase -X ours origin HEAD || true
             git push origin HEAD
           fi
