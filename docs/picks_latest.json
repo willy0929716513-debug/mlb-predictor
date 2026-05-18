@@ -366,7 +366,7 @@
       "reason": "第8局客隊領先5分（賽前客隊勝率46%），大局已定"
     }
   ],
-  "live_updated_ts": 1779068851,
+  "live_updated_ts": 1779069153,
   "game_preds": {
     "mariners|padres": {
       "home_win_prob": 0.5444,
@@ -429,5 +429,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-05-18 09:47 (台灣時間)"
+  "live_updated_at": "2026-05-18 09:52 (台灣時間)"
 }
