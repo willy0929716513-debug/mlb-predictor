@@ -176,7 +176,7 @@
       "reason": "主隊落後1分 第5局，賽前主隊勝率64%"
     }
   ],
-  "live_updated_ts": 1779063683,
+  "live_updated_ts": 1779063984,
   "game_preds": {
     "rockies|diamondbacks": {
       "home_win_prob": 0.2314,
@@ -243,5 +243,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-05-18 08:21 (台灣時間)"
+  "live_updated_at": "2026-05-18 08:26 (台灣時間)"
 }
