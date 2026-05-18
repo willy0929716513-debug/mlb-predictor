@@ -1,145 +1,134 @@
 {
-  "2026-05-18|mariners|padres": {
-    "ts": "2026-05-18",
-    "home_ml": 18.0,
-    "away_ml": 1.02,
-    "rl_h": 2.02,
-    "rl_a": 1.8,
-    "rl_h_25": null,
-    "rl_a_25": null,
-    "over": 2.25,
-    "under": 2.1
-  },
   "2026-05-19|marlins|braves": {
     "ts": "2026-05-18",
     "home_ml": 1.94,
-    "away_ml": 1.98,
-    "rl_h": 1.57,
+    "away_ml": 2.0,
+    "rl_h": 1.58,
     "rl_a": 2.55,
     "rl_h_25": null,
     "rl_a_25": null,
     "over": 1.98,
-    "under": 1.89
+    "under": 1.88
   },
   "2026-05-19|rays|orioles": {
     "ts": "2026-05-18",
-    "home_ml": 1.74,
-    "away_ml": 2.31,
-    "rl_h": 2.6,
-    "rl_a": 1.59,
+    "home_ml": 1.7,
+    "away_ml": 2.39,
+    "rl_h": 2.55,
+    "rl_a": 1.62,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 1.91,
-    "under": 2.03
+    "over": 1.93,
+    "under": 1.95
   },
   "2026-05-19|phillies|reds": {
     "ts": "2026-05-18",
     "home_ml": 1.83,
     "away_ml": 2.13,
-    "rl_h": 2.62,
-    "rl_a": 1.54,
+    "rl_h": 2.66,
+    "rl_a": 1.56,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 1.93,
-    "under": 1.95
+    "over": 1.89,
+    "under": 1.98
   },
   "2026-05-19|tigers|guardians": {
     "ts": "2026-05-18",
-    "home_ml": 1.68,
-    "away_ml": 2.38,
+    "home_ml": 1.69,
+    "away_ml": 2.31,
     "rl_h": 2.46,
-    "rl_a": 1.65,
+    "rl_a": 1.62,
     "rl_h_25": null,
     "rl_a_25": null,
     "over": 2.0,
-    "under": 2.03
+    "under": 2.07
   },
   "2026-05-19|nationals|mets": {
     "ts": "2026-05-18",
-    "home_ml": 2.24,
-    "away_ml": 1.74,
-    "rl_h": 1.78,
-    "rl_a": 2.13,
+    "home_ml": 2.27,
+    "away_ml": 1.71,
+    "rl_h": 1.82,
+    "rl_a": 2.12,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 1.96,
-    "under": 2.03
+    "over": 1.88,
+    "under": 2.05
   },
   "2026-05-19|yankees|blue jays": {
     "ts": "2026-05-18",
     "home_ml": 1.51,
-    "away_ml": 2.75,
+    "away_ml": 2.77,
     "rl_h": 2.05,
-    "rl_a": 1.85,
-    "rl_h_25": null,
-    "rl_a_25": null,
-    "over": 2.01,
-    "under": 2.03
-  },
-  "2026-05-19|royals|red sox": {
-    "ts": "2026-05-18",
-    "home_ml": 1.98,
-    "away_ml": 1.93,
-    "rl_h": 1.62,
-    "rl_a": 2.5,
+    "rl_a": 1.89,
     "rl_h_25": null,
     "rl_a_25": null,
     "over": 2.0,
-    "under": 2.01
+    "under": 2.12
+  },
+  "2026-05-19|royals|red sox": {
+    "ts": "2026-05-18",
+    "home_ml": 2.0,
+    "away_ml": 1.91,
+    "rl_h": 1.62,
+    "rl_a": 2.52,
+    "rl_h_25": null,
+    "rl_a_25": null,
+    "over": 1.87,
+    "under": 2.03
   },
   "2026-05-19|cubs|brewers": {
     "ts": "2026-05-18",
-    "home_ml": 1.62,
+    "home_ml": 1.65,
     "away_ml": 2.45,
-    "rl_h": 2.23,
-    "rl_a": 1.77,
+    "rl_h": 2.3,
+    "rl_a": 1.78,
     "rl_h_25": null,
     "rl_a_25": null,
     "over": 1.93,
-    "under": 2.0
+    "under": 1.98
   },
   "2026-05-19|twins|astros": {
     "ts": "2026-05-18",
-    "home_ml": 1.95,
-    "away_ml": 1.99,
-    "rl_h": 1.6,
-    "rl_a": 2.48,
+    "home_ml": 1.93,
+    "away_ml": 2.04,
+    "rl_h": 1.59,
+    "rl_a": 2.4,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 2.07,
-    "under": 1.95
+    "over": 2.04,
+    "under": 1.98
   },
   "2026-05-19|rockies|rangers": {
     "ts": "2026-05-18",
-    "home_ml": 2.33,
+    "home_ml": 2.35,
     "away_ml": 1.68,
     "rl_h": 1.85,
     "rl_a": 2.05,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 2.07,
-    "under": 1.95
+    "over": 1.95,
+    "under": 1.92
   },
   "2026-05-19|angels|athletics": {
     "ts": "2026-05-18",
-    "home_ml": 2.17,
-    "away_ml": 1.81,
+    "home_ml": 2.14,
+    "away_ml": 1.8,
     "rl_h": 1.7,
-    "rl_a": 2.32,
+    "rl_a": 2.3,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 2.0,
+    "over": 1.96,
     "under": 2.07
   },
   "2026-05-19|diamondbacks|giants": {
     "ts": "2026-05-18",
     "home_ml": 1.74,
     "away_ml": 2.22,
-    "rl_h": 2.5,
+    "rl_h": 2.55,
     "rl_a": 1.59,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 1.93,
+    "over": 2.0,
     "under": 1.98
   },
   "2026-05-19|mariners|white sox": {
@@ -147,21 +136,21 @@
     "home_ml": 1.59,
     "away_ml": 2.54,
     "rl_h": 2.36,
-    "rl_a": 1.67,
+    "rl_a": 1.66,
     "rl_h_25": null,
     "rl_a_25": null,
     "over": 2.02,
-    "under": 1.95
+    "under": 2.04
   },
   "2026-05-19|padres|dodgers": {
     "ts": "2026-05-18",
-    "home_ml": 2.34,
+    "home_ml": 2.32,
     "away_ml": 1.69,
     "rl_h": 1.78,
-    "rl_a": 2.14,
+    "rl_a": 2.2,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 1.95,
-    "under": 1.95
+    "over": 1.93,
+    "under": 2.0
   }
 }
