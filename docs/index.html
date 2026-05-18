@@ -978,7 +978,10 @@ function setFilter(type, btn){
     picksEl.style.display = "";
     renderPicks();
   }
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  // iOS Safari 相容的滾到頂端
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+  window.scrollTo(0, 0);
 }
 
 function renderPicks(){
