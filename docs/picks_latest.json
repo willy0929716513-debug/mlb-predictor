@@ -356,14 +356,14 @@
     {
       "home_cn": "水手",
       "away_cn": "教士",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 8,
-      "projected_total": 13.2,
+      "projected_total": 12.4,
       "market_total": 13.5,
-      "bet": "客隊獨贏",
-      "reason": "第8局客隊領先5分（賽前客隊勝率46%），大局已定"
+      "bet": "大小分 UNDER",
+      "reason": "第9局 8:3 → 預計終局12.4分 < 盤口13.5"
     }
   ],
   "live_updated_ts": 1779069756,
