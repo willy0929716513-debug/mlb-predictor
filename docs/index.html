@@ -1391,11 +1391,23 @@ let _lastLiveBetCount = -1;
 
 function requestNotifPermission(){
   if(!("Notification" in window)){ showRunToast("此瀏覽器不支援通知", false); return; }
+  if(Notification.permission === "granted"){
+    // 已有權限：直接發測試通知確認
+    try {
+      new Notification("⚾ 測試通知", { body: "通知功能正常！場中有新推薦時會自動提醒。", icon: "icon.svg" });
+    } catch(e){}
+    showRunToast("✓ 通知已開啟（已發測試）", true);
+    return;
+  }
   Notification.requestPermission().then(perm => {
     const btn = document.getElementById("notif-btn");
     if(perm==="granted"){
       if(btn) btn.style.opacity = "1";
-      showRunToast("✓ 通知已開啟", true);
+      // 立即發測試通知確認
+      try {
+        new Notification("⚾ 測試通知", { body: "通知功能正常！場中有新推薦時會自動提醒。", icon: "icon.svg" });
+      } catch(e){}
+      showRunToast("✓ 通知已開啟（已發測試）", true);
     } else {
       if(btn) btn.style.opacity = "0.4";
       showRunToast("通知已被封鎖", false);
