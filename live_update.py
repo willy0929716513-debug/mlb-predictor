@@ -15,6 +15,22 @@ log = logging.getLogger("live_update")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
 JSON_PATH = "docs/picks_latest.json"
+NTFY_TOPIC = os.environ.get("NTFY_TOPIC", "")
+
+
+def send_ntfy(title, message):
+    if not NTFY_TOPIC:
+        return
+    try:
+        requests.post(
+            f"https://ntfy.sh/{NTFY_TOPIC}",
+            data=message.encode("utf-8"),
+            headers={"Title": title, "Priority": "high", "Tags": "baseball"},
+            timeout=10,
+        )
+        log.info("ntfy sent: %s", title)
+    except Exception as e:
+        log.warning("ntfy error: %s", e)
 
 CN = {
     "dodgers": "道奇", "yankees": "洋基", "mets": "大都會", "braves": "勇士",
@@ -202,12 +218,27 @@ def main():
     game_preds = data.get("game_preds", {})
     log.info("game_preds: %d games", len(game_preds))
 
+    prev_bets = {
+        f"{g['away_cn']}@{g['home_cn']}"
+        for g in data.get("live_games", [])
+        if g.get("bet")
+    }
+
     et_now       = datetime.datetime.utcnow() - datetime.timedelta(hours=4)
     et_date_str  = et_now.strftime("%Y-%m-%d")
     log.info("ET date: %s", et_date_str)
 
     live_games  = fetch_live_scores(et_date_str)
     live_picks  = generate_live_picks(live_games, game_preds)
+
+    for pick in live_picks:
+        if pick.get("bet"):
+            key = f"{pick['away_cn']}@{pick['home_cn']}"
+            if key not in prev_bets:
+                send_ntfy(
+                    f"⚾ 場中推薦 — {pick['bet']}",
+                    f"{pick['away_cn']} @ {pick['home_cn']}\n{pick.get('reason', '')}",
+                )
 
     now_tw = datetime.datetime.utcnow() + datetime.timedelta(hours=8)
     data["live_games"]       = live_picks
