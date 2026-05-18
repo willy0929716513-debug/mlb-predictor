@@ -357,7 +357,7 @@
       "home_cn": "水手",
       "away_cn": "教士",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 8,
       "projected_total": 16.5,
