@@ -397,7 +397,7 @@ function renderLiveSection(liveGames) {
           ${isPinned ? '<span class="text-[0.6rem] font-bold text-amber-400 bg-amber-400/10 px-1.5 py-0.5 rounded">📌 置頂</span>' : ''}
         </div>
         <div class="flex items-center gap-1.5">
-          <button onclick="togglePin(${JSON.stringify(gameKey)})"
+          <button onclick="togglePin('${gameKey}')"
                   class="pin-btn ${isPinned ? 'pinned' : 'unpinned'}"
                   title="${isPinned ? '取消置頂' : '置頂此比賽'}">📌</button>
           <span class="text-xs bg-slate-700/60 text-slate-300 px-2.5 py-0.5 rounded-full font-bold">
@@ -978,7 +978,10 @@ function setFilter(type, btn){
     picksEl.style.display = "";
     renderPicks();
   }
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  // iOS Safari 相容的滾到頂端
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+  window.scrollTo(0, 0);
 }
 
 function renderPicks(){
