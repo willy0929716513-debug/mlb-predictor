@@ -356,14 +356,14 @@
     {
       "home_cn": "水手",
       "away_cn": "教士",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 8,
-      "projected_total": 15.2,
+      "projected_total": 14.1,
       "market_total": 13.5,
       "bet": "客隊獨贏",
-      "reason": "第7局客隊領先5分（賽前客隊勝率46%），大局已定"
+      "reason": "第8局客隊領先5分（賽前客隊勝率46%），大局已定"
     }
   ],
   "live_updated_ts": 1779068549,
