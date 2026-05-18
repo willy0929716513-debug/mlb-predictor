@@ -517,10 +517,13 @@ function spSimple(name, era, hand, rest, avgip){
   const handBadge = hand==="L"
     ? '<span class="text-[0.6rem] font-bold bg-indigo-900/60 text-indigo-300 px-1 rounded">左</span>'
     : hand==="R" ? '<span class="text-[0.6rem] bg-slate-700 text-slate-400 px-1 rounded">右</span>' : '';
-  const dot = era==null ? '' : era<=3.5 ? '🟢' : era<=4.5 ? '🟡' : '🔴';
-  const restWarn = rest!=null&&rest<=3 ? '<span class="text-amber-400 text-[0.6rem] ml-1">短休</span>' : '';
-  const ipWarn = avgip!=null&&avgip<5 ? '<span class="text-amber-400 text-[0.6rem] ml-1">投不滿5局</span>' : '';
-  return `${handBadge} <span class="text-slate-200 text-xs">${name}</span> ${dot}${restWarn}${ipWarn}`;
+  const statusBadge = era==null ? ''
+    : era<=3.5 ? '<span class="text-[0.6rem] font-bold text-emerald-400 bg-emerald-900/30 px-1 rounded">狀態佳</span>'
+    : era<=4.5 ? '<span class="text-[0.6rem] font-bold text-amber-400 bg-amber-900/30 px-1 rounded">普通</span>'
+    :            '<span class="text-[0.6rem] font-bold text-rose-400 bg-rose-900/30 px-1 rounded">狀態差</span>';
+  const restWarn = rest!=null&&rest<=3 ? '<span class="text-[0.6rem] text-amber-400">⚠️短休</span>' : '';
+  const ipWarn = avgip!=null&&avgip<5 ? '<span class="text-[0.6rem] text-amber-400">⚠️投不滿5局</span>' : '';
+  return `${handBadge} <span class="text-slate-200 text-xs">${name}</span> ${statusBadge}${restWarn}${ipWarn}`;
 }
 
 /* ── Clean pitcher card (expanded section) ───── */
