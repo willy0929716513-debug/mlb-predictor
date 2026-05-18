@@ -357,10 +357,10 @@
       "home_cn": "水手",
       "away_cn": "教士",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 8,
-      "projected_total": 14.1,
+      "projected_total": 13.2,
       "market_total": 13.5,
       "bet": "客隊獨贏",
       "reason": "第8局客隊領先5分（賽前客隊勝率46%），大局已定"
