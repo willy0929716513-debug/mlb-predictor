@@ -166,17 +166,17 @@
     {
       "home_cn": "水手",
       "away_cn": "教士",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 0,
-      "away_runs": 2,
-      "projected_total": 4.0,
+      "away_runs": 4,
+      "projected_total": 7.2,
       "market_total": 7.5,
-      "bet": "主隊讓分(+1.5)",
-      "reason": "主隊落後2分 第5局，賽前主隊勝率64%"
+      "bet": null,
+      "reason": null
     }
   ],
-  "live_updated_ts": 1779064586,
+  "live_updated_ts": 1779064888,
   "game_preds": {
     "rockies|diamondbacks": {
       "home_win_prob": 0.2314,
@@ -243,5 +243,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-05-18 08:36 (台灣時間)"
+  "live_updated_at": "2026-05-18 08:41 (台灣時間)"
 }
