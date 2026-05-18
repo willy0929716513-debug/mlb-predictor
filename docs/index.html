@@ -960,6 +960,7 @@ function renderTypePill(label, data){
 /* ── Filter ──────────────────────────────────── */
 function setFilter(type, btn){
   currentFilter = type;
+  sessionStorage.setItem("mlb_filter", type);
   document.querySelectorAll(".tab").forEach(t=>{
     t.classList.toggle("tab-active", t===btn);
     t.classList.toggle("tab-inactive", t!==btn);
@@ -977,6 +978,7 @@ function setFilter(type, btn){
     picksEl.style.display = "";
     renderPicks();
   }
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function renderPicks(){
@@ -1201,6 +1203,26 @@ async function loadData(){
     allPicks = data.picks||[];
     recentHistory = data.recent_history||[];
     updateCounts();
+    // 恢復上次選的 Tab
+    const savedFilter = sessionStorage.getItem("mlb_filter") || "ALL";
+    if(savedFilter !== currentFilter){
+      currentFilter = savedFilter;
+      const savedBtn = document.querySelector(`.tab[data-filter="${savedFilter}"]`);
+      if(savedBtn){
+        document.querySelectorAll(".tab").forEach(t=>{
+          t.classList.toggle("tab-active", t===savedBtn);
+          t.classList.toggle("tab-inactive", t!==savedBtn);
+        });
+        const liveEl  = document.getElementById("live-section");
+        const lblEl   = document.getElementById("live-auto-label");
+        const picksEl = document.getElementById("picks-container");
+        if(savedFilter==="場中"){
+          liveEl.style.display="block"; lblEl.style.display="block"; picksEl.style.display="none";
+        } else {
+          liveEl.style.display="none"; lblEl.style.display="none"; picksEl.style.display="";
+        }
+      }
+    }
     renderPicks();
     renderFormStrip(recentHistory);
     renderStreak(recentHistory);
