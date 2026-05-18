@@ -360,13 +360,13 @@
       "top_inning": false,
       "home_runs": 3,
       "away_runs": 8,
-      "projected_total": 16.5,
+      "projected_total": 15.2,
       "market_total": 13.5,
       "bet": "客隊獨贏",
       "reason": "第7局客隊領先5分（賽前客隊勝率46%），大局已定"
     }
   ],
-  "live_updated_ts": 1779067946,
+  "live_updated_ts": 1779068247,
   "game_preds": {
     "mariners|padres": {
       "home_win_prob": 0.5444,
@@ -429,5 +429,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-05-18 09:32 (台灣時間)"
+  "live_updated_at": "2026-05-18 09:37 (台灣時間)"
 }
