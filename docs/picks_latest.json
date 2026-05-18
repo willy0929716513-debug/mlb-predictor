@@ -305,14 +305,14 @@
     {
       "home_cn": "光芒",
       "away_cn": "金鶯",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 6,
       "away_runs": 0,
-      "projected_total": 36.0,
+      "projected_total": 27.0,
       "market_total": 7.5,
       "bet": "大小分 OVER",
-      "reason": "第2局 0:6 → 預計終局36.0分 > 盤口7.5"
+      "reason": "第3局 0:6 → 預計終局27.0分 > 盤口7.5"
     },
     {
       "home_cn": "費城人",
@@ -343,12 +343,12 @@
       "away_cn": "大都會",
       "inning": 2,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 6.0,
+      "projected_total": 12.0,
       "market_total": 10.0,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第2局 1:1 → 預計終局12.0分 > 盤口10.0"
     },
     {
       "home_cn": "洋基",
@@ -365,11 +365,11 @@
     {
       "home_cn": "皇家",
       "away_cn": "紅襪",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.5,
+      "projected_total": 0.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -399,7 +399,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779146408,
+  "live_updated_ts": 1779146710,
   "game_preds": {
     "marlins|braves": {
       "home_win_prob": 0.4857,
@@ -458,5 +458,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-05-19 07:20 (台灣時間)"
+  "live_updated_at": "2026-05-19 07:25 (台灣時間)"
 }
