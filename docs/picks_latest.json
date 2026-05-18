@@ -356,17 +356,17 @@
     {
       "home_cn": "水手",
       "away_cn": "教士",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 7,
-      "projected_total": 16.4,
+      "projected_total": 15.0,
       "market_total": 9.5,
-      "bet": null,
-      "reason": null
+      "bet": "客隊獨贏",
+      "reason": "第7局客隊領先4分（賽前客隊勝率45%），大局已定"
     }
   ],
-  "live_updated_ts": 1779066998,
+  "live_updated_ts": 1779067299,
   "game_preds": {
     "mariners|padres": {
       "home_win_prob": 0.5486,
@@ -429,5 +429,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-05-18 09:16 (台灣時間)"
+  "live_updated_at": "2026-05-18 09:21 (台灣時間)"
 }
