@@ -71,6 +71,52 @@
     #history-panel { overflow:hidden; transition:max-height .35s ease, opacity .3s ease; }
     #history-panel.closed { max-height:0; opacity:0; }
     #history-panel.open   { max-height:2000px; opacity:1; }
+
+    /* ── 淺色主題 ── */
+    body.light { background:#f1f5f9; color:#1e293b; }
+    body.light .card { background:#ffffff; border-color:#e2e8f0; }
+    body.light .stat-box { background:#f8fafc; }
+    body.light .type-pill { background:#f8fafc; border-color:#e2e8f0; }
+    body.light .tab-inactive { background:#f1f5f9; color:#64748b; border-color:#cbd5e1; }
+    body.light .sp-chip { background:#f1f5f9; border-color:#e2e8f0; color:#475569; }
+    body.light .badge-ml { background:#dbeafe; color:#1d4ed8; }
+    body.light .badge-rl { background:#ede9fe; color:#7c3aed; }
+    body.light .badge-tot { background:#d1fae5; color:#065f46; }
+    body.light .text-white { color:#0f172a !important; }
+    body.light .text-slate-200 { color:#1e293b !important; }
+    body.light .text-slate-300 { color:#334155 !important; }
+    body.light .text-slate-400 { color:#475569 !important; }
+    body.light .text-slate-500 { color:#64748b !important; }
+    body.light .text-slate-600 { color:#94a3b8 !important; }
+    body.light .text-slate-700 { color:#cbd5e1 !important; }
+    body.light .bg-slate-700 { background:#e2e8f0 !important; }
+    body.light .bg-slate-800\/60 { background:rgba(226,232,240,0.7) !important; }
+    body.light .bg-slate-800\/40 { background:rgba(226,232,240,0.5) !important; }
+    body.light .bg-slate-800\/50 { background:rgba(226,232,240,0.6) !important; }
+    body.light .border-slate-700\/40 { border-color:rgba(148,163,184,0.4) !important; }
+    body.light #picks-container .card, body.light #live-section .card { color:#1e293b; }
+
+    /* ── W/L 近況條 ── */
+    .form-sq { display:inline-flex; align-items:center; justify-content:center;
+               width:1.2rem; height:1.2rem; border-radius:3px;
+               font-size:0.6rem; font-weight:800; line-height:1; }
+    .form-w  { background:#059669; color:#fff; }
+    .form-l  { background:#e11d48; color:#fff; }
+    .form-p  { background:#475569; color:#fff; }
+    .form-pd { background:rgba(234,179,8,0.25); color:#ca8a04; border:1px solid rgba(234,179,8,0.3); }
+
+    /* ── 勝率機率條 ── */
+    .prob-track { position:relative; height:6px; background:#1e293b; border-radius:9999px; overflow:hidden; }
+    body.light .prob-track { background:#e2e8f0; }
+
+    /* ── 置頂按鈕 ── */
+    .pin-btn { background:none; border:none; cursor:pointer; line-height:1;
+               padding:2px 4px; border-radius:4px; transition:all .15s; font-size:0.85rem; }
+    .pin-btn:hover  { background:rgba(251,191,36,0.15); }
+    .pin-btn.pinned { filter:none; }
+    .pin-btn.unpinned { opacity:0.3; filter:grayscale(1); }
+    .pin-btn.unpinned:hover { opacity:0.7; filter:none; }
+    .card-pinned { border-color:#d97706 !important; box-shadow:0 0 0 1px rgba(217,119,6,0.25); }
   </style>
 </head>
 <body class="min-h-screen p-4 md:p-6">
@@ -126,6 +172,12 @@
       <p id="gen-time" class="text-xs text-slate-500 mt-0.5"></p>
     </div>
     <div class="flex items-center gap-2">
+      <button id="theme-btn" onclick="toggleTheme()"
+              class="w-9 h-9 flex items-center justify-center bg-slate-800 hover:bg-slate-700
+                     border border-slate-600 rounded-full text-slate-300 text-base transition-colors">🌙</button>
+      <button id="notif-btn" onclick="requestNotifPermission()"
+              class="relative w-9 h-9 flex items-center justify-center bg-slate-800 hover:bg-slate-700
+                     border border-slate-600 rounded-full text-slate-300 text-base transition-colors">🔔</button>
       <span id="refresh-countdown" class="text-xs text-slate-600 tabular-nums"></span>
       <button onclick="manualRefresh()"
               class="w-9 h-9 flex items-center justify-center bg-slate-800 hover:bg-slate-700
@@ -168,6 +220,9 @@
       </div>
     </div>
     <div class="grid grid-cols-3 gap-2" id="by-type-row"></div>
+    <div id="form-strip" class="mt-3 pt-2 border-t border-slate-700/40 flex items-center gap-1 flex-wrap min-h-[1.5rem]"></div>
+    <div id="roi-chart" class="mt-2"></div>
+    <div id="today-pnl" class="mt-1"></div>
   </div>
 
   <!-- ── History panel ───────────────────────────── -->
@@ -210,6 +265,8 @@ let allPicks = [];
 let currentFilter = "ALL";
 let historyOpen = false;
 let recentHistory = [];
+let _lastLiveGames = [];
+let _pinnedGames = new Set(JSON.parse(localStorage.getItem("mlb_pinned") || "[]"));
 
 /* ── Team key mapping ────────────────────────── */
 const CN_TO_KEY = {
@@ -222,6 +279,17 @@ const CN_TO_KEY = {
   "皇家":"royals","老虎":"tigers","雙城":"twins","白襪":"white sox",
   "洋基":"yankees","天使":"angels",
 };
+
+/* ── Pin / unpin live game ───────────────────── */
+function togglePin(key){
+  if(_pinnedGames.has(key)) _pinnedGames.delete(key);
+  else _pinnedGames.add(key);
+  localStorage.setItem("mlb_pinned", JSON.stringify([..._pinnedGames]));
+  renderLiveSection(_lastLiveGames);
+  // 重設 live-ts-label（renderLiveSection 會清空 innerHTML）
+  const tsEl = document.getElementById("live-ts-label");
+  if(tsEl && _lastLiveGames._ts_label) tsEl.textContent = _lastLiveGames._ts_label;
+}
 
 /* ── Live game card renderer ─────────────────── */
 function renderLiveSection(liveGames) {
@@ -244,9 +312,19 @@ function renderLiveSection(liveGames) {
     return;
   }
 
-  const liveTs = liveGames._updated_at || "";   // 由外層 render 時注入
+  _lastLiveGames = liveGames || [];
   const half = g => g.top_inning ? "▲" : "▼";
-  const cards = liveGames.map(g => {
+
+  // 置頂的排前面，其餘維持原順序
+  const sorted = [...(liveGames || [])].sort((a, b) => {
+    const pa = _pinnedGames.has(`${a.away_cn}@${a.home_cn}`) ? 0 : 1;
+    const pb = _pinnedGames.has(`${b.away_cn}@${b.home_cn}`) ? 0 : 1;
+    return pa - pb;
+  });
+
+  const cards = sorted.map(g => {
+    const gameKey  = `${g.away_cn}@${g.home_cn}`;
+    const isPinned = _pinnedGames.has(gameKey);
     const projDiff = g.projected_total - g.market_total;
     const projCol  = Math.abs(projDiff) < 1 ? "text-slate-400"
                    : projDiff < 0 ? "text-sky-400" : "text-orange-400";
@@ -267,16 +345,24 @@ function renderLiveSection(liveGames) {
          </div>`;
 
     return `
-    <div class="card rounded-xl p-4 mb-3 border border-slate-700/40">
-      <!-- 頂行：狀態 + 局數 -->
+    <div class="card rounded-xl p-4 mb-3 border ${isPinned ? 'card-pinned' : 'border-slate-700/40'}">
+      <!-- 頂行：狀態 + 置頂 + 局數 -->
       <div class="flex items-center justify-between mb-3">
-        <span class="flex items-center gap-1.5 text-xs font-bold text-red-400 tracking-wide">
-          <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse inline-block"></span>
-          LIVE
-        </span>
-        <span class="text-xs bg-slate-700/60 text-slate-300 px-2.5 py-0.5 rounded-full font-bold">
-          ${half(g)} ${g.inning} 局
-        </span>
+        <div class="flex items-center gap-2">
+          <span class="flex items-center gap-1.5 text-xs font-bold text-red-400 tracking-wide">
+            <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse inline-block"></span>
+            LIVE
+          </span>
+          ${isPinned ? '<span class="text-[0.6rem] font-bold text-amber-400 bg-amber-400/10 px-1.5 py-0.5 rounded">📌 置頂</span>' : ''}
+        </div>
+        <div class="flex items-center gap-1.5">
+          <button onclick="togglePin(${JSON.stringify(gameKey)})"
+                  class="pin-btn ${isPinned ? 'pinned' : 'unpinned'}"
+                  title="${isPinned ? '取消置頂' : '置頂此比賽'}">📌</button>
+          <span class="text-xs bg-slate-700/60 text-slate-300 px-2.5 py-0.5 rounded-full font-bold">
+            ${half(g)} ${g.inning} 局
+          </span>
+        </div>
       </div>
 
       <!-- 計分板：客隊 比分 主隊 -->
@@ -286,9 +372,9 @@ function renderLiveSection(liveGames) {
           <div class="text-sm font-bold text-white leading-tight">${g.away_cn}</div>
         </div>
         <div class="flex items-center gap-3">
-          <span class="text-3xl font-black text-white tabular-nums">${g.away_runs}</span>
+          <span class="text-3xl font-black tabular-nums ${g.away_runs > g.home_runs ? 'text-emerald-400' : g.away_runs < g.home_runs ? 'text-rose-400' : 'text-white'}">${g.away_runs}</span>
           <span class="text-slate-600 text-lg font-light">:</span>
-          <span class="text-3xl font-black text-white tabular-nums">${g.home_runs}</span>
+          <span class="text-3xl font-black tabular-nums ${g.home_runs > g.away_runs ? 'text-emerald-400' : g.home_runs < g.away_runs ? 'text-rose-400' : 'text-white'}">${g.home_runs}</span>
         </div>
         <div class="text-center w-28">
           <div class="text-[0.65rem] text-slate-500 mb-1 uppercase tracking-widest">主隊</div>
@@ -596,9 +682,12 @@ function renderCard(p){
 
     <!-- Quick stats row (always visible) -->
     <div class="mt-3 grid grid-cols-3 gap-2 text-center">
-      <div class="bg-slate-800/40 rounded-lg py-2">
+      <div class="bg-slate-800/40 rounded-lg py-2 px-2">
         <div class="text-xs text-slate-500">Edge</div>
         <div class="text-sm font-bold ${(p.edge||0)>=12?"text-emerald-400":(p.edge||0)>=8?"text-amber-400":"text-sky-400"}">${edgeStr}</div>
+        <div class="mt-1 h-1 bg-slate-700 rounded-full overflow-hidden">
+          <div class="h-full rounded-full ${(p.edge||0)>=12?"bg-emerald-500":(p.edge||0)>=8?"bg-amber-400":"bg-sky-400"}" style="width:${Math.min(Math.max((p.edge||0)/20*100,0),100)}%"></div>
+        </div>
       </div>
       <div class="bg-slate-800/40 rounded-lg py-2">
         <div class="text-xs text-slate-500">信心</div>
@@ -614,6 +703,19 @@ function renderCard(p){
     <div class="mt-2 h-1.5 bg-slate-700 rounded-full overflow-hidden">
       <div class="h-full rounded-full ${confCol} transition-all duration-700" style="width:${Math.min(conf,100)}%"></div>
     </div>
+
+    <!-- Win probability vs market bar -->
+    ${(p.model_p != null && p.dv_p != null) ? `
+    <div class="mt-2 px-0.5">
+      <div class="flex justify-between text-[0.6rem] text-slate-600 mb-0.5">
+        <span>市場 ${(p.dv_p*100).toFixed(1)}%</span>
+        <span class="${(p.edge||0)>=12?'text-emerald-400':(p.edge||0)>=8?'text-amber-400':'text-sky-400'}">模型 ${p.model_p.toFixed(1)}%</span>
+      </div>
+      <div class="relative h-1 bg-slate-700/80 rounded-full overflow-hidden">
+        <div class="absolute top-0 left-0 h-full rounded-full bg-slate-500/60" style="width:${Math.min(p.dv_p*100,100)}%"></div>
+        <div class="absolute top-0 left-0 h-full rounded-full ${(p.edge||0)>=12?'bg-emerald-500':(p.edge||0)>=8?'bg-amber-400':'bg-sky-400'} opacity-80" style="width:${Math.min(p.model_p,100)}%"></div>
+      </div>
+    </div>` : ""}
 
     <!-- Expand button -->
     <button id="btn-${uid}" onclick="toggleDetail('${uid}')"
@@ -910,10 +1012,16 @@ async function loadData(){
     recentHistory = data.recent_history||[];
     updateCounts();
     renderPicks();
-    _hasLiveGames = (data.live_games || []).length > 0;
-    renderLiveSection(data.live_games);
+    renderFormStrip(recentHistory);
+    renderROISparkline(recentHistory);
+    renderTodayPnL(recentHistory);
+    const liveGames = data.live_games || [];
+    liveGames._ts_label = "更新 " + (data.live_updated_at || data.generated_at || "");
+    _hasLiveGames = liveGames.length > 0;
+    renderLiveSection(liveGames);
+    checkLiveNotification(liveGames);
     const tsEl = document.getElementById("live-ts-label");
-    if (tsEl) tsEl.textContent = "更新 " + (data.live_updated_at || data.generated_at || "");
+    if (tsEl) tsEl.textContent = liveGames._ts_label;
     setNextRefreshFromTs(data.live_updated_ts);
     if(historyOpen) renderHistory();
   } catch(e){
@@ -948,10 +1056,13 @@ async function refreshLiveOnly(){
     const res  = await fetch(JSON_URL + "?t=" + Date.now());
     if (!res.ok) return;
     const data = await res.json();
-    _hasLiveGames = (data.live_games || []).length > 0;
-    renderLiveSection(data.live_games);
+    const liveGames2 = data.live_games || [];
+    liveGames2._ts_label = "更新 " + (data.live_updated_at || data.generated_at || "");
+    _hasLiveGames = liveGames2.length > 0;
+    renderLiveSection(liveGames2);
+    checkLiveNotification(liveGames2);
     const tsEl = document.getElementById("live-ts-label");
-    if (tsEl) tsEl.textContent = "更新 " + (data.live_updated_at || data.generated_at || "");
+    if (tsEl) tsEl.textContent = liveGames2._ts_label;
     setNextRefreshFromTs(data.live_updated_ts);
   } catch(e){ /* 靜默失敗 */ }
 }
@@ -976,6 +1087,130 @@ setInterval(async ()=>{
       ? (secs > 0 ? `↻ ${m}:${s} 後自動更新` : "↻ 即將更新...")
       : "";
 }, 1000);
+
+/* ── W/L Form strip ──────────────────────────── */
+function renderFormStrip(hist){
+  const el = document.getElementById("form-strip");
+  if(!el) return;
+  const settled = (hist||[]).filter(r => r.result==="W"||r.result==="L"||r.result==="P");
+  if(!settled.length){ el.innerHTML = ''; return; }
+  const recent = settled.slice(-10);
+  const squares = recent.map(r => {
+    if(r.result==="W") return `<span class="form-sq form-w">W</span>`;
+    if(r.result==="L") return `<span class="form-sq form-l">L</span>`;
+    return `<span class="form-sq form-p">P</span>`;
+  }).join("");
+  el.innerHTML = `<span class="text-[0.65rem] text-slate-600 mr-1.5 shrink-0">近況</span>${squares}`;
+}
+
+/* ── ROI Sparkline ───────────────────────────── */
+function renderROISparkline(hist){
+  const el = document.getElementById("roi-chart");
+  if(!el) return;
+  const settled = (hist||[]).filter(r => r.result==="W"||r.result==="L"||r.result==="P");
+  if(settled.length < 2){ el.innerHTML = ''; return; }
+  let cum = 0;
+  const points = settled.map(r => {
+    if(r.result==="W"&&r.stake&&r.price) cum += r.stake*(r.price-1);
+    else if(r.result==="L"&&r.stake) cum -= r.stake;
+    return cum;
+  });
+  const W = 200, H = 28;
+  const minV = Math.min(0, ...points);
+  const maxV = Math.max(0, ...points);
+  const range = maxV - minV || 1;
+  const toX = i => (i/(points.length-1))*W;
+  const toY = v => H - ((v-minV)/range)*H;
+  const pts = points.map((v,i) => `${toX(i).toFixed(1)},${toY(v).toFixed(1)}`).join(" ");
+  const zeroY = toY(0).toFixed(1);
+  const last = points[points.length-1];
+  const col = last >= 0 ? "#34d399" : "#f43f5e";
+  el.innerHTML = `
+    <div class="flex items-center justify-between text-[0.65rem] text-slate-600 mb-0.5">
+      <span>累積 P&L</span>
+      <span class="${last>=0?'text-emerald-400':'text-rose-400'} font-semibold">${last>=0?'+':''}$${last.toFixed(1)}</span>
+    </div>
+    <svg viewBox="0 0 ${W} ${H}" class="w-full" style="height:28px;display:block">
+      <line x1="0" y1="${zeroY}" x2="${W}" y2="${zeroY}" stroke="#334155" stroke-width="1"/>
+      <polyline points="${pts}" fill="none" stroke="${col}" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+    </svg>`;
+}
+
+/* ── Today P&L ───────────────────────────────── */
+function renderTodayPnL(hist){
+  const el = document.getElementById("today-pnl");
+  if(!el) return;
+  const now = new Date();
+  const mm = String(now.getMonth()+1).padStart(2,'0');
+  const dd = String(now.getDate()).padStart(2,'0');
+  const todayStr = `${mm}/${dd}`;
+  const todayBets = (hist||[]).filter(r => (r.date||"").includes(todayStr));
+  if(!todayBets.length){ el.innerHTML = ''; return; }
+  let pnl = 0, settled = 0, pending = 0;
+  todayBets.forEach(r => {
+    if(r.result==="W"&&r.stake&&r.price){ pnl += r.stake*(r.price-1); settled++; }
+    else if(r.result==="L"&&r.stake){ pnl -= r.stake; settled++; }
+    else pending++;
+  });
+  if(!settled && !pending){ el.innerHTML = ''; return; }
+  const col = pnl>=0 ? "text-emerald-400" : "text-rose-400";
+  const pendStr = pending > 0 ? ` · <span class="text-amber-400">${pending}場待結算</span>` : "";
+  el.innerHTML = `<div class="flex items-center justify-between text-[0.65rem] mt-0.5">
+    <span class="text-slate-600">今日損益${pendStr}</span>
+    <span class="font-bold ${col}">${pnl>=0?'+':''}$${pnl.toFixed(1)}</span>
+  </div>`;
+}
+
+/* ── Theme toggle ───────────────────────────── */
+function toggleTheme(){
+  const isLight = document.body.classList.toggle("light");
+  const btn = document.getElementById("theme-btn");
+  if(btn) btn.textContent = isLight ? "☀️" : "🌙";
+  localStorage.setItem("mlb_theme", isLight ? "light" : "dark");
+}
+
+/* ── Browser push notifications ─────────────── */
+let _lastLiveBetCount = -1;
+
+function requestNotifPermission(){
+  if(!("Notification" in window)){ showRunToast("此瀏覽器不支援通知", false); return; }
+  Notification.requestPermission().then(perm => {
+    const btn = document.getElementById("notif-btn");
+    if(perm==="granted"){
+      if(btn) btn.style.opacity = "1";
+      showRunToast("✓ 通知已開啟", true);
+    } else {
+      if(btn) btn.style.opacity = "0.4";
+      showRunToast("通知已被封鎖", false);
+    }
+  });
+}
+
+function checkLiveNotification(liveGames){
+  if(typeof Notification === "undefined" || Notification.permission !== "granted") return;
+  const bets = (liveGames||[]).filter(g => g.bet);
+  if(_lastLiveBetCount >= 0 && bets.length > _lastLiveBetCount){
+    bets.slice(_lastLiveBetCount).forEach(g => {
+      try {
+        new Notification("⚾ 場中新推薦", {
+          body: `${g.away_cn} @ ${g.home_cn}：${g.bet}`,
+          icon: "icon.svg",
+          tag: `${g.away_cn}-${g.home_cn}`,
+        });
+      } catch(e){}
+    });
+  }
+  _lastLiveBetCount = bets.length;
+}
+
+/* ── Init theme on load ─────────────────────── */
+(function(){
+  if(localStorage.getItem("mlb_theme")==="light"){
+    document.body.classList.add("light");
+    const b = document.getElementById("theme-btn");
+    if(b) b.textContent = "☀️";
+  }
+})();
 
 loadData();
 if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
