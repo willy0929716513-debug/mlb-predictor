@@ -577,11 +577,11 @@ function gameCountdown(dateStr, timeStr){
   const gameMs = Date.UTC(twNow.getUTCFullYear(), mo-1, dd, hh, mm) - 60000; // -1 分鐘
   const nowMs  = twNow.getTime();
   const diff   = gameMs - nowMs;
-  if(diff<=0||diff>3600000) return ""; // 只在 1 小時內才顯示
+  if(diff<=0||diff>8*3600000) return ""; // 8 小時內才顯示倒數
   const h=Math.floor(diff/3600000), min=Math.floor((diff%3600000)/60000);
   if(h>0) return `${h}h${min}m 後開賽`;
   if(min>1) return `${min} 分後開賽`;
-  return "即將開賽";
+  return "即將開賽"; // 開賽前 1 分鐘內才顯示「即將開賽」
 }
 
 /* ── Spotlight: feature best pick ────────────── */
