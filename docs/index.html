@@ -137,6 +137,11 @@
                       border:1px solid rgba(251,191,36,0.3); position:relative; overflow:hidden; }
     .spotlight-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px;
                                background:linear-gradient(90deg,#f59e0b,#fcd34d,#f59e0b); }
+    body.light .spotlight-card { background:linear-gradient(135deg,#fffbeb 0%,#fef3c7 100%);
+                                  border-color:rgba(217,119,6,0.5); }
+    body.light .spotlight-card .text-white { color:#1c1917 !important; }
+    body.light .spotlight-card .text-slate-300 { color:#44403c !important; }
+    body.light .spotlight-card .text-slate-500 { color:#78716c !important; }
 
     /* ── SP card in expanded section ── */
     .sp-grade { display:inline-flex; align-items:center; justify-content:center;
@@ -240,11 +245,11 @@
         </div>
       </div>
       <div class="stat-box text-center">
-        <div class="text-xl font-bold" id="s-roi">—</div>
+        <div class="text-2xl font-bold" id="s-roi">—</div>
         <div class="text-xs text-slate-500 mt-0.5">ROI</div>
       </div>
       <div class="stat-box text-center">
-        <div class="text-xl font-bold text-white" id="s-record">—</div>
+        <div class="text-2xl font-bold text-white" id="s-record">—</div>
         <div class="text-xs text-slate-500 mt-0.5">勝 / 場</div>
       </div>
     </div>
@@ -569,10 +574,10 @@ function gameCountdown(dateStr, timeStr){
   // compute diff in TW timezone (UTC+8)
   const nowUtcMs = Date.now();
   const twNow = new Date(nowUtcMs + 8*3600000);
-  const gameMs = Date.UTC(twNow.getUTCFullYear(), mo-1, dd, hh, mm);
+  const gameMs = Date.UTC(twNow.getUTCFullYear(), mo-1, dd, hh, mm) - 60000; // -1 分鐘
   const nowMs  = twNow.getTime();
   const diff   = gameMs - nowMs;
-  if(diff<=0||diff>24*3600000) return "";
+  if(diff<=0||diff>3600000) return ""; // 只在 1 小時內才顯示
   const h=Math.floor(diff/3600000), min=Math.floor((diff%3600000)/60000);
   if(h>0) return `${h}h${min}m 後開賽`;
   if(min>1) return `${min} 分後開賽`;
