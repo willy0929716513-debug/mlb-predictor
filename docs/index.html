@@ -108,6 +108,15 @@
     /* ── 勝率機率條 ── */
     .prob-track { position:relative; height:6px; background:#1e293b; border-radius:9999px; overflow:hidden; }
     body.light .prob-track { background:#e2e8f0; }
+
+    /* ── 置頂按鈕 ── */
+    .pin-btn { background:none; border:none; cursor:pointer; line-height:1;
+               padding:2px 4px; border-radius:4px; transition:all .15s; font-size:0.85rem; }
+    .pin-btn:hover  { background:rgba(251,191,36,0.15); }
+    .pin-btn.pinned { filter:none; }
+    .pin-btn.unpinned { opacity:0.3; filter:grayscale(1); }
+    .pin-btn.unpinned:hover { opacity:0.7; filter:none; }
+    .card-pinned { border-color:#d97706 !important; box-shadow:0 0 0 1px rgba(217,119,6,0.25); }
   </style>
 </head>
 <body class="min-h-screen p-4 md:p-6">
@@ -256,6 +265,8 @@ let allPicks = [];
 let currentFilter = "ALL";
 let historyOpen = false;
 let recentHistory = [];
+let _lastLiveGames = [];
+let _pinnedGames = new Set(JSON.parse(localStorage.getItem("mlb_pinned") || "[]"));
 
 /* ── Team key mapping ────────────────────────── */
 const CN_TO_KEY = {
@@ -268,6 +279,17 @@ const CN_TO_KEY = {
   "皇家":"royals","老虎":"tigers","雙城":"twins","白襪":"white sox",
   "洋基":"yankees","天使":"angels",
 };
+
+/* ── Pin / unpin live game ───────────────────── */
+function togglePin(key){
+  if(_pinnedGames.has(key)) _pinnedGames.delete(key);
+  else _pinnedGames.add(key);
+  localStorage.setItem("mlb_pinned", JSON.stringify([..._pinnedGames]));
+  renderLiveSection(_lastLiveGames);
+  // 重設 live-ts-label（renderLiveSection 會清空 innerHTML）
+  const tsEl = document.getElementById("live-ts-label");
+  if(tsEl && _lastLiveGames._ts_label) tsEl.textContent = _lastLiveGames._ts_label;
+}
 
 /* ── Live game card renderer ─────────────────── */
 function renderLiveSection(liveGames) {
@@ -290,9 +312,19 @@ function renderLiveSection(liveGames) {
     return;
   }
 
-  const liveTs = liveGames._updated_at || "";   // 由外層 render 時注入
+  _lastLiveGames = liveGames || [];
   const half = g => g.top_inning ? "▲" : "▼";
-  const cards = liveGames.map(g => {
+
+  // 置頂的排前面，其餘維持原順序
+  const sorted = [...(liveGames || [])].sort((a, b) => {
+    const pa = _pinnedGames.has(`${a.away_cn}@${a.home_cn}`) ? 0 : 1;
+    const pb = _pinnedGames.has(`${b.away_cn}@${b.home_cn}`) ? 0 : 1;
+    return pa - pb;
+  });
+
+  const cards = sorted.map(g => {
+    const gameKey  = `${g.away_cn}@${g.home_cn}`;
+    const isPinned = _pinnedGames.has(gameKey);
     const projDiff = g.projected_total - g.market_total;
     const projCol  = Math.abs(projDiff) < 1 ? "text-slate-400"
                    : projDiff < 0 ? "text-sky-400" : "text-orange-400";
@@ -313,16 +345,24 @@ function renderLiveSection(liveGames) {
          </div>`;
 
     return `
-    <div class="card rounded-xl p-4 mb-3 border border-slate-700/40">
-      <!-- 頂行：狀態 + 局數 -->
+    <div class="card rounded-xl p-4 mb-3 border ${isPinned ? 'card-pinned' : 'border-slate-700/40'}">
+      <!-- 頂行：狀態 + 置頂 + 局數 -->
       <div class="flex items-center justify-between mb-3">
-        <span class="flex items-center gap-1.5 text-xs font-bold text-red-400 tracking-wide">
-          <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse inline-block"></span>
-          LIVE
-        </span>
-        <span class="text-xs bg-slate-700/60 text-slate-300 px-2.5 py-0.5 rounded-full font-bold">
-          ${half(g)} ${g.inning} 局
-        </span>
+        <div class="flex items-center gap-2">
+          <span class="flex items-center gap-1.5 text-xs font-bold text-red-400 tracking-wide">
+            <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse inline-block"></span>
+            LIVE
+          </span>
+          ${isPinned ? '<span class="text-[0.6rem] font-bold text-amber-400 bg-amber-400/10 px-1.5 py-0.5 rounded">📌 置頂</span>' : ''}
+        </div>
+        <div class="flex items-center gap-1.5">
+          <button onclick="togglePin(${JSON.stringify(gameKey)})"
+                  class="pin-btn ${isPinned ? 'pinned' : 'unpinned'}"
+                  title="${isPinned ? '取消置頂' : '置頂此比賽'}">📌</button>
+          <span class="text-xs bg-slate-700/60 text-slate-300 px-2.5 py-0.5 rounded-full font-bold">
+            ${half(g)} ${g.inning} 局
+          </span>
+        </div>
       </div>
 
       <!-- 計分板：客隊 比分 主隊 -->
@@ -975,11 +1015,13 @@ async function loadData(){
     renderFormStrip(recentHistory);
     renderROISparkline(recentHistory);
     renderTodayPnL(recentHistory);
-    _hasLiveGames = (data.live_games || []).length > 0;
-    renderLiveSection(data.live_games);
-    checkLiveNotification(data.live_games);
+    const liveGames = data.live_games || [];
+    liveGames._ts_label = "更新 " + (data.live_updated_at || data.generated_at || "");
+    _hasLiveGames = liveGames.length > 0;
+    renderLiveSection(liveGames);
+    checkLiveNotification(liveGames);
     const tsEl = document.getElementById("live-ts-label");
-    if (tsEl) tsEl.textContent = "更新 " + (data.live_updated_at || data.generated_at || "");
+    if (tsEl) tsEl.textContent = liveGames._ts_label;
     setNextRefreshFromTs(data.live_updated_ts);
     if(historyOpen) renderHistory();
   } catch(e){
@@ -1014,11 +1056,13 @@ async function refreshLiveOnly(){
     const res  = await fetch(JSON_URL + "?t=" + Date.now());
     if (!res.ok) return;
     const data = await res.json();
-    _hasLiveGames = (data.live_games || []).length > 0;
-    renderLiveSection(data.live_games);
-    checkLiveNotification(data.live_games);
+    const liveGames2 = data.live_games || [];
+    liveGames2._ts_label = "更新 " + (data.live_updated_at || data.generated_at || "");
+    _hasLiveGames = liveGames2.length > 0;
+    renderLiveSection(liveGames2);
+    checkLiveNotification(liveGames2);
     const tsEl = document.getElementById("live-ts-label");
-    if (tsEl) tsEl.textContent = "更新 " + (data.live_updated_at || data.generated_at || "");
+    if (tsEl) tsEl.textContent = liveGames2._ts_label;
     setNextRefreshFromTs(data.live_updated_ts);
   } catch(e){ /* 靜默失敗 */ }
 }
