@@ -117,6 +117,33 @@
     .pin-btn.unpinned { opacity:0.3; filter:grayscale(1); }
     .pin-btn.unpinned:hover { opacity:0.7; filter:none; }
     .card-pinned { border-color:#d97706 !important; box-shadow:0 0 0 1px rgba(217,119,6,0.25); }
+
+    /* ── Skeleton loading ── */
+    @keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+    .skeleton { background:linear-gradient(90deg,#1e293b 25%,#263548 50%,#1e293b 75%);
+                background-size:200% 100%; animation:shimmer 1.5s infinite; border-radius:0.5rem; }
+    body.light .skeleton { background:linear-gradient(90deg,#e2e8f0 25%,#f1f5f9 50%,#e2e8f0 75%);
+                           background-size:200% 100%; }
+
+    /* ── Sticky filter tabs ── */
+    #filter-tabs { position:sticky; top:0; z-index:20;
+                   background:rgba(15,23,42,0.95); backdrop-filter:blur(8px);
+                   margin-left:-1rem; margin-right:-1rem; padding:0.5rem 1rem;
+                   border-bottom:1px solid rgba(51,65,85,0.5); }
+    body.light #filter-tabs { background:rgba(241,245,249,0.95); border-bottom-color:rgba(203,213,225,0.5); }
+
+    /* ── Spotlight card ── */
+    .spotlight-card { background:linear-gradient(135deg,#1e293b 0%,#1a2942 100%);
+                      border:1px solid rgba(251,191,36,0.3); position:relative; overflow:hidden; }
+    .spotlight-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px;
+                               background:linear-gradient(90deg,#f59e0b,#fcd34d,#f59e0b); }
+
+    /* ── SP card in expanded section ── */
+    .sp-grade { display:inline-flex; align-items:center; justify-content:center;
+                width:2.2rem; height:2.2rem; border-radius:50%; font-size:0.7rem; font-weight:900; }
+    .sp-grade-a { background:rgba(52,211,153,0.15); color:#34d399; border:1.5px solid rgba(52,211,153,0.4); }
+    .sp-grade-b { background:rgba(251,191,36,0.15); color:#fbbf24; border:1.5px solid rgba(251,191,36,0.4); }
+    .sp-grade-c { background:rgba(244,63,94,0.15); color:#f43f5e; border:1.5px solid rgba(244,63,94,0.4); }
   </style>
 </head>
 <body class="min-h-screen p-4 md:p-6">
@@ -206,9 +233,11 @@
   <!-- ── 整體統計 ──────────────────────────────── -->
   <div class="card rounded-xl p-4 mb-4">
     <div class="grid grid-cols-3 gap-3 mb-3">
-      <div class="stat-box text-center">
-        <div class="text-xl font-bold text-white" id="s-wr">—</div>
-        <div class="text-xs text-slate-500 mt-0.5">整體勝率</div>
+      <div class="stat-box text-center flex flex-col items-center">
+        <div id="s-wr" class="flex flex-col items-center">
+          <div class="text-xl font-bold text-white">—</div>
+          <div class="text-xs text-slate-500 mt-0.5">整體勝率</div>
+        </div>
       </div>
       <div class="stat-box text-center">
         <div class="text-xl font-bold" id="s-roi">—</div>
@@ -221,6 +250,7 @@
     </div>
     <div class="grid grid-cols-3 gap-2" id="by-type-row"></div>
     <div id="form-strip" class="mt-3 pt-2 border-t border-slate-700/40 flex items-center gap-1 flex-wrap min-h-[1.5rem]"></div>
+    <div id="s-streak"></div>
     <div id="roi-chart" class="mt-2"></div>
     <div id="today-pnl" class="mt-1"></div>
   </div>
@@ -236,8 +266,11 @@
     </div>
   </div>
 
+  <!-- ── Spotlight (today's best pick) ────────── -->
+  <div id="spotlight"></div>
+
   <!-- ── Filter tabs ───────────────────────────── -->
-  <div class="flex gap-2 mb-4 flex-wrap" id="filter-tabs">
+  <div class="flex gap-2 mb-1 flex-wrap" id="filter-tabs">
     <button class="tab tab-active" data-filter="ALL" onclick="setFilter('ALL',this)">全部 <span id="cnt-ALL" class="ml-1 opacity-70"></span></button>
     <button class="tab tab-inactive" data-filter="獨贏" onclick="setFilter('獨贏',this)">ML 獨贏 <span id="cnt-ML" class="ml-1 opacity-70"></span></button>
     <button class="tab tab-inactive" data-filter="讓分" onclick="setFilter('讓分',this)">RL 讓分 <span id="cnt-RL" class="ml-1 opacity-70"></span></button>
@@ -251,7 +284,10 @@
 
   <!-- ── Pick cards ────────────────────────────── -->
   <div id="picks-container">
-    <div class="text-center text-slate-400 py-12">載入中…</div>
+    <div class="space-y-4">
+      <div class="card rounded-xl p-4"><div class="skeleton h-3 w-1/2 mb-3"></div><div class="skeleton h-5 w-3/4 mb-3"></div><div class="skeleton h-10 w-full mb-3 rounded-lg"></div><div class="grid grid-cols-3 gap-2"><div class="skeleton h-12 rounded-lg"></div><div class="skeleton h-12 rounded-lg"></div><div class="skeleton h-12 rounded-lg"></div></div></div>
+      <div class="card rounded-xl p-4"><div class="skeleton h-3 w-2/3 mb-3"></div><div class="skeleton h-5 w-4/5 mb-3"></div><div class="skeleton h-10 w-full mb-3 rounded-lg"></div><div class="grid grid-cols-3 gap-2"><div class="skeleton h-12 rounded-lg"></div><div class="skeleton h-12 rounded-lg"></div><div class="skeleton h-12 rounded-lg"></div></div></div>
+    </div>
   </div>
 
   <p class="text-center text-xs text-slate-700 mt-6">
@@ -475,6 +511,121 @@ function trendChip(t){
   return "";
 }
 
+/* ── Simplified pitcher 1-liner (always visible) ── */
+function spSimple(name, era, hand, rest, avgip){
+  if(!name||name==="TBD") return '<span class="text-slate-600">TBD</span>';
+  const handBadge = hand==="L"
+    ? '<span class="text-[0.6rem] font-bold bg-indigo-900/60 text-indigo-300 px-1 rounded">左</span>'
+    : hand==="R" ? '<span class="text-[0.6rem] bg-slate-700 text-slate-400 px-1 rounded">右</span>' : '';
+  const dot = era==null ? '' : era<=3.5 ? '🟢' : era<=4.5 ? '🟡' : '🔴';
+  const restWarn = rest!=null&&rest<=3 ? '<span class="text-amber-400 text-[0.6rem] ml-1">短休</span>' : '';
+  const ipWarn = avgip!=null&&avgip<5 ? '<span class="text-amber-400 text-[0.6rem] ml-1">投不滿5局</span>' : '';
+  return `${handBadge} <span class="text-slate-200 text-xs">${name}</span> ${dot}${restWarn}${ipWarn}`;
+}
+
+/* ── Clean pitcher card (expanded section) ───── */
+function spCard(name, era, hand, rest, trend, avgip){
+  if(!name||name==="TBD") return `<div class="text-center py-2 text-slate-600 text-xs">投手 TBD</div>`;
+  const handLabel = hand==="L"?"左投":hand==="R"?"右投":"";
+  const handCls   = hand==="L"?"bg-indigo-900/50 text-indigo-300":"bg-slate-700/60 text-slate-400";
+  const grade     = era==null?null:era<=3.5?"A":era<=4.5?"B":"C";
+  const gradeCls  = grade==="A"?"sp-grade sp-grade-a":grade==="B"?"sp-grade sp-grade-b":"sp-grade sp-grade-c";
+  const gradeLabel= grade==="A"?"優":grade==="B"?"普通":"差";
+  const eraStr    = era!=null?era.toFixed(2):"—";
+  const eraCls    = era==null?"text-slate-400":era<=3.5?"text-emerald-400":era<=4.5?"text-amber-400":"text-rose-400";
+  const warns=[];
+  if(rest!=null&&rest<=3) warns.push("⚠️ 短休 "+rest+" 天");
+  if(avgip!=null&&avgip<5) warns.push("⚠️ 通常投不滿 5 局");
+  if(trend!=null&&trend>1.5) warns.push("📈 近期狀態退步");
+  else if(trend!=null&&trend<-1.5) warns.push("📉 近期狀態變好");
+  const warnHtml = warns.length
+    ? warns.map(w=>`<div class="text-[0.62rem] text-amber-400 mt-0.5">${w}</div>`).join("")
+    : `<div class="text-[0.62rem] text-emerald-400/60 mt-0.5">✅ 無異常</div>`;
+  return `
+    <div class="text-center">
+      ${handLabel?`<span class="text-[0.62rem] font-bold px-1.5 py-0.5 rounded ${handCls}">${handLabel}</span>`:""}
+      <div class="text-sm font-semibold text-white mt-1 truncate">${name}</div>
+      <div class="flex items-center justify-center gap-1.5 mt-1.5">
+        ${grade?`<div class="${gradeCls}">${grade}</div>`:""}
+        <div>
+          <div class="text-xl font-black ${eraCls} leading-none">${eraStr}</div>
+          <div class="text-[0.6rem] text-slate-500">防禦率${grade?" · "+gradeLabel:""}</div>
+        </div>
+      </div>
+      ${warnHtml}
+    </div>`;
+}
+
+/* ── Game countdown ───────────────────────────── */
+function gameCountdown(dateStr, timeStr){
+  if(!dateStr||!timeStr) return "";
+  const m = timeStr.match(/(\d{1,2}):(\d{2})/);
+  if(!m) return "";
+  const hh=parseInt(m[1]), mm=parseInt(m[2]);
+  const [mo,dd] = dateStr.split('/').map(Number);
+  // compute diff in TW timezone (UTC+8)
+  const nowUtcMs = Date.now();
+  const twNow = new Date(nowUtcMs + 8*3600000);
+  const gameMs = Date.UTC(twNow.getUTCFullYear(), mo-1, dd, hh, mm);
+  const nowMs  = twNow.getTime();
+  const diff   = gameMs - nowMs;
+  if(diff<=0||diff>24*3600000) return "";
+  const h=Math.floor(diff/3600000), min=Math.floor((diff%3600000)/60000);
+  if(h>0) return `${h}h${min}m 後開賽`;
+  if(min>1) return `${min} 分後開賽`;
+  return "即將開賽";
+}
+
+/* ── Spotlight: feature best pick ────────────── */
+function renderSpotlight(picks){
+  const el = document.getElementById("spotlight");
+  if(!el) return;
+  const active = (picks||[]).filter(p=>(p.edge||0)>0);
+  if(!active.length){ el.innerHTML=''; return; }
+  const top = active.slice().sort((a,b)=>(b.edge||0)-(a.edge||0))[0];
+  const edgeCol = (top.edge||0)>=12?"text-emerald-400":"text-amber-400";
+  const badge   = top.btype==="獨贏"?"badge-ml":top.btype==="讓分"?"badge-rl":"badge-tot";
+  const bLabel  = top.btype==="獨贏"?"ML 獨贏":top.btype==="讓分"?"RL 讓分":"TOT 大小分";
+  const cd      = gameCountdown(top.game_date, top.game_time);
+  el.innerHTML = `
+    <div class="spotlight-card rounded-xl p-4 mb-4">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-amber-400 text-xs font-black tracking-wide">🏆 今日最強推薦</span>
+        <span class="badge ${badge} text-[0.65rem]">${bLabel}</span>
+        ${cd?`<span class="ml-auto text-[0.65rem] text-slate-500">${cd}</span>`:''}
+      </div>
+      <div class="flex items-center justify-between">
+        <div class="min-w-0">
+          <div class="text-lg font-bold text-white truncate">${top.away_cn} @ ${top.home_cn}</div>
+          <div class="text-sm text-slate-300 mt-0.5">${top.bet_label}</div>
+          <div class="text-xs text-slate-500 mt-1">${top.game_date} ${top.game_time}</div>
+        </div>
+        <div class="text-right shrink-0 ml-3">
+          <div class="text-3xl font-black ${edgeCol}">+${(top.edge||0).toFixed(1)}%</div>
+          <div class="text-[0.65rem] text-slate-500">Edge 優勢</div>
+          <div class="text-lg font-bold text-emerald-400 mt-0.5">$${top.stake}</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+/* ── Streak counter ───────────────────────────── */
+function renderStreak(hist){
+  const el = document.getElementById("s-streak");
+  if(!el) return;
+  const settled = (hist||[]).filter(r=>r.result==="W"||r.result==="L");
+  if(settled.length<2){ el.innerHTML=''; return; }
+  const last = settled[settled.length-1].result;
+  let streak=1;
+  for(let i=settled.length-2;i>=0;i--){
+    if(settled[i].result===last) streak++; else break;
+  }
+  if(streak<2){ el.innerHTML=''; return; }
+  el.innerHTML = last==="W"
+    ? `<div class="text-xs text-amber-400 mt-1 text-center">🔥 連贏 ${streak} 場</div>`
+    : `<div class="text-xs text-rose-400 mt-1 text-center">❄️ 連輸 ${streak} 場</div>`;
+}
+
 /* ── SP chip builder ─────────────────────────── */
 function spChips(name, era, fip, k9, avgip, rest, whip, hand, babip, lob){
   if(!name||name==="TBD") return '<span class="text-slate-600">TBD</span>';
@@ -652,7 +803,10 @@ function renderCard(p){
           ${badge} ${pfHtml}${wxHtml}${umpHtml}${spSrcHtml}
         </div>
         <div class="text-lg font-bold text-white mt-0.5">${p.away_cn} @ ${p.home_cn}</div>
-        <div class="text-xs text-slate-500">${p.game_date} &nbsp;${p.game_time} 台灣時間</div>
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="text-xs text-slate-500">${p.game_date} &nbsp;${p.game_time} 台灣時間</span>
+          ${(()=>{ const cd=gameCountdown(p.game_date,p.game_time); return cd?`<span class="text-[0.65rem] text-sky-400 font-semibold">${cd}</span>`:''; })()}
+        </div>
       </div>
       <div class="text-right shrink-0">
         <div class="text-2xl font-bold text-emerald-400">$${p.stake}</div>
@@ -679,6 +833,15 @@ function renderCard(p){
         <span class="text-xs text-slate-500 ml-auto">${p.bk||""}</span>
       </div>
     </div>
+
+    <!-- Pitcher 1-liner -->
+    ${(p.away_sp||p.home_sp)?`
+    <div class="mt-2 flex items-center gap-2 text-xs bg-slate-800/30 rounded-lg px-3 py-1.5 flex-wrap">
+      <span class="text-slate-600 shrink-0">投手</span>
+      <span>${spSimple(p.away_sp,p.away_era,p.away_hand,p.away_rest,p.away_avgip)}</span>
+      <span class="text-slate-700">vs</span>
+      <span>${spSimple(p.home_sp,p.home_era,p.home_hand,p.home_rest,p.home_avgip)}</span>
+    </div>`:''}
 
     <!-- Quick stats row (always visible) -->
     <div class="mt-3 grid grid-cols-3 gap-2 text-center">
@@ -726,23 +889,18 @@ function renderCard(p){
 
     <!-- Collapsible details -->
     <div id="${uid}" class="detail-section collapsed">
-      <div class="mt-3 space-y-1.5">
-        <div class="text-xs text-slate-500 font-medium">先發投手</div>
-        <div class="text-xs leading-relaxed">
-          <span class="text-slate-500 mr-1">客隊</span>
-          ${spChips(p.away_sp,p.away_era,p.away_fip,p.away_k9,p.away_avgip,p.away_rest,p.away_whip,p.away_hand,p.away_babip,p.away_lob)}
-          ${trendChip(p.away_trend)}
+      <!-- 投手對決卡 -->
+      <div class="mt-3 bg-slate-800/40 rounded-lg px-3 py-3">
+        <div class="text-[0.65rem] text-slate-500 font-bold uppercase tracking-widest text-center mb-3">⚾ 先發投手對決</div>
+        <div class="grid grid-cols-2 gap-3 divide-x divide-slate-700/50">
+          <div>${spCard(p.away_sp,p.away_era,p.away_hand,p.away_rest,p.away_trend,p.away_avgip)}</div>
+          <div class="pl-3">${spCard(p.home_sp,p.home_era,p.home_hand,p.home_rest,p.home_trend,p.home_avgip)}</div>
         </div>
-        <div class="text-xs leading-relaxed">
-          <span class="text-slate-500 mr-1">主隊</span>
-          ${spChips(p.home_sp,p.home_era,p.home_fip,p.home_k9,p.home_avgip,p.home_rest,p.home_whip,p.home_hand,p.home_babip,p.home_lob)}
-          ${trendChip(p.home_trend)}
+        <div class="grid grid-cols-2 gap-1 text-[0.65rem] text-slate-600 mt-3 pt-2 border-t border-slate-700/40">
+          <div class="text-center">${p.away_cn} ${awayWpctHtml}</div>
+          <div class="text-center">${p.home_cn} ${homeWpctHtml}</div>
         </div>
-        <div class="grid grid-cols-2 gap-1 text-xs text-slate-500 mt-1">
-          <div>得分支援: ${awayRS} ${awayWpctHtml} ${awayL10Html}</div>
-          <div>得分支援: ${homeRS} ${homeWpctHtml} ${homeL10Html}</div>
-        </div>
-        ${travelHtml ? `<div class="mt-1.5 flex flex-wrap gap-1">${travelHtml}</div>` : ""}
+        ${travelHtml ? `<div class="mt-2 flex flex-wrap gap-1 justify-center">${travelHtml}</div>` : ""}
       </div>
 
       <!-- 打線 -->
@@ -997,7 +1155,21 @@ async function loadData(){
     const wrEl  = document.getElementById("s-wr");
     const roiEl = document.getElementById("s-roi");
     const recEl = document.getElementById("s-record");
-    wrEl.textContent  = (s.win_rate||0).toFixed(1)+"%";
+    // Circular gauge for win rate
+    const wr = s.win_rate||0;
+    const circ = 94.25; // 2π×15
+    const dash = Math.min(wr/100*circ, circ).toFixed(1);
+    const gaugeCol = wr>=55?"#34d399":wr>=50?"#f59e0b":"#f43f5e";
+    wrEl.innerHTML = `
+      <svg viewBox="0 0 36 36" class="w-14 h-14" style="display:block">
+        <circle cx="18" cy="18" r="15" fill="none" stroke="#1e293b" stroke-width="3"/>
+        <circle cx="18" cy="18" r="15" fill="none" stroke="${gaugeCol}" stroke-width="3"
+                stroke-dasharray="${dash} ${circ}" stroke-linecap="round"
+                transform="rotate(-90 18 18)"/>
+        <text x="18" y="21" text-anchor="middle" fill="${gaugeCol}"
+              font-size="7.5" font-weight="800" font-family="system-ui">${wr.toFixed(0)}%</text>
+      </svg>
+      <div class="text-[0.65rem] text-slate-500 mt-0.5">整體勝率</div>`;
     roiEl.textContent = s.roi!=null?signStr(s.roi)+"%":"N/A";
     roiEl.className   = "text-xl font-bold "+(s.roi!=null?(s.roi>=0?"text-emerald-400":"text-rose-400"):"text-slate-400");
     recEl.textContent = (s.wins||0)+" / "+(s.settled||0);
@@ -1013,8 +1185,10 @@ async function loadData(){
     updateCounts();
     renderPicks();
     renderFormStrip(recentHistory);
+    renderStreak(recentHistory);
     renderROISparkline(recentHistory);
     renderTodayPnL(recentHistory);
+    renderSpotlight(allPicks);
     const liveGames = data.live_games || [];
     liveGames._ts_label = "更新 " + (data.live_updated_at || data.generated_at || "");
     _hasLiveGames = liveGames.length > 0;
