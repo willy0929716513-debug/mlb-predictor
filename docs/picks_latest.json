@@ -366,7 +366,7 @@
       "reason": "第9局 8:3 → 預計終局11.6分 < 盤口13.5"
     }
   ],
-  "live_updated_ts": 1779070058,
+  "live_updated_ts": 1779070360,
   "game_preds": {
     "mariners|padres": {
       "home_win_prob": 0.5444,
@@ -429,5 +429,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-05-18 10:07 (台灣時間)"
+  "live_updated_at": "2026-05-18 10:12 (台灣時間)"
 }
