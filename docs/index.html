@@ -564,6 +564,16 @@ function spCard(name, era, hand, rest, trend, avgip){
     </div>`;
 }
 
+/* ── Adjust displayed game time -1 min ────────── */
+function adjustGameTime(timeStr){
+  if(!timeStr) return timeStr;
+  const m = timeStr.match(/(\d{1,2}):(\d{2})/);
+  if(!m) return timeStr;
+  let h = parseInt(m[1]), min = parseInt(m[2]) - 1;
+  if(min < 0){ min = 59; h = (h - 1 + 24) % 24; }
+  return `${String(h).padStart(2,'0')}:${String(min).padStart(2,'0')}`;
+}
+
 /* ── Game countdown ───────────────────────────── */
 function gameCountdown(dateStr, timeStr){
   if(!dateStr||!timeStr) return "";
@@ -574,14 +584,14 @@ function gameCountdown(dateStr, timeStr){
   // compute diff in TW timezone (UTC+8)
   const nowUtcMs = Date.now();
   const twNow = new Date(nowUtcMs + 8*3600000);
-  const gameMs = Date.UTC(twNow.getUTCFullYear(), mo-1, dd, hh, mm) - 60000; // -1 分鐘
+  const gameMs = Date.UTC(twNow.getUTCFullYear(), mo-1, dd, hh, mm);
   const nowMs  = twNow.getTime();
   const diff   = gameMs - nowMs;
-  if(diff<=0||diff>3600000) return ""; // 只在 1 小時內才顯示
+  if(diff<=0||diff>8*3600000) return ""; // 8 小時內才顯示倒數
   const h=Math.floor(diff/3600000), min=Math.floor((diff%3600000)/60000);
   if(h>0) return `${h}h${min}m 後開賽`;
   if(min>1) return `${min} 分後開賽`;
-  return "即將開賽";
+  return "即將開賽"; // 開賽前 1 分鐘內才顯示「即將開賽」
 }
 
 /* ── Spotlight: feature best pick ────────────── */
@@ -606,7 +616,7 @@ function renderSpotlight(picks){
         <div class="min-w-0">
           <div class="text-lg font-bold text-white truncate">${top.away_cn} @ ${top.home_cn}</div>
           <div class="text-sm text-slate-300 mt-0.5">${top.bet_label}</div>
-          <div class="text-xs text-slate-500 mt-1">${top.game_date} ${top.game_time}</div>
+          <div class="text-xs text-slate-500 mt-1">${top.game_date} ${adjustGameTime(top.game_time)}</div>
         </div>
         <div class="text-right shrink-0 ml-3">
           <div class="text-3xl font-black ${edgeCol}">+${(top.edge||0).toFixed(1)}%</div>
@@ -812,7 +822,7 @@ function renderCard(p){
         </div>
         <div class="text-lg font-bold text-white mt-0.5">${p.away_cn} @ ${p.home_cn}</div>
         <div class="flex items-center gap-2 flex-wrap">
-          <span class="text-xs text-slate-500">${p.game_date} &nbsp;${p.game_time} 台灣時間</span>
+          <span class="text-xs text-slate-500">${p.game_date} &nbsp;${adjustGameTime(p.game_time)} 台灣時間</span>
           ${(()=>{ const cd=gameCountdown(p.game_date,p.game_time); return cd?`<span class="text-[0.65rem] text-sky-400 font-semibold">${cd}</span>`:''; })()}
         </div>
       </div>
