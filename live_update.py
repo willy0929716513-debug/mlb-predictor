@@ -212,6 +212,8 @@ def main():
         log.error("%s not found — run main bot first", JSON_PATH)
         return
 
+    send_ntfy("⚾ 場中更新啟動", "live_update 已開始執行，開始監控比賽中...")
+
     with open(JSON_PATH, encoding="utf-8") as f:
         data = json.load(f)
 
