@@ -306,10 +306,10 @@
       "home_cn": "光芒",
       "away_cn": "金鶯",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 16,
       "away_runs": 6,
-      "projected_total": 28.3,
+      "projected_total": 26.4,
       "market_total": 7.5,
       "bet": "主隊獨贏",
       "reason": "第8局主隊領先10分（賽前主隊勝率76%），大局已定"
@@ -331,12 +331,12 @@
       "away_cn": "大都會",
       "inning": 8,
       "top_inning": false,
-      "home_runs": 4,
+      "home_runs": 5,
       "away_runs": 5,
-      "projected_total": 10.8,
+      "projected_total": 12.0,
       "market_total": 10.0,
-      "bet": "主隊讓分(+1.5)",
-      "reason": "主隊落後1分 第8局，賽前主隊勝率60%"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "洋基",
@@ -353,14 +353,14 @@
     {
       "home_cn": "皇家",
       "away_cn": "紅襪",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 3,
-      "projected_total": 4.8,
+      "projected_total": 4.5,
       "market_total": 9.0,
       "bet": "大小分 UNDER",
-      "reason": "第8局 3:1 → 預計終局4.8分 < 盤口9.0"
+      "reason": "第9局 3:1 → 預計終局4.5分 < 盤口9.0"
     },
     {
       "home_cn": "雙城",
@@ -419,6 +419,18 @@
       "away_runs": 0,
       "projected_total": 7.5,
       "market_total": 7.5,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "響尾蛇",
+      "away_cn": "巨人",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 9.0,
+      "market_total": 9.0,
       "bet": null,
       "reason": null
     },
