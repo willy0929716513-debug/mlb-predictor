@@ -167,10 +167,10 @@ def generate_live_picks(live_games, game_preds):
         if inning >= 6 and projected < market_total - 1.0:
             bet    = "大小分 UNDER"
             reason = "第%d局 %d:%d → 預計終局%.1f分 < 盤口%.1f" % (inning, away_r, home_r, projected, market_total)
-        # 大小分 OVER：第4局起（避免早局外推失真），走勢高分
-        elif 4 <= inning <= 5 and projected > market_total + 1.0:
+        # 大小分 OVER：第4局起，當前得分已達盤口85%（不靠外推）
+        elif 4 <= inning <= 5 and current_total >= market_total * 0.85:
             bet    = "大小分 OVER"
-            reason = "第%d局 %d:%d → 預計終局%.1f分 > 盤口%.1f" % (inning, away_r, home_r, projected, market_total)
+            reason = "第%d局已得%d分（盤口%.1f），剩%.1f局大機率OVER" % (inning, current_total, market_total, innings_left)
         # ML 主隊獨贏：第7局起，主隊領先2分以上（模型不反對）
         elif inning >= 7 and diff >= 2 and p_home >= 0.45:
             bet    = "主隊獨贏"
