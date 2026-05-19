@@ -296,8 +296,8 @@
       "inning": 5,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 2,
-      "projected_total": 6.8,
+      "away_runs": 3,
+      "projected_total": 9.0,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -317,8 +317,8 @@
     {
       "home_cn": "費城人",
       "away_cn": "紅人",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 3,
       "projected_total": 8.3,
@@ -331,21 +331,21 @@
       "away_cn": "勇士",
       "inning": 5,
       "top_inning": false,
-      "home_runs": 6,
+      "home_runs": 7,
       "away_runs": 0,
-      "projected_total": 12.0,
+      "projected_total": 14.0,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第5局 0:6 → 預計終局12.0分 > 盤口8.5"
+      "reason": "第5局 0:7 → 預計終局14.0分 > 盤口8.5"
     },
     {
       "home_cn": "國民",
       "away_cn": "大都會",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 4,
-      "projected_total": 12.6,
+      "projected_total": 11.5,
       "market_total": 10.0,
       "bet": "主隊讓分(+1.5)",
       "reason": "主隊落後1分 第6局，賽前主隊勝率60%"
@@ -379,9 +379,9 @@
       "away_cn": "太空人",
       "inning": 4,
       "top_inning": false,
-      "home_runs": 1,
+      "home_runs": 3,
       "away_runs": 0,
-      "projected_total": 2.6,
+      "projected_total": 7.7,
       "market_total": 9.5,
       "bet": null,
       "reason": null
@@ -392,11 +392,11 @@
       "inning": 4,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 1,
-      "projected_total": 3.0,
+      "away_runs": 2,
+      "projected_total": 6.0,
       "market_total": 10.5,
       "bet": "主隊讓分(+1.5)",
-      "reason": "主隊落後1分 第4局，賽前主隊勝率66%"
+      "reason": "主隊落後2分 第4局，賽前主隊勝率66%"
     },
     {
       "home_cn": "落磯",
