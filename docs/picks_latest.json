@@ -307,9 +307,9 @@
       "away_cn": "金鶯",
       "inning": 6,
       "top_inning": false,
-      "home_runs": 12,
+      "home_runs": 13,
       "away_runs": 4,
-      "projected_total": 26.2,
+      "projected_total": 27.8,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -357,10 +357,10 @@
       "top_inning": true,
       "home_runs": 3,
       "away_runs": 4,
-      "projected_total": 14.0,
+      "projected_total": 12.6,
       "market_total": 9.0,
-      "bet": "大小分 OVER",
-      "reason": "第5局 4:3 → 預計終局14.0分 > 盤口9.0"
+      "bet": "主隊讓分(+1.5)",
+      "reason": "主隊落後1分 第6局，賽前主隊勝率66%"
     },
     {
       "home_cn": "皇家",
@@ -411,7 +411,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779151365,
+  "live_updated_ts": 1779151667,
   "game_preds": {
     "marlins|braves": {
       "home_win_prob": 0.4857,
@@ -470,5 +470,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-05-19 08:42 (台灣時間)"
+  "live_updated_at": "2026-05-19 08:47 (台灣時間)"
 }
