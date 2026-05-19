@@ -324,7 +324,7 @@
       "projected_total": 14.4,
       "market_total": 8.5,
       "bet": "主隊獨贏",
-      "reason": "第8局主隊領先12分（賽前主隊勝率49%），大局已定"
+      "reason": "第9局主隊領先12分（賽前主隊勝率49%），大局已定"
     },
     {
       "home_cn": "國民",
@@ -447,7 +447,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779154084,
+  "live_updated_ts": 1779154385,
   "game_preds": {
     "marlins|braves": {
       "home_win_prob": 0.4857,
@@ -506,5 +506,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-05-19 09:28 (台灣時間)"
+  "live_updated_at": "2026-05-19 09:33 (台灣時間)"
 }
