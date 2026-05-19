@@ -33,15 +33,15 @@ RS_BLEND_W_TOT = 0.04   # 大小分預測的RS權重（極低，防止RS拉高Ov
 MIN_P          = 1.35
 MAX_P          = 2.80  # 上限放寬（↑2.50→2.80），讓高賠RL好注進來
 BANK           = 1000.0
-KELLY          = 0.12
-KELLY_MAX      = 150.0  # 每注上限 $150（本金 $1000 的 15%）
-KELLY_FLOOR    = 50.0   # 最低注額 $50（本金 $1000 的 5%）
+KELLY          = 0.25
+KELLY_MAX      = 200.0  # 每注上限 $200（強注放大空間）
+KELLY_FLOOR    = 50.0   # 最低注額 $50
 KELLY_MIN      = 50.0   # 低於此值直接排除，不值得下注
 MAX_PICKS      = 5      # CLV 排序後只取前 N 名，讓推薦穩定
 MAX_RL_PICKS   = 2      # 每日RL推薦上限（防止同日過度集中）
 RL_BET_CONF_MIN= 0.68  # RL 最低信心門檻（↓0.70→0.68，RL ROI+71%，小幅鬆動增加穩定性）
 RL_KELLY_MULT  = 0.75  # RL Kelly 折扣（不確定性更高，下注降低25%）
-RL_KELLY_MAX   = 100.0 # RL 最大下注上限
+RL_KELLY_MAX   = 130.0 # RL 最大下注上限
 LINE_CLV_MIN   = -1.50  # 線路 CLV 門檻（↑-0.30→-1.50）：2.50賠率需移動0.10+才觸發；≤0.30%只是噪音
 STALE_PRICE_GAP = 0.20  # 最佳賠率超過共識20%以上 → 顯示警告
 MAX_PRICE_GAP   = 0.25  # 超過25% → 直接封鎖（可能為錯誤賠率或過時報價）
@@ -2436,7 +2436,7 @@ def kelly_stake(edge, model_p, price, conf=1.0, dv_p=None):
     kp = (model_p*(1-KELLY_BAYES_W) + dv_p*KELLY_BAYES_W) if dv_p else model_p
     raw_k = (b*kp - (1-kp)) / b
     if raw_k<=0: return 0.0
-    dyn_k = max(0.05, min(0.18, KELLY*conf))
+    dyn_k = max(0.08, min(0.30, KELLY*conf))
     return round(max(0.0, min(KELLY_MAX, dyn_k*raw_k*BANK)), 1)
 
 def calc_perf(hist):
