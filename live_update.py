@@ -15,7 +15,7 @@ log = logging.getLogger("live_update")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
 JSON_PATH = "docs/picks_latest.json"
-NTFY_TOPIC = os.environ.get("NTFY_TOPIC", "")
+NTFY_TOPIC = os.environ.get("NTFY_TOPIC", "mlb-picks-willy0815")
 
 
 def send_ntfy(title, message):
