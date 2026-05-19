@@ -295,24 +295,12 @@
       "away_cn": "守護者",
       "inning": 8,
       "top_inning": false,
-      "home_runs": 1,
+      "home_runs": 2,
       "away_runs": 7,
-      "projected_total": 9.6,
+      "projected_total": 10.8,
       "market_total": 8.0,
       "bet": "客隊獨贏",
-      "reason": "第8局客隊領先6分（賽前客隊勝率70%），大局已定"
-    },
-    {
-      "home_cn": "馬林魚",
-      "away_cn": "勇士",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 12,
-      "away_runs": 0,
-      "projected_total": 13.5,
-      "market_total": 8.5,
-      "bet": "主隊獨贏",
-      "reason": "第9局主隊領先12分（賽前主隊勝率49%），大局已定"
+      "reason": "第8局客隊領先5分（賽前客隊勝率70%），大局已定"
     },
     {
       "home_cn": "國民",
@@ -329,26 +317,14 @@
     {
       "home_cn": "洋基",
       "away_cn": "藍鳥",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 7,
       "away_runs": 5,
-      "projected_total": 16.6,
+      "projected_total": 15.4,
       "market_total": 9.0,
       "bet": "主隊獨贏",
-      "reason": "第7局主隊領先2分（賽前主隊勝率66%），大局已定"
-    },
-    {
-      "home_cn": "皇家",
-      "away_cn": "紅襪",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 1,
-      "away_runs": 3,
-      "projected_total": 4.2,
-      "market_total": 9.0,
-      "bet": "大小分 UNDER",
-      "reason": "第9局 3:1 → 預計終局4.2分 < 盤口9.0"
+      "reason": "第8局主隊領先2分（賽前主隊勝率66%），大局已定"
     },
     {
       "home_cn": "雙城",
