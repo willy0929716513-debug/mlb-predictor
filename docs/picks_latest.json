@@ -297,7 +297,7 @@
       "top_inning": false,
       "home_runs": 1,
       "away_runs": 2,
-      "projected_total": 13.5,
+      "projected_total": 10.8,
       "market_total": 8.0,
       "bet": "大小分 OVER",
       "reason": "第3局 2:1 → 預計終局10.8分 > 盤口8.0"
@@ -319,12 +319,12 @@
       "away_cn": "紅人",
       "inning": 6,
       "top_inning": false,
-      "home_runs": 2,
+      "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 6.5,
+      "projected_total": 8.2,
       "market_total": 9.5,
       "bet": "大小分 UNDER",
-      "reason": "第6局 2:2 → 預計終局6.5分 < 盤口9.5"
+      "reason": "第6局 2:3 → 預計終局8.2分 < 盤口9.5"
     },
     {
       "home_cn": "馬林魚",
@@ -341,14 +341,14 @@
     {
       "home_cn": "國民",
       "away_cn": "大都會",
-      "inning": 4,
-      "top_inning": false,
+      "inning": 5,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 12.9,
+      "projected_total": 11.2,
       "market_total": 10.0,
       "bet": "大小分 OVER",
-      "reason": "第4局 2:3 → 預計終局12.9分 > 盤口10.0"
+      "reason": "第5局 2:3 → 預計終局11.2分 > 盤口10.0"
     },
     {
       "home_cn": "洋基",
@@ -356,11 +356,11 @@
       "inning": 4,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 0,
-      "projected_total": 3.0,
+      "away_runs": 3,
+      "projected_total": 12.0,
       "market_total": 9.0,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第4局 3:1 → 預計終局12.0分 > 盤口9.0"
     },
     {
       "home_cn": "皇家",
@@ -379,9 +379,9 @@
       "away_cn": "太空人",
       "inning": 2,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 0.0,
+      "projected_total": 6.0,
       "market_total": 9.5,
       "bet": null,
       "reason": null
