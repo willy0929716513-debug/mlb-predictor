@@ -219,6 +219,14 @@ def main():
         log.error("%s not found — run main bot first", JSON_PATH)
         return
 
+    _flag = "/tmp/ntfy_live_started"
+    if not os.path.exists(_flag):
+        send_ntfy("MLB Live Update", "場中監控已啟動")
+        try:
+            open(_flag, "w").close()
+        except Exception:
+            pass
+
     with open(JSON_PATH, encoding="utf-8") as f:
         data = json.load(f)
 

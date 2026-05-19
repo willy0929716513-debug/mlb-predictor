@@ -43,12 +43,6 @@ jobs:
           MISS=0       # 連續無比賽次數
           SEEN=0       # 是否曾偵測到比賽
 
-          python3 -c "
-import os, requests
-topic = os.environ.get('NTFY_TOPIC', 'mlb-picks-willy0815')
-requests.post('https://ntfy.sh', json={'topic': topic, 'title': '⚾ 場中更新啟動', 'message': '開始監控比賽中...', 'priority': 4, 'tags': ['baseball']}, timeout=10)
-" 2>/dev/null || true
-
           while [ $MISS -lt 3 ]; do
             python live_update.py
 
