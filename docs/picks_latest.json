@@ -296,8 +296,8 @@
       "inning": 12,
       "top_inning": true,
       "home_runs": 6,
-      "away_runs": 7,
-      "projected_total": 13.0,
+      "away_runs": 8,
+      "projected_total": 14.0,
       "market_total": 10.0,
       "bet": null,
       "reason": null
@@ -341,11 +341,11 @@
     {
       "home_cn": "教士",
       "away_cn": "道奇",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 3.6,
+      "projected_total": 3.0,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -354,7 +354,7 @@
       "home_cn": "響尾蛇",
       "away_cn": "巨人",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 5,
       "away_runs": 2,
       "projected_total": 31.5,
@@ -366,16 +366,16 @@
       "home_cn": "水手",
       "away_cn": "白襪",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 4.5,
+      "projected_total": 3.6,
       "market_total": 7.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1779157406,
+  "live_updated_ts": 1779157708,
   "game_preds": {
     "marlins|braves": {
       "home_win_prob": 0.4857,
@@ -434,5 +434,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-05-19 10:23 (台灣時間)"
+  "live_updated_at": "2026-05-19 10:28 (台灣時間)"
 }
