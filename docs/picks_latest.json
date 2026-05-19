@@ -294,13 +294,13 @@
       "home_cn": "老虎",
       "away_cn": "守護者",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 2,
       "projected_total": 13.5,
       "market_total": 8.0,
       "bet": "大小分 OVER",
-      "reason": "第3局 2:1 → 預計終局13.5分 > 盤口8.0"
+      "reason": "第3局 2:1 → 預計終局10.8分 > 盤口8.0"
     },
     {
       "home_cn": "光芒",
@@ -331,9 +331,9 @@
       "away_cn": "勇士",
       "inning": 4,
       "top_inning": false,
-      "home_runs": 1,
+      "home_runs": 3,
       "away_runs": 0,
-      "projected_total": 2.6,
+      "projected_total": 7.7,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -399,7 +399,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779148949,
+  "live_updated_ts": 1779149251,
   "game_preds": {
     "marlins|braves": {
       "home_win_prob": 0.4857,
@@ -458,5 +458,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-05-19 08:02 (台灣時間)"
+  "live_updated_at": "2026-05-19 08:07 (台灣時間)"
 }
