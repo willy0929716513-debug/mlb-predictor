@@ -305,26 +305,26 @@
     {
       "home_cn": "天使",
       "away_cn": "運動家",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
       "projected_total": 0.0,
       "market_total": 9.0,
       "bet": "大小分 UNDER",
-      "reason": "第8局 0:0 → 預計終局0.0分 < 盤口9.0"
+      "reason": "第9局 0:0 → 預計終局0.0分 < 盤口9.0"
     },
     {
       "home_cn": "教士",
       "away_cn": "道奇",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 1.3,
+      "projected_total": 1.2,
       "market_total": 7.5,
       "bet": "大小分 UNDER",
-      "reason": "第8局 0:1 → 預計終局1.3分 < 盤口7.5"
+      "reason": "第8局 0:1 → 預計終局1.2分 < 盤口7.5"
     },
     {
       "home_cn": "響尾蛇",
@@ -351,7 +351,7 @@
       "reason": "第7局主隊領先2分（賽前主隊勝率57%），大局已定"
     }
   ],
-  "live_updated_ts": 1779161951,
+  "live_updated_ts": 1779162253,
   "game_preds": {
     "marlins|braves": {
       "home_win_prob": 0.4857,
@@ -410,5 +410,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-05-19 11:39 (台灣時間)"
+  "live_updated_at": "2026-05-19 11:44 (台灣時間)"
 }
