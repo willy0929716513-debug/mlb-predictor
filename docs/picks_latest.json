@@ -240,7 +240,7 @@
       "reason": "第5局已得7分（盤口8.0），剩4.5局大機率OVER"
     }
   ],
-  "live_updated_ts": 1779226681,
+  "live_updated_ts": 1779226983,
   "game_preds": {
     "marlins|braves": {
       "home_win_prob": 0.4276,
@@ -303,5 +303,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-05-20 05:38 (台灣時間)"
+  "live_updated_at": "2026-05-20 05:43 (台灣時間)"
 }
