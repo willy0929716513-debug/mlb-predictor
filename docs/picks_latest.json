@@ -230,14 +230,14 @@
     {
       "home_cn": "老虎",
       "away_cn": "守護者",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 1,
-      "projected_total": 9.9,
+      "projected_total": 8.8,
       "market_total": 8.0,
-      "bet": null,
-      "reason": null
+      "bet": "客隊讓分(+1.5)",
+      "reason": "客隊落後1分 第4局，賽前客隊勝率67%"
     },
     {
       "home_cn": "光芒",
@@ -324,7 +324,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779233021,
+  "live_updated_ts": 1779233323,
   "game_preds": {
     "marlins|braves": {
       "home_win_prob": 0.4276,
@@ -387,5 +387,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-05-20 07:23 (台灣時間)"
+  "live_updated_at": "2026-05-20 07:28 (台灣時間)"
 }
