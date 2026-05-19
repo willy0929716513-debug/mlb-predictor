@@ -232,15 +232,15 @@
       "away_cn": "勇士",
       "inning": 1,
       "top_inning": false,
-      "home_runs": 1,
+      "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 10.6,
+      "projected_total": 12.6,
       "market_total": 8.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1779222755,
+  "live_updated_ts": 1779223057,
   "game_preds": {
     "marlins|braves": {
       "home_win_prob": 0.4276,
@@ -303,5 +303,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-05-20 04:32 (台灣時間)"
+  "live_updated_at": "2026-05-20 04:37 (台灣時間)"
 }
