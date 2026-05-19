@@ -1,35 +1,35 @@
 {
   "2026-05-20|marlins|braves": {
     "ts": "2026-05-19",
-    "home_ml": 2.26,
-    "away_ml": 1.76,
-    "rl_h": 1.78,
-    "rl_a": 2.3,
+    "home_ml": 2.24,
+    "away_ml": 1.73,
+    "rl_h": 1.76,
+    "rl_a": 2.2,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 1.98,
+    "over": 2.0,
     "under": 2.07
   },
   "2026-05-20|rays|orioles": {
     "ts": "2026-05-19",
-    "home_ml": 1.86,
-    "away_ml": 2.09,
-    "rl_h": 2.7,
+    "home_ml": 1.83,
+    "away_ml": 2.1,
+    "rl_h": 2.82,
     "rl_a": 1.5,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 1.98,
+    "over": 1.97,
     "under": 1.95
   },
   "2026-05-20|phillies|reds": {
     "ts": "2026-05-19",
-    "home_ml": 1.72,
-    "away_ml": 2.26,
+    "home_ml": 1.74,
+    "away_ml": 2.22,
     "rl_h": 2.5,
-    "rl_a": 1.61,
+    "rl_a": 1.59,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 1.93,
+    "over": 1.88,
     "under": 1.98
   },
   "2026-05-20|tigers|guardians": {
@@ -37,39 +37,39 @@
     "home_ml": 2.09,
     "away_ml": 1.84,
     "rl_h": 1.62,
-    "rl_a": 2.46,
+    "rl_a": 2.42,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 1.95,
-    "under": 2.07
+    "over": 1.98,
+    "under": 1.95
   },
   "2026-05-20|nationals|mets": {
     "ts": "2026-05-19",
-    "home_ml": 2.36,
-    "away_ml": 1.68,
+    "home_ml": 2.35,
+    "away_ml": 1.72,
     "rl_h": 1.81,
-    "rl_a": 2.09,
+    "rl_a": 2.1,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 1.97,
-    "under": 2.0
+    "over": 1.88,
+    "under": 1.98
   },
   "2026-05-20|yankees|blue jays": {
     "ts": "2026-05-19",
     "home_ml": 1.76,
     "away_ml": 2.2,
-    "rl_h": 2.6,
+    "rl_h": 2.54,
     "rl_a": 1.59,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 1.97,
-    "under": 2.07
+    "over": 2.05,
+    "under": 2.06
   },
   "2026-05-20|royals|red sox": {
     "ts": "2026-05-19",
     "home_ml": 2.14,
-    "away_ml": 1.84,
-    "rl_h": 1.66,
+    "away_ml": 1.81,
+    "rl_h": 1.65,
     "rl_a": 2.41,
     "rl_h_25": null,
     "rl_a_25": null,
@@ -81,17 +81,17 @@
     "home_ml": 2.03,
     "away_ml": 1.88,
     "rl_h": 1.65,
-    "rl_a": 2.45,
+    "rl_a": 2.46,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 1.98,
-    "under": 1.95
+    "over": 1.96,
+    "under": 1.96
   },
   "2026-05-20|twins|astros": {
     "ts": "2026-05-19",
-    "home_ml": 1.77,
-    "away_ml": 2.23,
-    "rl_h": 2.6,
+    "home_ml": 1.75,
+    "away_ml": 2.24,
+    "rl_h": 2.55,
     "rl_a": 1.6,
     "rl_h_25": null,
     "rl_a_25": null,
@@ -106,30 +106,30 @@
     "rl_a": 2.55,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 2.0,
+    "over": 1.95,
     "under": 1.98
   },
   "2026-05-20|rockies|rangers": {
     "ts": "2026-05-19",
-    "home_ml": 2.18,
+    "home_ml": 2.14,
     "away_ml": 1.81,
     "rl_h": 1.71,
-    "rl_a": 2.26,
+    "rl_a": 2.25,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 1.91,
+    "over": 1.88,
     "under": 1.98
   },
   "2026-05-20|angels|athletics": {
     "ts": "2026-05-19",
     "home_ml": 1.81,
-    "away_ml": 2.12,
+    "away_ml": 2.13,
     "rl_h": 2.61,
-    "rl_a": 1.55,
+    "rl_a": 1.56,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 1.95,
-    "under": 1.97
+    "over": 2.0,
+    "under": 1.99
   },
   "2026-05-20|diamondbacks|giants": {
     "ts": "2026-05-19",
@@ -139,15 +139,15 @@
     "rl_a": 1.53,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 2.06,
-    "under": 2.09
+    "over": 1.88,
+    "under": 2.03
   },
   "2026-05-20|mariners|white sox": {
     "ts": "2026-05-19",
     "home_ml": 1.69,
     "away_ml": 2.35,
     "rl_h": 2.46,
-    "rl_a": 1.65,
+    "rl_a": 1.61,
     "rl_h_25": null,
     "rl_a_25": null,
     "over": 1.93,
@@ -156,12 +156,12 @@
   "2026-05-20|padres|dodgers": {
     "ts": "2026-05-19",
     "home_ml": 2.4,
-    "away_ml": 1.65,
-    "rl_h": 1.82,
-    "rl_a": 2.08,
+    "away_ml": 1.66,
+    "rl_h": 1.85,
+    "rl_a": 2.1,
     "rl_h_25": null,
     "rl_a_25": null,
     "over": 2.0,
-    "under": 1.95
+    "under": 1.93
   }
 }
