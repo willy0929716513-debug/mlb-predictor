@@ -22,13 +22,13 @@ def send_ntfy(title, message):
     if not NTFY_TOPIC:
         return
     try:
-        requests.post(
-            f"https://ntfy.sh/{NTFY_TOPIC}",
-            data=message.encode("utf-8"),
-            headers={"Title": title, "Priority": "high", "Tags": "baseball"},
+        r = requests.post(
+            "https://ntfy.sh",
+            json={"topic": NTFY_TOPIC, "title": title, "message": message,
+                  "priority": 4, "tags": ["baseball"]},
             timeout=10,
         )
-        log.info("ntfy sent: %s", title)
+        log.info("ntfy response: %d — %s", r.status_code, title)
     except Exception as e:
         log.warning("ntfy error: %s", e)
 
