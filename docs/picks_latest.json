@@ -356,11 +356,11 @@
       "inning": 3,
       "top_inning": true,
       "home_runs": 5,
-      "away_runs": 1,
-      "projected_total": 27.0,
+      "away_runs": 2,
+      "projected_total": 31.5,
       "market_total": 9.0,
       "bet": "大小分 OVER",
-      "reason": "第3局 1:5 → 預計終局27.0分 > 盤口9.0"
+      "reason": "第3局 2:5 → 預計終局31.5分 > 盤口9.0"
     },
     {
       "home_cn": "水手",
