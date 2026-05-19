@@ -212,7 +212,10 @@ def main():
         log.error("%s not found — run main bot first", JSON_PATH)
         return
 
-    send_ntfy("⚾ 場中更新啟動", "live_update 已開始執行，開始監控比賽中...")
+    _flag = "/tmp/ntfy_live_started"
+    if not os.path.exists(_flag):
+        send_ntfy("⚾ 場中更新啟動", "live_update 已開始執行，開始監控比賽中...")
+        open(_flag, "w").close()
 
     with open(JSON_PATH, encoding="utf-8") as f:
         data = json.load(f)
