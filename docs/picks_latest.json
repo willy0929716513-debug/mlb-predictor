@@ -355,21 +355,21 @@
       "away_cn": "遊騎兵",
       "inning": 4,
       "top_inning": false,
-      "home_runs": 4,
+      "home_runs": 5,
       "away_runs": 1,
-      "projected_total": 12.9,
+      "projected_total": 15.4,
       "market_total": 9.5,
       "bet": "大小分 OVER",
-      "reason": "第4局 1:4 → 預計終局12.9分 > 盤口9.5"
+      "reason": "第4局 1:5 → 預計終局15.4分 > 盤口9.5"
     },
     {
       "home_cn": "天使",
       "away_cn": "運動家",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.5,
+      "projected_total": 0.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -379,9 +379,9 @@
       "away_cn": "道奇",
       "inning": 1,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 7.1,
+      "projected_total": 8.1,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -396,16 +396,16 @@
       "projected_total": 12.5,
       "market_total": 9.0,
       "bet": "大小分 OVER",
-      "reason": "第1局 0:4 → 預計終局12.5分 > 盤口9.0"
+      "reason": "第2局 0:4 → 預計終局36.0分 > 盤口9.0"
     },
     {
       "home_cn": "水手",
       "away_cn": "白襪",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 7.0,
+      "projected_total": 6.6,
       "market_total": 7.0,
       "bet": null,
       "reason": null
