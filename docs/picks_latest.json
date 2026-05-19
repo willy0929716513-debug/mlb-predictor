@@ -240,7 +240,7 @@
       "reason": "客隊落後2分 第4局，賽前客隊勝率57%"
     }
   ],
-  "live_updated_ts": 1779225171,
+  "live_updated_ts": 1779225473,
   "game_preds": {
     "marlins|braves": {
       "home_win_prob": 0.4276,
@@ -303,5 +303,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-05-20 05:12 (台灣時間)"
+  "live_updated_at": "2026-05-20 05:17 (台灣時間)"
 }
