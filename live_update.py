@@ -150,7 +150,14 @@ def generate_live_picks(live_games, game_preds):
                  away_r, home_r, diff, market_total, p_home,
                  "有" if pred else "無(預設0.5)")
 
-        run_rate  = (current_total / innings_done) if innings_done > 0.5 else (market_total / 9.0)
+        market_rate = market_total / 9.0
+        if innings_done > 0.5:
+            current_rate = current_total / innings_done
+            # 早局偏向盤口預期，晚局偏向實際速率（4.5局為分界點）
+            blend = min(innings_done / 4.5, 1.0)
+            run_rate = blend * current_rate + (1 - blend) * market_rate
+        else:
+            run_rate = market_rate
         projected = round(current_total + run_rate * innings_left, 1)
         log.info("    預計終局 %.1f (門檻 UNDER<%.1f / OVER>%.1f)",
                  projected, market_total - 1.0, market_total + 1.0)
@@ -160,8 +167,8 @@ def generate_live_picks(live_games, game_preds):
         if inning >= 6 and projected < market_total - 1.0:
             bet    = "大小分 UNDER"
             reason = "第%d局 %d:%d → 預計終局%.1f分 < 盤口%.1f" % (inning, away_r, home_r, projected, market_total)
-        # 大小分 OVER：第5局前，走勢高分
-        elif inning <= 5 and projected > market_total + 1.0:
+        # 大小分 OVER：第4局起（避免早局外推失真），走勢高分
+        elif 4 <= inning <= 5 and projected > market_total + 1.0:
             bet    = "大小分 OVER"
             reason = "第%d局 %d:%d → 預計終局%.1f分 > 盤口%.1f" % (inning, away_r, home_r, projected, market_total)
         # ML 主隊獨贏：第7局起，主隊領先2分以上（模型不反對）
