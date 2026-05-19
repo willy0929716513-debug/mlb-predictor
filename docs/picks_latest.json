@@ -320,35 +320,35 @@
       "inning": 7,
       "top_inning": true,
       "home_runs": 3,
-      "away_runs": 2,
-      "projected_total": 7.5,
+      "away_runs": 3,
+      "projected_total": 9.0,
       "market_total": 9.5,
-      "bet": "大小分 UNDER",
-      "reason": "第7局 2:3 → 預計終局7.5分 < 盤口9.5"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "馬林魚",
       "away_cn": "勇士",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 6,
       "away_runs": 0,
-      "projected_total": 13.5,
+      "projected_total": 12.0,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第5局 0:6 → 預計終局13.5分 > 盤口8.5"
+      "reason": "第5局 0:6 → 預計終局12.0分 > 盤口8.5"
     },
     {
       "home_cn": "國民",
       "away_cn": "大都會",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 4,
-      "projected_total": 14.0,
+      "projected_total": 12.6,
       "market_total": 10.0,
-      "bet": "大小分 OVER",
-      "reason": "第5局 4:3 → 預計終局14.0分 > 盤口10.0"
+      "bet": "主隊讓分(+1.5)",
+      "reason": "主隊落後1分 第6局，賽前主隊勝率60%"
     },
     {
       "home_cn": "洋基",
@@ -365,14 +365,14 @@
     {
       "home_cn": "皇家",
       "away_cn": "紅襪",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
       "projected_total": 0.0,
       "market_total": 9.0,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 UNDER",
+      "reason": "第6局 0:0 → 預計終局0.0分 < 盤口9.0"
     },
     {
       "home_cn": "雙城",
@@ -389,14 +389,14 @@
     {
       "home_cn": "小熊",
       "away_cn": "釀酒人",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 3.6,
+      "projected_total": 3.0,
       "market_total": 10.5,
-      "bet": null,
-      "reason": null
+      "bet": "主隊讓分(+1.5)",
+      "reason": "主隊落後1分 第4局，賽前主隊勝率66%"
     },
     {
       "home_cn": "落磯",
@@ -411,7 +411,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779150157,
+  "live_updated_ts": 1779150459,
   "game_preds": {
     "marlins|braves": {
       "home_win_prob": 0.4857,
@@ -470,5 +470,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-05-19 08:22 (台灣時間)"
+  "live_updated_at": "2026-05-19 08:27 (台灣時間)"
 }
