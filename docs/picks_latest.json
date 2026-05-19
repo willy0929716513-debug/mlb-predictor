@@ -342,10 +342,10 @@
       "home_cn": "教士",
       "away_cn": "道奇",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 4.5,
+      "projected_total": 3.6,
       "market_total": 7.5,
       "bet": null,
       "reason": null
