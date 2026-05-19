@@ -230,17 +230,17 @@
     {
       "home_cn": "馬林魚",
       "away_cn": "勇士",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 4,
-      "away_runs": 3,
-      "projected_total": 14.0,
+      "away_runs": 4,
+      "projected_total": 14.4,
       "market_total": 8.0,
-      "bet": "大小分 OVER",
-      "reason": "第5局已得7分（盤口8.0），剩4.5局大機率OVER"
+      "bet": null,
+      "reason": null
     }
   ],
-  "live_updated_ts": 1779226983,
+  "live_updated_ts": 1779227285,
   "game_preds": {
     "marlins|braves": {
       "home_win_prob": 0.4276,
@@ -303,5 +303,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-05-20 05:43 (台灣時間)"
+  "live_updated_at": "2026-05-20 05:48 (台灣時間)"
 }
