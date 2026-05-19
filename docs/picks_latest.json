@@ -296,8 +296,8 @@
       "inning": 6,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 4,
-      "projected_total": 9.0,
+      "away_runs": 5,
+      "projected_total": 10.8,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -305,11 +305,11 @@
     {
       "home_cn": "光芒",
       "away_cn": "金鶯",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 16,
-      "away_runs": 4,
-      "projected_total": 32.7,
+      "away_runs": 5,
+      "projected_total": 31.5,
       "market_total": 7.5,
       "bet": "主隊獨贏",
       "reason": "第7局主隊領先11分（賽前主隊勝率76%），大局已定"
@@ -411,7 +411,7 @@
       "reason": "第1局 0:2 → 預計終局11.0分 > 盤口9.5"
     }
   ],
-  "live_updated_ts": 1779152271,
+  "live_updated_ts": 1779152572,
   "game_preds": {
     "marlins|braves": {
       "home_win_prob": 0.4857,
@@ -470,5 +470,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-05-19 08:57 (台灣時間)"
+  "live_updated_at": "2026-05-19 09:02 (台灣時間)"
 }
