@@ -293,20 +293,20 @@
     {
       "home_cn": "老虎",
       "away_cn": "守護者",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 2,
-      "projected_total": 10.8,
+      "projected_total": 9.0,
       "market_total": 8.0,
-      "bet": "大小分 OVER",
-      "reason": "第3局 2:1 → 預計終局10.8分 > 盤口8.0"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "光芒",
       "away_cn": "金鶯",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 8,
       "away_runs": 4,
       "projected_total": 27.0,
@@ -357,10 +357,10 @@
       "top_inning": false,
       "home_runs": 1,
       "away_runs": 3,
-      "projected_total": 12.0,
+      "projected_total": 10.3,
       "market_total": 9.0,
       "bet": "大小分 OVER",
-      "reason": "第4局 3:1 → 預計終局12.0分 > 盤口9.0"
+      "reason": "第4局 3:1 → 預計終局10.3分 > 盤口9.0"
     },
     {
       "home_cn": "皇家",
@@ -377,11 +377,11 @@
     {
       "home_cn": "雙城",
       "away_cn": "太空人",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 6.0,
+      "projected_total": 4.5,
       "market_total": 9.5,
       "bet": null,
       "reason": null
