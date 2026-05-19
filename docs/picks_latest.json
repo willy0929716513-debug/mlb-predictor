@@ -240,7 +240,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779227889,
+  "live_updated_ts": 1779228191,
   "game_preds": {
     "marlins|braves": {
       "home_win_prob": 0.4276,
@@ -303,5 +303,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-05-20 05:58 (台灣時間)"
+  "live_updated_at": "2026-05-20 06:03 (台灣時間)"
 }
