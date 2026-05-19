@@ -293,14 +293,14 @@
     {
       "home_cn": "老虎",
       "away_cn": "守護者",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 7,
-      "projected_total": 10.8,
+      "projected_total": 10.1,
       "market_total": 8.0,
       "bet": "客隊獨贏",
-      "reason": "第8局客隊領先5分（賽前客隊勝率70%），大局已定"
+      "reason": "第9局客隊領先5分（賽前客隊勝率70%），大局已定"
     },
     {
       "home_cn": "國民",
