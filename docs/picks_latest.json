@@ -293,14 +293,14 @@
     {
       "home_cn": "天使",
       "away_cn": "運動家",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 4,
       "away_runs": 8,
-      "projected_total": 15.7,
+      "projected_total": 15.2,
       "market_total": 9.5,
       "bet": "大小分 OVER",
-      "reason": "第6局已得12分（此時預期5.8分），高分走勢盤口9.5"
+      "reason": "第7局已得12分（此時預期6.3分），高分走勢盤口9.5"
     },
     {
       "home_cn": "教士",
