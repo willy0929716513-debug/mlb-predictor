@@ -320,11 +320,11 @@
       "inning": 8,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 2,
-      "projected_total": 4.8,
+      "away_runs": 3,
+      "projected_total": 5.8,
       "market_total": 8.0,
-      "bet": "大小分 UNDER",
-      "reason": "第8局僅3分（此時預期6.2分），低分走勢盤口8.0"
+      "bet": "主隊讓分(+1.5)",
+      "reason": "主隊落後2分 第8局，賽前主隊勝率62%"
     },
     {
       "home_cn": "雙城",
@@ -342,7 +342,7 @@
       "home_cn": "小熊",
       "away_cn": "釀酒人",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 5,
       "projected_total": 6.4,
@@ -423,7 +423,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779241789,
+  "live_updated_ts": 1779242091,
   "game_preds": {
     "rays|orioles": {
       "home_win_prob": 0.7309,
@@ -486,5 +486,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-05-20 09:49 (台灣時間)"
+  "live_updated_at": "2026-05-20 09:54 (台灣時間)"
 }
