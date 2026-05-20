@@ -318,13 +318,13 @@
       "home_cn": "國民",
       "away_cn": "大都會",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 4,
       "away_runs": 2,
-      "projected_total": 12.3,
+      "projected_total": 11.8,
       "market_total": 9.5,
       "bet": "大小分 OVER",
-      "reason": "第4局已得6分（此時預期3.2分），高分走勢盤口9.5"
+      "reason": "第4局已得6分（此時預期3.7分），高分走勢盤口9.5"
     },
     {
       "home_cn": "皇家",
@@ -363,7 +363,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779320540,
+  "live_updated_ts": 1779320718,
   "game_preds": {
     "phillies|reds": {
       "home_win_prob": 0.4713,
@@ -426,5 +426,5 @@
       "market_total": 9.5
     }
   },
-  "live_updated_at": "2026-05-21 07:42 (台灣時間)"
+  "live_updated_at": "2026-05-21 07:45 (台灣時間)"
 }
