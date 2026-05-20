@@ -293,8 +293,8 @@
     {
       "home_cn": "老虎",
       "away_cn": "守護者",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 4,
       "projected_total": 8.4,
@@ -354,7 +354,7 @@
       "home_cn": "皇家",
       "away_cn": "紅襪",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 2,
       "projected_total": 9.0,
@@ -366,7 +366,7 @@
       "home_cn": "雙城",
       "away_cn": "太空人",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
       "projected_total": 4.5,
@@ -377,8 +377,8 @@
     {
       "home_cn": "小熊",
       "away_cn": "釀酒人",
-      "inning": 4,
-      "top_inning": false,
+      "inning": 5,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 3,
       "projected_total": 7.7,
@@ -411,7 +411,7 @@
       "reason": "第1局 2:0 → 預計終局12.5分 > 盤口10.5"
     }
   ],
-  "live_updated_ts": 1779238076,
+  "live_updated_ts": 1779238378,
   "game_preds": {
     "rays|orioles": {
       "home_win_prob": 0.7309,
@@ -474,5 +474,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-05-20 08:47 (台灣時間)"
+  "live_updated_at": "2026-05-20 08:52 (台灣時間)"
 }
