@@ -231,10 +231,10 @@
       "home_cn": "老虎",
       "away_cn": "守護者",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 3,
-      "projected_total": 10.8,
+      "projected_total": 9.8,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -254,23 +254,23 @@
     {
       "home_cn": "費城人",
       "away_cn": "紅人",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 2,
-      "projected_total": 4.9,
+      "projected_total": 4.5,
       "market_total": 8.5,
       "bet": "大小分 UNDER",
-      "reason": "第6局 2:1 → 預計終局4.9分 < 盤口8.5"
+      "reason": "第7局 2:1 → 預計終局4.5分 < 盤口8.5"
     },
     {
       "home_cn": "國民",
       "away_cn": "大都會",
       "inning": 2,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 4,
       "away_runs": 5,
-      "projected_total": 18.3,
+      "projected_total": 29.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -281,8 +281,8 @@
       "inning": 4,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 2,
-      "projected_total": 6.6,
+      "away_runs": 3,
+      "projected_total": 8.9,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -315,10 +315,10 @@
       "home_cn": "小熊",
       "away_cn": "釀酒人",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 8.0,
+      "projected_total": 6.8,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -336,7 +336,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779235659,
+  "live_updated_ts": 1779235961,
   "game_preds": {
     "marlins|braves": {
       "home_win_prob": 0.4276,
@@ -399,5 +399,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-05-20 08:07 (台灣時間)"
+  "live_updated_at": "2026-05-20 08:12 (台灣時間)"
 }
