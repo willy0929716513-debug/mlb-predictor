@@ -230,11 +230,11 @@
     {
       "home_cn": "老虎",
       "away_cn": "守護者",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 3,
-      "projected_total": 9.8,
+      "projected_total": 9.0,
       "market_total": 8.0,
       "bet": null,
       "reason": null
