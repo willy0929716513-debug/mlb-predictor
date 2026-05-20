@@ -306,13 +306,13 @@
       "home_cn": "教士",
       "away_cn": "道奇",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 4,
       "away_runs": 4,
-      "projected_total": 11.1,
+      "projected_total": 10.7,
       "market_total": 7.0,
       "bet": "大小分 OVER",
-      "reason": "第6局已得8分（此時預期3.9分），高分走勢盤口7.0"
+      "reason": "第6局已得8分（此時預期4.3分），高分走勢盤口7.0"
     },
     {
       "home_cn": "響尾蛇",
@@ -339,7 +339,7 @@
       "reason": "第6局僅1分（此時預期4.2分），低分走勢盤口7.5"
     }
   ],
-  "live_updated_ts": 1779246623,
+  "live_updated_ts": 1779246925,
   "game_preds": {
     "rays|orioles": {
       "home_win_prob": 0.7309,
@@ -402,5 +402,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-05-20 11:10 (台灣時間)"
+  "live_updated_at": "2026-05-20 11:15 (台灣時間)"
 }
