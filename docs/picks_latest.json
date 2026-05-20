@@ -268,12 +268,12 @@
       "away_cn": "大都會",
       "inning": 4,
       "top_inning": false,
-      "home_runs": 7,
+      "home_runs": 9,
       "away_runs": 5,
-      "projected_total": 27.9,
+      "projected_total": 32.3,
       "market_total": 9.0,
       "bet": "大小分 OVER",
-      "reason": "第4局已得12分（盤口9.0），剩5.5局大機率OVER"
+      "reason": "第4局已得14分（盤口9.0），剩5.5局大機率OVER"
     },
     {
       "home_cn": "洋基",
@@ -341,14 +341,14 @@
       "inning": 1,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 10.5,
+      "away_runs": 2,
+      "projected_total": 12.5,
       "market_total": 10.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1779237774,
+  "live_updated_ts": 1779238076,
   "game_preds": {
     "marlins|braves": {
       "home_win_prob": 0.4276,
@@ -411,5 +411,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-05-20 08:42 (台灣時間)"
+  "live_updated_at": "2026-05-20 08:47 (台灣時間)"
 }
