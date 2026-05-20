@@ -309,10 +309,10 @@
       "top_inning": false,
       "home_runs": 9,
       "away_runs": 5,
-      "projected_total": 18.2,
+      "projected_total": 17.7,
       "market_total": 9.5,
       "bet": "大小分 OVER",
-      "reason": "第6局已得14分（此時預期5.3分），高分走勢盤口9.5"
+      "reason": "第6局已得14分（此時預期5.8分），高分走勢盤口9.5"
     },
     {
       "home_cn": "洋基",
@@ -369,7 +369,7 @@
       "top_inning": true,
       "home_runs": 3,
       "away_runs": 4,
-      "projected_total": 11.0,
+      "projected_total": 10.6,
       "market_total": 8.0,
       "bet": "大小分 OVER",
       "reason": "第6局已得7分（此時預期4.4分），高分走勢盤口8.0"
