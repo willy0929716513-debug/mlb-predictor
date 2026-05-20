@@ -293,14 +293,14 @@
     {
       "home_cn": "國民",
       "away_cn": "大都會",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 9,
       "away_runs": 6,
-      "projected_total": 17.6,
+      "projected_total": 17.1,
       "market_total": 9.5,
-      "bet": "大小分 OVER",
-      "reason": "第7局已得15分（此時預期6.9分），高分走勢盤口9.5"
+      "bet": "主隊獨贏",
+      "reason": "第8局主隊領先3分（賽前主隊勝率61%），大局已定"
     },
     {
       "home_cn": "洋基",
