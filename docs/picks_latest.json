@@ -294,10 +294,10 @@
       "home_cn": "水手",
       "away_cn": "白襪",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 5,
       "away_runs": 3,
-      "projected_total": 9.7,
+      "projected_total": 9.2,
       "market_total": 7.5,
       "bet": "主隊獨贏",
       "reason": "第8局主隊領先2分（賽前主隊勝率72%），大局已定"
@@ -339,7 +339,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779316315,
+  "live_updated_ts": 1779316617,
   "game_preds": {
     "phillies|reds": {
       "home_win_prob": 0.4713,
@@ -402,5 +402,5 @@
       "market_total": 9.5
     }
   },
-  "live_updated_at": "2026-05-21 06:31 (台灣時間)"
+  "live_updated_at": "2026-05-21 06:36 (台灣時間)"
 }
