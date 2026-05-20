@@ -303,31 +303,19 @@
       "reason": null
     },
     {
-      "home_cn": "響尾蛇",
-      "away_cn": "巨人",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 6,
-      "away_runs": 3,
-      "projected_total": 9.9,
-      "market_total": 8.5,
-      "bet": "主隊獨贏",
-      "reason": "第9局主隊領先3分（賽前主隊勝率76%），大局已定"
-    },
-    {
       "home_cn": "水手",
       "away_cn": "白襪",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 2,
-      "projected_total": 6.9,
+      "projected_total": 6.5,
       "market_total": 7.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1779314503,
+  "live_updated_ts": 1779314805,
   "game_preds": {
     "phillies|reds": {
       "home_win_prob": 0.4713,
@@ -390,5 +378,5 @@
       "market_total": 9.5
     }
   },
-  "live_updated_at": "2026-05-21 06:01 (台灣時間)"
+  "live_updated_at": "2026-05-21 06:06 (台灣時間)"
 }
