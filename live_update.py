@@ -151,26 +151,26 @@ def generate_live_picks(live_games, game_preds):
                  "有" if pred else "無(預設0.5)")
 
         market_rate = market_total / 9.0
-        if innings_done > 0.5:
-            current_rate = current_total / innings_done
-            # 早局偏向盤口預期，晚局偏向實際速率（4.5局為分界點）
-            blend = min(innings_done / 4.5, 1.0)
-            run_rate = blend * current_rate + (1 - blend) * market_rate
-        else:
-            run_rate = market_rate
-        projected = round(current_total + run_rate * innings_left, 1)
-        log.info("    預計終局 %.1f (門檻 UNDER<%.1f / OVER>%.1f)",
-                 projected, market_total - 1.0, market_total + 1.0)
+
+        # 投影：剩餘局數用盤口預期速率，不放大當前異常
+        projected = round(current_total + market_rate * innings_left, 1)
+
+        # 此時市場預期應有幾分（用於判斷跑分進度）
+        expected_now = round(market_total * innings_done / 9.0, 1) if innings_done > 0 else 0.0
+        pace_ratio   = (current_total / expected_now) if expected_now > 0 else 1.0
+
+        log.info("    預計終局 %.1f 市場預期進度 %.1f 實際 %d 速率比 %.2f",
+                 projected, expected_now, current_total, pace_ratio)
 
         bet = reason = None
-        # 大小分 UNDER：第6局起，走勢低分
-        if inning >= 6 and projected < market_total - 1.0:
+        # 大小分 UNDER：第6局起，實際得分低於市場預期60%以下
+        if inning >= 6 and innings_left >= 1.5 and pace_ratio <= 0.60:
             bet    = "大小分 UNDER"
-            reason = "第%d局 %d:%d → 預計終局%.1f分 < 盤口%.1f" % (inning, away_r, home_r, projected, market_total)
-        # 大小分 OVER：第4局起，當前得分已達盤口85%（不靠外推）
-        elif 4 <= inning <= 5 and current_total >= market_total * 0.85:
+            reason = "第%d局僅%d分（此時預期%.1f分），低分走勢盤口%.1f" % (inning, current_total, expected_now, market_total)
+        # 大小分 OVER：第4局起，實際得分超過市場預期140%以上
+        elif 4 <= inning <= 7 and expected_now > 0 and pace_ratio >= 1.40 and current_total >= 5:
             bet    = "大小分 OVER"
-            reason = "第%d局已得%d分（盤口%.1f），剩%.1f局大機率OVER" % (inning, current_total, market_total, innings_left)
+            reason = "第%d局已得%d分（此時預期%.1f分），高分走勢盤口%.1f" % (inning, current_total, expected_now, market_total)
         # ML 主隊獨贏：第7局起，主隊領先2分以上（模型不反對）
         elif inning >= 7 and diff >= 2 and p_home >= 0.45:
             bet    = "主隊獨贏"
