@@ -296,11 +296,11 @@
       "inning": 9,
       "top_inning": true,
       "home_runs": 5,
-      "away_runs": 3,
-      "projected_total": 8.8,
+      "away_runs": 4,
+      "projected_total": 9.8,
       "market_total": 7.5,
-      "bet": "主隊獨贏",
-      "reason": "第9局主隊領先2分（賽前主隊勝率72%），大局已定"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "老虎",
@@ -318,10 +318,10 @@
       "home_cn": "馬林魚",
       "away_cn": "勇士",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 7.0,
+      "projected_total": 6.6,
       "market_total": 7.0,
       "bet": null,
       "reason": null
@@ -339,7 +339,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779317220,
+  "live_updated_ts": 1779317522,
   "game_preds": {
     "phillies|reds": {
       "home_win_prob": 0.4713,
@@ -402,5 +402,5 @@
       "market_total": 9.5
     }
   },
-  "live_updated_at": "2026-05-21 06:47 (台灣時間)"
+  "live_updated_at": "2026-05-21 06:52 (台灣時間)"
 }
