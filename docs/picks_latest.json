@@ -353,14 +353,14 @@
     {
       "home_cn": "紅雀",
       "away_cn": "海盜",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 6.4,
+      "projected_total": 6.0,
       "market_total": 7.5,
-      "bet": null,
-      "reason": null
+      "bet": "主隊讓分(+1.5)",
+      "reason": "主隊落後1分 第4局，賽前主隊勝率54%"
     },
     {
       "home_cn": "教士",
@@ -368,8 +368,8 @@
       "inning": 1,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 7.5,
+      "away_runs": 1,
+      "projected_total": 8.5,
       "market_total": 7.5,
       "bet": null,
       "reason": null
