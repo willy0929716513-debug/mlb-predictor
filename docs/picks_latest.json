@@ -305,17 +305,17 @@
     {
       "home_cn": "天使",
       "away_cn": "運動家",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 5,
       "away_runs": 4,
-      "projected_total": 10.6,
+      "projected_total": 10.1,
       "market_total": 9.5,
-      "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後1分 第8局，賽前客隊勝率78%"
+      "bet": null,
+      "reason": null
     }
   ],
-  "live_updated_ts": 1779334840,
+  "live_updated_ts": 1779335141,
   "game_preds": {
     "phillies|reds": {
       "home_win_prob": 0.4713,
@@ -378,5 +378,5 @@
       "market_total": 9.5
     }
   },
-  "live_updated_at": "2026-05-21 11:40 (台灣時間)"
+  "live_updated_at": "2026-05-21 11:45 (台灣時間)"
 }
