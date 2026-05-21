@@ -176,7 +176,7 @@
       "reason": "第7局僅3分（此時預期5.0分），低分走勢盤口7.5"
     }
   ],
-  "live_updated_ts": 1779399787,
+  "live_updated_ts": 1779400089,
   "game_preds": {
     "tigers|guardians": {
       "home_win_prob": 0.4901,
@@ -207,5 +207,5 @@
       "market_total": 9.5
     }
   },
-  "live_updated_at": "2026-05-22 05:43 (台灣時間)"
+  "live_updated_at": "2026-05-22 05:48 (台灣時間)"
 }
