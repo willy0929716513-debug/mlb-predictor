@@ -341,8 +341,8 @@
     {
       "home_cn": "小熊",
       "away_cn": "釀酒人",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 4,
       "projected_total": 8.7,
