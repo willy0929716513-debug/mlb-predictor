@@ -318,10 +318,10 @@
       "home_cn": "小熊",
       "away_cn": "釀酒人",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 5,
-      "projected_total": 6.4,
+      "projected_total": 6.1,
       "market_total": 6.5,
       "bet": "客隊獨贏",
       "reason": "第8局客隊領先5分（賽前客隊勝率76%），大局已定"
@@ -363,7 +363,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779327607,
+  "live_updated_ts": 1779327909,
   "game_preds": {
     "phillies|reds": {
       "home_win_prob": 0.4713,
@@ -426,5 +426,5 @@
       "market_total": 9.5
     }
   },
-  "live_updated_at": "2026-05-21 09:40 (台灣時間)"
+  "live_updated_at": "2026-05-21 09:45 (台灣時間)"
 }
