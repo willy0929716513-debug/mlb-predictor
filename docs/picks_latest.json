@@ -305,11 +305,11 @@
     {
       "home_cn": "馬林魚",
       "away_cn": "勇士",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 3,
-      "projected_total": 7.5,
+      "projected_total": 7.1,
       "market_total": 7.0,
       "bet": null,
       "reason": null
@@ -363,7 +363,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779321322,
+  "live_updated_ts": 1779321624,
   "game_preds": {
     "phillies|reds": {
       "home_win_prob": 0.4713,
@@ -426,5 +426,5 @@
       "market_total": 9.5
     }
   },
-  "live_updated_at": "2026-05-21 07:55 (台灣時間)"
+  "live_updated_at": "2026-05-21 08:00 (台灣時間)"
 }
