@@ -166,17 +166,17 @@
     {
       "home_cn": "國民",
       "away_cn": "大都會",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 2,
-      "projected_total": 5.9,
+      "projected_total": 5.5,
       "market_total": 7.5,
-      "bet": "主隊讓分(+1.5)",
-      "reason": "主隊落後1分 第6局，賽前主隊勝率55%"
+      "bet": "大小分 UNDER",
+      "reason": "第7局僅3分（此時預期5.0分），低分走勢盤口7.5"
     }
   ],
-  "live_updated_ts": 1779399485,
+  "live_updated_ts": 1779399787,
   "game_preds": {
     "tigers|guardians": {
       "home_win_prob": 0.4901,
@@ -207,5 +207,5 @@
       "market_total": 9.5
     }
   },
-  "live_updated_at": "2026-05-22 05:38 (台灣時間)"
+  "live_updated_at": "2026-05-22 05:43 (台灣時間)"
 }
