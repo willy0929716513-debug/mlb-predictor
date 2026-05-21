@@ -293,14 +293,14 @@
     {
       "home_cn": "洋基",
       "away_cn": "藍鳥",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 3.2,
+      "projected_total": 2.8,
       "market_total": 7.5,
-      "bet": "大小分 UNDER",
-      "reason": "第8局僅2分（此時預期6.2分），低分走勢盤口7.5"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "天使",
