@@ -296,8 +296,8 @@
       "inning": 9,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 0,
-      "projected_total": 1.8,
+      "away_runs": 1,
+      "projected_total": 2.8,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -306,10 +306,10 @@
       "home_cn": "馬林魚",
       "away_cn": "勇士",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 9,
-      "projected_total": 11.6,
+      "projected_total": 11.2,
       "market_total": 7.0,
       "bet": "客隊獨贏",
       "reason": "第8局客隊領先8分（賽前客隊勝率78%），大局已定"
