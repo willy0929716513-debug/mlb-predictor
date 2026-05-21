@@ -279,11 +279,11 @@
       "inning": 5,
       "top_inning": true,
       "home_runs": 2,
-      "away_runs": 3,
-      "projected_total": 9.2,
+      "away_runs": 5,
+      "projected_total": 11.2,
       "market_total": 7.5,
       "bet": "大小分 OVER",
-      "reason": "第5局已得5分（此時預期3.3分），高分走勢盤口7.5"
+      "reason": "第5局已得7分（此時預期3.3分），高分走勢盤口7.5"
     },
     {
       "home_cn": "洋基",
@@ -298,7 +298,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779407229,
+  "live_updated_ts": 1779407531,
   "game_preds": {
     "nationals|mets": {
       "home_win_prob": 0.5828,
@@ -361,5 +361,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-05-22 07:47 (台灣時間)"
+  "live_updated_at": "2026-05-22 07:52 (台灣時間)"
 }
