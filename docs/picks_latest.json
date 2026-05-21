@@ -318,7 +318,7 @@
       "home_cn": "天使",
       "away_cn": "運動家",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 5,
       "away_runs": 4,
       "projected_total": 12.2,
