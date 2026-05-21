@@ -341,11 +341,11 @@
     {
       "home_cn": "皇家",
       "away_cn": "紅襪",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 8.8,
+      "projected_total": 8.3,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -354,10 +354,10 @@
       "home_cn": "小熊",
       "away_cn": "釀酒人",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 4,
-      "projected_total": 7.6,
+      "projected_total": 7.2,
       "market_total": 6.5,
       "bet": null,
       "reason": null
