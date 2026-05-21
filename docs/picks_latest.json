@@ -167,16 +167,16 @@
       "home_cn": "國民",
       "away_cn": "大都會",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 7.0,
+      "projected_total": 6.6,
       "market_total": 7.5,
       "bet": "主隊讓分(+1.5)",
       "reason": "主隊落後2分 第4局，賽前主隊勝率55%"
     }
   ],
-  "live_updated_ts": 1779397371,
+  "live_updated_ts": 1779397673,
   "game_preds": {
     "tigers|guardians": {
       "home_win_prob": 0.4901,
@@ -207,5 +207,5 @@
       "market_total": 9.5
     }
   },
-  "live_updated_at": "2026-05-22 05:02 (台灣時間)"
+  "live_updated_at": "2026-05-22 05:07 (台灣時間)"
 }
