@@ -318,10 +318,10 @@
       "home_cn": "小熊",
       "away_cn": "釀酒人",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 5,
-      "projected_total": 7.2,
+      "projected_total": 6.8,
       "market_total": 6.5,
       "bet": "客隊獨贏",
       "reason": "第7局客隊領先5分（賽前客隊勝率76%），大局已定"
