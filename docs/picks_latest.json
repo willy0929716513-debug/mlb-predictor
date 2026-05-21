@@ -277,10 +277,10 @@
       "home_cn": "馬林魚",
       "away_cn": "勇士",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 3,
-      "projected_total": 9.0,
+      "projected_total": 8.6,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -298,7 +298,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779406323,
+  "live_updated_ts": 1779406624,
   "game_preds": {
     "nationals|mets": {
       "home_win_prob": 0.5828,
@@ -361,5 +361,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-05-22 07:32 (台灣時間)"
+  "live_updated_at": "2026-05-22 07:37 (台灣時間)"
 }
