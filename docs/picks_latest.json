@@ -294,10 +294,10 @@
       "home_cn": "洋基",
       "away_cn": "藍鳥",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 2.8,
+      "projected_total": 2.4,
       "market_total": 7.5,
       "bet": null,
       "reason": null
