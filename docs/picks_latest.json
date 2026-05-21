@@ -294,7 +294,7 @@
       "home_cn": "老虎",
       "away_cn": "守護者",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 1,
       "projected_total": 2.8,
@@ -319,12 +319,12 @@
       "away_cn": "大都會",
       "inning": 8,
       "top_inning": false,
-      "home_runs": 6,
+      "home_runs": 8,
       "away_runs": 4,
-      "projected_total": 11.6,
+      "projected_total": 13.6,
       "market_total": 9.5,
       "bet": "主隊獨贏",
-      "reason": "第8局主隊領先2分（賽前主隊勝率59%），大局已定"
+      "reason": "第8局主隊領先4分（賽前主隊勝率59%），大局已定"
     },
     {
       "home_cn": "洋基",
@@ -342,22 +342,22 @@
       "home_cn": "皇家",
       "away_cn": "紅襪",
       "inning": 5,
-      "top_inning": true,
-      "home_runs": 1,
+      "top_inning": false,
+      "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 7.2,
+      "projected_total": 8.8,
       "market_total": 7.5,
-      "bet": "主隊讓分(+1.5)",
-      "reason": "主隊落後1分 第5局，賽前主隊勝率61%"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "小熊",
       "away_cn": "釀酒人",
-      "inning": 4,
-      "top_inning": false,
+      "inning": 5,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 4,
-      "projected_total": 8.0,
+      "projected_total": 7.6,
       "market_total": 6.5,
       "bet": null,
       "reason": null
@@ -387,7 +387,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779324644,
+  "live_updated_ts": 1779324946,
   "game_preds": {
     "phillies|reds": {
       "home_win_prob": 0.4713,
@@ -450,5 +450,5 @@
       "market_total": 9.5
     }
   },
-  "live_updated_at": "2026-05-21 08:50 (台灣時間)"
+  "live_updated_at": "2026-05-21 08:55 (台灣時間)"
 }
