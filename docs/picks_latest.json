@@ -277,10 +277,10 @@
       "home_cn": "馬林魚",
       "away_cn": "勇士",
       "inning": 3,
-      "top_inning": true,
-      "home_runs": 0,
+      "top_inning": false,
+      "home_runs": 1,
       "away_runs": 3,
-      "projected_total": 8.8,
+      "projected_total": 9.4,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -289,16 +289,16 @@
       "home_cn": "洋基",
       "away_cn": "藍鳥",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 9.5,
+      "projected_total": 9.0,
       "market_total": 8.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1779405524,
+  "live_updated_ts": 1779405826,
   "game_preds": {
     "nationals|mets": {
       "home_win_prob": 0.5828,
@@ -361,5 +361,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-05-22 07:18 (台灣時間)"
+  "live_updated_at": "2026-05-22 07:23 (台灣時間)"
 }
