@@ -354,10 +354,10 @@
       "home_cn": "紅雀",
       "away_cn": "海盜",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 7.7,
+      "projected_total": 7.2,
       "market_total": 7.5,
       "bet": null,
       "reason": null
