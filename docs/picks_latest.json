@@ -277,10 +277,10 @@
       "home_cn": "洋基",
       "away_cn": "藍鳥",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 2.9,
+      "projected_total": 2.5,
       "market_total": 8.5,
       "bet": "客隊獨贏",
       "reason": "第9局客隊領先2分（賽前客隊勝率56%），大局已定"
@@ -290,9 +290,9 @@
       "away_cn": "運動家",
       "inning": 1,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 2,
       "away_runs": 0,
-      "projected_total": 8.0,
+      "projected_total": 10.0,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -310,7 +310,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779414455,
+  "live_updated_ts": 1779414756,
   "game_preds": {
     "nationals|mets": {
       "home_win_prob": 0.5828,
@@ -373,5 +373,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-05-22 09:47 (台灣時間)"
+  "live_updated_at": "2026-05-22 09:52 (台灣時間)"
 }
