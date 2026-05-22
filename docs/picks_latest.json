@@ -289,16 +289,16 @@
       "home_cn": "響尾蛇",
       "away_cn": "落磯",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 7.6,
+      "projected_total": 7.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1779415058,
+  "live_updated_ts": 1779415359,
   "game_preds": {
     "nationals|mets": {
       "home_win_prob": 0.5828,
@@ -361,5 +361,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-05-22 09:57 (台灣時間)"
+  "live_updated_at": "2026-05-22 10:02 (台灣時間)"
 }
