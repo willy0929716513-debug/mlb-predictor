@@ -279,26 +279,26 @@
       "inning": 8,
       "top_inning": true,
       "home_runs": 3,
-      "away_runs": 6,
-      "projected_total": 10.7,
+      "away_runs": 8,
+      "projected_total": 12.7,
       "market_total": 7.5,
       "bet": "客隊獨贏",
-      "reason": "第8局客隊領先3分（賽前客隊勝率49%），大局已定"
+      "reason": "第8局客隊領先5分（賽前客隊勝率49%），大局已定"
     },
     {
       "home_cn": "洋基",
       "away_cn": "藍鳥",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 4.8,
+      "projected_total": 4.3,
       "market_total": 8.5,
       "bet": "大小分 UNDER",
-      "reason": "第6局僅1分（此時預期4.7分），低分走勢盤口8.5"
+      "reason": "第6局僅1分（此時預期5.2分），低分走勢盤口8.5"
     }
   ],
-  "live_updated_ts": 1779411154,
+  "live_updated_ts": 1779411455,
   "game_preds": {
     "nationals|mets": {
       "home_win_prob": 0.5828,
@@ -361,5 +361,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-05-22 08:52 (台灣時間)"
+  "live_updated_at": "2026-05-22 08:57 (台灣時間)"
 }
