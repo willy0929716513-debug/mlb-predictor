@@ -289,21 +289,8 @@
       "result": "W"
     }
   ],
-  "live_games": [
-    {
-      "home_cn": "小熊",
-      "away_cn": "太空人",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 2,
-      "away_runs": 4,
-      "projected_total": 6.4,
-      "market_total": 7.0,
-      "bet": "客隊獨贏",
-      "reason": "第9局客隊領先2分（賽前客隊勝率68%），大局已定"
-    }
-  ],
-  "live_updated_ts": 1779484498,
+  "live_games": [],
+  "live_updated_ts": 1779485700,
   "game_preds": {
     "cubs|astros": {
       "home_win_prob": 0.3178,
@@ -366,5 +353,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-05-23 05:14 (台灣時間)"
+  "live_updated_at": ""
 }
