@@ -303,7 +303,7 @@
       "reason": "第9局客隊領先2分（賽前客隊勝率68%），大局已定"
     }
   ],
-  "live_updated_ts": 1779483894,
+  "live_updated_ts": 1779484196,
   "game_preds": {
     "cubs|astros": {
       "home_win_prob": 0.3178,
@@ -366,5 +366,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-05-23 05:04 (台灣時間)"
+  "live_updated_at": "2026-05-23 05:09 (台灣時間)"
 }
