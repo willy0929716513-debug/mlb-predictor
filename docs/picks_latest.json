@@ -305,11 +305,11 @@
     {
       "home_cn": "洋基",
       "away_cn": "光芒",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 6.7,
+      "projected_total": 6.2,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -329,11 +329,11 @@
     {
       "home_cn": "紅襪",
       "away_cn": "雙城",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 4,
       "away_runs": 3,
-      "projected_total": 13.2,
+      "projected_total": 12.8,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -341,11 +341,11 @@
     {
       "home_cn": "馬林魚",
       "away_cn": "大都會",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 8.7,
+      "projected_total": 8.2,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -353,11 +353,11 @@
     {
       "home_cn": "金鶯",
       "away_cn": "老虎",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 0,
-      "away_runs": 1,
-      "projected_total": 8.1,
+      "away_runs": 2,
+      "projected_total": 8.6,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -366,10 +366,10 @@
       "home_cn": "勇士",
       "away_cn": "國民",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 7.0,
+      "projected_total": 6.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -390,16 +390,16 @@
       "home_cn": "釀酒人",
       "away_cn": "道奇",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.5,
+      "projected_total": 8.0,
       "market_total": 8.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1779493604,
+  "live_updated_ts": 1779493906,
   "game_preds": {
     "cubs|astros": {
       "home_win_prob": 0.3178,
@@ -462,5 +462,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-05-23 07:46 (台灣時間)"
+  "live_updated_at": "2026-05-23 07:51 (台灣時間)"
 }
