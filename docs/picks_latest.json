@@ -277,10 +277,10 @@
       "home_cn": "馬林魚",
       "away_cn": "勇士",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 8,
-      "projected_total": 12.7,
+      "projected_total": 12.2,
       "market_total": 7.5,
       "bet": "客隊獨贏",
       "reason": "第8局客隊領先5分（賽前客隊勝率49%），大局已定"
@@ -298,7 +298,7 @@
       "reason": "第6局僅1分（此時預期5.2分），低分走勢盤口8.5"
     }
   ],
-  "live_updated_ts": 1779411455,
+  "live_updated_ts": 1779411757,
   "game_preds": {
     "nationals|mets": {
       "home_win_prob": 0.5828,
@@ -361,5 +361,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-05-22 08:57 (台灣時間)"
+  "live_updated_at": "2026-05-22 09:02 (台灣時間)"
 }
