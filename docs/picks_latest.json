@@ -291,14 +291,14 @@
       "inning": 8,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 0,
-      "projected_total": 2.9,
+      "away_runs": 1,
+      "projected_total": 3.9,
       "market_total": 8.5,
       "bet": "大小分 UNDER",
-      "reason": "第8局僅1分（此時預期6.6分），低分走勢盤口8.5"
+      "reason": "第8局僅2分（此時預期6.6分），低分走勢盤口8.5"
     }
   ],
-  "live_updated_ts": 1779421391,
+  "live_updated_ts": 1779421692,
   "game_preds": {
     "nationals|mets": {
       "home_win_prob": 0.5828,
@@ -361,5 +361,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-05-22 11:43 (台灣時間)"
+  "live_updated_at": "2026-05-22 11:48 (台灣時間)"
 }
