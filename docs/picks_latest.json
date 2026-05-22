@@ -279,11 +279,11 @@
       "inning": 9,
       "top_inning": true,
       "home_runs": 3,
-      "away_runs": 8,
-      "projected_total": 11.8,
+      "away_runs": 9,
+      "projected_total": 12.8,
       "market_total": 7.5,
       "bet": "客隊獨贏",
-      "reason": "第9局客隊領先5分（賽前客隊勝率49%），大局已定"
+      "reason": "第9局客隊領先6分（賽前客隊勝率49%），大局已定"
     },
     {
       "home_cn": "洋基",
