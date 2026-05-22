@@ -277,13 +277,13 @@
       "home_cn": "洋基",
       "away_cn": "藍鳥",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 3.9,
+      "projected_total": 3.4,
       "market_total": 8.5,
       "bet": "大小分 UNDER",
-      "reason": "第8局僅2分（此時預期6.6分），低分走勢盤口8.5"
+      "reason": "第8局僅2分（此時預期7.1分），低分走勢盤口8.5"
     },
     {
       "home_cn": "天使",
@@ -310,7 +310,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779413550,
+  "live_updated_ts": 1779413852,
   "game_preds": {
     "nationals|mets": {
       "home_win_prob": 0.5828,
@@ -373,5 +373,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-05-22 09:32 (台灣時間)"
+  "live_updated_at": "2026-05-22 09:37 (台灣時間)"
 }
