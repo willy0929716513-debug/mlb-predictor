@@ -294,10 +294,10 @@
       "home_cn": "費城人",
       "away_cn": "守護者",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 7.0,
+      "projected_total": 6.6,
       "market_total": 7.0,
       "bet": null,
       "reason": null
@@ -363,7 +363,7 @@
       "reason": "第8局主隊領先4分（賽前主隊勝率59%），大局已定"
     }
   ],
-  "live_updated_ts": 1779573941,
+  "live_updated_ts": 1779574242,
   "game_preds": {
     "reds|cardinals": {
       "home_win_prob": 0.2764,
@@ -422,5 +422,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-05-24 06:05 (台灣時間)"
+  "live_updated_at": "2026-05-24 06:10 (台灣時間)"
 }
