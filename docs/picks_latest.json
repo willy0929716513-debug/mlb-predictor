@@ -293,8 +293,8 @@
     {
       "home_cn": "天使",
       "away_cn": "遊騎兵",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 6,
       "away_runs": 4,
       "projected_total": 12.9,
@@ -333,7 +333,7 @@
       "top_inning": true,
       "home_runs": 0,
       "away_runs": 9,
-      "projected_total": 13.6,
+      "projected_total": 13.2,
       "market_total": 7.5,
       "bet": "大小分 OVER",
       "reason": "第5局已得9分（此時預期3.3分），高分走勢盤口7.5"
