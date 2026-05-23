@@ -39,7 +39,7 @@ def _team_match(n1, n2):
 
 def settle(hist):
     today = datetime.date.today().isoformat()
-    pending = [r for r in hist if r.get("result") is None and r.get("date","") < today]
+    pending = [r for r in hist if r.get("result") is None and r.get("date","") <= today]
     print(f"Pending records to settle: {len(pending)}")
     if not pending:
         return 0
