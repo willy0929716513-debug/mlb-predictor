@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-23 13:05 (台灣時間)",
+  "generated_at": "2026-05-23 19:06 (台灣時間)",
   "date": "2026-05-23",
   "stats": {
     "settled": 102,
@@ -38,14 +38,14 @@
       "away_cn": "守護者",
       "home_cn": "費城人",
       "bet_label": "守護者 讓分(+1.5)",
-      "bk": "LowVig.ag",
-      "bp": 1.78,
-      "con_p": 1.759,
-      "dv_p": 0.545,
-      "edge": 21.3,
+      "bk": "MyBookie.ag",
+      "bp": 1.79,
+      "con_p": 1.746,
+      "dv_p": 0.5492,
+      "edge": 20.7,
       "conf": 82.0,
       "stake": 50.0,
-      "model_p": 74.8,
+      "model_p": 74.6,
       "away_sp": "Slade Cecconi",
       "home_sp": "Zack Wheeler",
       "away_era": 2.83,
@@ -69,12 +69,12 @@
       "model_total": null,
       "market_total": null,
       "park_factor": null,
-      "weather_factor": 0.922,
+      "weather_factor": 0.911,
       "ump_name": null,
       "ump_adj": null,
       "away_trend": -4.81,
       "home_trend": -2.52,
-      "line_clv": null,
+      "line_clv": -0.31,
       "game_date": "2026-05-24",
       "game_time": "04:06",
       "sp_src": "probable",
@@ -102,13 +102,13 @@
       "home_cn": "天使",
       "bet_label": "遊騎兵 獨贏",
       "bk": "FanDuel",
-      "bp": 1.76,
-      "con_p": 1.739,
-      "dv_p": 0.5551,
-      "edge": 12.0,
+      "bp": 1.74,
+      "con_p": 1.722,
+      "dv_p": 0.5594,
+      "edge": 10.8,
       "conf": 86.3,
       "stake": 50.0,
-      "model_p": 67.5,
+      "model_p": 66.7,
       "away_sp": "Nathan Eovaldi",
       "home_sp": "Walbert Urena",
       "away_era": 2.08,
@@ -127,17 +127,17 @@
       "home_rs": 4.0,
       "away_rpg": 4.15,
       "home_rpg": 4.12,
-      "pred_away": 3.8,
-      "pred_home": 2.8,
+      "pred_away": 3.7,
+      "pred_home": 2.7,
       "model_total": null,
       "market_total": null,
       "park_factor": null,
-      "weather_factor": null,
+      "weather_factor": 0.972,
       "ump_name": null,
       "ump_adj": null,
       "away_trend": -3.4,
       "home_trend": -0.48,
-      "line_clv": null,
+      "line_clv": 0.65,
       "game_date": "2026-05-24",
       "game_time": "10:06",
       "sp_src": "espn",
@@ -292,64 +292,64 @@
   "live_games": [],
   "live_updated_ts": 1779509832,
   "game_preds": {
-    "giants|white sox": {
-      "home_win_prob": 0.6355,
-      "market_total": 8.0
-    },
     "reds|cardinals": {
-      "home_win_prob": 0.2778,
+      "home_win_prob": 0.2665,
       "market_total": 9.5
     },
     "yankees|rays": {
-      "home_win_prob": 0.3886,
+      "home_win_prob": 0.3927,
       "market_total": 7.0
     },
     "cubs|astros": {
-      "home_win_prob": 0.3025,
+      "home_win_prob": 0.2956,
       "market_total": 7.5
     },
     "blue jays|pirates": {
-      "home_win_prob": 0.3304,
+      "home_win_prob": 0.3319,
       "market_total": 7.5
     },
     "orioles|tigers": {
-      "home_win_prob": 0.502,
-      "market_total": 8.0
+      "home_win_prob": 0.5005,
+      "market_total": 8.5
+    },
+    "giants|white sox": {
+      "home_win_prob": 0.5394,
+      "market_total": 8.5
     },
     "phillies|guardians": {
-      "home_win_prob": 0.4345,
+      "home_win_prob": 0.446,
       "market_total": 7.0
     },
     "braves|nationals": {
-      "home_win_prob": 0.6372,
+      "home_win_prob": 0.6409,
       "market_total": 9.0
     },
     "red sox|twins": {
-      "home_win_prob": 0.441,
+      "home_win_prob": 0.4329,
       "market_total": 8.5
     },
     "royals|mariners": {
-      "home_win_prob": 0.4761,
+      "home_win_prob": 0.481,
       "market_total": 8.5
     },
     "marlins|mets": {
-      "home_win_prob": 0.5798,
+      "home_win_prob": 0.5847,
       "market_total": 7.5
     },
     "brewers|dodgers": {
-      "home_win_prob": 0.3458,
+      "home_win_prob": 0.3487,
       "market_total": 9.0
     },
     "padres|athletics": {
-      "home_win_prob": 0.3722,
-      "market_total": 7.5
+      "home_win_prob": 0.372,
+      "market_total": 8.0
     },
     "angels|rangers": {
-      "home_win_prob": 0.3246,
-      "market_total": 8.5
+      "home_win_prob": 0.3327,
+      "market_total": 8.0
     },
     "diamondbacks|rockies": {
-      "home_win_prob": 0.6195,
+      "home_win_prob": 0.6158,
       "market_total": 9.5
     }
   }
