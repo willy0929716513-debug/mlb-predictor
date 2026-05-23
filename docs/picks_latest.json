@@ -293,11 +293,11 @@
     {
       "home_cn": "費城人",
       "away_cn": "守護者",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 5.1,
+      "projected_total": 4.7,
       "market_total": 7.0,
       "bet": null,
       "reason": null
@@ -305,14 +305,14 @@
     {
       "home_cn": "巨人",
       "away_cn": "白襪",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 10,
       "away_runs": 3,
-      "projected_total": 14.4,
+      "projected_total": 13.9,
       "market_total": 8.5,
       "bet": "主隊獨贏",
-      "reason": "第8局主隊領先7分（賽前主隊勝率53%），大局已定"
+      "reason": "第9局主隊領先7分（賽前主隊勝率53%），大局已定"
     },
     {
       "home_cn": "紅襪",
@@ -329,17 +329,29 @@
     {
       "home_cn": "勇士",
       "away_cn": "國民",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 4.5,
+      "projected_total": 4.0,
       "market_total": 9.0,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅2分（此時預期6.5分），低分走勢盤口9.0"
+      "reason": "第8局僅2分（此時預期7.0分），低分走勢盤口9.0"
+    },
+    {
+      "home_cn": "釀酒人",
+      "away_cn": "道奇",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 9.0,
+      "market_total": 9.0,
+      "bet": null,
+      "reason": null
     }
   ],
-  "live_updated_ts": 1779576351,
+  "live_updated_ts": 1779576652,
   "game_preds": {
     "reds|cardinals": {
       "home_win_prob": 0.2764,
@@ -398,5 +410,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-05-24 06:45 (台灣時間)"
+  "live_updated_at": "2026-05-24 06:50 (台灣時間)"
 }
