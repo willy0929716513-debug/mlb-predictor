@@ -294,10 +294,10 @@
       "home_cn": "紅人",
       "away_cn": "紅雀",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 10.0,
+      "projected_total": 9.4,
       "market_total": 10.0,
       "bet": null,
       "reason": null
@@ -318,16 +318,16 @@
       "home_cn": "釀酒人",
       "away_cn": "道奇",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 9.0,
+      "projected_total": 8.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1779578451,
+  "live_updated_ts": 1779578753,
   "game_preds": {
     "reds|cardinals": {
       "home_win_prob": 0.2764,
@@ -386,5 +386,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-05-24 07:20 (台灣時間)"
+  "live_updated_at": "2026-05-24 07:25 (台灣時間)"
 }
