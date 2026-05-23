@@ -296,11 +296,11 @@
       "inning": 8,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 5,
-      "projected_total": 8.2,
+      "away_runs": 6,
+      "projected_total": 9.2,
       "market_total": 10.0,
       "bet": "客隊獨贏",
-      "reason": "第8局客隊領先4分（賽前客隊勝率72%），大局已定"
+      "reason": "第8局客隊領先5分（賽前客隊勝率72%），大局已定"
     },
     {
       "home_cn": "小熊",
@@ -317,17 +317,17 @@
     {
       "home_cn": "藍鳥",
       "away_cn": "海盜",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 8.1,
+      "projected_total": 7.7,
       "market_total": 7.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1779563996,
+  "live_updated_ts": 1779564297,
   "game_preds": {
     "reds|cardinals": {
       "home_win_prob": 0.2764,
@@ -386,5 +386,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-05-24 03:19 (台灣時間)"
+  "live_updated_at": "2026-05-24 03:24 (台灣時間)"
 }
