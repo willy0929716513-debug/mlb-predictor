@@ -1,29 +1,29 @@
 {
-  "generated_at": "2026-05-23 19:22 (台灣時間)",
+  "generated_at": "2026-05-23 20:41 (台灣時間)",
   "date": "2026-05-23",
   "stats": {
-    "settled": 104,
-    "wins": 70,
-    "win_rate": 67.3,
-    "total_in": 1618.0,
-    "total_pnl": 331.0,
-    "roi": 20.5,
+    "settled": 102,
+    "wins": 68,
+    "win_rate": 66.7,
+    "total_in": 1518.0,
+    "total_pnl": 271.0,
+    "roi": 17.9,
     "by_type": {
       "ML": {
-        "settled": 40,
         "wins": 26,
+        "settled": 40,
         "win_rate": 65.0,
         "roi": 6.6
       },
       "RL": {
-        "settled": 43,
-        "wins": 30,
-        "win_rate": 69.8,
-        "roi": 15.4
+        "wins": 28,
+        "settled": 41,
+        "win_rate": 68.3,
+        "roi": 7.3
       },
       "TOT": {
-        "settled": 21,
         "wins": 14,
+        "settled": 21,
         "win_rate": 66.7,
         "roi": 54.0
       }
@@ -38,11 +38,11 @@
       "away_cn": "守護者",
       "home_cn": "費城人",
       "bet_label": "守護者 讓分(+1.5)",
-      "bk": "MyBookie.ag",
-      "bp": 1.79,
-      "con_p": 1.746,
-      "dv_p": 0.5492,
-      "edge": 21.1,
+      "bk": "LowVig.ag",
+      "bp": 1.75,
+      "con_p": 1.72,
+      "dv_p": 0.5581,
+      "edge": 20.2,
       "conf": 82.0,
       "stake": 50.0,
       "model_p": 75.0,
@@ -69,12 +69,12 @@
       "model_total": null,
       "market_total": null,
       "park_factor": null,
-      "weather_factor": 0.911,
+      "weather_factor": 0.912,
       "ump_name": null,
       "ump_adj": null,
       "away_trend": -4.81,
       "home_trend": -2.52,
-      "line_clv": 0.0,
+      "line_clv": 1.28,
       "game_date": "2026-05-24",
       "game_time": "04:06",
       "sp_src": "probable",
@@ -104,11 +104,11 @@
       "bk": "FanDuel",
       "bp": 1.74,
       "con_p": 1.722,
-      "dv_p": 0.5594,
-      "edge": 11.2,
+      "dv_p": 0.5591,
+      "edge": 10.1,
       "conf": 86.3,
       "stake": 50.0,
-      "model_p": 67.1,
+      "model_p": 66.0,
       "away_sp": "Nathan Eovaldi",
       "home_sp": "Walbert Urena",
       "away_era": 2.08,
@@ -293,63 +293,63 @@
   "live_updated_ts": 1779509832,
   "game_preds": {
     "reds|cardinals": {
-      "home_win_prob": 0.2781,
+      "home_win_prob": 0.2729,
       "market_total": 9.5
     },
     "yankees|rays": {
-      "home_win_prob": 0.4073,
+      "home_win_prob": 0.3971,
       "market_total": 7.0
     },
     "cubs|astros": {
-      "home_win_prob": 0.2987,
+      "home_win_prob": 0.2942,
       "market_total": 7.5
     },
     "blue jays|pirates": {
-      "home_win_prob": 0.3206,
+      "home_win_prob": 0.3273,
       "market_total": 7.5
     },
     "orioles|tigers": {
-      "home_win_prob": 0.5057,
-      "market_total": 8.5
+      "home_win_prob": 0.5064,
+      "market_total": 8.0
     },
     "giants|white sox": {
-      "home_win_prob": 0.5371,
+      "home_win_prob": 0.5284,
       "market_total": 8.5
     },
     "phillies|guardians": {
-      "home_win_prob": 0.4324,
+      "home_win_prob": 0.4284,
       "market_total": 7.0
     },
     "braves|nationals": {
-      "home_win_prob": 0.6393,
+      "home_win_prob": 0.6381,
       "market_total": 9.0
     },
     "red sox|twins": {
-      "home_win_prob": 0.4345,
-      "market_total": 8.5
+      "home_win_prob": 0.4419,
+      "market_total": 8.0
     },
     "royals|mariners": {
-      "home_win_prob": 0.4738,
+      "home_win_prob": 0.4715,
       "market_total": 8.5
     },
     "marlins|mets": {
-      "home_win_prob": 0.5917,
+      "home_win_prob": 0.5859,
       "market_total": 7.5
     },
     "brewers|dodgers": {
-      "home_win_prob": 0.3464,
+      "home_win_prob": 0.343,
       "market_total": 9.0
     },
     "padres|athletics": {
-      "home_win_prob": 0.3734,
+      "home_win_prob": 0.3689,
       "market_total": 8.0
     },
     "angels|rangers": {
-      "home_win_prob": 0.329,
+      "home_win_prob": 0.3397,
       "market_total": 8.0
     },
     "diamondbacks|rockies": {
-      "home_win_prob": 0.6207,
+      "home_win_prob": 0.622,
       "market_total": 9.5
     }
   }
