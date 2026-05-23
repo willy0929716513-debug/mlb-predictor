@@ -291,6 +291,18 @@
   ],
   "live_games": [
     {
+      "home_cn": "紅人",
+      "away_cn": "紅雀",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 10.0,
+      "market_total": 10.0,
+      "bet": null,
+      "reason": null
+    },
+    {
       "home_cn": "費城人",
       "away_cn": "守護者",
       "inning": 4,
@@ -330,13 +342,13 @@
       "home_cn": "勇士",
       "away_cn": "國民",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 4.0,
+      "projected_total": 3.5,
       "market_total": 9.0,
       "bet": "大小分 UNDER",
-      "reason": "第8局僅2分（此時預期7.0分），低分走勢盤口9.0"
+      "reason": "第8局僅2分（此時預期7.5分），低分走勢盤口9.0"
     },
     {
       "home_cn": "釀酒人",
@@ -351,7 +363,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779576652,
+  "live_updated_ts": 1779576954,
   "game_preds": {
     "reds|cardinals": {
       "home_win_prob": 0.2764,
@@ -410,5 +422,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-05-24 06:50 (台灣時間)"
+  "live_updated_at": "2026-05-24 06:55 (台灣時間)"
 }
