@@ -2,12 +2,12 @@
   "generated_at": "2026-05-23 20:41 (台灣時間)",
   "date": "2026-05-23",
   "stats": {
-    "settled": 104,
-    "wins": 70,
-    "win_rate": 67.3,
-    "total_in": 1618.0,
-    "total_pnl": 331.0,
-    "roi": 20.5,
+    "settled": 106,
+    "wins": 72,
+    "win_rate": 67.9,
+    "total_in": 1718.0,
+    "total_pnl": 391.0,
+    "roi": 22.8,
     "by_type": {
       "ML": {
         "settled": 40,
@@ -16,10 +16,10 @@
         "roi": 6.6
       },
       "RL": {
-        "settled": 43,
-        "wins": 30,
-        "win_rate": 69.8,
-        "roi": 15.4
+        "settled": 45,
+        "wins": 32,
+        "win_rate": 71.1,
+        "roi": 21.3
       },
       "TOT": {
         "settled": 21,
@@ -159,6 +159,32 @@
   ],
   "recent_history": [
     {
+      "date": "2026-05-23",
+      "home": "yankees",
+      "away": "rays",
+      "home_cn": "洋基",
+      "away_cn": "光芒",
+      "bet_type": "讓分",
+      "label": "+1.5",
+      "price": 1.62,
+      "stake": 50.0,
+      "edge": 16.2,
+      "result": "W"
+    },
+    {
+      "date": "2026-05-23",
+      "home": "brewers",
+      "away": "dodgers",
+      "home_cn": "釀酒人",
+      "away_cn": "道奇",
+      "bet_type": "讓分",
+      "label": "+1.5",
+      "price": 1.58,
+      "stake": 50.0,
+      "edge": 14.4,
+      "result": "W"
+    },
+    {
       "date": "2026-05-22",
       "home": "diamondbacks",
       "away": "rockies",
@@ -260,32 +286,6 @@
       "price": 1.71,
       "stake": 50.0,
       "edge": 20.9,
-      "result": "W"
-    },
-    {
-      "date": "2026-05-17",
-      "home": "astros",
-      "away": "rangers",
-      "home_cn": "太空人",
-      "away_cn": "遊騎兵",
-      "bet_type": "讓分",
-      "label": "+1.5",
-      "price": 1.75,
-      "stake": 11.2,
-      "edge": 16.5,
-      "result": "W"
-    },
-    {
-      "date": "2026-05-17",
-      "home": "white sox",
-      "away": "cubs",
-      "home_cn": "白襪",
-      "away_cn": "小熊",
-      "bet_type": "讓分",
-      "label": "+1.5",
-      "price": 1.57,
-      "stake": 5.8,
-      "edge": 10.8,
       "result": "W"
     }
   ],
