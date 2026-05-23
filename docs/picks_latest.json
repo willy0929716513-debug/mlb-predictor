@@ -305,23 +305,23 @@
     {
       "home_cn": "巨人",
       "away_cn": "白襪",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 9,
       "away_runs": 3,
-      "projected_total": 16.2,
+      "projected_total": 15.8,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第5局已得12分（此時預期4.2分），高分走勢盤口8.5"
+      "reason": "第6局已得12分（此時預期4.7分），高分走勢盤口8.5"
     },
     {
       "home_cn": "皇家",
       "away_cn": "水手",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 5,
       "away_runs": 0,
-      "projected_total": 7.4,
+      "projected_total": 6.9,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -341,29 +341,29 @@
     {
       "home_cn": "勇士",
       "away_cn": "國民",
-      "inning": 4,
-      "top_inning": false,
+      "inning": 5,
+      "top_inning": true,
       "home_runs": 0,
-      "away_runs": 1,
-      "projected_total": 6.5,
+      "away_runs": 2,
+      "projected_total": 7.0,
       "market_total": 9.0,
       "bet": "主隊讓分(+1.5)",
-      "reason": "主隊落後1分 第4局，賽前主隊勝率63%"
+      "reason": "主隊落後2分 第5局，賽前主隊勝率63%"
     },
     {
       "home_cn": "馬林魚",
       "away_cn": "大都會",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 4,
       "away_runs": 0,
-      "projected_total": 6.7,
+      "projected_total": 6.2,
       "market_total": 8.0,
       "bet": "主隊獨贏",
       "reason": "第7局主隊領先4分（賽前主隊勝率59%），大局已定"
     }
   ],
-  "live_updated_ts": 1779573037,
+  "live_updated_ts": 1779573338,
   "game_preds": {
     "reds|cardinals": {
       "home_win_prob": 0.2764,
@@ -422,5 +422,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-05-24 05:50 (台灣時間)"
+  "live_updated_at": "2026-05-24 05:55 (台灣時間)"
 }
