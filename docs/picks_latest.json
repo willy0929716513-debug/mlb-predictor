@@ -323,17 +323,17 @@
       "away_runs": 3,
       "projected_total": 9.0,
       "market_total": 8.0,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第5局已得6分（此時預期4.0分），高分走勢盤口8.0"
     },
     {
       "home_cn": "巨人",
       "away_cn": "白襪",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 5.4,
+      "projected_total": 5.0,
       "market_total": 7.5,
       "bet": null,
       "reason": null
