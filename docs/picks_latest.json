@@ -307,21 +307,21 @@
       "away_cn": "海盜",
       "inning": 8,
       "top_inning": false,
-      "home_runs": 3,
+      "home_runs": 4,
       "away_runs": 2,
-      "projected_total": 6.3,
+      "projected_total": 7.3,
       "market_total": 8.0,
-      "bet": null,
-      "reason": null
+      "bet": "主隊獨贏",
+      "reason": "第8局主隊領先2分（賽前主隊勝率49%），大局已定"
     },
     {
       "home_cn": "紅襪",
       "away_cn": "雙城",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 6,
       "away_runs": 7,
-      "projected_total": 14.2,
+      "projected_total": 13.8,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -330,13 +330,13 @@
       "home_cn": "金鶯",
       "away_cn": "老虎",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 7,
       "away_runs": 4,
-      "projected_total": 13.8,
+      "projected_total": 13.4,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第7局已得11分（此時預期5.7分），高分走勢盤口8.5"
+      "reason": "第7局已得11分（此時預期6.1分），高分走勢盤口8.5"
     },
     {
       "home_cn": "勇士",
@@ -353,14 +353,14 @@
     {
       "home_cn": "皇家",
       "away_cn": "水手",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 4.2,
+      "projected_total": 3.8,
       "market_total": 8.0,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅2分（此時預期5.8分），低分走勢盤口8.0"
+      "reason": "第8局僅2分（此時預期6.2分），低分走勢盤口8.0"
     },
     {
       "home_cn": "釀酒人",
@@ -368,20 +368,20 @@
       "inning": 7,
       "top_inning": true,
       "home_runs": 5,
-      "away_runs": 0,
-      "projected_total": 7.8,
+      "away_runs": 1,
+      "projected_total": 8.8,
       "market_total": 8.5,
       "bet": "主隊獨贏",
-      "reason": "第7局主隊領先5分（賽前主隊勝率57%），大局已定"
+      "reason": "第7局主隊領先4分（賽前主隊勝率57%），大局已定"
     },
     {
       "home_cn": "天使",
       "away_cn": "遊騎兵",
       "inning": 1,
-      "top_inning": true,
-      "home_runs": 0,
+      "top_inning": false,
+      "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 7.5,
+      "projected_total": 8.1,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -404,14 +404,14 @@
       "inning": 1,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 8.0,
+      "away_runs": 2,
+      "projected_total": 10.0,
       "market_total": 8.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1779500491,
+  "live_updated_ts": 1779500792,
   "game_preds": {
     "cubs|astros": {
       "home_win_prob": 0.3178,
@@ -474,5 +474,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-05-23 09:41 (台灣時間)"
+  "live_updated_at": "2026-05-23 09:46 (台灣時間)"
 }
