@@ -295,12 +295,12 @@
       "away_cn": "遊騎兵",
       "inning": 7,
       "top_inning": false,
-      "home_runs": 6,
+      "home_runs": 7,
       "away_runs": 5,
-      "projected_total": 13.1,
+      "projected_total": 14.1,
       "market_total": 7.5,
       "bet": "大小分 OVER",
-      "reason": "第7局已得11分（此時預期5.4分），高分走勢盤口7.5"
+      "reason": "第7局已得12分（此時預期5.4分），高分走勢盤口7.5"
     },
     {
       "home_cn": "響尾蛇",
@@ -308,20 +308,20 @@
       "inning": 8,
       "top_inning": true,
       "home_runs": 2,
-      "away_runs": 1,
-      "projected_total": 5.0,
+      "away_runs": 2,
+      "projected_total": 6.0,
       "market_total": 9.0,
       "bet": "大小分 UNDER",
-      "reason": "第8局僅3分（此時預期7.0分），低分走勢盤口9.0"
+      "reason": "第8局僅4分（此時預期7.0分），低分走勢盤口9.0"
     },
     {
       "home_cn": "教士",
       "away_cn": "運動家",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 4,
       "away_runs": 3,
-      "projected_total": 8.8,
+      "projected_total": 8.3,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -331,15 +331,15 @@
       "away_cn": "白襪",
       "inning": 5,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 2,
       "away_runs": 9,
-      "projected_total": 12.8,
+      "projected_total": 14.8,
       "market_total": 7.5,
       "bet": "大小分 OVER",
-      "reason": "第5局已得9分（此時預期3.8分），高分走勢盤口7.5"
+      "reason": "第5局已得11分（此時預期3.8分），高分走勢盤口7.5"
     }
   ],
-  "live_updated_ts": 1779508027,
+  "live_updated_ts": 1779508328,
   "game_preds": {
     "cubs|astros": {
       "home_win_prob": 0.3178,
@@ -402,5 +402,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-05-23 11:47 (台灣時間)"
+  "live_updated_at": "2026-05-23 11:52 (台灣時間)"
 }
