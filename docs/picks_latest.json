@@ -318,10 +318,10 @@
       "home_cn": "釀酒人",
       "away_cn": "道奇",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 0,
-      "projected_total": 11.0,
+      "projected_total": 10.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
