@@ -7,7 +7,7 @@ GIST_DESC = "mlb_bot_history"
 
 PICKS_TO_ADD = [
     {
-        "date":         "2025-05-23",
+        "date":         "2026-05-23",
         "team":         "rays",
         "home":         "yankees",
         "away":         "rays",
@@ -15,13 +15,13 @@ PICKS_TO_ADD = [
         "stake":        50.0,
         "edge":         0.162,
         "conf":         0.73,
-        "bet_type":     "RL",
+        "bet_type":     "讓分",
         "result":       None,
         "label":        "+1.5",
         "market_total": None,
     },
     {
-        "date":         "2025-05-23",
+        "date":         "2026-05-23",
         "team":         "brewers",
         "home":         "brewers",
         "away":         "dodgers",
@@ -29,7 +29,7 @@ PICKS_TO_ADD = [
         "stake":        50.0,
         "edge":         0.144,
         "conf":         0.74,
-        "bet_type":     "RL",
+        "bet_type":     "讓分",
         "result":       None,
         "label":        "+1.5",
         "market_total": None,
