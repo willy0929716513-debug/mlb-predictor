@@ -319,9 +319,9 @@
       "away_cn": "運動家",
       "inning": 7,
       "top_inning": false,
-      "home_runs": 3,
+      "home_runs": 4,
       "away_runs": 3,
-      "projected_total": 8.2,
+      "projected_total": 9.2,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -330,16 +330,16 @@
       "home_cn": "巨人",
       "away_cn": "白襪",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 9,
-      "projected_total": 13.2,
+      "projected_total": 12.8,
       "market_total": 7.5,
       "bet": "大小分 OVER",
-      "reason": "第5局已得9分（此時預期3.3分），高分走勢盤口7.5"
+      "reason": "第5局已得9分（此時預期3.8分），高分走勢盤口7.5"
     }
   ],
-  "live_updated_ts": 1779507424,
+  "live_updated_ts": 1779507726,
   "game_preds": {
     "cubs|astros": {
       "home_win_prob": 0.3178,
@@ -402,5 +402,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-05-23 11:37 (台灣時間)"
+  "live_updated_at": "2026-05-23 11:42 (台灣時間)"
 }
