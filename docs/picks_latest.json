@@ -293,14 +293,14 @@
     {
       "home_cn": "天使",
       "away_cn": "遊騎兵",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 7,
       "away_runs": 5,
-      "projected_total": 14.1,
+      "projected_total": 13.7,
       "market_total": 7.5,
-      "bet": "大小分 OVER",
-      "reason": "第7局已得12分（此時預期5.4分），高分走勢盤口7.5"
+      "bet": "主隊獨贏",
+      "reason": "第8局主隊領先2分（賽前主隊勝率54%），大局已定"
     },
     {
       "home_cn": "響尾蛇",
@@ -319,27 +319,27 @@
       "away_cn": "運動家",
       "inning": 8,
       "top_inning": false,
-      "home_runs": 4,
+      "home_runs": 6,
       "away_runs": 3,
-      "projected_total": 8.3,
+      "projected_total": 10.3,
       "market_total": 8.0,
-      "bet": null,
-      "reason": null
+      "bet": "主隊獨贏",
+      "reason": "第8局主隊領先3分（賽前主隊勝率51%），大局已定"
     },
     {
       "home_cn": "巨人",
       "away_cn": "白襪",
-      "inning": 5,
-      "top_inning": false,
-      "home_runs": 2,
+      "inning": 6,
+      "top_inning": true,
+      "home_runs": 3,
       "away_runs": 9,
-      "projected_total": 14.8,
+      "projected_total": 15.3,
       "market_total": 7.5,
       "bet": "大小分 OVER",
-      "reason": "第5局已得11分（此時預期3.8分），高分走勢盤口7.5"
+      "reason": "第6局已得12分（此時預期4.2分），高分走勢盤口7.5"
     }
   ],
-  "live_updated_ts": 1779508328,
+  "live_updated_ts": 1779508630,
   "game_preds": {
     "cubs|astros": {
       "home_win_prob": 0.3178,
@@ -402,5 +402,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-05-23 11:52 (台灣時間)"
+  "live_updated_at": "2026-05-23 11:57 (台灣時間)"
 }
