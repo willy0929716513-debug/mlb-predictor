@@ -317,11 +317,11 @@
     {
       "home_cn": "教士",
       "away_cn": "運動家",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 2,
-      "projected_total": 9.8,
+      "projected_total": 9.3,
       "market_total": 8.0,
       "bet": null,
       "reason": null
