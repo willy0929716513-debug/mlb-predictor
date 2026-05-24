@@ -49,7 +49,7 @@ BLOWOUT_ERA_DIFF = 1.5  # ERA差門檻：弱投手隊不推薦讓分受讓
 BLOWOUT_ERA_POOR = 4.20 # 弱投手ERA門檻（≥此值且ERA差距大，拒絕RL）
 ELITE_ERA_DUAL   = 3.50 # 雙方投手都低於此值時視為菁英對決
 ELITE_ERA_OVER_P = 0.68 # 菁英投手對決時，OVER需達更高概率門檻（防RS拉高）
-ACE_ERA_RL       = 2.20 # 面對此ERA以下的真正頂級王牌時，拒絕推薦讓分受讓（↓2.70→2.20）
+ACE_ERA_RL       = 2.50 # 面對此ERA以下的真正頂級王牌時，拒絕推薦讓分受讓（↑2.20→2.50）
 FIP_ERA_WARN_GAP = 1.50 # RL: 推薦隊SP的FIP比ERA高超過此值 → 幸運ERA不可持續，拒絕RL
 FIP_ERA_UNDER_GAP= 1.00 # UNDER: 任一SP的FIP比ERA高超過此值 → 幸運ERA，失分回歸，拒絕UNDER
 ODDS_SNAP_PATH = "docs/odds_snapshot.json"
@@ -3040,6 +3040,12 @@ def run():
                             (_rl_sp_fip - _rl_sp_era_raw) > FIP_ERA_WARN_GAP):
                         log.info("RL blocked FIP-ERA gap: %s gap=%.2f (FIP=%.2f ERA=%.2f)",
                                  home_sp, _rl_sp_fip - _rl_sp_era_raw, _rl_sp_fip, _rl_sp_era_raw)
+                        continue
+                # ⑤ 天氣不利：雨/逆風時降低RL信心（得分更難預測，讓分風險高）
+                if _wf <= 0.93:
+                    bet_conf = round(bet_conf * 0.90, 4)
+                    if bet_conf < RL_BET_CONF_MIN:
+                        log.info("RL blocked by weather: wf=%.3f conf→%.3f", _wf, bet_conf)
                         continue
             # ── ★ 菁英對決保護：雙方ERA均優時，OVER門檻提高 ──
             # 若雙SP ERA < 3.50，RS易誤拉高total，需更高p_over才下Over
