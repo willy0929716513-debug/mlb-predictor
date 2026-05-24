@@ -296,11 +296,11 @@
       "inning": 6,
       "top_inning": true,
       "home_runs": 5,
-      "away_runs": 1,
-      "projected_total": 10.4,
+      "away_runs": 4,
+      "projected_total": 13.4,
       "market_total": 10.0,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第6局已得9分（此時預期5.6分），高分走勢盤口10.0"
     },
     {
       "home_cn": "釀酒人",
@@ -315,7 +315,7 @@
       "reason": "第5局已得7分（此時預期4.0分），高分走勢盤口9.0"
     }
   ],
-  "live_updated_ts": 1779583274,
+  "live_updated_ts": 1779583575,
   "game_preds": {
     "reds|cardinals": {
       "home_win_prob": 0.2764,
@@ -374,5 +374,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-05-24 08:41 (台灣時間)"
+  "live_updated_at": "2026-05-24 08:46 (台灣時間)"
 }
