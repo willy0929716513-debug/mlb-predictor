@@ -410,7 +410,7 @@
       "home_cn": "天使",
       "away_cn": "遊騎兵",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
       "projected_total": 8.1,
@@ -419,7 +419,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779666069,
+  "live_updated_ts": 1779666370,
   "game_preds": {
     "blue jays|pirates": {
       "home_win_prob": 0.6451,
@@ -482,5 +482,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-05-25 07:41 (台灣時間)"
+  "live_updated_at": "2026-05-25 07:46 (台灣時間)"
 }
