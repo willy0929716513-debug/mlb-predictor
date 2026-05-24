@@ -397,14 +397,14 @@
     {
       "home_cn": "勇士",
       "away_cn": "國民",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 3.4,
+      "projected_total": 2.9,
       "market_total": 8.5,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅1分（此時預期6.1分），低分走勢盤口8.5"
+      "reason": "第8局僅1分（此時預期6.6分），低分走勢盤口8.5"
     },
     {
       "home_cn": "天使",
@@ -419,7 +419,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779666370,
+  "live_updated_ts": 1779666672,
   "game_preds": {
     "blue jays|pirates": {
       "home_win_prob": 0.6451,
@@ -482,5 +482,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-05-25 07:46 (台灣時間)"
+  "live_updated_at": "2026-05-25 07:51 (台灣時間)"
 }
