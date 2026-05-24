@@ -293,11 +293,11 @@
     {
       "home_cn": "紅人",
       "away_cn": "紅雀",
-      "inning": 9,
-      "top_inning": false,
+      "inning": 10,
+      "top_inning": true,
       "home_runs": 6,
       "away_runs": 6,
-      "projected_total": 12.6,
+      "projected_total": 12.0,
       "market_total": 10.0,
       "bet": null,
       "reason": null
