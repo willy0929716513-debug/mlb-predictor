@@ -295,9 +295,9 @@
       "away_cn": "紅雀",
       "inning": 11,
       "top_inning": false,
-      "home_runs": 6,
+      "home_runs": 7,
       "away_runs": 6,
-      "projected_total": 12.0,
+      "projected_total": 13.0,
       "market_total": 10.0,
       "bet": null,
       "reason": null
@@ -329,11 +329,11 @@
     {
       "home_cn": "響尾蛇",
       "away_cn": "落磯",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 7.5,
+      "projected_total": 7.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
