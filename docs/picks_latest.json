@@ -409,14 +409,14 @@
     {
       "home_cn": "洋基",
       "away_cn": "光芒",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 1.2,
+      "projected_total": 0.8,
       "market_total": 7.0,
-      "bet": "大小分 UNDER",
-      "reason": "第8局僅0分（此時預期5.8分），低分走勢盤口7.0"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "馬林魚",
@@ -448,11 +448,11 @@
       "inning": 5,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 1,
-      "projected_total": 6.4,
+      "away_runs": 5,
+      "projected_total": 10.4,
       "market_total": 8.0,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第5局已得6分（此時預期3.6分），高分走勢盤口8.0"
     },
     {
       "home_cn": "小熊",
@@ -460,11 +460,11 @@
       "inning": 5,
       "top_inning": true,
       "home_runs": 3,
-      "away_runs": 2,
-      "projected_total": 8.9,
+      "away_runs": 4,
+      "projected_total": 10.9,
       "market_total": 7.0,
       "bet": "大小分 OVER",
-      "reason": "第5局已得5分（此時預期3.1分），高分走勢盤口7.0"
+      "reason": "第5局已得7分（此時預期3.1分），高分走勢盤口7.0"
     },
     {
       "home_cn": "巨人",
@@ -479,7 +479,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779651388,
+  "live_updated_ts": 1779651690,
   "game_preds": {
     "blue jays|pirates": {
       "home_win_prob": 0.6451,
@@ -542,5 +542,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-05-25 03:36 (台灣時間)"
+  "live_updated_at": "2026-05-25 03:41 (台灣時間)"
 }
