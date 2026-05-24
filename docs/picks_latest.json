@@ -385,17 +385,113 @@
     {
       "home_cn": "藍鳥",
       "away_cn": "海盜",
-      "inning": 1,
+      "inning": 8,
+      "top_inning": false,
+      "home_runs": 1,
+      "away_runs": 4,
+      "projected_total": 6.2,
+      "market_total": 7.5,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "金鶯",
+      "away_cn": "老虎",
+      "inning": 8,
+      "top_inning": true,
+      "home_runs": 1,
+      "away_runs": 3,
+      "projected_total": 5.8,
+      "market_total": 8.0,
+      "bet": "客隊獨贏",
+      "reason": "第8局客隊領先2分（賽前客隊勝率72%），大局已定"
+    },
+    {
+      "home_cn": "紅襪",
+      "away_cn": "雙城",
+      "inning": 4,
+      "top_inning": true,
+      "home_runs": 1,
+      "away_runs": 3,
+      "projected_total": 8.7,
+      "market_total": 7.0,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "費城人",
+      "away_cn": "守護者",
+      "inning": 5,
       "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 7.5,
+      "projected_total": 3.9,
+      "market_total": 7.0,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "洋基",
+      "away_cn": "光芒",
+      "inning": 5,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 3.9,
+      "market_total": 7.0,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "馬林魚",
+      "away_cn": "大都會",
+      "inning": 4,
+      "top_inning": false,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 4.6,
       "market_total": 7.5,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "皇家",
+      "away_cn": "水手",
+      "inning": 3,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 1,
+      "projected_total": 7.2,
+      "market_total": 8.0,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "釀酒人",
+      "away_cn": "道奇",
+      "inning": 2,
+      "top_inning": false,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 6.7,
+      "market_total": 8.0,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "小熊",
+      "away_cn": "太空人",
+      "inning": 2,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 1,
+      "projected_total": 7.2,
+      "market_total": 7.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1779596290,
+  "live_updated_ts": 1779648067,
   "game_preds": {
     "blue jays|pirates": {
       "home_win_prob": 0.6451,
@@ -457,5 +553,6 @@
       "home_win_prob": 0.4186,
       "market_total": 8.0
     }
-  }
+  },
+  "live_updated_at": "2026-05-25 02:41 (台灣時間)"
 }
