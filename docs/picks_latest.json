@@ -397,26 +397,26 @@
     {
       "home_cn": "巨人",
       "away_cn": "白襪",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 8,
       "away_runs": 4,
-      "projected_total": 16.0,
+      "projected_total": 15.6,
       "market_total": 8.0,
       "bet": "大小分 OVER",
-      "reason": "第5局已得12分（此時預期4.0分），高分走勢盤口8.0"
+      "reason": "第6局已得12分（此時預期4.4分），高分走勢盤口8.0"
     },
     {
       "home_cn": "響尾蛇",
       "away_cn": "落磯",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 9,
       "away_runs": 0,
-      "projected_total": 11.8,
+      "projected_total": 11.4,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第7局已得9分（此時預期5.7分），高分走勢盤口8.5"
+      "reason": "第7局已得9分（此時預期6.1分），高分走勢盤口8.5"
     },
     {
       "home_cn": "教士",
@@ -433,17 +433,17 @@
     {
       "home_cn": "勇士",
       "away_cn": "國民",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 4.3,
+      "projected_total": 3.8,
       "market_total": 8.5,
       "bet": "大小分 UNDER",
-      "reason": "第6局僅1分（此時預期5.2分），低分走勢盤口8.5"
+      "reason": "第7局僅1分（此時預期5.7分），低分走勢盤口8.5"
     }
   ],
-  "live_updated_ts": 1779660139,
+  "live_updated_ts": 1779660441,
   "game_preds": {
     "blue jays|pirates": {
       "home_win_prob": 0.6451,
@@ -506,5 +506,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-05-25 06:02 (台灣時間)"
+  "live_updated_at": "2026-05-25 06:07 (台灣時間)"
 }
