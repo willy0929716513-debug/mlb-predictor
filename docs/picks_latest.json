@@ -319,12 +319,12 @@
       "away_cn": "落磯",
       "inning": 4,
       "top_inning": false,
-      "home_runs": 3,
+      "home_runs": 5,
       "away_runs": 2,
-      "projected_total": 10.5,
+      "projected_total": 12.5,
       "market_total": 9.0,
       "bet": "大小分 OVER",
-      "reason": "第4局已得5分（此時預期3.5分），高分走勢盤口9.0"
+      "reason": "第4局已得7分（此時預期3.5分），高分走勢盤口9.0"
     }
   ],
   "live_updated_ts": 1779592975,
