@@ -307,12 +307,12 @@
       "away_cn": "遊騎兵",
       "inning": 5,
       "top_inning": false,
-      "home_runs": 2,
+      "home_runs": 3,
       "away_runs": 1,
-      "projected_total": 6.8,
+      "projected_total": 7.8,
       "market_total": 7.5,
       "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後1分 第5局，賽前客隊勝率67%"
+      "reason": "客隊落後2分 第5局，賽前客隊勝率67%"
     },
     {
       "home_cn": "響尾蛇",
