@@ -398,22 +398,22 @@
       "home_cn": "金鶯",
       "away_cn": "老虎",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 3,
-      "projected_total": 5.8,
+      "projected_total": 5.3,
       "market_total": 8.0,
-      "bet": "客隊獨贏",
-      "reason": "第8局客隊領先2分（賽前客隊勝率72%），大局已定"
+      "bet": "大小分 UNDER",
+      "reason": "第8局僅4分（此時預期6.7分），低分走勢盤口8.0"
     },
     {
       "home_cn": "紅襪",
       "away_cn": "雙城",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 3,
-      "projected_total": 8.7,
+      "projected_total": 8.3,
       "market_total": 7.0,
       "bet": null,
       "reason": null
@@ -424,8 +424,8 @@
       "inning": 5,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 3.9,
+      "away_runs": 1,
+      "projected_total": 4.9,
       "market_total": 7.0,
       "bet": null,
       "reason": null
@@ -458,10 +458,10 @@
       "home_cn": "皇家",
       "away_cn": "水手",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 7.2,
+      "projected_total": 6.8,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -482,16 +482,16 @@
       "home_cn": "小熊",
       "away_cn": "太空人",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 7.2,
+      "projected_total": 6.8,
       "market_total": 7.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1779648067,
+  "live_updated_ts": 1779648369,
   "game_preds": {
     "blue jays|pirates": {
       "home_win_prob": 0.6451,
@@ -554,5 +554,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-05-25 02:41 (台灣時間)"
+  "live_updated_at": "2026-05-25 02:46 (台灣時間)"
 }
