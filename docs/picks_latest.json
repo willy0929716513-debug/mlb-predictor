@@ -385,14 +385,14 @@
     {
       "home_cn": "金鶯",
       "away_cn": "老虎",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 4,
-      "projected_total": 8.1,
+      "projected_total": 7.7,
       "market_total": 8.0,
-      "bet": null,
-      "reason": null
+      "bet": "客隊獨贏",
+      "reason": "第7局客隊領先3分（賽前客隊勝率72%），大局已定"
     },
     {
       "home_cn": "勇士",
@@ -413,7 +413,7 @@
       "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 8.1,
+      "projected_total": 7.7,
       "market_total": 8.0,
       "bet": null,
       "reason": null
