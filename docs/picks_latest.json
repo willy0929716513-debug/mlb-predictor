@@ -383,49 +383,13 @@
   ],
   "live_games": [
     {
-      "home_cn": "紅襪",
-      "away_cn": "雙城",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 5,
-      "away_runs": 6,
-      "projected_total": 11.4,
-      "market_total": 7.0,
-      "bet": null,
-      "reason": null
-    },
-    {
-      "home_cn": "皇家",
-      "away_cn": "水手",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 8,
-      "away_runs": 6,
-      "projected_total": 14.9,
-      "market_total": 8.0,
-      "bet": null,
-      "reason": null
-    },
-    {
-      "home_cn": "小熊",
-      "away_cn": "太空人",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 5,
-      "away_runs": 8,
-      "projected_total": 13.4,
-      "market_total": 7.0,
-      "bet": "客隊獨贏",
-      "reason": "第9局客隊領先3分（賽前客隊勝率49%），大局已定"
-    },
-    {
       "home_cn": "巨人",
       "away_cn": "白襪",
       "inning": 3,
-      "top_inning": true,
-      "home_runs": 2,
+      "top_inning": false,
+      "home_runs": 4,
       "away_runs": 1,
-      "projected_total": 9.2,
+      "projected_total": 10.8,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -435,9 +399,9 @@
       "away_cn": "落磯",
       "inning": 3,
       "top_inning": false,
-      "home_runs": 6,
+      "home_runs": 7,
       "away_runs": 0,
-      "projected_total": 12.1,
+      "projected_total": 13.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -457,17 +421,17 @@
     {
       "home_cn": "勇士",
       "away_cn": "國民",
-      "inning": 2,
+      "inning": 3,
       "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 7.6,
+      "projected_total": 6.6,
       "market_total": 8.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1779656216,
+  "live_updated_ts": 1779656517,
   "game_preds": {
     "blue jays|pirates": {
       "home_win_prob": 0.6451,
@@ -530,5 +494,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-05-25 04:56 (台灣時間)"
+  "live_updated_at": "2026-05-25 05:01 (台灣時間)"
 }
