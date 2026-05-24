@@ -305,14 +305,14 @@
     {
       "home_cn": "費城人",
       "away_cn": "守護者",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 0,
-      "projected_total": 4.2,
+      "projected_total": 3.8,
       "market_total": 7.0,
-      "bet": "大小分 UNDER",
-      "reason": "第8局僅3分（此時預期5.8分），低分走勢盤口7.0"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "釀酒人",
