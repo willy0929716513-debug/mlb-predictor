@@ -294,10 +294,10 @@
       "home_cn": "紅人",
       "away_cn": "紅雀",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 6,
       "away_runs": 4,
-      "projected_total": 12.2,
+      "projected_total": 11.7,
       "market_total": 10.0,
       "bet": "客隊讓分(+1.5)",
       "reason": "客隊落後2分 第8局，賽前客隊勝率72%"
@@ -323,6 +323,18 @@
       "away_runs": 0,
       "projected_total": 8.0,
       "market_total": 8.0,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "天使",
+      "away_cn": "遊騎兵",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 7.5,
+      "market_total": 7.5,
       "bet": null,
       "reason": null
     }
