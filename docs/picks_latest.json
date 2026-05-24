@@ -385,11 +385,11 @@
     {
       "home_cn": "金鶯",
       "away_cn": "老虎",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 4,
-      "projected_total": 9.0,
+      "projected_total": 8.6,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -419,7 +419,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779665274,
+  "live_updated_ts": 1779665466,
   "game_preds": {
     "blue jays|pirates": {
       "home_win_prob": 0.6451,
@@ -482,5 +482,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-05-25 07:27 (台灣時間)"
+  "live_updated_at": "2026-05-25 07:31 (台灣時間)"
 }
