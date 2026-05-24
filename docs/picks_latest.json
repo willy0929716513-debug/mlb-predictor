@@ -351,7 +351,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779588144,
+  "live_updated_ts": 1779588446,
   "game_preds": {
     "reds|cardinals": {
       "home_win_prob": 0.2764,
@@ -410,5 +410,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-05-24 10:02 (台灣時間)"
+  "live_updated_at": "2026-05-24 10:07 (台灣時間)"
 }
