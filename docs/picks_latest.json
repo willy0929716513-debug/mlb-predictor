@@ -397,23 +397,23 @@
     {
       "home_cn": "響尾蛇",
       "away_cn": "落磯",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 7,
       "away_runs": 0,
-      "projected_total": 13.1,
+      "projected_total": 12.7,
       "market_total": 8.5,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第4局已得7分（此時預期2.8分），高分走勢盤口8.5"
     },
     {
       "home_cn": "教士",
       "away_cn": "運動家",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 3,
-      "projected_total": 8.4,
+      "projected_total": 8.0,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -431,7 +431,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779656517,
+  "live_updated_ts": 1779656819,
   "game_preds": {
     "blue jays|pirates": {
       "home_win_prob": 0.6451,
@@ -494,5 +494,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-05-25 05:01 (台灣時間)"
+  "live_updated_at": "2026-05-25 05:06 (台灣時間)"
 }
