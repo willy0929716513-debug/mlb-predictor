@@ -431,7 +431,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779664067,
+  "live_updated_ts": 1779664369,
   "game_preds": {
     "blue jays|pirates": {
       "home_win_prob": 0.6451,
@@ -494,5 +494,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-05-25 07:07 (台灣時間)"
+  "live_updated_at": "2026-05-25 07:12 (台灣時間)"
 }
