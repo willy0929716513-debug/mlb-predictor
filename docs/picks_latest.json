@@ -308,11 +308,11 @@
       "inning": 8,
       "top_inning": true,
       "home_runs": 3,
-      "away_runs": 4,
-      "projected_total": 9.0,
+      "away_runs": 5,
+      "projected_total": 10.0,
       "market_total": 9.0,
-      "bet": null,
-      "reason": null
+      "bet": "客隊獨贏",
+      "reason": "第8局客隊領先2分（賽前客隊勝率65%），大局已定"
     },
     {
       "home_cn": "教士",
@@ -339,7 +339,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779586635,
+  "live_updated_ts": 1779586937,
   "game_preds": {
     "reds|cardinals": {
       "home_win_prob": 0.2764,
@@ -398,5 +398,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-05-24 09:37 (台灣時間)"
+  "live_updated_at": "2026-05-24 09:42 (台灣時間)"
 }
