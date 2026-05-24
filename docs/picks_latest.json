@@ -385,14 +385,14 @@
     {
       "home_cn": "紅襪",
       "away_cn": "雙城",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 4,
       "away_runs": 6,
-      "projected_total": 11.9,
+      "projected_total": 11.6,
       "market_total": 7.0,
-      "bet": "大小分 OVER",
-      "reason": "第7局已得10分（此時預期5.1分），高分走勢盤口7.0"
+      "bet": "客隊獨贏",
+      "reason": "第8局客隊領先2分（賽前客隊勝率65%），大局已定"
     },
     {
       "home_cn": "費城人",
@@ -409,14 +409,14 @@
     {
       "home_cn": "馬林魚",
       "away_cn": "大都會",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 2.1,
+      "projected_total": 1.7,
       "market_total": 7.5,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅0分（此時預期5.4分），低分走勢盤口7.5"
+      "reason": "第8局僅0分（此時預期5.8分），低分走勢盤口7.5"
     },
     {
       "home_cn": "皇家",
@@ -424,8 +424,8 @@
       "inning": 7,
       "top_inning": true,
       "home_runs": 5,
-      "away_runs": 1,
-      "projected_total": 8.7,
+      "away_runs": 2,
+      "projected_total": 9.7,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -489,9 +489,21 @@
       "market_total": 7.5,
       "bet": null,
       "reason": null
+    },
+    {
+      "home_cn": "勇士",
+      "away_cn": "國民",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 8.5,
+      "market_total": 8.5,
+      "bet": null,
+      "reason": null
     }
   ],
-  "live_updated_ts": 1779652595,
+  "live_updated_ts": 1779652896,
   "game_preds": {
     "blue jays|pirates": {
       "home_win_prob": 0.6451,
@@ -554,5 +566,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-05-25 03:56 (台灣時間)"
+  "live_updated_at": "2026-05-25 04:01 (台灣時間)"
 }
