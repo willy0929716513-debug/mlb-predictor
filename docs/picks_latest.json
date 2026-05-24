@@ -433,23 +433,23 @@
     {
       "home_cn": "洋基",
       "away_cn": "光芒",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 3.5,
+      "projected_total": 3.1,
       "market_total": 7.0,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 UNDER",
+      "reason": "第6局僅0分（此時預期3.9分），低分走勢盤口7.0"
     },
     {
       "home_cn": "馬林魚",
       "away_cn": "大都會",
-      "inning": 4,
-      "top_inning": false,
+      "inning": 5,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 4.6,
+      "projected_total": 4.2,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -457,11 +457,11 @@
     {
       "home_cn": "皇家",
       "away_cn": "水手",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 6.8,
+      "projected_total": 6.3,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -469,11 +469,11 @@
     {
       "home_cn": "釀酒人",
       "away_cn": "道奇",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 7.7,
+      "projected_total": 7.2,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -491,7 +491,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779648671,
+  "live_updated_ts": 1779648973,
   "game_preds": {
     "blue jays|pirates": {
       "home_win_prob": 0.6451,
@@ -554,5 +554,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-05-25 02:51 (台灣時間)"
+  "live_updated_at": "2026-05-25 02:56 (台灣時間)"
 }
