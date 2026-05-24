@@ -383,28 +383,40 @@
   ],
   "live_games": [
     {
+      "home_cn": "金鶯",
+      "away_cn": "老虎",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 8.0,
+      "market_total": 8.0,
+      "bet": null,
+      "reason": null
+    },
+    {
       "home_cn": "巨人",
       "away_cn": "白襪",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 4,
       "away_runs": 4,
-      "projected_total": 12.4,
+      "projected_total": 12.0,
       "market_total": 8.0,
       "bet": "大小分 OVER",
-      "reason": "第5局已得8分（此時預期3.6分），高分走勢盤口8.0"
+      "reason": "第5局已得8分（此時預期4.0分），高分走勢盤口8.0"
     },
     {
       "home_cn": "響尾蛇",
       "away_cn": "落磯",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 7,
       "away_runs": 0,
-      "projected_total": 10.8,
+      "projected_total": 10.3,
       "market_total": 8.5,
-      "bet": "大小分 OVER",
-      "reason": "第6局已得7分（此時預期4.7分），高分走勢盤口8.5"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "教士",
@@ -422,16 +434,16 @@
       "home_cn": "勇士",
       "away_cn": "國民",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 5.7,
+      "projected_total": 5.2,
       "market_total": 8.5,
       "bet": "主隊讓分(+1.5)",
       "reason": "主隊落後1分 第5局，賽前主隊勝率71%"
     }
   ],
-  "live_updated_ts": 1779658932,
+  "live_updated_ts": 1779659234,
   "game_preds": {
     "blue jays|pirates": {
       "home_win_prob": 0.6451,
@@ -494,5 +506,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-05-25 05:42 (台灣時間)"
+  "live_updated_at": "2026-05-25 05:47 (台灣時間)"
 }
