@@ -409,11 +409,11 @@
     {
       "home_cn": "天使",
       "away_cn": "遊騎兵",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 7.6,
+      "projected_total": 7.1,
       "market_total": 8.0,
       "bet": null,
       "reason": null
