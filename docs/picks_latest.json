@@ -398,10 +398,10 @@
       "home_cn": "馬林魚",
       "away_cn": "大都會",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 0.8,
+      "projected_total": 0.4,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -421,35 +421,35 @@
     {
       "home_cn": "釀酒人",
       "away_cn": "道奇",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 5,
-      "projected_total": 8.2,
+      "projected_total": 7.8,
       "market_total": 8.0,
       "bet": "客隊獨贏",
-      "reason": "第7局客隊領先4分（賽前客隊勝率48%），大局已定"
+      "reason": "第8局客隊領先4分（賽前客隊勝率48%），大局已定"
     },
     {
       "home_cn": "小熊",
       "away_cn": "太空人",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 7,
-      "projected_total": 12.3,
+      "projected_total": 11.9,
       "market_total": 7.0,
       "bet": "大小分 OVER",
-      "reason": "第7局已得10分（此時預期4.7分），高分走勢盤口7.0"
+      "reason": "第7局已得10分（此時預期5.1分），高分走勢盤口7.0"
     },
     {
       "home_cn": "巨人",
       "away_cn": "白襪",
       "inning": 1,
-      "top_inning": true,
-      "home_runs": 0,
+      "top_inning": false,
+      "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 9.0,
+      "projected_total": 9.6,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -459,9 +459,9 @@
       "away_cn": "落磯",
       "inning": 1,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 2,
       "away_runs": 0,
-      "projected_total": 8.0,
+      "projected_total": 10.0,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -470,16 +470,16 @@
       "home_cn": "教士",
       "away_cn": "運動家",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 8.5,
+      "projected_total": 8.1,
       "market_total": 7.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1779653802,
+  "live_updated_ts": 1779654104,
   "game_preds": {
     "blue jays|pirates": {
       "home_win_prob": 0.6451,
@@ -542,5 +542,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-05-25 04:16 (台灣時間)"
+  "live_updated_at": "2026-05-25 04:21 (台灣時間)"
 }
