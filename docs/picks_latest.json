@@ -421,11 +421,11 @@
     {
       "home_cn": "教士",
       "away_cn": "運動家",
-      "inning": 5,
+      "inning": 6,
       "top_inning": false,
       "home_runs": 0,
       "away_runs": 4,
-      "projected_total": 7.8,
+      "projected_total": 6.9,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -433,17 +433,17 @@
     {
       "home_cn": "勇士",
       "away_cn": "國民",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 5.2,
+      "projected_total": 4.8,
       "market_total": 8.5,
-      "bet": "主隊讓分(+1.5)",
-      "reason": "主隊落後1分 第5局，賽前主隊勝率71%"
+      "bet": "大小分 UNDER",
+      "reason": "第6局僅1分（此時預期4.7分），低分走勢盤口8.5"
     }
   ],
-  "live_updated_ts": 1779659234,
+  "live_updated_ts": 1779659535,
   "game_preds": {
     "blue jays|pirates": {
       "home_win_prob": 0.6451,
@@ -506,5 +506,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-05-25 05:47 (台灣時間)"
+  "live_updated_at": "2026-05-25 05:52 (台灣時間)"
 }
