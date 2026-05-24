@@ -386,10 +386,10 @@
       "home_cn": "紅襪",
       "away_cn": "雙城",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 4,
       "away_runs": 6,
-      "projected_total": 10.8,
+      "projected_total": 10.4,
       "market_total": 7.0,
       "bet": "客隊獨贏",
       "reason": "第9局客隊領先2分（賽前客隊勝率65%），大局已定"
@@ -399,9 +399,9 @@
       "away_cn": "水手",
       "inning": 8,
       "top_inning": false,
-      "home_runs": 6,
+      "home_runs": 8,
       "away_runs": 3,
-      "projected_total": 10.3,
+      "projected_total": 12.3,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -434,10 +434,10 @@
       "home_cn": "巨人",
       "away_cn": "白襪",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 1,
-      "projected_total": 10.1,
+      "projected_total": 9.7,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -447,9 +447,9 @@
       "away_cn": "落磯",
       "inning": 2,
       "top_inning": false,
-      "home_runs": 3,
+      "home_runs": 5,
       "away_runs": 0,
-      "projected_total": 10.1,
+      "projected_total": 12.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -458,10 +458,10 @@
       "home_cn": "教士",
       "away_cn": "運動家",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 3,
-      "projected_total": 9.7,
+      "projected_total": 9.2,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -470,16 +470,16 @@
       "home_cn": "勇士",
       "away_cn": "國民",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.5,
+      "projected_total": 8.0,
       "market_total": 8.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1779655009,
+  "live_updated_ts": 1779655311,
   "game_preds": {
     "blue jays|pirates": {
       "home_win_prob": 0.6451,
@@ -542,5 +542,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-05-25 04:36 (台灣時間)"
+  "live_updated_at": "2026-05-25 04:41 (台灣時間)"
 }
