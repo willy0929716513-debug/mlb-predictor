@@ -167,10 +167,10 @@
       "home_cn": "金鶯",
       "away_cn": "光芒",
       "inning": 13,
-      "top_inning": true,
-      "home_runs": 5,
-      "away_runs": 6,
-      "projected_total": 11.0,
+      "top_inning": false,
+      "home_runs": 6,
+      "away_runs": 7,
+      "projected_total": 13.0,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -191,13 +191,13 @@
       "home_cn": "大都會",
       "away_cn": "紅人",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 7,
-      "projected_total": 11.2,
+      "projected_total": 10.8,
       "market_total": 7.5,
       "bet": "大小分 OVER",
-      "reason": "第5局已得7分（此時預期3.3分），高分走勢盤口7.5"
+      "reason": "第5局已得7分（此時預期3.8分），高分走勢盤口7.5"
     },
     {
       "home_cn": "巨人",
@@ -212,7 +212,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779745243,
+  "live_updated_ts": 1779745544,
   "game_preds": {
     "orioles|rays": {
       "home_win_prob": 0.5246,
@@ -267,5 +267,5 @@
       "market_total": 10.5
     }
   },
-  "live_updated_at": "2026-05-26 05:40 (台灣時間)"
+  "live_updated_at": "2026-05-26 05:45 (台灣時間)"
 }
