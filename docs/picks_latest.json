@@ -178,14 +178,14 @@
     {
       "home_cn": "大都會",
       "away_cn": "紅人",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 7,
-      "projected_total": 10.9,
+      "projected_total": 10.5,
       "market_total": 7.5,
       "bet": "大小分 OVER",
-      "reason": "第6局已得8分（此時預期4.6分），高分走勢盤口7.5"
+      "reason": "第7局已得8分（此時預期5.0分），高分走勢盤口7.5"
     },
     {
       "home_cn": "巨人",
@@ -212,7 +212,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779746749,
+  "live_updated_ts": 1779747051,
   "game_preds": {
     "orioles|rays": {
       "home_win_prob": 0.5246,
@@ -267,5 +267,5 @@
       "market_total": 10.5
     }
   },
-  "live_updated_at": "2026-05-26 06:05 (台灣時間)"
+  "live_updated_at": "2026-05-26 06:10 (台灣時間)"
 }
