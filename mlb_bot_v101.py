@@ -3042,10 +3042,11 @@ def run():
                                  home_sp, _rl_sp_fip - _rl_sp_era_raw, _rl_sp_fip, _rl_sp_era_raw)
                         continue
                 # ⑤ 天氣不利：雨/逆風時降低RL信心（得分更難預測，讓分風險高）
-                if _wf <= 0.93:
+                _wf_rl = pred.get("weather_factor", 1.0) or 1.0
+                if _wf_rl <= 0.93:
                     bet_conf = round(bet_conf * 0.90, 4)
                     if bet_conf < RL_BET_CONF_MIN:
-                        log.info("RL blocked by weather: wf=%.3f conf→%.3f", _wf, bet_conf)
+                        log.info("RL blocked by weather: wf=%.3f conf→%.3f", _wf_rl, bet_conf)
                         continue
             # ── ★ 菁英對決保護：雙方ERA均優時，OVER門檻提高 ──
             # 若雙SP ERA < 3.50，RS易誤拉高total，需更高p_over才下Over
