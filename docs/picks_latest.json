@@ -179,7 +179,7 @@
       "home_cn": "守護者",
       "away_cn": "國民",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 8,
       "projected_total": 14.7,
