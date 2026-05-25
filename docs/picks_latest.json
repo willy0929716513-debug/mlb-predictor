@@ -168,12 +168,12 @@
       "away_cn": "紅人",
       "inning": 7,
       "top_inning": false,
-      "home_runs": 1,
+      "home_runs": 2,
       "away_runs": 7,
-      "projected_total": 10.1,
+      "projected_total": 11.1,
       "market_total": 7.5,
       "bet": "大小分 OVER",
-      "reason": "第7局已得8分（此時預期5.4分），高分走勢盤口7.5"
+      "reason": "第7局已得9分（此時預期5.4分），高分走勢盤口7.5"
     },
     {
       "home_cn": "巨人",
@@ -181,20 +181,20 @@
       "inning": 5,
       "top_inning": true,
       "home_runs": 2,
-      "away_runs": 1,
-      "projected_total": 7.2,
+      "away_runs": 3,
+      "projected_total": 9.2,
       "market_total": 7.5,
-      "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後1分 第5局，賽前客隊勝率69%"
+      "bet": "大小分 OVER",
+      "reason": "第5局已得5分（此時預期3.3分），高分走勢盤口7.5"
     },
     {
       "home_cn": "守護者",
       "away_cn": "國民",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 3,
-      "projected_total": 11.5,
+      "projected_total": 11.0,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -212,7 +212,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779747653,
+  "live_updated_ts": 1779747954,
   "game_preds": {
     "orioles|rays": {
       "home_win_prob": 0.5246,
@@ -267,5 +267,5 @@
       "market_total": 10.5
     }
   },
-  "live_updated_at": "2026-05-26 06:20 (台灣時間)"
+  "live_updated_at": "2026-05-26 06:25 (台灣時間)"
 }
