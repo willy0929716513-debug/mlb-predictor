@@ -2,30 +2,30 @@
   "generated_at": "2026-05-24 23:57 (台灣時間)",
   "date": "2026-05-24",
   "stats": {
-    "settled": 104,
-    "wins": 70,
-    "win_rate": 67.3,
-    "total_in": 1618.0,
-    "total_pnl": 331.0,
-    "roi": 20.5,
+    "settled": 106,
+    "wins": 71,
+    "win_rate": 67.0,
+    "total_in": 1718.0,
+    "total_pnl": 328.5,
+    "roi": 19.1,
     "by_type": {
       "ML": {
+        "settled": 41,
         "wins": 26,
-        "settled": 40,
-        "win_rate": 65.0,
-        "roi": 6.6
+        "win_rate": 63.4,
+        "roi": -1.5
       },
       "RL": {
-        "wins": 30,
         "settled": 43,
+        "wins": 30,
         "win_rate": 69.8,
         "roi": 15.4
       },
       "TOT": {
-        "wins": 14,
-        "settled": 21,
-        "win_rate": 66.7,
-        "roi": 54.0
+        "settled": 22,
+        "wins": 15,
+        "win_rate": 68.2,
+        "roi": 59.0
       }
     }
   },
@@ -251,30 +251,30 @@
   ],
   "recent_history": [
     {
-      "date": "2026-05-24",
-      "home": "phillies",
-      "away": "guardians",
-      "home_cn": "費城人",
-      "away_cn": "守護者",
-      "bet_type": "讓分",
-      "label": "+1.5",
-      "price": 1.72,
+      "date": "2026-05-25",
+      "home": "royals",
+      "away": "mariners",
+      "home_cn": "皇家",
+      "away_cn": "水手",
+      "bet_type": "獨贏",
+      "label": "",
+      "price": 1.87,
       "stake": 50.0,
-      "edge": 19.7,
-      "result": null
+      "edge": 24.4,
+      "result": "L"
     },
     {
-      "date": "2026-05-24",
+      "date": "2026-05-25",
       "home": "angels",
       "away": "rangers",
       "home_cn": "天使",
       "away_cn": "遊騎兵",
-      "bet_type": "獨贏",
-      "label": "",
-      "price": 1.74,
+      "bet_type": "大小分",
+      "label": "UNDER",
+      "price": 1.95,
       "stake": 50.0,
-      "edge": 10.9,
-      "result": null
+      "edge": 18.8,
+      "result": "W"
     },
     {
       "date": "2026-05-23",
