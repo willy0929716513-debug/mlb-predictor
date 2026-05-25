@@ -169,8 +169,8 @@
       "inning": 13,
       "top_inning": true,
       "home_runs": 5,
-      "away_runs": 5,
-      "projected_total": 10.0,
+      "away_runs": 6,
+      "projected_total": 11.0,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -179,10 +179,10 @@
       "home_cn": "皇家",
       "away_cn": "洋基",
       "inning": 8,
-      "top_inning": true,
-      "home_runs": 2,
+      "top_inning": false,
+      "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 5.9,
+      "projected_total": 6.4,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -212,7 +212,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779744942,
+  "live_updated_ts": 1779745243,
   "game_preds": {
     "orioles|rays": {
       "home_win_prob": 0.5246,
@@ -267,5 +267,5 @@
       "market_total": 10.5
     }
   },
-  "live_updated_at": "2026-05-26 05:35 (台灣時間)"
+  "live_updated_at": "2026-05-26 05:40 (台灣時間)"
 }
