@@ -179,10 +179,10 @@
       "home_cn": "教士",
       "away_cn": "費城人",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 4.9,
+      "projected_total": 4.5,
       "market_total": 7.0,
       "bet": null,
       "reason": null
@@ -212,7 +212,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779752770,
+  "live_updated_ts": 1779753072,
   "game_preds": {
     "orioles|rays": {
       "home_win_prob": 0.5246,
@@ -267,5 +267,5 @@
       "market_total": 10.5
     }
   },
-  "live_updated_at": "2026-05-26 07:46 (台灣時間)"
+  "live_updated_at": "2026-05-26 07:51 (台灣時間)"
 }
