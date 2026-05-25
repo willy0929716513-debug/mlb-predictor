@@ -166,14 +166,14 @@
     {
       "home_cn": "巨人",
       "away_cn": "響尾蛇",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 6,
-      "projected_total": 9.2,
+      "projected_total": 8.8,
       "market_total": 7.5,
       "bet": "客隊獨贏",
-      "reason": "第8局客隊領先4分（賽前客隊勝率69%），大局已定"
+      "reason": "第9局客隊領先4分（賽前客隊勝率69%），大局已定"
     },
     {
       "home_cn": "守護者",
@@ -181,20 +181,20 @@
       "inning": 5,
       "top_inning": true,
       "home_runs": 2,
-      "away_runs": 7,
-      "projected_total": 13.7,
+      "away_runs": 8,
+      "projected_total": 14.7,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第5局已得9分（此時預期3.8分），高分走勢盤口8.5"
+      "reason": "第5局已得10分（此時預期3.8分），高分走勢盤口8.5"
     },
     {
       "home_cn": "教士",
       "away_cn": "費城人",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 6.1,
+      "projected_total": 5.7,
       "market_total": 7.0,
       "bet": null,
       "reason": null
@@ -202,11 +202,11 @@
     {
       "home_cn": "遊騎兵",
       "away_cn": "太空人",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 8.6,
+      "projected_total": 8.1,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -224,7 +224,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779751872,
+  "live_updated_ts": 1779752166,
   "game_preds": {
     "orioles|rays": {
       "home_win_prob": 0.5246,
@@ -279,5 +279,5 @@
       "market_total": 10.5
     }
   },
-  "live_updated_at": "2026-05-26 07:31 (台灣時間)"
+  "live_updated_at": "2026-05-26 07:36 (台灣時間)"
 }
