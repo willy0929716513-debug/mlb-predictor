@@ -167,10 +167,10 @@
       "home_cn": "金鶯",
       "away_cn": "光芒",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 2,
-      "projected_total": 5.7,
+      "projected_total": 5.2,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -179,13 +179,13 @@
       "home_cn": "白襪",
       "away_cn": "雙城",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 1,
-      "projected_total": 5.9,
+      "projected_total": 5.4,
       "market_total": 8.5,
-      "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後2分 第8局，賽前客隊勝率57%"
+      "bet": "大小分 UNDER",
+      "reason": "第8局僅4分（此時預期7.1分），低分走勢盤口8.5"
     },
     {
       "home_cn": "釀酒人",
@@ -203,10 +203,10 @@
       "home_cn": "皇家",
       "away_cn": "洋基",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 9.6,
+      "projected_total": 9.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -224,7 +224,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779739518,
+  "live_updated_ts": 1779739819,
   "game_preds": {
     "orioles|rays": {
       "home_win_prob": 0.5246,
@@ -279,5 +279,5 @@
       "market_total": 10.5
     }
   },
-  "live_updated_at": "2026-05-26 04:05 (台灣時間)"
+  "live_updated_at": "2026-05-26 04:10 (台灣時間)"
 }
