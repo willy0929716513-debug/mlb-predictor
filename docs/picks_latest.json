@@ -190,11 +190,11 @@
     {
       "home_cn": "教士",
       "away_cn": "費城人",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 6.8,
+      "projected_total": 6.4,
       "market_total": 7.0,
       "bet": null,
       "reason": null
@@ -203,10 +203,10 @@
       "home_cn": "遊騎兵",
       "away_cn": "太空人",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 9.0,
+      "projected_total": 8.6,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -224,7 +224,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779750968,
+  "live_updated_ts": 1779751269,
   "game_preds": {
     "orioles|rays": {
       "home_win_prob": 0.5246,
@@ -279,5 +279,5 @@
       "market_total": 10.5
     }
   },
-  "live_updated_at": "2026-05-26 07:16 (台灣時間)"
+  "live_updated_at": "2026-05-26 07:21 (台灣時間)"
 }
