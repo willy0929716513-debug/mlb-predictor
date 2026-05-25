@@ -166,11 +166,11 @@
     {
       "home_cn": "大都會",
       "away_cn": "紅人",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 7,
-      "projected_total": 10.2,
+      "projected_total": 9.8,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -178,23 +178,23 @@
     {
       "home_cn": "巨人",
       "away_cn": "響尾蛇",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 6,
-      "projected_total": 10.9,
+      "projected_total": 10.5,
       "market_total": 7.5,
       "bet": "大小分 OVER",
-      "reason": "第6局已得8分（此時預期4.6分），高分走勢盤口7.5"
+      "reason": "第7局已得8分（此時預期5.0分），高分走勢盤口7.5"
     },
     {
       "home_cn": "守護者",
       "away_cn": "國民",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 1,
-      "away_runs": 6,
-      "projected_total": 14.1,
+      "away_runs": 7,
+      "projected_total": 14.6,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -203,10 +203,10 @@
       "home_cn": "教士",
       "away_cn": "費城人",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 8.0,
+      "projected_total": 7.6,
       "market_total": 7.0,
       "bet": null,
       "reason": null
@@ -236,7 +236,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779749461,
+  "live_updated_ts": 1779749762,
   "game_preds": {
     "orioles|rays": {
       "home_win_prob": 0.5246,
@@ -291,5 +291,5 @@
       "market_total": 10.5
     }
   },
-  "live_updated_at": "2026-05-26 06:51 (台灣時間)"
+  "live_updated_at": "2026-05-26 06:56 (台灣時間)"
 }
