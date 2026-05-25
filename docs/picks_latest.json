@@ -224,7 +224,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779736806,
+  "live_updated_ts": 1779737107,
   "game_preds": {
     "orioles|rays": {
       "home_win_prob": 0.5246,
@@ -279,5 +279,5 @@
       "market_total": 10.5
     }
   },
-  "live_updated_at": "2026-05-26 03:20 (台灣時間)"
+  "live_updated_at": "2026-05-26 03:25 (台灣時間)"
 }
