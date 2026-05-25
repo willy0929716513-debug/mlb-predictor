@@ -167,13 +167,13 @@
       "home_cn": "守護者",
       "away_cn": "國民",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
-      "away_runs": 8,
-      "projected_total": 13.8,
+      "away_runs": 10,
+      "projected_total": 15.3,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第6局已得10分（此時預期4.7分），高分走勢盤口8.5"
+      "reason": "第6局已得12分（此時預期5.2分），高分走勢盤口8.5"
     },
     {
       "home_cn": "教士",
@@ -191,10 +191,10 @@
       "home_cn": "遊騎兵",
       "away_cn": "太空人",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 7.2,
+      "projected_total": 6.8,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -202,17 +202,17 @@
     {
       "home_cn": "藍鳥",
       "away_cn": "馬林魚",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 6.4,
+      "projected_total": 6.0,
       "market_total": 7.5,
-      "bet": null,
-      "reason": null
+      "bet": "主隊讓分(+1.5)",
+      "reason": "主隊落後1分 第4局，賽前主隊勝率76%"
     }
   ],
-  "live_updated_ts": 1779753072,
+  "live_updated_ts": 1779753374,
   "game_preds": {
     "orioles|rays": {
       "home_win_prob": 0.5246,
@@ -267,5 +267,5 @@
       "market_total": 10.5
     }
   },
-  "live_updated_at": "2026-05-26 07:51 (台灣時間)"
+  "live_updated_at": "2026-05-26 07:56 (台灣時間)"
 }
