@@ -398,13 +398,13 @@
       "home_cn": "勇士",
       "away_cn": "國民",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 3.9,
+      "projected_total": 3.4,
       "market_total": 8.5,
       "bet": "大小分 UNDER",
-      "reason": "第8局僅2分（此時預期6.6分），低分走勢盤口8.5"
+      "reason": "第8局僅2分（此時預期7.1分），低分走勢盤口8.5"
     },
     {
       "home_cn": "天使",
