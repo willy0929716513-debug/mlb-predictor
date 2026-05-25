@@ -191,10 +191,10 @@
       "home_cn": "守護者",
       "away_cn": "國民",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 7,
-      "projected_total": 14.6,
+      "projected_total": 14.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -236,7 +236,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779749762,
+  "live_updated_ts": 1779750064,
   "game_preds": {
     "orioles|rays": {
       "home_win_prob": 0.5246,
@@ -291,5 +291,5 @@
       "market_total": 10.5
     }
   },
-  "live_updated_at": "2026-05-26 06:56 (台灣時間)"
+  "live_updated_at": "2026-05-26 07:01 (台灣時間)"
 }
