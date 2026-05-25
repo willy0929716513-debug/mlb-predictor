@@ -164,18 +164,6 @@
   ],
   "live_games": [
     {
-      "home_cn": "金鶯",
-      "away_cn": "光芒",
-      "inning": 13,
-      "top_inning": false,
-      "home_runs": 6,
-      "away_runs": 7,
-      "projected_total": 13.0,
-      "market_total": 7.5,
-      "bet": null,
-      "reason": null
-    },
-    {
       "home_cn": "皇家",
       "away_cn": "洋基",
       "inning": 8,
@@ -203,16 +191,16 @@
       "home_cn": "巨人",
       "away_cn": "響尾蛇",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 6.8,
+      "projected_total": 6.4,
       "market_total": 7.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1779745544,
+  "live_updated_ts": 1779745845,
   "game_preds": {
     "orioles|rays": {
       "home_win_prob": 0.5246,
@@ -267,5 +255,5 @@
       "market_total": 10.5
     }
   },
-  "live_updated_at": "2026-05-26 05:45 (台灣時間)"
+  "live_updated_at": "2026-05-26 05:50 (台灣時間)"
 }
