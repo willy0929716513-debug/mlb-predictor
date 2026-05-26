@@ -166,11 +166,11 @@
     {
       "home_cn": "道奇",
       "away_cn": "落磯",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 5,
       "away_runs": 3,
-      "projected_total": 9.4,
+      "projected_total": 8.9,
       "market_total": 8.5,
       "bet": "主隊獨贏",
       "reason": "第9局主隊領先2分（賽前主隊勝率76%），大局已定"
