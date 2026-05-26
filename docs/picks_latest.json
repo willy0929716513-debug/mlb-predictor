@@ -178,17 +178,17 @@
     {
       "home_cn": "運動家",
       "away_cn": "水手",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 0,
-      "away_runs": 6,
-      "projected_total": 13.6,
+      "away_runs": 7,
+      "projected_total": 14.0,
       "market_total": 10.5,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第4局已得7分（此時預期3.5分），高分走勢盤口10.5"
     }
   ],
-  "live_updated_ts": 1779763172,
+  "live_updated_ts": 1779763474,
   "game_preds": {
     "orioles|rays": {
       "home_win_prob": 0.5246,
@@ -243,5 +243,5 @@
       "market_total": 10.5
     }
   },
-  "live_updated_at": "2026-05-26 10:39 (台灣時間)"
+  "live_updated_at": "2026-05-26 10:44 (台灣時間)"
 }
