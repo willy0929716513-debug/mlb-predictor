@@ -2,28 +2,28 @@
   "generated_at": "2026-05-26 00:20 (台灣時間)",
   "date": "2026-05-26",
   "stats": {
-    "settled": 106,
-    "wins": 71,
-    "win_rate": 67.0,
-    "total_in": 1718.0,
-    "total_pnl": 328.5,
-    "roi": 19.1,
+    "settled": 108,
+    "wins": 73,
+    "win_rate": 67.6,
+    "total_in": 1818.0,
+    "total_pnl": 388.0,
+    "roi": 21.3,
     "by_type": {
       "ML": {
-        "wins": 26,
         "settled": 41,
+        "wins": 26,
         "win_rate": 63.4,
         "roi": -1.5
       },
       "RL": {
-        "wins": 30,
-        "settled": 43,
-        "win_rate": 69.8,
-        "roi": 15.4
+        "settled": 45,
+        "wins": 32,
+        "win_rate": 71.1,
+        "roi": 21.2
       },
       "TOT": {
-        "wins": 15,
         "settled": 22,
+        "wins": 15,
         "win_rate": 68.2,
         "roi": 59.0
       }
@@ -31,6 +31,32 @@
   },
   "picks": [],
   "recent_history": [
+    {
+      "date": "2026-05-26",
+      "home": "orioles",
+      "away": "rays",
+      "home_cn": "金鶯",
+      "away_cn": "光芒",
+      "bet_type": "讓分",
+      "label": "+1.5",
+      "price": 1.65,
+      "stake": 50.0,
+      "edge": 12.7,
+      "result": "W"
+    },
+    {
+      "date": "2026-05-26",
+      "home": "giants",
+      "away": "diamondbacks",
+      "home_cn": "巨人",
+      "away_cn": "響尾蛇",
+      "bet_type": "讓分",
+      "label": "+1.5",
+      "price": 1.54,
+      "stake": 50.0,
+      "edge": 13.0,
+      "result": "W"
+    },
     {
       "date": "2026-05-25",
       "home": "royals",
@@ -134,32 +160,6 @@
       "stake": 50.0,
       "edge": 14.2,
       "result": "W"
-    },
-    {
-      "date": "2026-05-19",
-      "home": "rockies",
-      "away": "rangers",
-      "home_cn": "落磯",
-      "away_cn": "遊騎兵",
-      "bet_type": "讓分",
-      "label": "+1.5",
-      "price": 1.83,
-      "stake": 50.0,
-      "edge": 17.8,
-      "result": "W"
-    },
-    {
-      "date": "2026-05-19",
-      "home": "nationals",
-      "away": "mets",
-      "home_cn": "國民",
-      "away_cn": "大都會",
-      "bet_type": "讓分",
-      "label": "+1.5",
-      "price": 1.77,
-      "stake": 50.0,
-      "edge": 17.8,
-      "result": "L"
     }
   ],
   "live_games": [
