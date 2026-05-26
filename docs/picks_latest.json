@@ -167,10 +167,10 @@
       "home_cn": "道奇",
       "away_cn": "落磯",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 3,
-      "projected_total": 6.8,
+      "projected_total": 6.4,
       "market_total": 8.5,
       "bet": "主隊讓分(+1.5)",
       "reason": "主隊落後2分 第7局，賽前主隊勝率76%"
@@ -188,7 +188,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779764679,
+  "live_updated_ts": 1779764981,
   "game_preds": {
     "orioles|rays": {
       "home_win_prob": 0.5246,
@@ -243,5 +243,5 @@
       "market_total": 10.5
     }
   },
-  "live_updated_at": "2026-05-26 11:04 (台灣時間)"
+  "live_updated_at": "2026-05-26 11:09 (台灣時間)"
 }
