@@ -167,13 +167,13 @@
       "home_cn": "守護者",
       "away_cn": "國民",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 10,
-      "projected_total": 14.8,
+      "projected_total": 14.4,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第7局已得12分（此時預期5.7分），高分走勢盤口8.5"
+      "reason": "第7局已得12分（此時預期6.1分），高分走勢盤口8.5"
     },
     {
       "home_cn": "教士",
@@ -191,10 +191,10 @@
       "home_cn": "遊騎兵",
       "away_cn": "太空人",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 7.3,
+      "projected_total": 6.9,
       "market_total": 8.0,
       "bet": "主隊讓分(+1.5)",
       "reason": "主隊落後2分 第4局，賽前主隊勝率70%"
@@ -212,7 +212,7 @@
       "reason": "主隊落後1分 第4局，賽前主隊勝率76%"
     }
   ],
-  "live_updated_ts": 1779753978,
+  "live_updated_ts": 1779754280,
   "game_preds": {
     "orioles|rays": {
       "home_win_prob": 0.5246,
@@ -267,5 +267,5 @@
       "market_total": 10.5
     }
   },
-  "live_updated_at": "2026-05-26 08:06 (台灣時間)"
+  "live_updated_at": "2026-05-26 08:11 (台灣時間)"
 }
