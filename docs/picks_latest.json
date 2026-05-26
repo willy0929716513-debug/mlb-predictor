@@ -173,22 +173,22 @@
       "projected_total": 9.4,
       "market_total": 8.5,
       "bet": "主隊獨贏",
-      "reason": "第8局主隊領先2分（賽前主隊勝率76%），大局已定"
+      "reason": "第9局主隊領先2分（賽前主隊勝率76%），大局已定"
     },
     {
       "home_cn": "運動家",
       "away_cn": "水手",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 7,
-      "projected_total": 10.5,
+      "projected_total": 9.9,
       "market_total": 10.5,
       "bet": "客隊獨贏",
       "reason": "第7局客隊領先7分（賽前客隊勝率58%），大局已定"
     }
   ],
-  "live_updated_ts": 1779766488,
+  "live_updated_ts": 1779766789,
   "game_preds": {
     "orioles|rays": {
       "home_win_prob": 0.5246,
@@ -243,5 +243,5 @@
       "market_total": 10.5
     }
   },
-  "live_updated_at": "2026-05-26 11:34 (台灣時間)"
+  "live_updated_at": "2026-05-26 11:39 (台灣時間)"
 }
