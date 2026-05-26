@@ -168,12 +168,12 @@
       "away_cn": "落磯",
       "inning": 7,
       "top_inning": false,
-      "home_runs": 4,
+      "home_runs": 5,
       "away_runs": 3,
-      "projected_total": 9.4,
+      "projected_total": 10.4,
       "market_total": 8.5,
-      "bet": null,
-      "reason": null
+      "bet": "主隊獨贏",
+      "reason": "第7局主隊領先2分（賽前主隊勝率76%），大局已定"
     },
     {
       "home_cn": "運動家",
