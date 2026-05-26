@@ -162,21 +162,8 @@
       "result": "W"
     }
   ],
-  "live_games": [
-    {
-      "home_cn": "運動家",
-      "away_cn": "水手",
-      "inning": 8,
-      "top_inning": false,
-      "home_runs": 1,
-      "away_runs": 7,
-      "projected_total": 9.8,
-      "market_total": 10.5,
-      "bet": "客隊獨贏",
-      "reason": "第8局客隊領先6分（賽前客隊勝率58%），大局已定"
-    }
-  ],
-  "live_updated_ts": 1779767995,
+  "live_games": [],
+  "live_updated_ts": 1779769197,
   "game_preds": {
     "orioles|rays": {
       "home_win_prob": 0.5246,
@@ -231,5 +218,5 @@
       "market_total": 10.5
     }
   },
-  "live_updated_at": "2026-05-26 11:59 (台灣時間)"
+  "live_updated_at": ""
 }
