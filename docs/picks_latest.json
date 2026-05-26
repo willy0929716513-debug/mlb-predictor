@@ -179,13 +179,13 @@
       "home_cn": "教士",
       "away_cn": "費城人",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 4.1,
+      "projected_total": 3.7,
       "market_total": 7.0,
       "bet": "大小分 UNDER",
-      "reason": "第6局僅1分（此時預期3.9分），低分走勢盤口7.0"
+      "reason": "第6局僅1分（此時預期4.3分），低分走勢盤口7.0"
     },
     {
       "home_cn": "遊騎兵",
