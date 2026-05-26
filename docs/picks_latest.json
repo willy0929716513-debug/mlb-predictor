@@ -188,7 +188,7 @@
       "reason": "第7局客隊領先7分（賽前客隊勝率58%），大局已定"
     }
   ],
-  "live_updated_ts": 1779766187,
+  "live_updated_ts": 1779766488,
   "game_preds": {
     "orioles|rays": {
       "home_win_prob": 0.5246,
@@ -243,5 +243,5 @@
       "market_total": 10.5
     }
   },
-  "live_updated_at": "2026-05-26 11:29 (台灣時間)"
+  "live_updated_at": "2026-05-26 11:34 (台灣時間)"
 }
