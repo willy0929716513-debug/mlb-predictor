@@ -1,14 +1,39 @@
 #!/usr/bin/env python3
-"""一次性腳本：從 Gist 刪除指定比賽記錄"""
+"""一次性腳本：手動把指定比賽加進 Gist 歷史記錄"""
 import json, os, requests
 
 GH_TOKEN  = os.getenv("GH_TOKEN", "")
 GIST_DESC = "mlb_bot_history"
 
-# 要刪除的比賽（home, away, date）
-PICKS_TO_DELETE = [
-    ("phillies", "guardians", "2026-05-24"),
-    ("angels",   "rangers",   "2026-05-24"),
+PICKS_TO_ADD = [
+    {
+        "date":         "2026-05-26",
+        "team":         "orioles",
+        "home":         "orioles",
+        "away":         "rays",
+        "price":        1.65,
+        "stake":        50.0,
+        "edge":         0.127,
+        "conf":         0.82,
+        "bet_type":     "讓分",
+        "result":       None,
+        "label":        "+1.5",
+        "market_total": None,
+    },
+    {
+        "date":         "2026-05-26",
+        "team":         "diamondbacks",
+        "home":         "giants",
+        "away":         "diamondbacks",
+        "price":        1.54,
+        "stake":        50.0,
+        "edge":         0.130,
+        "conf":         0.71,
+        "bet_type":     "讓分",
+        "result":       None,
+        "label":        "+1.5",
+        "market_total": None,
+    },
 ]
 
 def gh_h():
@@ -36,25 +61,26 @@ def main():
     detail  = requests.get("https://api.github.com/gists/" + gid, headers=gh_h(), timeout=15).json()
     raw_url = list(detail["files"].values())[0]["raw_url"]
     records = requests.get(raw_url, timeout=15).json()
-    print(f"Loaded {len(records)} records")
+    print(f"Loaded {len(records)} existing records")
 
-    new_records = []
-    for rec in records:
-        rk = (rec.get("home",""), rec.get("away",""), rec.get("date",""))
-        if rk in PICKS_TO_DELETE:
-            print(f"Deleted: {rec.get('away')}@{rec.get('home')} {rec.get('date')}")
+    added = 0
+    for pick in PICKS_TO_ADD:
+        rk = (pick["home"], pick["away"], pick["date"])
+        if any((r.get("home"), r.get("away"), r.get("date")) == rk for r in records):
+            print(f"Skip (already exists): {pick['away']}@{pick['home']} {pick['date']}")
         else:
-            new_records.append(rec)
+            records.append(pick)
+            added += 1
+            print(f"Added: {pick['away']}@{pick['home']} {pick['date']} {pick['bet_type']} {pick['label']}")
 
-    removed = len(records) - len(new_records)
-    if removed == 0:
-        print("Nothing deleted."); return
+    if added == 0:
+        print("Nothing to add."); return
 
-    body = json.dumps(new_records, ensure_ascii=False, indent=2)
+    body = json.dumps(records, ensure_ascii=False, indent=2)
     pl   = {"description": GIST_DESC, "public": False,
             "files": {"history.json": {"content": body}}}
     requests.patch("https://api.github.com/gists/" + gid, headers=gh_h(), json=pl, timeout=10).raise_for_status()
-    print(f"Done. Removed {removed} records. Total: {len(new_records)}")
+    print(f"Saved. Total records: {len(records)}")
 
 if __name__ == "__main__":
     main()
