@@ -164,18 +164,6 @@
   ],
   "live_games": [
     {
-      "home_cn": "藍鳥",
-      "away_cn": "馬林魚",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 2,
-      "away_runs": 8,
-      "projected_total": 10.4,
-      "market_total": 7.5,
-      "bet": null,
-      "reason": null
-    },
-    {
       "home_cn": "道奇",
       "away_cn": "落磯",
       "inning": 4,
