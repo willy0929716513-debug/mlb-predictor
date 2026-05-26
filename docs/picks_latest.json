@@ -203,16 +203,16 @@
       "home_cn": "藍鳥",
       "away_cn": "馬林魚",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 6.0,
+      "projected_total": 5.6,
       "market_total": 7.5,
       "bet": "主隊讓分(+1.5)",
       "reason": "主隊落後1分 第4局，賽前主隊勝率76%"
     }
   ],
-  "live_updated_ts": 1779753676,
+  "live_updated_ts": 1779753978,
   "game_preds": {
     "orioles|rays": {
       "home_win_prob": 0.5246,
@@ -267,5 +267,5 @@
       "market_total": 10.5
     }
   },
-  "live_updated_at": "2026-05-26 08:01 (台灣時間)"
+  "live_updated_at": "2026-05-26 08:06 (台灣時間)"
 }
