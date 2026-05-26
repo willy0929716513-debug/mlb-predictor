@@ -167,13 +167,13 @@
       "home_cn": "遊騎兵",
       "away_cn": "太空人",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 9,
-      "projected_total": 11.7,
+      "projected_total": 11.2,
       "market_total": 8.0,
       "bet": "大小分 OVER",
-      "reason": "第7局已得9分（此時預期5.3分），高分走勢盤口8.0"
+      "reason": "第7局已得9分（此時預期5.8分），高分走勢盤口8.0"
     },
     {
       "home_cn": "藍鳥",
@@ -200,7 +200,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779757902,
+  "live_updated_ts": 1779758204,
   "game_preds": {
     "orioles|rays": {
       "home_win_prob": 0.5246,
@@ -255,5 +255,5 @@
       "market_total": 10.5
     }
   },
-  "live_updated_at": "2026-05-26 09:11 (台灣時間)"
+  "live_updated_at": "2026-05-26 09:16 (台灣時間)"
 }
