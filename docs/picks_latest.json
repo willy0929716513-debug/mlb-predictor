@@ -318,13 +318,13 @@
       "home_cn": "皇家",
       "away_cn": "洋基",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 11,
-      "projected_total": 14.8,
+      "projected_total": 14.4,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第7局已得12分（此時預期5.7分），高分走勢盤口8.5"
+      "reason": "第7局已得12分（此時預期6.1分），高分走勢盤口8.5"
     },
     {
       "home_cn": "釀酒人",
