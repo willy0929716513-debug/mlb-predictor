@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-05-26 23:33 (台灣時間)",
-  "date": "2026-05-26",
+  "generated_at": "2026-05-27 23:21 (台灣時間)",
+  "date": "2026-05-27",
   "stats": {
     "settled": 108,
     "wins": 73,
@@ -31,133 +31,205 @@
   },
   "picks": [
     {
-      "tier": "⭐ 穩定",
+      "tier": "💎 頂級",
       "btype": "大小分",
-      "away": "diamondbacks",
-      "home": "giants",
-      "away_cn": "響尾蛇",
-      "home_cn": "巨人",
-      "bet_label": "UNDER 8.0",
-      "bk": "LowVig.ag",
-      "bp": 1.98,
-      "con_p": 1.947,
-      "dv_p": 0.4904,
-      "edge": 17.3,
-      "conf": 65.9,
+      "away": "angels",
+      "home": "tigers",
+      "away_cn": "天使",
+      "home_cn": "老虎",
+      "bet_label": "UNDER 7.5",
+      "bk": "BetRivers",
+      "bp": 1.95,
+      "con_p": 1.914,
+      "dv_p": 0.499,
+      "edge": 19.5,
+      "conf": 88.6,
       "stake": 50.0,
-      "model_p": 65.5,
-      "away_sp": "Eduardo Rodriguez",
-      "home_sp": "Tyler Mahle",
-      "away_era": 2.17,
-      "home_era": 4.79,
-      "away_fip": 2.31,
-      "home_fip": 4.48,
-      "away_k9": 6.2,
-      "home_k9": 11.8,
-      "away_avgip": 6.7,
-      "home_avgip": 5.1,
-      "away_whip": 1.04,
-      "home_whip": 1.71,
+      "model_p": 68.5,
+      "away_sp": "Jose Soriano",
+      "home_sp": "Casey Mize",
+      "away_era": 2.82,
+      "home_era": 1.66,
+      "away_fip": 2.4,
+      "home_fip": 1.95,
+      "away_k9": 9.7,
+      "home_k9": 7.4,
+      "away_avgip": 6.2,
+      "home_avgip": 6.1,
+      "away_whip": 1.08,
+      "home_whip": 0.66,
       "away_rest": null,
       "home_rest": null,
-      "away_rs": 3.0,
-      "home_rs": 4.0,
-      "away_rpg": 4.57,
-      "home_rpg": 3.85,
-      "pred_away": 4.5,
-      "pred_home": 2.9,
-      "model_total": 7.4,
-      "market_total": 8.0,
+      "away_rs": 3.33,
+      "home_rs": 2.33,
+      "away_rpg": 4.18,
+      "home_rpg": 4.08,
+      "pred_away": 2.9,
+      "pred_home": 3.1,
+      "model_total": 6.3,
+      "market_total": 7.5,
       "park_factor": null,
-      "weather_factor": 0.921,
+      "weather_factor": 0.985,
       "ump_name": null,
       "ump_adj": null,
-      "away_trend": 0.83,
-      "home_trend": 4.61,
-      "line_clv": 0.0,
-      "game_date": "2026-05-27",
-      "game_time": "09:46",
-      "sp_src": "probable",
+      "away_trend": 1.37,
+      "home_trend": 0.45,
+      "line_clv": null,
+      "game_date": "2026-05-28",
+      "game_time": "06:41",
+      "sp_src": "espn",
       "home_hand": "R",
       "away_hand": "R",
-      "home_babip": 0.452,
-      "away_babip": 0.486,
-      "home_lob": 53.9,
-      "away_lob": 81.0,
+      "home_babip": 0.333,
+      "away_babip": 0.3,
+      "home_lob": 75.0,
+      "away_lob": 57.1,
       "away_road_days": 1,
-      "away_tz_cross": null,
+      "away_tz_cross": true,
       "home_wpct": null,
       "away_road_wpct": null,
-      "home_l10_wpct": 0.4,
-      "away_l10_wpct": 0.8,
+      "home_l10_wpct": 0.1,
+      "away_l10_wpct": 0.5,
       "home_lineup": [],
       "away_lineup": []
     },
     {
       "tier": "⭐ 穩定",
-      "btype": "讓分",
+      "btype": "獨贏",
       "away": "marlins",
       "home": "blue jays",
       "away_cn": "馬林魚",
       "home_cn": "藍鳥",
-      "bet_label": "馬林魚 讓分(+1.5)",
-      "bk": "MyBookie.ag",
-      "bp": 1.59,
-      "con_p": 1.566,
-      "dv_p": 0.6147,
-      "edge": 13.8,
-      "conf": 72.6,
+      "bet_label": "藍鳥 獨贏",
+      "bk": "BetOnline.ag",
+      "bp": 1.67,
+      "con_p": 1.656,
+      "dv_p": 0.5816,
+      "edge": 17.8,
+      "conf": 78.7,
       "stake": 50.0,
-      "model_p": 74.7,
-      "away_sp": "Sandy Alcantara",
-      "home_sp": "Braydon Fisher",
-      "away_era": 3.78,
-      "home_era": 4.2,
-      "away_fip": 3.54,
-      "home_fip": null,
-      "away_k9": 6.0,
-      "home_k9": null,
-      "away_avgip": 6.0,
-      "home_avgip": null,
-      "away_whip": 1.28,
-      "home_whip": null,
+      "model_p": 76.0,
+      "away_sp": "Eury Pérez",
+      "home_sp": "Kevin Gausman",
+      "away_era": 5.22,
+      "home_era": 2.33,
+      "away_fip": 5.44,
+      "home_fip": 1.88,
+      "away_k9": 9.5,
+      "home_k9": 9.9,
+      "away_avgip": 5.7,
+      "home_avgip": 5.5,
+      "away_whip": 0.99,
+      "home_whip": 1.28,
       "away_rest": null,
       "home_rest": null,
-      "away_rs": 6.0,
-      "home_rs": null,
-      "away_rpg": 4.36,
-      "home_rpg": 4.19,
-      "pred_away": 4.6,
-      "pred_home": 4.1,
+      "away_rs": 1.67,
+      "home_rs": 5.0,
+      "away_rpg": 4.32,
+      "home_rpg": 4.23,
+      "pred_away": 2.7,
+      "pred_home": 4.8,
       "model_total": null,
       "market_total": null,
       "park_factor": null,
       "weather_factor": null,
       "ump_name": null,
       "ump_adj": null,
-      "away_trend": -1.65,
-      "home_trend": null,
-      "line_clv": 0.0,
-      "game_date": "2026-05-27",
-      "game_time": "07:08",
-      "sp_src": "probable",
+      "away_trend": -0.76,
+      "home_trend": -6.27,
+      "line_clv": null,
+      "game_date": "2026-05-28",
+      "game_time": "01:08",
+      "sp_src": "gamefeed",
       "home_hand": "R",
       "away_hand": "R",
-      "home_babip": null,
-      "away_babip": 0.576,
-      "home_lob": null,
-      "away_lob": 74.3,
-      "away_road_days": 1,
+      "home_babip": 0.5,
+      "away_babip": 0.194,
+      "home_lob": 71.4,
+      "away_lob": 72.6,
+      "away_road_days": 2,
       "away_tz_cross": null,
       "home_wpct": null,
       "away_road_wpct": null,
       "home_l10_wpct": null,
-      "away_l10_wpct": 0.6,
+      "away_l10_wpct": 0.5,
       "home_lineup": [],
-      "away_lineup": []
+      "away_lineup": [
+        {
+          "order": 1,
+          "name": "Xavier Edwards",
+          "pos": "2B"
+        },
+        {
+          "order": 2,
+          "name": "Liam Hicks",
+          "pos": "C"
+        },
+        {
+          "order": 3,
+          "name": "Otto Lopez",
+          "pos": "SS"
+        },
+        {
+          "order": 4,
+          "name": "Kyle Stowers",
+          "pos": "LF"
+        },
+        {
+          "order": 5,
+          "name": "Jakob Marsee",
+          "pos": "CF"
+        },
+        {
+          "order": 6,
+          "name": "Connor Norby",
+          "pos": "DH"
+        },
+        {
+          "order": 7,
+          "name": "Owen Caissie",
+          "pos": "RF"
+        },
+        {
+          "order": 8,
+          "name": "Christopher Morel",
+          "pos": "1B"
+        },
+        {
+          "order": 9,
+          "name": "Graham Pauley",
+          "pos": "3B"
+        }
+      ]
     }
   ],
   "recent_history": [
+    {
+      "date": "2026-05-27",
+      "home": "blue jays",
+      "away": "marlins",
+      "home_cn": "藍鳥",
+      "away_cn": "馬林魚",
+      "bet_type": "讓分",
+      "label": "+1.5",
+      "price": 1.59,
+      "stake": 50.0,
+      "edge": 13.8,
+      "result": null
+    },
+    {
+      "date": "2026-05-27",
+      "home": "giants",
+      "away": "diamondbacks",
+      "home_cn": "巨人",
+      "away_cn": "響尾蛇",
+      "bet_type": "大小分",
+      "label": "UNDER",
+      "price": 1.98,
+      "stake": 50.0,
+      "edge": 17.3,
+      "result": null
+    },
     {
       "date": "2026-05-26",
       "home": "orioles",
@@ -261,97 +333,70 @@
       "stake": 50.0,
       "edge": 14.2,
       "result": "L"
-    },
-    {
-      "date": "2026-05-21",
-      "home": "mariners",
-      "away": "white sox",
-      "home_cn": "水手",
-      "away_cn": "白襪",
-      "bet_type": "獨贏",
-      "label": "",
-      "price": 1.7,
-      "stake": 50.0,
-      "edge": 14.5,
-      "result": "W"
-    },
-    {
-      "date": "2026-05-20",
-      "home": "yankees",
-      "away": "blue jays",
-      "home_cn": "洋基",
-      "away_cn": "藍鳥",
-      "bet_type": "讓分",
-      "label": "+1.5",
-      "price": 1.57,
-      "stake": 50.0,
-      "edge": 14.2,
-      "result": "W"
     }
   ],
   "live_games": [],
   "live_updated_ts": 1779855434,
   "game_preds": {
-    "guardians|nationals": {
-      "home_win_prob": 0.4547,
-      "market_total": 7.5
-    },
-    "orioles|rays": {
-      "home_win_prob": 0.3685,
-      "market_total": 8.5
-    },
-    "pirates|cubs": {
-      "home_win_prob": 0.6241,
-      "market_total": 8.0
-    },
-    "tigers|angels": {
-      "home_win_prob": 0.4954,
-      "market_total": 8.5
-    },
-    "red sox|braves": {
-      "home_win_prob": 0.4304,
-      "market_total": 8.0
-    },
     "blue jays|marlins": {
-      "home_win_prob": 0.4154,
+      "home_win_prob": 0.76,
+      "market_total": 7.5
+    },
+    "guardians|nationals": {
+      "home_win_prob": 0.6299,
       "market_total": 8.0
-    },
-    "mets|reds": {
-      "home_win_prob": 0.3464,
-      "market_total": 7.5
-    },
-    "white sox|twins": {
-      "home_win_prob": 0.2672,
-      "market_total": 7.5
-    },
-    "royals|yankees": {
-      "home_win_prob": 0.3965,
-      "market_total": 8.5
     },
     "brewers|cardinals": {
-      "home_win_prob": 0.76,
-      "market_total": 8.0
-    },
-    "rangers|astros": {
-      "home_win_prob": 0.6218,
+      "home_win_prob": 0.7074,
       "market_total": 8.0
     },
     "athletics|mariners": {
-      "home_win_prob": 0.383,
-      "market_total": 9.5
-    },
-    "padres|phillies": {
-      "home_win_prob": 0.5025,
-      "market_total": 8.0
+      "home_win_prob": 0.4799,
+      "market_total": 9.0
     },
     "giants|diamondbacks": {
-      "home_win_prob": 0.2491,
+      "home_win_prob": 0.3933,
+      "market_total": 7.5
+    },
+    "padres|phillies": {
+      "home_win_prob": 0.3801,
+      "market_total": 7.0
+    },
+    "orioles|rays": {
+      "home_win_prob": 0.3922,
+      "market_total": 9.0
+    },
+    "pirates|cubs": {
+      "home_win_prob": 0.76,
+      "market_total": 9.0
+    },
+    "tigers|angels": {
+      "home_win_prob": 0.5554,
+      "market_total": 7.5
+    },
+    "red sox|braves": {
+      "home_win_prob": 0.3149,
+      "market_total": 8.5
+    },
+    "mets|reds": {
+      "home_win_prob": 0.404,
       "market_total": 8.0
     },
-    "dodgers|rockies": {
-      "home_win_prob": 0.6766,
+    "white sox|twins": {
+      "home_win_prob": 0.601,
+      "market_total": 7.5
+    },
+    "royals|yankees": {
+      "home_win_prob": 0.6039,
       "market_total": 9.0
+    },
+    "rangers|astros": {
+      "home_win_prob": 0.5754,
+      "market_total": 7.5
+    },
+    "dodgers|rockies": {
+      "home_win_prob": 0.76,
+      "market_total": 8.0
     }
-  },
-  "live_updated_at": ""
+  }
 }
