@@ -329,14 +329,14 @@
     {
       "home_cn": "大都會",
       "away_cn": "紅人",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 6,
-      "projected_total": 10.1,
+      "projected_total": 9.7,
       "market_total": 7.5,
-      "bet": "大小分 OVER",
-      "reason": "第7局已得8分（此時預期5.4分），高分走勢盤口7.5"
+      "bet": "客隊獨贏",
+      "reason": "第8局客隊領先4分（賽前客隊勝率65%），大局已定"
     },
     {
       "home_cn": "白襪",
@@ -354,13 +354,13 @@
       "home_cn": "皇家",
       "away_cn": "洋基",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 10,
-      "projected_total": 14.8,
+      "projected_total": 14.3,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第6局已得11分（此時預期4.7分），高分走勢盤口8.5"
+      "reason": "第6局已得11分（此時預期5.2分），高分走勢盤口8.5"
     },
     {
       "home_cn": "釀酒人",
@@ -423,7 +423,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779845487,
+  "live_updated_ts": 1779845788,
   "game_preds": {
     "guardians|nationals": {
       "home_win_prob": 0.4547,
@@ -486,5 +486,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-05-27 09:31 (台灣時間)"
+  "live_updated_at": "2026-05-27 09:36 (台灣時間)"
 }
