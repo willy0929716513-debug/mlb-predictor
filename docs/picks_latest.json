@@ -337,25 +337,13 @@
   ],
   "live_games": [
     {
-      "home_cn": "運動家",
-      "away_cn": "水手",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 0,
-      "away_runs": 9,
-      "projected_total": 9.5,
-      "market_total": 9.0,
-      "bet": "客隊獨贏",
-      "reason": "第9局客隊領先9分（賽前客隊勝率52%），大局已定"
-    },
-    {
       "home_cn": "巨人",
       "away_cn": "響尾蛇",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 3,
-      "projected_total": 6.7,
+      "projected_total": 6.2,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -363,17 +351,17 @@
     {
       "home_cn": "教士",
       "away_cn": "費城人",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 4.7,
+      "projected_total": 4.3,
       "market_total": 7.0,
       "bet": "大小分 UNDER",
-      "reason": "第6局僅2分（此時預期4.3分），低分走勢盤口7.0"
+      "reason": "第7局僅2分（此時預期4.7分），低分走勢盤口7.0"
     }
   ],
-  "live_updated_ts": 1779918199,
+  "live_updated_ts": 1779918501,
   "game_preds": {
     "blue jays|marlins": {
       "home_win_prob": 0.76,
@@ -436,5 +424,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-05-28 05:43 (台灣時間)"
+  "live_updated_at": "2026-05-28 05:48 (台灣時間)"
 }
