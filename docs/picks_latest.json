@@ -318,10 +318,10 @@
       "home_cn": "巨人",
       "away_cn": "響尾蛇",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 3,
-      "projected_total": 9.4,
+      "projected_total": 9.0,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -339,7 +339,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779850613,
+  "live_updated_ts": 1779850914,
   "game_preds": {
     "guardians|nationals": {
       "home_win_prob": 0.4547,
@@ -402,5 +402,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-05-27 10:56 (台灣時間)"
+  "live_updated_at": "2026-05-27 11:01 (台灣時間)"
 }
