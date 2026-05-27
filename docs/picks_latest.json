@@ -365,14 +365,14 @@
     {
       "home_cn": "釀酒人",
       "away_cn": "紅雀",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 6,
       "away_runs": 0,
-      "projected_total": 9.1,
+      "projected_total": 8.7,
       "market_total": 8.0,
-      "bet": null,
-      "reason": null
+      "bet": "主隊獨贏",
+      "reason": "第7局主隊領先6分（賽前主隊勝率76%），大局已定"
     },
     {
       "home_cn": "遊騎兵",
