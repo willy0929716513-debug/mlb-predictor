@@ -306,10 +306,10 @@
       "home_cn": "白襪",
       "away_cn": "雙城",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 2,
-      "projected_total": 4.8,
+      "projected_total": 4.4,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -320,35 +320,35 @@
       "inning": 8,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 11,
-      "projected_total": 13.9,
+      "away_runs": 12,
+      "projected_total": 14.9,
       "market_total": 8.5,
       "bet": "客隊獨贏",
-      "reason": "第8局客隊領先10分（賽前客隊勝率60%），大局已定"
+      "reason": "第8局客隊領先11分（賽前客隊勝率60%），大局已定"
     },
     {
       "home_cn": "釀酒人",
       "away_cn": "紅雀",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 6,
       "away_runs": 0,
-      "projected_total": 7.3,
+      "projected_total": 6.9,
       "market_total": 8.0,
       "bet": "主隊獨贏",
-      "reason": "第8局主隊領先6分（賽前主隊勝率76%），大局已定"
+      "reason": "第9局主隊領先6分（賽前主隊勝率76%），大局已定"
     },
     {
       "home_cn": "遊騎兵",
       "away_cn": "太空人",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 9,
       "away_runs": 4,
-      "projected_total": 15.2,
+      "projected_total": 14.8,
       "market_total": 8.0,
-      "bet": "大小分 OVER",
-      "reason": "第7局已得13分（此時預期5.8分），高分走勢盤口8.0"
+      "bet": "主隊獨贏",
+      "reason": "第8局主隊領先5分（賽前主隊勝率62%），大局已定"
     },
     {
       "home_cn": "運動家",
@@ -356,8 +356,8 @@
       "inning": 2,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 1,
-      "projected_total": 9.4,
+      "away_runs": 2,
+      "projected_total": 10.4,
       "market_total": 9.5,
       "bet": null,
       "reason": null
@@ -366,7 +366,7 @@
       "home_cn": "教士",
       "away_cn": "費城人",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
       "projected_total": 9.1,
@@ -399,7 +399,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779847295,
+  "live_updated_ts": 1779847597,
   "game_preds": {
     "guardians|nationals": {
       "home_win_prob": 0.4547,
@@ -462,5 +462,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-05-27 10:01 (台灣時間)"
+  "live_updated_at": "2026-05-27 10:06 (台灣時間)"
 }
