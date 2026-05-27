@@ -233,8 +233,9 @@ def main():
     game_preds = data.get("game_preds", {})
     log.info("game_preds: %d games", len(game_preds))
 
+    # 追蹤上一輪的「場次|注單類型」，這樣同場不同注單類型時也會重新通知
     prev_bets = {
-        f"{g['away_cn']}@{g['home_cn']}"
+        f"{g['away_cn']}@{g['home_cn']}|{g.get('bet', '')}"
         for g in data.get("live_games", [])
         if g.get("bet")
     }
@@ -248,8 +249,8 @@ def main():
 
     for pick in live_picks:
         if pick.get("bet"):
-            key = f"{pick['away_cn']}@{pick['home_cn']}"
-            if key not in prev_bets:
+            full_key = f"{pick['away_cn']}@{pick['home_cn']}|{pick.get('bet', '')}"
+            if full_key not in prev_bets:
                 send_ntfy(
                     f"⚾ 場中推薦 — {pick['bet']}",
                     f"{pick['away_cn']} @ {pick['home_cn']}\n{pick.get('reason', '')}",

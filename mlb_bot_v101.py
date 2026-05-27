@@ -1624,25 +1624,26 @@ def generate_live_picks(live_games):
                  away_r, home_r, diff, market_total, p_home,
                  "有賽前預測" if has_pred else "無賽前預測(p_home預設0.5)")
 
-        if innings_done > 0.5:
-            run_rate = current_total / innings_done
-        else:
-            run_rate = market_total / 9.0
-        projected = round(current_total + run_rate * innings_left, 1)
-        log.info("  → 預計終局%.1f分 (門檻 UNDER<%.1f / OVER>%.1f)",
-                 projected, market_total - 1.0, market_total + 1.0)
+        # 投影：剩餘局數用盤口預期速率（不放大當前異常）
+        market_rate  = market_total / 9.0
+        projected    = round(current_total + market_rate * innings_left, 1)
+        # 此時市場預期應有幾分（用於判斷跑分進度）
+        expected_now = round(market_total * innings_done / 9.0, 1) if innings_done > 0 else 0.0
+        pace_ratio   = (current_total / expected_now) if expected_now > 0 else 1.0
+        log.info("  → 預計終局%.1f分 市場預期進度%.1f 速率比%.2f (門檻 UNDER≤0.60 / OVER≥1.40)",
+                 projected, expected_now, pace_ratio)
 
         bet = None
         reason = None
 
-        # 大小分 UNDER：第6局起，走勢低分
-        if inning >= 6 and projected < market_total - 1.0:
+        # 大小分 UNDER：第6局起，實際得分低於市場預期60%以下
+        if inning >= 6 and innings_left >= 1.5 and pace_ratio <= 0.60:
             bet    = "大小分 UNDER"
-            reason = "第%d局 %d:%d → 預計終局%.1f分 < 盤口%.1f" % (inning, away_r, home_r, projected, market_total)
-        # 大小分 OVER：第5局前，走勢高分
-        elif inning <= 5 and projected > market_total + 1.0:
+            reason = "第%d局僅%d分（此時預期%.1f分），低分走勢盤口%.1f" % (inning, current_total, expected_now, market_total)
+        # 大小分 OVER：第4局起，實際得分超過市場預期140%以上
+        elif 4 <= inning <= 7 and expected_now > 0 and pace_ratio >= 1.40 and current_total >= 5:
             bet    = "大小分 OVER"
-            reason = "第%d局 %d:%d → 預計終局%.1f分 > 盤口%.1f" % (inning, away_r, home_r, projected, market_total)
+            reason = "第%d局已得%d分（此時預期%.1f分），高分走勢盤口%.1f" % (inning, current_total, expected_now, market_total)
         # ML 主隊獨贏：第7局起，主隊領先2分以上
         elif inning >= 7 and diff >= 2 and p_home >= 0.45:
             bet    = "主隊獨贏"
