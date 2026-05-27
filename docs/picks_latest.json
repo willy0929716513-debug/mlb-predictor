@@ -293,11 +293,11 @@
     {
       "home_cn": "白襪",
       "away_cn": "雙城",
-      "inning": 9,
-      "top_inning": false,
+      "inning": 10,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 2,
-      "projected_total": 4.4,
+      "projected_total": 4.0,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -306,10 +306,10 @@
       "home_cn": "皇家",
       "away_cn": "洋基",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 13,
-      "projected_total": 15.9,
+      "projected_total": 15.4,
       "market_total": 8.5,
       "bet": "客隊獨贏",
       "reason": "第8局客隊領先12分（賽前客隊勝率60%），大局已定"
@@ -320,11 +320,11 @@
       "inning": 8,
       "top_inning": true,
       "home_runs": 9,
-      "away_runs": 5,
-      "projected_total": 15.8,
+      "away_runs": 6,
+      "projected_total": 16.8,
       "market_total": 8.0,
       "bet": "主隊獨贏",
-      "reason": "第8局主隊領先4分（賽前主隊勝率62%），大局已定"
+      "reason": "第8局主隊領先3分（賽前主隊勝率62%），大局已定"
     },
     {
       "home_cn": "運動家",
@@ -333,7 +333,7 @@
       "top_inning": false,
       "home_runs": 0,
       "away_runs": 3,
-      "projected_total": 11.4,
+      "projected_total": 10.9,
       "market_total": 9.5,
       "bet": null,
       "reason": null
@@ -354,10 +354,10 @@
       "home_cn": "巨人",
       "away_cn": "響尾蛇",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
-      "away_runs": 2,
-      "projected_total": 10.1,
+      "away_runs": 3,
+      "projected_total": 10.7,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -375,7 +375,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779847899,
+  "live_updated_ts": 1779848200,
   "game_preds": {
     "guardians|nationals": {
       "home_win_prob": 0.4547,
@@ -438,5 +438,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-05-27 10:11 (台灣時間)"
+  "live_updated_at": "2026-05-27 10:16 (台灣時間)"
 }
