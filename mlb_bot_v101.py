@@ -3009,6 +3009,13 @@ def run():
                     continue
                 if bside in ("rl_h","rl_h_25") and not away_sp:
                     continue
+                # ① 牛棚輪替：對手用多投手接力，主場控制力更強，不推劣勢隊讓分受讓
+                if bside in ("rl_a","rl_a_25") and home_sp and home_sp in _RELIEVER_FLAGS:
+                    log.info("RL blocked: home bullpen rotation, risky for away +1.5")
+                    continue
+                if bside in ("rl_h","rl_h_25") and away_sp and away_sp in _RELIEVER_FLAGS:
+                    log.info("RL blocked: away bullpen rotation, risky for home +1.5")
+                    continue
                 _era_diff = _h_era_v - _a_era_v  # 正值=主隊投手較弱
                 _margin   = pred["margin"]        # 正值=主隊模型預期較強
                 if bside in ("rl_a","rl_a_25"):
@@ -3095,6 +3102,13 @@ def run():
                 _a_k9 = _PITCHER_K9.get(away_sp, 7.0)
                 if _h_k9 >= K9_HIGH_THRESH and _a_k9 >= K9_HIGH_THRESH:
                     bet_conf = min(1.0, bet_conf + K9_UNDER_CONF)
+                # ⑦ 天氣不確定性：壞天氣讓模型低估總分，但實際更難預測，UNDER需更謹慎
+                _wf_tot = pred.get("weather_factor", 1.0) or 1.0
+                if _wf_tot <= 0.95:
+                    bet_conf = round(bet_conf * 0.90, 4)
+                    if bet_conf < 0.65:
+                        log.info("UNDER blocked by weather: wf=%.3f conf→%.3f", _wf_tot, bet_conf)
+                        continue
             # ── ★ 市場品質：bookmaker數不足時降低信心（非流動市場賠率不可靠）──
             if btype == BET_ML:
                 _n_books = len(con_h_prices) if bside=="home" else len(con_a_prices)
