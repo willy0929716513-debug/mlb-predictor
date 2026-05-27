@@ -293,8 +293,8 @@
     {
       "home_cn": "白襪",
       "away_cn": "雙城",
-      "inning": 10,
-      "top_inning": false,
+      "inning": 11,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 2,
       "projected_total": 4.0,
@@ -341,11 +341,11 @@
     {
       "home_cn": "教士",
       "away_cn": "費城人",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 4,
-      "projected_total": 9.8,
+      "projected_total": 9.3,
       "market_total": 8.0,
       "bet": null,
       "reason": null
