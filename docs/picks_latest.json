@@ -294,10 +294,10 @@
       "home_cn": "大都會",
       "away_cn": "紅人",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 7,
-      "projected_total": 9.8,
+      "projected_total": 9.4,
       "market_total": 7.5,
       "bet": "客隊獨贏",
       "reason": "第9局客隊領先5分（賽前客隊勝率65%），大局已定"
@@ -368,8 +368,8 @@
       "inning": 2,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 1,
-      "projected_total": 8.1,
+      "away_runs": 2,
+      "projected_total": 9.1,
       "market_total": 8.0,
       "bet": null,
       "reason": null
