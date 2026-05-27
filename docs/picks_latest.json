@@ -294,10 +294,10 @@
       "home_cn": "守護者",
       "away_cn": "國民",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 4,
-      "projected_total": 8.3,
+      "projected_total": 7.9,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -329,23 +329,23 @@
     {
       "home_cn": "海盜",
       "away_cn": "小熊",
-      "inning": 5,
-      "top_inning": false,
-      "home_runs": 6,
+      "inning": 6,
+      "top_inning": true,
+      "home_runs": 8,
       "away_runs": 1,
-      "projected_total": 11.0,
+      "projected_total": 12.6,
       "market_total": 8.0,
       "bet": "大小分 OVER",
-      "reason": "第5局已得7分（此時預期4.0分），高分走勢盤口8.0"
+      "reason": "第6局已得9分（此時預期4.4分），高分走勢盤口8.0"
     },
     {
       "home_cn": "紅襪",
       "away_cn": "勇士",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 2,
-      "projected_total": 8.4,
+      "projected_total": 8.0,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -354,10 +354,10 @@
       "home_cn": "藍鳥",
       "away_cn": "馬林魚",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 0,
-      "projected_total": 7.3,
+      "projected_total": 6.9,
       "market_total": 8.0,
       "bet": "客隊讓分(+1.5)",
       "reason": "客隊落後2分 第4局，賽前客隊勝率58%"
@@ -389,11 +389,11 @@
     {
       "home_cn": "皇家",
       "away_cn": "洋基",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 0,
-      "away_runs": 4,
-      "projected_total": 12.0,
+      "away_runs": 5,
+      "projected_total": 12.6,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -401,11 +401,11 @@
     {
       "home_cn": "釀酒人",
       "away_cn": "紅雀",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 7.6,
+      "projected_total": 7.1,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -423,7 +423,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779840097,
+  "live_updated_ts": 1779840399,
   "game_preds": {
     "guardians|nationals": {
       "home_win_prob": 0.4547,
@@ -486,5 +486,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-05-27 08:01 (台灣時間)"
+  "live_updated_at": "2026-05-27 08:06 (台灣時間)"
 }
