@@ -365,14 +365,14 @@
     {
       "home_cn": "遊騎兵",
       "away_cn": "太空人",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 9,
       "away_runs": 4,
-      "projected_total": 17.0,
+      "projected_total": 16.6,
       "market_total": 8.0,
       "bet": "大小分 OVER",
-      "reason": "第5局已得13分（此時預期4.0分），高分走勢盤口8.0"
+      "reason": "第6局已得13分（此時預期4.4分），高分走勢盤口8.0"
     },
     {
       "home_cn": "運動家",
