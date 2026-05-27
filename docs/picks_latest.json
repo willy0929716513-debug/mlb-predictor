@@ -337,37 +337,25 @@
   ],
   "live_games": [
     {
-      "home_cn": "藍鳥",
-      "away_cn": "馬林魚",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 2,
-      "away_runs": 1,
-      "projected_total": 3.8,
-      "market_total": 7.5,
-      "bet": null,
-      "reason": null
-    },
-    {
       "home_cn": "運動家",
       "away_cn": "水手",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
-      "away_runs": 3,
-      "projected_total": 9.0,
+      "away_runs": 5,
+      "projected_total": 10.5,
       "market_total": 9.0,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第4局已得5分（此時預期3.5分），高分走勢盤口9.0"
     },
     {
       "home_cn": "巨人",
       "away_cn": "響尾蛇",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 6.7,
+      "projected_total": 6.2,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -385,7 +373,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779912159,
+  "live_updated_ts": 1779912462,
   "game_preds": {
     "blue jays|marlins": {
       "home_win_prob": 0.76,
@@ -448,5 +436,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-05-28 04:02 (台灣時間)"
+  "live_updated_at": "2026-05-28 04:07 (台灣時間)"
 }
