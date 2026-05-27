@@ -373,7 +373,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779912462,
+  "live_updated_ts": 1779912764,
   "game_preds": {
     "blue jays|marlins": {
       "home_win_prob": 0.76,
@@ -436,5 +436,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-05-28 04:07 (台灣時間)"
+  "live_updated_at": "2026-05-28 04:12 (台灣時間)"
 }
