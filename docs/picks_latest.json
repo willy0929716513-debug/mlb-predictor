@@ -329,8 +329,8 @@
     {
       "home_cn": "運動家",
       "away_cn": "水手",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 3,
       "projected_total": 10.9,
