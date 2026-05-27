@@ -349,7 +349,7 @@
       "reason": "第8局僅2分（此時預期5.8分），低分走勢盤口7.0"
     }
   ],
-  "live_updated_ts": 1779919709,
+  "live_updated_ts": 1779920011,
   "game_preds": {
     "blue jays|marlins": {
       "home_win_prob": 0.76,
@@ -412,5 +412,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-05-28 06:08 (台灣時間)"
+  "live_updated_at": "2026-05-28 06:13 (台灣時間)"
 }
