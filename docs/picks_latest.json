@@ -305,41 +305,41 @@
     {
       "home_cn": "教士",
       "away_cn": "費城人",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 4,
-      "projected_total": 8.2,
+      "projected_total": 7.8,
       "market_total": 8.0,
       "bet": "客隊獨贏",
-      "reason": "第7局客隊領先2分（賽前客隊勝率50%），大局已定"
+      "reason": "第8局客隊領先2分（賽前客隊勝率50%），大局已定"
     },
     {
       "home_cn": "巨人",
       "away_cn": "響尾蛇",
       "inning": 7,
       "top_inning": false,
-      "home_runs": 2,
+      "home_runs": 3,
       "away_runs": 6,
-      "projected_total": 10.2,
+      "projected_total": 11.2,
       "market_total": 8.0,
-      "bet": "客隊獨贏",
-      "reason": "第7局客隊領先4分（賽前客隊勝率75%），大局已定"
+      "bet": "大小分 OVER",
+      "reason": "第7局已得9分（此時預期5.8分），高分走勢盤口8.0"
     },
     {
       "home_cn": "道奇",
       "away_cn": "落磯",
       "inning": 5,
       "top_inning": false,
-      "home_runs": 8,
+      "home_runs": 10,
       "away_runs": 1,
-      "projected_total": 13.5,
+      "projected_total": 15.5,
       "market_total": 9.0,
       "bet": "大小分 OVER",
-      "reason": "第5局已得9分（此時預期4.5分），高分走勢盤口9.0"
+      "reason": "第5局已得11分（此時預期4.5分），高分走勢盤口9.0"
     }
   ],
-  "live_updated_ts": 1779853026,
+  "live_updated_ts": 1779853327,
   "game_preds": {
     "guardians|nationals": {
       "home_win_prob": 0.4547,
@@ -402,5 +402,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-05-27 11:37 (台灣時間)"
+  "live_updated_at": "2026-05-27 11:42 (台灣時間)"
 }
