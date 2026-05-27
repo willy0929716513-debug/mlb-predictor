@@ -383,9 +383,21 @@
       "market_total": 9.0,
       "bet": null,
       "reason": null
+    },
+    {
+      "home_cn": "紅襪",
+      "away_cn": "勇士",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 8.5,
+      "market_total": 8.5,
+      "bet": null,
+      "reason": null
     }
   ],
-  "live_updated_ts": 1779920917,
+  "live_updated_ts": 1779921219,
   "game_preds": {
     "blue jays|marlins": {
       "home_win_prob": 0.76,
@@ -448,5 +460,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-05-28 06:28 (台灣時間)"
+  "live_updated_at": "2026-05-28 06:33 (台灣時間)"
 }
