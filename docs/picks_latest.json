@@ -306,10 +306,10 @@
       "home_cn": "金鶯",
       "away_cn": "光芒",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 1,
-      "projected_total": 8.7,
+      "projected_total": 8.2,
       "market_total": 8.5,
       "bet": "客隊讓分(+1.5)",
       "reason": "客隊落後2分 第5局，賽前客隊勝率63%"
@@ -319,12 +319,12 @@
       "away_cn": "天使",
       "inning": 5,
       "top_inning": false,
-      "home_runs": 2,
+      "home_runs": 4,
       "away_runs": 4,
-      "projected_total": 10.2,
+      "projected_total": 12.2,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第5局已得6分（此時預期4.2分），高分走勢盤口8.5"
+      "reason": "第5局已得8分（此時預期4.2分），高分走勢盤口8.5"
     },
     {
       "home_cn": "海盜",
@@ -344,32 +344,32 @@
       "inning": 5,
       "top_inning": true,
       "home_runs": 2,
-      "away_runs": 0,
-      "projected_total": 6.4,
-      "market_total": 8.0,
-      "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後2分 第5局，賽前客隊勝率57%"
-    },
-    {
-      "home_cn": "藍鳥",
-      "away_cn": "馬林魚",
-      "inning": 3,
-      "top_inning": false,
-      "home_runs": 1,
-      "away_runs": 0,
-      "projected_total": 6.8,
+      "away_runs": 2,
+      "projected_total": 8.4,
       "market_total": 8.0,
       "bet": null,
       "reason": null
     },
     {
+      "home_cn": "藍鳥",
+      "away_cn": "馬林魚",
+      "inning": 4,
+      "top_inning": true,
+      "home_runs": 2,
+      "away_runs": 0,
+      "projected_total": 7.3,
+      "market_total": 8.0,
+      "bet": "客隊讓分(+1.5)",
+      "reason": "客隊落後2分 第4局，賽前客隊勝率58%"
+    },
+    {
       "home_cn": "大都會",
       "away_cn": "紅人",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 7.8,
+      "projected_total": 7.4,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -423,7 +423,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779839796,
+  "live_updated_ts": 1779840097,
   "game_preds": {
     "guardians|nationals": {
       "home_win_prob": 0.4547,
@@ -486,5 +486,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-05-27 07:56 (台灣時間)"
+  "live_updated_at": "2026-05-27 08:01 (台灣時間)"
 }
