@@ -340,10 +340,10 @@
       "home_cn": "金鶯",
       "away_cn": "光芒",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 5,
       "away_runs": 0,
-      "projected_total": 12.0,
+      "projected_total": 11.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -352,10 +352,10 @@
       "home_cn": "老虎",
       "away_cn": "天使",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 0,
-      "projected_total": 7.8,
+      "projected_total": 7.4,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -364,10 +364,10 @@
       "home_cn": "海盜",
       "away_cn": "小熊",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 3,
-      "projected_total": 10.0,
+      "projected_total": 9.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -376,10 +376,10 @@
       "home_cn": "紅襪",
       "away_cn": "勇士",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 6.6,
+      "projected_total": 6.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -387,11 +387,11 @@
     {
       "home_cn": "大都會",
       "away_cn": "紅人",
-      "inning": 1,
-      "top_inning": false,
-      "home_runs": 0,
+      "inning": 2,
+      "top_inning": true,
+      "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 7.6,
+      "projected_total": 8.1,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -421,7 +421,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779924238,
+  "live_updated_ts": 1779924539,
   "game_preds": {
     "blue jays|marlins": {
       "home_win_prob": 0.76,
@@ -484,5 +484,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-05-28 07:23 (台灣時間)"
+  "live_updated_at": "2026-05-28 07:28 (台灣時間)"
 }
