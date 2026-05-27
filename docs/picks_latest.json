@@ -352,10 +352,10 @@
       "home_cn": "老虎",
       "away_cn": "天使",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 7.7,
+      "projected_total": 7.2,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -363,11 +363,11 @@
     {
       "home_cn": "海盜",
       "away_cn": "小熊",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 10.5,
+      "projected_total": 10.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -397,7 +397,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779923030,
+  "live_updated_ts": 1779923332,
   "game_preds": {
     "blue jays|marlins": {
       "home_win_prob": 0.76,
@@ -460,5 +460,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-05-28 07:03 (台灣時間)"
+  "live_updated_at": "2026-05-28 07:08 (台灣時間)"
 }
