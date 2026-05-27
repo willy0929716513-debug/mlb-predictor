@@ -342,16 +342,16 @@
       "home_cn": "道奇",
       "away_cn": "落磯",
       "inning": 3,
-      "top_inning": true,
-      "home_runs": 2,
+      "top_inning": false,
+      "home_runs": 3,
       "away_runs": 1,
-      "projected_total": 10.0,
+      "projected_total": 10.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1779850010,
+  "live_updated_ts": 1779850311,
   "game_preds": {
     "guardians|nationals": {
       "home_win_prob": 0.4547,
@@ -414,5 +414,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-05-27 10:46 (台灣時間)"
+  "live_updated_at": "2026-05-27 10:51 (台灣時間)"
 }
