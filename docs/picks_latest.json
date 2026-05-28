@@ -386,16 +386,28 @@
       "home_cn": "紅襪",
       "away_cn": "勇士",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 7,
-      "projected_total": 11.9,
+      "projected_total": 11.5,
       "market_total": 6.5,
       "bet": "大小分 OVER",
-      "reason": "第6局已得9分（此時預期3.6分），高分走勢盤口6.5"
+      "reason": "第6局已得9分（此時預期4.0分），高分走勢盤口6.5"
+    },
+    {
+      "home_cn": "金鶯",
+      "away_cn": "藍鳥",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 8.5,
+      "market_total": 8.5,
+      "bet": null,
+      "reason": null
     }
   ],
-  "live_updated_ts": 1780006221,
+  "live_updated_ts": 1780006523,
   "game_preds": {
     "tigers|angels": {
       "home_win_prob": 0.4902,
@@ -422,5 +434,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-05-29 06:10 (台灣時間)"
+  "live_updated_at": "2026-05-29 06:15 (台灣時間)"
 }
