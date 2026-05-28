@@ -340,10 +340,10 @@
       "home_cn": "遊騎兵",
       "away_cn": "太空人",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 4,
-      "projected_total": 7.8,
+      "projected_total": 7.4,
       "market_total": 7.5,
       "bet": null,
       "reason": null
