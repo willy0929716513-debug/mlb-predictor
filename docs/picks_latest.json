@@ -337,18 +337,6 @@
   ],
   "live_games": [
     {
-      "home_cn": "大都會",
-      "away_cn": "紅人",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 4,
-      "away_runs": 2,
-      "projected_total": 6.9,
-      "market_total": 8.0,
-      "bet": null,
-      "reason": null
-    },
-    {
       "home_cn": "遊騎兵",
       "away_cn": "太空人",
       "inning": 8,
