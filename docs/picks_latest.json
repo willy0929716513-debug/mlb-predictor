@@ -352,10 +352,10 @@
       "home_cn": "白襪",
       "away_cn": "雙城",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 14,
       "away_runs": 2,
-      "projected_total": 17.7,
+      "projected_total": 17.2,
       "market_total": 7.5,
       "bet": "主隊獨贏",
       "reason": "第8局主隊領先12分（賽前主隊勝率60%），大局已定"
@@ -364,10 +364,10 @@
       "home_cn": "皇家",
       "away_cn": "洋基",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 7,
-      "projected_total": 9.0,
+      "projected_total": 8.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -397,7 +397,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779933074,
+  "live_updated_ts": 1779933375,
   "game_preds": {
     "blue jays|marlins": {
       "home_win_prob": 0.76,
@@ -460,5 +460,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-05-28 09:51 (台灣時間)"
+  "live_updated_at": "2026-05-28 09:56 (台灣時間)"
 }
