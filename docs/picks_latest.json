@@ -387,9 +387,9 @@
       "away_cn": "藍鳥",
       "inning": 4,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 6.2,
+      "projected_total": 7.2,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -407,7 +407,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780011051,
+  "live_updated_ts": 1780011353,
   "game_preds": {
     "tigers|angels": {
       "home_win_prob": 0.4902,
@@ -434,5 +434,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-05-29 07:30 (台灣時間)"
+  "live_updated_at": "2026-05-29 07:35 (台灣時間)"
 }
