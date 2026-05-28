@@ -398,16 +398,16 @@
       "home_cn": "紅襪",
       "away_cn": "勇士",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 6.5,
+      "projected_total": 6.1,
       "market_total": 6.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1779999274,
+  "live_updated_ts": 1779999576,
   "game_preds": {
     "tigers|angels": {
       "home_win_prob": 0.4902,
@@ -434,5 +434,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-05-29 04:14 (台灣時間)"
+  "live_updated_at": "2026-05-29 04:19 (台灣時間)"
 }
