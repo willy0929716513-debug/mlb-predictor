@@ -375,26 +375,26 @@
     {
       "home_cn": "大都會",
       "away_cn": "紅人",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 8.1,
+      "projected_total": 7.7,
       "market_total": 8.0,
       "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後1分 第6局，賽前客隊勝率60%"
+      "reason": "客隊落後1分 第7局，賽前客隊勝率60%"
     },
     {
       "home_cn": "白襪",
       "away_cn": "雙城",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 8,
       "away_runs": 1,
-      "projected_total": 12.8,
+      "projected_total": 12.3,
       "market_total": 7.5,
       "bet": "大小分 OVER",
-      "reason": "第5局已得9分（此時預期3.8分），高分走勢盤口7.5"
+      "reason": "第6局已得9分（此時預期4.2分），高分走勢盤口7.5"
     },
     {
       "home_cn": "皇家",
@@ -421,7 +421,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1779930428,
+  "live_updated_ts": 1779930730,
   "game_preds": {
     "blue jays|marlins": {
       "home_win_prob": 0.76,
@@ -484,5 +484,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-05-28 09:07 (台灣時間)"
+  "live_updated_at": "2026-05-28 09:12 (台灣時間)"
 }
