@@ -340,10 +340,10 @@
       "home_cn": "大都會",
       "away_cn": "紅人",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 4,
       "away_runs": 2,
-      "projected_total": 7.8,
+      "projected_total": 7.3,
       "market_total": 8.0,
       "bet": "客隊讓分(+1.5)",
       "reason": "客隊落後2分 第8局，賽前客隊勝率60%"
