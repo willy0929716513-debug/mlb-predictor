@@ -353,12 +353,12 @@
       "away_cn": "紅人",
       "inning": 7,
       "top_inning": false,
-      "home_runs": 3,
+      "home_runs": 4,
       "away_runs": 2,
-      "projected_total": 7.2,
+      "projected_total": 8.2,
       "market_total": 8.0,
       "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後1分 第7局，賽前客隊勝率60%"
+      "reason": "客隊落後2分 第7局，賽前客隊勝率60%"
     },
     {
       "home_cn": "白襪",
