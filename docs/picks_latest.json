@@ -395,7 +395,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780004409,
+  "live_updated_ts": 1780004711,
   "game_preds": {
     "tigers|angels": {
       "home_win_prob": 0.4902,
@@ -422,5 +422,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-05-29 05:40 (台灣時間)"
+  "live_updated_at": "2026-05-29 05:45 (台灣時間)"
 }
