@@ -375,26 +375,26 @@
     {
       "home_cn": "紅襪",
       "away_cn": "勇士",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 6,
       "away_runs": 0,
-      "projected_total": 10.2,
+      "projected_total": 9.8,
       "market_total": 8.5,
-      "bet": "大小分 OVER",
-      "reason": "第5局已得6分（此時預期4.2分），高分走勢盤口8.5"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "大都會",
       "away_cn": "紅人",
-      "inning": 4,
-      "top_inning": false,
+      "inning": 5,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 1,
-      "projected_total": 7.9,
+      "projected_total": 7.4,
       "market_total": 8.0,
       "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後1分 第4局，賽前客隊勝率60%"
+      "reason": "客隊落後1分 第5局，賽前客隊勝率60%"
     },
     {
       "home_cn": "白襪",
@@ -411,11 +411,11 @@
     {
       "home_cn": "皇家",
       "away_cn": "洋基",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 6.5,
+      "projected_total": 6.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
