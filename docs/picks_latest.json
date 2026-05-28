@@ -385,14 +385,14 @@
     {
       "home_cn": "白襪",
       "away_cn": "雙城",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 6,
       "away_runs": 2,
-      "projected_total": 9.2,
+      "projected_total": 8.8,
       "market_total": 7.5,
       "bet": "主隊獨贏",
-      "reason": "第8局主隊領先4分（賽前主隊勝率49%），大局已定"
+      "reason": "第9局主隊領先4分（賽前主隊勝率49%），大局已定"
     },
     {
       "home_cn": "紅襪",
@@ -407,7 +407,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780000181,
+  "live_updated_ts": 1780000483,
   "game_preds": {
     "tigers|angels": {
       "home_win_prob": 0.4902,
@@ -434,5 +434,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-05-29 04:29 (台灣時間)"
+  "live_updated_at": "2026-05-29 04:34 (台灣時間)"
 }
