@@ -337,18 +337,6 @@
   ],
   "live_games": [
     {
-      "home_cn": "金鶯",
-      "away_cn": "光芒",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 11,
-      "away_runs": 2,
-      "projected_total": 14.0,
-      "market_total": 9.0,
-      "bet": null,
-      "reason": null
-    },
-    {
       "home_cn": "海盜",
       "away_cn": "小熊",
       "inning": 8,
