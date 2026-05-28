@@ -388,14 +388,14 @@
       "inning": 6,
       "top_inning": true,
       "home_runs": 2,
-      "away_runs": 2,
-      "projected_total": 6.9,
+      "away_runs": 7,
+      "projected_total": 11.9,
       "market_total": 6.5,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第6局已得9分（此時預期3.6分），高分走勢盤口6.5"
     }
   ],
-  "live_updated_ts": 1780005919,
+  "live_updated_ts": 1780006221,
   "game_preds": {
     "tigers|angels": {
       "home_win_prob": 0.4902,
@@ -422,5 +422,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-05-29 06:05 (台灣時間)"
+  "live_updated_at": "2026-05-29 06:10 (台灣時間)"
 }
