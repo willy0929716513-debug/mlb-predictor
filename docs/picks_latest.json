@@ -2,30 +2,30 @@
   "generated_at": "2026-05-28 23:54 (台灣時間)",
   "date": "2026-05-28",
   "stats": {
-    "settled": 110,
-    "wins": 75,
-    "win_rate": 68.2,
-    "total_in": 1918.0,
-    "total_pnl": 466.5,
-    "roi": 24.3,
+    "settled": 112,
+    "wins": 77,
+    "win_rate": 68.8,
+    "total_in": 2018.0,
+    "total_pnl": 550.0,
+    "roi": 27.3,
     "by_type": {
       "ML": {
-        "wins": 26,
-        "settled": 41,
-        "win_rate": 63.4,
-        "roi": -1.5
+        "settled": 42,
+        "wins": 27,
+        "win_rate": 64.3,
+        "roi": 4.2
       },
       "RL": {
-        "wins": 33,
         "settled": 46,
+        "wins": 33,
         "win_rate": 71.7,
         "roi": 23.6
       },
       "TOT": {
-        "wins": 16,
-        "settled": 23,
-        "win_rate": 69.6,
-        "roi": 63.4
+        "settled": 24,
+        "wins": 17,
+        "win_rate": 70.8,
+        "roi": 65.8
       }
     }
   },
@@ -251,6 +251,32 @@
   ],
   "recent_history": [
     {
+      "date": "2026-05-29",
+      "home": "red sox",
+      "away": "braves",
+      "home_cn": "紅襪",
+      "away_cn": "勇士",
+      "bet_type": "獨贏",
+      "label": "",
+      "price": 1.79,
+      "stake": 50.0,
+      "edge": 15.7,
+      "result": "W"
+    },
+    {
+      "date": "2026-05-29",
+      "home": "tigers",
+      "away": "angels",
+      "home_cn": "老虎",
+      "away_cn": "天使",
+      "bet_type": "大小分",
+      "label": "UNDER",
+      "price": 1.88,
+      "stake": 50.0,
+      "edge": 16.5,
+      "result": "W"
+    },
+    {
       "date": "2026-05-27",
       "home": "blue jays",
       "away": "marlins",
@@ -353,32 +379,6 @@
       "stake": 50.0,
       "edge": 14.4,
       "result": "W"
-    },
-    {
-      "date": "2026-05-22",
-      "home": "diamondbacks",
-      "away": "rockies",
-      "home_cn": "響尾蛇",
-      "away_cn": "落磯",
-      "bet_type": "大小分",
-      "label": "UNDER",
-      "price": 2.03,
-      "stake": 50.0,
-      "edge": 18.8,
-      "result": "W"
-    },
-    {
-      "date": "2026-05-21",
-      "home": "padres",
-      "away": "dodgers",
-      "home_cn": "教士",
-      "away_cn": "道奇",
-      "bet_type": "讓分",
-      "label": "+1.5",
-      "price": 1.9,
-      "stake": 50.0,
-      "edge": 14.2,
-      "result": "L"
     }
   ],
   "live_games": [],
