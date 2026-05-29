@@ -385,14 +385,14 @@
     {
       "home_cn": "金鶯",
       "away_cn": "藍鳥",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 6.2,
+      "projected_total": 5.8,
       "market_total": 8.5,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 UNDER",
+      "reason": "第6局僅2分（此時預期4.7分），低分走勢盤口8.5"
     },
     {
       "home_cn": "海盜",
@@ -419,7 +419,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780012634,
+  "live_updated_ts": 1780012936,
   "game_preds": {
     "tigers|angels": {
       "home_win_prob": 0.4902,
@@ -446,5 +446,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-05-29 07:57 (台灣時間)"
+  "live_updated_at": "2026-05-29 08:02 (台灣時間)"
 }
