@@ -397,14 +397,14 @@
     {
       "home_cn": "海盜",
       "away_cn": "小熊",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 3,
-      "projected_total": 7.1,
+      "projected_total": 6.7,
       "market_total": 7.5,
       "bet": "主隊讓分(+1.5)",
-      "reason": "主隊落後1分 第7局，賽前主隊勝率58%"
+      "reason": "主隊落後1分 第8局，賽前主隊勝率58%"
     },
     {
       "home_cn": "遊騎兵",
@@ -412,14 +412,14 @@
       "inning": 3,
       "top_inning": false,
       "home_runs": 1,
-      "away_runs": 4,
-      "projected_total": 10.4,
+      "away_runs": 5,
+      "projected_total": 11.1,
       "market_total": 7.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1780016258,
+  "live_updated_ts": 1780016560,
   "game_preds": {
     "tigers|angels": {
       "home_win_prob": 0.4902,
@@ -446,5 +446,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-05-29 08:57 (台灣時間)"
+  "live_updated_at": "2026-05-29 09:02 (台灣時間)"
 }
