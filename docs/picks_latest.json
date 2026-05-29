@@ -385,14 +385,14 @@
     {
       "home_cn": "金鶯",
       "away_cn": "藍鳥",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 4.4,
+      "projected_total": 3.9,
       "market_total": 8.5,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅2分（此時預期6.1分），低分走勢盤口8.5"
+      "reason": "第8局僅2分（此時預期6.6分），低分走勢盤口8.5"
     },
     {
       "home_cn": "海盜",
@@ -410,10 +410,10 @@
       "home_cn": "遊騎兵",
       "away_cn": "太空人",
       "inning": 2,
-      "top_inning": true,
-      "home_runs": 0,
+      "top_inning": false,
+      "home_runs": 1,
       "away_runs": 3,
-      "projected_total": 9.2,
+      "projected_total": 9.8,
       "market_total": 7.0,
       "bet": null,
       "reason": null
