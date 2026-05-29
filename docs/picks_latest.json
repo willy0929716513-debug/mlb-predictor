@@ -395,7 +395,7 @@
       "reason": "第8局客隊領先4分（賽前客隊勝率49%），大局已定"
     }
   ],
-  "live_updated_ts": 1780021827,
+  "live_updated_ts": 1780022128,
   "game_preds": {
     "tigers|angels": {
       "home_win_prob": 0.4902,
@@ -422,5 +422,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-05-29 10:30 (台灣時間)"
+  "live_updated_at": "2026-05-29 10:35 (台灣時間)"
 }
