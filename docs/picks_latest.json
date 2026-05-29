@@ -398,10 +398,10 @@
       "home_cn": "海盜",
       "away_cn": "小熊",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 5.2,
+      "projected_total": 4.8,
       "market_total": 7.5,
       "bet": "主隊讓分(+1.5)",
       "reason": "主隊落後1分 第5局，賽前主隊勝率58%"
