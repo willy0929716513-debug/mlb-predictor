@@ -409,14 +409,14 @@
     {
       "home_cn": "遊騎兵",
       "away_cn": "太空人",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 5,
-      "projected_total": 11.1,
+      "projected_total": 10.7,
       "market_total": 7.0,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第4局已得6分（此時預期2.3分），高分走勢盤口7.0"
     }
   ],
   "live_updated_ts": 1780016862,
