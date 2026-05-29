@@ -385,14 +385,14 @@
     {
       "home_cn": "遊騎兵",
       "away_cn": "太空人",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 5,
-      "projected_total": 7.2,
+      "projected_total": 6.8,
       "market_total": 7.0,
       "bet": "客隊獨贏",
-      "reason": "第8局客隊領先4分（賽前客隊勝率49%），大局已定"
+      "reason": "第9局客隊領先4分（賽前客隊勝率49%），大局已定"
     }
   ],
   "live_updated_ts": 1780022128,
