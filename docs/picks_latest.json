@@ -412,14 +412,14 @@
       "inning": 3,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 3,
-      "projected_total": 9.4,
+      "away_runs": 4,
+      "projected_total": 10.4,
       "market_total": 7.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1780015956,
+  "live_updated_ts": 1780016258,
   "game_preds": {
     "tigers|angels": {
       "home_win_prob": 0.4902,
@@ -446,5 +446,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-05-29 08:52 (台灣時間)"
+  "live_updated_at": "2026-05-29 08:57 (台灣時間)"
 }
