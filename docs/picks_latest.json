@@ -386,10 +386,10 @@
       "home_cn": "金鶯",
       "away_cn": "藍鳥",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 2,
-      "projected_total": 3.9,
+      "projected_total": 3.5,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -400,8 +400,8 @@
       "inning": 8,
       "top_inning": true,
       "home_runs": 2,
-      "away_runs": 5,
-      "projected_total": 8.7,
+      "away_runs": 6,
+      "projected_total": 9.7,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -410,13 +410,13 @@
       "home_cn": "遊騎兵",
       "away_cn": "太空人",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 5,
-      "projected_total": 10.7,
+      "projected_total": 10.3,
       "market_total": 7.0,
       "bet": "大小分 OVER",
-      "reason": "第4局已得6分（此時預期2.3分），高分走勢盤口7.0"
+      "reason": "第4局已得6分（此時預期2.7分），高分走勢盤口7.0"
     }
   ],
   "live_updated_ts": 1780017165,
