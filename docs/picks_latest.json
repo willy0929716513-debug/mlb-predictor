@@ -383,18 +383,6 @@
   ],
   "live_games": [
     {
-      "home_cn": "海盜",
-      "away_cn": "小熊",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 2,
-      "away_runs": 7,
-      "projected_total": 9.4,
-      "market_total": 7.5,
-      "bet": null,
-      "reason": null
-    },
-    {
       "home_cn": "遊騎兵",
       "away_cn": "太空人",
       "inning": 6,
