@@ -419,7 +419,7 @@
       "reason": "第4局已得6分（此時預期2.3分），高分走勢盤口7.0"
     }
   ],
-  "live_updated_ts": 1780016862,
+  "live_updated_ts": 1780017165,
   "game_preds": {
     "tigers|angels": {
       "home_win_prob": 0.4902,
@@ -446,5 +446,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-05-29 09:07 (台灣時間)"
+  "live_updated_at": "2026-05-29 09:12 (台灣時間)"
 }
