@@ -257,11 +257,11 @@
       "inning": 8,
       "top_inning": true,
       "home_runs": 4,
-      "away_runs": 3,
-      "projected_total": 8.9,
+      "away_runs": 4,
+      "projected_total": 9.9,
       "market_total": 8.5,
-      "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後1分 第8局，賽前客隊勝率54%"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "落磯",
@@ -312,7 +312,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780107305,
+  "live_updated_ts": 1780107607,
   "game_preds": {
     "reds|braves": {
       "home_win_prob": 0.4216,
@@ -375,5 +375,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-05-30 10:15 (台灣時間)"
+  "live_updated_at": "2026-05-30 10:20 (台灣時間)"
 }
