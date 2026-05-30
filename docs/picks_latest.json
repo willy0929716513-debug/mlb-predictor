@@ -228,18 +228,6 @@
   ],
   "live_games": [
     {
-      "home_cn": "白襪",
-      "away_cn": "老虎",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 7,
-      "away_runs": 1,
-      "projected_total": 8.8,
-      "market_total": 7.5,
-      "bet": "主隊獨贏",
-      "reason": "第9局主隊領先6分（賽前主隊勝率66%），大局已定"
-    },
-    {
       "home_cn": "國民",
       "away_cn": "教士",
       "inning": 3,
@@ -254,11 +242,11 @@
     {
       "home_cn": "遊騎兵",
       "away_cn": "皇家",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 7.7,
+      "projected_total": 7.2,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -315,10 +303,10 @@
       "home_cn": "大都會",
       "away_cn": "馬林魚",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 7.0,
+      "projected_total": 6.6,
       "market_total": 7.0,
       "bet": null,
       "reason": null
@@ -327,16 +315,16 @@
       "home_cn": "太空人",
       "away_cn": "釀酒人",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 8.6,
+      "projected_total": 8.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1780173433,
+  "live_updated_ts": 1780173735,
   "game_preds": {
     "white sox|tigers": {
       "home_win_prob": 0.6634,
@@ -399,5 +387,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-05-31 04:37 (台灣時間)"
+  "live_updated_at": "2026-05-31 04:42 (台灣時間)"
 }
