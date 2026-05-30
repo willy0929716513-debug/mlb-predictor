@@ -230,11 +230,11 @@
     {
       "home_cn": "太空人",
       "away_cn": "釀酒人",
-      "inning": 9,
-      "top_inning": false,
+      "inning": 10,
+      "top_inning": true,
       "home_runs": 4,
       "away_runs": 4,
-      "projected_total": 8.5,
+      "projected_total": 8.0,
       "market_total": 8.5,
       "bet": null,
       "reason": null
