@@ -230,26 +230,26 @@
     {
       "home_cn": "運動家",
       "away_cn": "洋基",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 8,
-      "projected_total": 11.6,
+      "projected_total": 11.1,
       "market_total": 9.5,
       "bet": "客隊獨贏",
-      "reason": "第7局客隊領先7分（賽前客隊勝率55%），大局已定"
+      "reason": "第8局客隊領先7分（賽前客隊勝率55%），大局已定"
     },
     {
       "home_cn": "水手",
       "away_cn": "響尾蛇",
       "inning": 6,
       "top_inning": false,
-      "home_runs": 5,
+      "home_runs": 6,
       "away_runs": 5,
-      "projected_total": 12.7,
+      "projected_total": 13.7,
       "market_total": 7.0,
       "bet": "大小分 OVER",
-      "reason": "第6局已得10分（此時預期4.3分），高分走勢盤口7.0"
+      "reason": "第6局已得11分（此時預期4.3分），高分走勢盤口7.0"
     },
     {
       "home_cn": "道奇",
@@ -261,7 +261,7 @@
       "projected_total": 6.8,
       "market_total": 8.0,
       "bet": "主隊獨贏",
-      "reason": "第8局主隊領先3分（賽前主隊勝率48%），大局已定"
+      "reason": "第8局主隊領先2分（賽前主隊勝率48%），大局已定"
     }
   ],
   "live_updated_ts": 1780113336,
