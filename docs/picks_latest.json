@@ -242,11 +242,11 @@
     {
       "home_cn": "海盜",
       "away_cn": "雙城",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 4,
       "away_runs": 5,
-      "projected_total": 10.3,
+      "projected_total": 9.9,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -255,10 +255,10 @@
       "home_cn": "金鶯",
       "away_cn": "藍鳥",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 5,
       "away_runs": 6,
-      "projected_total": 11.9,
+      "projected_total": 11.5,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -280,12 +280,12 @@
       "away_cn": "馬林魚",
       "inning": 7,
       "top_inning": false,
-      "home_runs": 6,
+      "home_runs": 7,
       "away_runs": 5,
-      "projected_total": 13.1,
+      "projected_total": 14.1,
       "market_total": 7.5,
       "bet": "大小分 OVER",
-      "reason": "第7局已得11分（此時預期5.4分），高分走勢盤口7.5"
+      "reason": "第7局已得12分（此時預期5.4分），高分走勢盤口7.5"
     },
     {
       "home_cn": "紅雀",
@@ -303,22 +303,22 @@
       "home_cn": "白襪",
       "away_cn": "老虎",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 2,
-      "projected_total": 4.9,
+      "projected_total": 4.4,
       "market_total": 8.5,
       "bet": "大小分 UNDER",
-      "reason": "第8局僅3分（此時預期6.6分），低分走勢盤口8.5"
+      "reason": "第8局僅3分（此時預期7.1分），低分走勢盤口8.5"
     },
     {
       "home_cn": "遊騎兵",
       "away_cn": "皇家",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 6,
       "away_runs": 0,
-      "projected_total": 9.8,
+      "projected_total": 9.3,
       "market_total": 7.5,
       "bet": "大小分 OVER",
       "reason": "第6局已得6分（此時預期4.2分），高分走勢盤口7.5"
