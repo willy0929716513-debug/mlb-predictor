@@ -230,11 +230,11 @@
     {
       "home_cn": "國民",
       "away_cn": "教士",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 1,
-      "away_runs": 1,
-      "projected_total": 7.4,
+      "away_runs": 2,
+      "projected_total": 8.0,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -243,10 +243,10 @@
       "home_cn": "遊騎兵",
       "away_cn": "皇家",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 7.2,
+      "projected_total": 6.8,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -268,9 +268,9 @@
       "away_cn": "雙城",
       "inning": 2,
       "top_inning": false,
-      "home_runs": 4,
+      "home_runs": 7,
       "away_runs": 1,
-      "projected_total": 12.1,
+      "projected_total": 15.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -278,11 +278,11 @@
     {
       "home_cn": "守護者",
       "away_cn": "紅襪",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 6.4,
+      "projected_total": 6.1,
       "market_total": 6.5,
       "bet": null,
       "reason": null
@@ -303,10 +303,10 @@
       "home_cn": "大都會",
       "away_cn": "馬林魚",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 6.2,
+      "projected_total": 5.8,
       "market_total": 7.0,
       "bet": null,
       "reason": null
@@ -316,15 +316,15 @@
       "away_cn": "釀酒人",
       "inning": 2,
       "top_inning": false,
-      "home_runs": 1,
+      "home_runs": 3,
       "away_runs": 1,
-      "projected_total": 9.1,
+      "projected_total": 11.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1780174037,
+  "live_updated_ts": 1780174338,
   "game_preds": {
     "white sox|tigers": {
       "home_win_prob": 0.6634,
@@ -387,5 +387,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-05-31 04:47 (台灣時間)"
+  "live_updated_at": "2026-05-31 04:52 (台灣時間)"
 }
