@@ -234,7 +234,7 @@
       "top_inning": false,
       "home_runs": 7,
       "away_runs": 7,
-      "projected_total": 14.0,
+      "projected_total": 16.0,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -242,14 +242,14 @@
     {
       "home_cn": "遊騎兵",
       "away_cn": "皇家",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 8,
       "away_runs": 0,
-      "projected_total": 10.1,
+      "projected_total": 9.7,
       "market_total": 7.5,
-      "bet": "大小分 OVER",
-      "reason": "第7局已得8分（此時預期5.4分），高分走勢盤口7.5"
+      "bet": "主隊獨贏",
+      "reason": "第8局主隊領先8分（賽前主隊勝率57%），大局已定"
     },
     {
       "home_cn": "太空人",
@@ -291,10 +291,10 @@
       "home_cn": "水手",
       "away_cn": "響尾蛇",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 7.0,
+      "projected_total": 6.6,
       "market_total": 7.0,
       "bet": null,
       "reason": null
