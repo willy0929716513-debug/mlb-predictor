@@ -267,13 +267,13 @@
       "home_cn": "光芒",
       "away_cn": "天使",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 8,
-      "away_runs": 4,
-      "projected_total": 13.8,
+      "away_runs": 5,
+      "projected_total": 14.3,
       "market_total": 8.0,
       "bet": "主隊獨贏",
-      "reason": "第8局主隊領先4分（賽前主隊勝率60%），大局已定"
+      "reason": "第8局主隊領先3分（賽前主隊勝率60%），大局已定"
     },
     {
       "home_cn": "大都會",
@@ -320,8 +320,8 @@
       "away_runs": 0,
       "projected_total": 7.8,
       "market_total": 7.5,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第5局已得6分（此時預期3.8分），高分走勢盤口7.5"
     },
     {
       "home_cn": "太空人",
@@ -360,7 +360,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780104290,
+  "live_updated_ts": 1780104591,
   "game_preds": {
     "reds|braves": {
       "home_win_prob": 0.4216,
@@ -423,5 +423,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-05-30 09:24 (台灣時間)"
+  "live_updated_at": "2026-05-30 09:29 (台灣時間)"
 }
