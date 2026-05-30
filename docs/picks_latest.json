@@ -232,9 +232,9 @@
       "away_cn": "巨人",
       "inning": 9,
       "top_inning": false,
-      "home_runs": 6,
+      "home_runs": 8,
       "away_runs": 6,
-      "projected_total": 12.6,
+      "projected_total": 14.6,
       "market_total": 10.5,
       "bet": null,
       "reason": null
@@ -257,17 +257,17 @@
       "inning": 6,
       "top_inning": true,
       "home_runs": 5,
-      "away_runs": 3,
-      "projected_total": 11.1,
+      "away_runs": 5,
+      "projected_total": 13.1,
       "market_total": 7.0,
       "bet": "大小分 OVER",
-      "reason": "第6局已得8分（此時預期3.9分），高分走勢盤口7.0"
+      "reason": "第6局已得10分（此時預期3.9分），高分走勢盤口7.0"
     },
     {
       "home_cn": "道奇",
       "away_cn": "費城人",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 4,
       "away_runs": 1,
       "projected_total": 7.7,
