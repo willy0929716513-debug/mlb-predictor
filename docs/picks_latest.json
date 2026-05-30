@@ -231,10 +231,10 @@
       "home_cn": "紅雀",
       "away_cn": "小熊",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 6.2,
+      "projected_total": 5.8,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -252,7 +252,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780185112,
+  "live_updated_ts": 1780185413,
   "game_preds": {
     "white sox|tigers": {
       "home_win_prob": 0.6634,
@@ -315,5 +315,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-05-31 07:51 (台灣時間)"
+  "live_updated_at": "2026-05-31 07:56 (台灣時間)"
 }
