@@ -254,14 +254,14 @@
     {
       "home_cn": "運動家",
       "away_cn": "洋基",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 6,
-      "projected_total": 13.9,
+      "projected_total": 13.3,
       "market_total": 9.5,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第4局已得7分（此時預期3.2分），高分走勢盤口9.5"
     },
     {
       "home_cn": "水手",
