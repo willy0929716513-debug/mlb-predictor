@@ -242,11 +242,11 @@
     {
       "home_cn": "大都會",
       "away_cn": "馬林魚",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 7,
       "away_runs": 7,
-      "projected_total": 15.2,
+      "projected_total": 14.8,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -317,8 +317,8 @@
       "inning": 1,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 1,
-      "projected_total": 10.5,
+      "away_runs": 4,
+      "projected_total": 13.5,
       "market_total": 9.5,
       "bet": null,
       "reason": null
