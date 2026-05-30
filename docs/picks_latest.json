@@ -240,7 +240,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780168907,
+  "live_updated_ts": 1780169209,
   "game_preds": {
     "white sox|tigers": {
       "home_win_prob": 0.6634,
@@ -303,5 +303,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-05-31 03:21 (台灣時間)"
+  "live_updated_at": "2026-05-31 03:26 (台灣時間)"
 }
