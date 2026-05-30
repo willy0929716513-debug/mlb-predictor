@@ -231,10 +231,10 @@
       "home_cn": "國民",
       "away_cn": "教士",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 3,
-      "projected_total": 8.2,
+      "projected_total": 7.8,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -244,9 +244,9 @@
       "away_cn": "皇家",
       "inning": 4,
       "top_inning": false,
-      "home_runs": 1,
+      "home_runs": 3,
       "away_runs": 0,
-      "projected_total": 5.9,
+      "projected_total": 7.9,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -255,10 +255,10 @@
       "home_cn": "金鶯",
       "away_cn": "藍鳥",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 2,
-      "projected_total": 8.0,
+      "projected_total": 7.6,
       "market_total": 7.5,
       "bet": "主隊讓分(+1.5)",
       "reason": "主隊落後1分 第4局，賽前主隊勝率61%"
@@ -266,14 +266,14 @@
     {
       "home_cn": "海盜",
       "away_cn": "雙城",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 7,
       "away_runs": 2,
-      "projected_total": 15.1,
+      "projected_total": 14.7,
       "market_total": 8.5,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第4局已得9分（此時預期2.8分），高分走勢盤口8.5"
     },
     {
       "home_cn": "守護者",
@@ -290,23 +290,23 @@
     {
       "home_cn": "光芒",
       "away_cn": "天使",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 4,
-      "projected_total": 10.1,
+      "projected_total": 9.7,
       "market_total": 7.0,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第4局已得5分（此時預期2.3分），高分走勢盤口7.0"
     },
     {
       "home_cn": "大都會",
       "away_cn": "馬林魚",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 5.4,
+      "projected_total": 5.1,
       "market_total": 7.0,
       "bet": null,
       "reason": null
@@ -314,17 +314,17 @@
     {
       "home_cn": "太空人",
       "away_cn": "釀酒人",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 1,
-      "projected_total": 10.1,
+      "projected_total": 9.7,
       "market_total": 8.5,
-      "bet": null,
-      "reason": null
+      "bet": "客隊讓分(+1.5)",
+      "reason": "客隊落後2分 第4局，賽前客隊勝率55%"
     }
   ],
-  "live_updated_ts": 1780175244,
+  "live_updated_ts": 1780175547,
   "game_preds": {
     "white sox|tigers": {
       "home_win_prob": 0.6634,
@@ -387,5 +387,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-05-31 05:07 (台灣時間)"
+  "live_updated_at": "2026-05-31 05:12 (台灣時間)"
 }
