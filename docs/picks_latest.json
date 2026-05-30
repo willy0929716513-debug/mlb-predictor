@@ -252,18 +252,6 @@
       "reason": null
     },
     {
-      "home_cn": "紅雀",
-      "away_cn": "小熊",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 7,
-      "away_runs": 7,
-      "projected_total": 14.8,
-      "market_total": 7.5,
-      "bet": null,
-      "reason": null
-    },
-    {
       "home_cn": "白襪",
       "away_cn": "老虎",
       "inning": 9,
@@ -316,7 +304,7 @@
       "away_cn": "洋基",
       "inning": 1,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 1,
       "away_runs": 4,
       "projected_total": 14.0,
       "market_total": 9.5,
@@ -348,7 +336,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780106099,
+  "live_updated_ts": 1780106401,
   "game_preds": {
     "reds|braves": {
       "home_win_prob": 0.4216,
@@ -411,5 +399,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-05-30 09:54 (台灣時間)"
+  "live_updated_at": "2026-05-30 10:00 (台灣時間)"
 }
