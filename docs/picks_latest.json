@@ -267,7 +267,7 @@
       "home_cn": "道奇",
       "away_cn": "費城人",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 4,
       "away_runs": 1,
       "projected_total": 8.6,
