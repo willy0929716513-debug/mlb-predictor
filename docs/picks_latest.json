@@ -232,9 +232,9 @@
       "away_cn": "教士",
       "inning": 7,
       "top_inning": false,
-      "home_runs": 2,
+      "home_runs": 3,
       "away_runs": 3,
-      "projected_total": 7.1,
+      "projected_total": 8.1,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -245,23 +245,23 @@
       "inning": 7,
       "top_inning": true,
       "home_runs": 3,
-      "away_runs": 0,
-      "projected_total": 5.7,
+      "away_runs": 2,
+      "projected_total": 7.7,
       "market_total": 8.0,
-      "bet": "大小分 UNDER",
-      "reason": "第7局僅3分（此時預期5.3分），低分走勢盤口8.0"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "金鶯",
       "away_cn": "藍鳥",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 2,
-      "projected_total": 5.5,
+      "projected_total": 5.1,
       "market_total": 7.5,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅3分（此時預期5.0分），低分走勢盤口7.5"
+      "reason": "第7局僅3分（此時預期5.4分），低分走勢盤口7.5"
     },
     {
       "home_cn": "海盜",
@@ -279,10 +279,10 @@
       "home_cn": "守護者",
       "away_cn": "紅襪",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 2,
-      "projected_total": 5.9,
+      "projected_total": 5.5,
       "market_total": 6.5,
       "bet": "主隊讓分(+1.5)",
       "reason": "主隊落後1分 第6局，賽前主隊勝率57%"
@@ -303,10 +303,10 @@
       "home_cn": "大都會",
       "away_cn": "馬林魚",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 1,
-      "projected_total": 7.9,
+      "projected_total": 7.5,
       "market_total": 7.0,
       "bet": null,
       "reason": null
@@ -324,7 +324,7 @@
       "reason": "客隊落後1分 第5局，賽前客隊勝率55%"
     }
   ],
-  "live_updated_ts": 1780177961,
+  "live_updated_ts": 1780178263,
   "game_preds": {
     "white sox|tigers": {
       "home_win_prob": 0.6634,
@@ -387,5 +387,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-05-31 05:52 (台灣時間)"
+  "live_updated_at": "2026-05-31 05:57 (台灣時間)"
 }
