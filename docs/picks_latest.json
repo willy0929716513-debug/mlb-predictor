@@ -233,11 +233,11 @@
       "inning": 9,
       "top_inning": true,
       "home_runs": 3,
-      "away_runs": 4,
-      "projected_total": 8.2,
+      "away_runs": 6,
+      "projected_total": 10.2,
       "market_total": 10.5,
-      "bet": null,
-      "reason": null
+      "bet": "客隊獨贏",
+      "reason": "第9局客隊領先3分（賽前客隊勝率58%），大局已定"
     },
     {
       "home_cn": "運動家",
