@@ -231,10 +231,10 @@
       "home_cn": "國民",
       "away_cn": "教士",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 5,
       "away_runs": 7,
-      "projected_total": 13.1,
+      "projected_total": 12.5,
       "market_total": 9.5,
       "bet": null,
       "reason": null
@@ -268,9 +268,9 @@
       "away_cn": "老虎",
       "inning": 9,
       "top_inning": false,
-      "home_runs": 1,
+      "home_runs": 2,
       "away_runs": 2,
-      "projected_total": 3.5,
+      "projected_total": 4.5,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -290,14 +290,14 @@
     {
       "home_cn": "太空人",
       "away_cn": "釀酒人",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 4,
       "away_runs": 3,
-      "projected_total": 10.3,
+      "projected_total": 9.8,
       "market_total": 8.5,
       "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後1分 第6局，賽前客隊勝率54%"
+      "reason": "客隊落後1分 第7局，賽前客隊勝率54%"
     },
     {
       "home_cn": "落磯",
@@ -318,7 +318,7 @@
       "top_inning": false,
       "home_runs": 0,
       "away_runs": 4,
-      "projected_total": 13.5,
+      "projected_total": 14.0,
       "market_total": 9.5,
       "bet": null,
       "reason": null
