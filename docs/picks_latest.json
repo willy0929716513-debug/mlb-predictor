@@ -234,10 +234,10 @@
       "top_inning": false,
       "home_runs": 3,
       "away_runs": 4,
-      "projected_total": 6.8,
+      "projected_total": 8.2,
       "market_total": 10.5,
-      "bet": "大小分 UNDER",
-      "reason": "第8局僅5分（此時預期8.8分），低分走勢盤口10.5"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "運動家",
@@ -276,7 +276,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780110924,
+  "live_updated_ts": 1780111225,
   "game_preds": {
     "reds|braves": {
       "home_win_prob": 0.4216,
@@ -339,5 +339,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-05-30 11:15 (台灣時間)"
+  "live_updated_at": "2026-05-30 11:20 (台灣時間)"
 }
