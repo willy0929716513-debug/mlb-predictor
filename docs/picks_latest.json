@@ -290,11 +290,11 @@
     {
       "home_cn": "道奇",
       "away_cn": "費城人",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 0,
-      "projected_total": 8.7,
+      "projected_total": 8.2,
       "market_total": 8.0,
       "bet": null,
       "reason": null
