@@ -30,6 +30,7 @@ STD            = 1.80   # 比賽勝負分差標準差（↑1.65→1.80 減少過
 RL_STD_MULT    = 1.90   # 讓分概率用更高不確定性
 RS_BLEND_W     = 0.12   # 投手隊友得分支援調整幅度（用於ML/RL預測）
 RS_BLEND_W_TOT = 0.04   # 大小分預測的RS權重（極低，防止RS拉高Over）
+RS_ADJ_CAP     = 1.5    # RS調整上限（±1.5分）：防止3場小樣本RS極端值扭曲預測
 MIN_P          = 1.35
 MAX_P          = 2.80  # 上限放寬（↑2.50→2.80），讓高賠RL好注進來
 BANK           = 1000.0
@@ -2302,11 +2303,12 @@ def predict(home, away, home_sp, away_sp, market_total=8.5, game_dt=None):
     h_exp_tot = h_exp  # 大小分專用，RS權重更低
     a_exp_tot = a_exp
     if h_rs is not None and h_rpg > 0:
-        rs_adj_h = h_rs - h_rpg
+        # 小樣本RS（3場）容易因隊伍整體攻擊力或單場爆發造成極端值，上限±RS_ADJ_CAP
+        rs_adj_h = max(-RS_ADJ_CAP, min(RS_ADJ_CAP, h_rs - h_rpg))
         h_exp     = round(h_exp     + rs_adj_h * RS_BLEND_W,     3)
         h_exp_tot = round(h_exp_tot + rs_adj_h * RS_BLEND_W_TOT, 3)
     if a_rs is not None and a_rpg > 0:
-        rs_adj_a = a_rs - a_rpg
+        rs_adj_a = max(-RS_ADJ_CAP, min(RS_ADJ_CAP, a_rs - a_rpg))
         a_exp     = round(a_exp     + rs_adj_a * RS_BLEND_W,     3)
         a_exp_tot = round(a_exp_tot + rs_adj_a * RS_BLEND_W_TOT, 3)
 
