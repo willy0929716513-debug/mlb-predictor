@@ -433,24 +433,24 @@
       "away_cn": "教士",
       "inning": 7,
       "top_inning": false,
-      "home_runs": 3,
+      "home_runs": 4,
       "away_runs": 2,
-      "projected_total": 7.5,
+      "projected_total": 8.5,
       "market_total": 9.0,
-      "bet": null,
-      "reason": null
+      "bet": "主隊獨贏",
+      "reason": "第7局主隊領先2分（賽前主隊勝率72%），大局已定"
     },
     {
       "home_cn": "海盜",
       "away_cn": "雙城",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 9,
       "away_runs": 2,
-      "projected_total": 13.1,
+      "projected_total": 12.7,
       "market_total": 7.5,
-      "bet": "大小分 OVER",
-      "reason": "第7局已得11分（此時預期5.4分），高分走勢盤口7.5"
+      "bet": "主隊獨贏",
+      "reason": "第8局主隊領先7分（賽前主隊勝率53%），大局已定"
     },
     {
       "home_cn": "守護者",
@@ -458,11 +458,11 @@
       "inning": 7,
       "top_inning": true,
       "home_runs": 4,
-      "away_runs": 3,
-      "projected_total": 9.3,
+      "away_runs": 6,
+      "projected_total": 12.3,
       "market_total": 7.0,
       "bet": "大小分 OVER",
-      "reason": "第7局已得7分（此時預期4.7分），高分走勢盤口7.0"
+      "reason": "第7局已得10分（此時預期4.7分），高分走勢盤口7.0"
     },
     {
       "home_cn": "光芒",
@@ -480,13 +480,13 @@
       "home_cn": "紅人",
       "away_cn": "勇士",
       "inning": 7,
-      "top_inning": true,
-      "home_runs": 5,
+      "top_inning": false,
+      "home_runs": 6,
       "away_runs": 3,
-      "projected_total": 10.8,
+      "projected_total": 11.4,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第7局已得8分（此時預期5.7分），高分走勢盤口8.5"
+      "reason": "第7局已得9分（此時預期6.1分），高分走勢盤口8.5"
     },
     {
       "home_cn": "大都會",
@@ -503,14 +503,14 @@
     {
       "home_cn": "白襪",
       "away_cn": "老虎",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 4.1,
+      "projected_total": 3.7,
       "market_total": 8.0,
       "bet": "大小分 UNDER",
-      "reason": "第6局僅1分（此時預期4.9分），低分走勢盤口8.0"
+      "reason": "第7局僅1分（此時預期5.3分），低分走勢盤口8.0"
     },
     {
       "home_cn": "太空人",
@@ -529,12 +529,12 @@
       "away_cn": "皇家",
       "inning": 4,
       "top_inning": false,
-      "home_runs": 4,
+      "home_runs": 6,
       "away_runs": 0,
-      "projected_total": 8.6,
+      "projected_total": 10.6,
       "market_total": 7.5,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第4局已得6分（此時預期2.9分），高分走勢盤口7.5"
     },
     {
       "home_cn": "落磯",
@@ -542,8 +542,8 @@
       "inning": 2,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 1,
-      "projected_total": 10.8,
+      "away_runs": 2,
+      "projected_total": 11.8,
       "market_total": 11.0,
       "bet": null,
       "reason": null
@@ -559,9 +559,33 @@
       "market_total": 10.5,
       "bet": null,
       "reason": null
+    },
+    {
+      "home_cn": "水手",
+      "away_cn": "響尾蛇",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 7.5,
+      "market_total": 7.5,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "道奇",
+      "away_cn": "費城人",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 9.0,
+      "market_total": 9.0,
+      "bet": null,
+      "reason": null
     }
   ],
-  "live_updated_ts": 1780256479,
+  "live_updated_ts": 1780256780,
   "game_preds": {
     "orioles|blue jays": {
       "home_win_prob": 0.4777,
@@ -624,5 +648,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-06-01 03:41 (台灣時間)"
+  "live_updated_at": "2026-06-01 03:46 (台灣時間)"
 }
