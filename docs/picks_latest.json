@@ -432,13 +432,13 @@
       "home_cn": "遊騎兵",
       "away_cn": "皇家",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 6,
       "away_runs": 1,
-      "projected_total": 9.5,
+      "projected_total": 9.1,
       "market_total": 7.5,
-      "bet": "大小分 OVER",
-      "reason": "第7局已得7分（此時預期5.0分），高分走勢盤口7.5"
+      "bet": "主隊獨贏",
+      "reason": "第7局主隊領先5分（賽前主隊勝率51%），大局已定"
     },
     {
       "home_cn": "落磯",
@@ -455,11 +455,11 @@
     {
       "home_cn": "運動家",
       "away_cn": "洋基",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 0,
-      "projected_total": 11.8,
+      "projected_total": 11.2,
       "market_total": 10.5,
       "bet": null,
       "reason": null
@@ -468,10 +468,10 @@
       "home_cn": "水手",
       "away_cn": "響尾蛇",
       "inning": 2,
-      "top_inning": true,
-      "home_runs": 0,
+      "top_inning": false,
+      "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 6.7,
+      "projected_total": 7.2,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -480,16 +480,16 @@
       "home_cn": "道奇",
       "away_cn": "費城人",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.0,
+      "projected_total": 7.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1780260095,
+  "live_updated_ts": 1780260396,
   "game_preds": {
     "orioles|blue jays": {
       "home_win_prob": 0.4777,
@@ -552,5 +552,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-06-01 04:41 (台灣時間)"
+  "live_updated_at": "2026-06-01 04:46 (台灣時間)"
 }
