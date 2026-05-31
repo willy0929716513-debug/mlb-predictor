@@ -242,14 +242,14 @@
     {
       "home_cn": "運動家",
       "away_cn": "洋基",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 1,
-      "projected_total": 7.7,
+      "projected_total": 7.2,
       "market_total": 9.5,
-      "bet": null,
-      "reason": null
+      "bet": "主隊獨贏",
+      "reason": "第7局主隊領先2分（賽前主隊勝率62%），大局已定"
     },
     {
       "home_cn": "水手",
