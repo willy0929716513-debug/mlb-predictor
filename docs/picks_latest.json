@@ -231,10 +231,10 @@
       "home_cn": "紅雀",
       "away_cn": "小熊",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 3,
-      "projected_total": 7.6,
+      "projected_total": 7.1,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -243,10 +243,10 @@
       "home_cn": "紅人",
       "away_cn": "勇士",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 4,
-      "projected_total": 9.2,
+      "projected_total": 8.6,
       "market_total": 9.5,
       "bet": "客隊獨贏",
       "reason": "第7局客隊領先2分（賽前客隊勝率68%），大局已定"
@@ -264,7 +264,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780189634,
+  "live_updated_ts": 1780189936,
   "game_preds": {
     "white sox|tigers": {
       "home_win_prob": 0.6634,
@@ -327,5 +327,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-05-31 09:07 (台灣時間)"
+  "live_updated_at": "2026-05-31 09:12 (台灣時間)"
 }
