@@ -432,13 +432,13 @@
       "home_cn": "落磯",
       "away_cn": "巨人",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 5,
-      "away_runs": 11,
-      "projected_total": 20.9,
+      "away_runs": 12,
+      "projected_total": 21.3,
       "market_total": 11.0,
       "bet": "大小分 OVER",
-      "reason": "第6局已得16分（此時預期6.1分），高分走勢盤口11.0"
+      "reason": "第6局已得17分（此時預期6.7分），高分走勢盤口11.0"
     },
     {
       "home_cn": "運動家",
@@ -456,10 +456,10 @@
       "home_cn": "水手",
       "away_cn": "響尾蛇",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 5.2,
+      "projected_total": 4.8,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -469,15 +469,15 @@
       "away_cn": "費城人",
       "inning": 4,
       "top_inning": false,
-      "home_runs": 3,
+      "home_runs": 4,
       "away_runs": 0,
-      "projected_total": 8.5,
+      "projected_total": 9.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1780263108,
+  "live_updated_ts": 1780263409,
   "game_preds": {
     "orioles|blue jays": {
       "home_win_prob": 0.4777,
@@ -540,5 +540,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-06-01 05:31 (台灣時間)"
+  "live_updated_at": "2026-06-01 05:36 (台灣時間)"
 }
