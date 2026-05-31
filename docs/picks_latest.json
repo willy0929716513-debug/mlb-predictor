@@ -432,10 +432,10 @@
       "home_cn": "守護者",
       "away_cn": "紅襪",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 4,
       "away_runs": 9,
-      "projected_total": 13.8,
+      "projected_total": 13.4,
       "market_total": 7.0,
       "bet": null,
       "reason": null
@@ -444,10 +444,10 @@
       "home_cn": "大都會",
       "away_cn": "馬林魚",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 10,
       "away_runs": 1,
-      "projected_total": 12.7,
+      "projected_total": 12.2,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -503,11 +503,11 @@
     {
       "home_cn": "運動家",
       "away_cn": "洋基",
-      "inning": 1,
-      "top_inning": false,
-      "home_runs": 2,
+      "inning": 2,
+      "top_inning": true,
+      "home_runs": 3,
       "away_runs": 0,
-      "projected_total": 11.9,
+      "projected_total": 12.3,
       "market_total": 10.5,
       "bet": null,
       "reason": null
@@ -515,11 +515,11 @@
     {
       "home_cn": "水手",
       "away_cn": "響尾蛇",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 7.1,
+      "projected_total": 6.7,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -527,17 +527,17 @@
     {
       "home_cn": "道奇",
       "away_cn": "費城人",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.5,
+      "projected_total": 8.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1780259191,
+  "live_updated_ts": 1780259492,
   "game_preds": {
     "orioles|blue jays": {
       "home_win_prob": 0.4777,
@@ -600,5 +600,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-06-01 04:26 (台灣時間)"
+  "live_updated_at": "2026-06-01 04:31 (台灣時間)"
 }
