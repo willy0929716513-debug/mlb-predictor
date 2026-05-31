@@ -14,7 +14,7 @@ GIST_DESC = "mlb_bot_history"
 EDGE_MIN       = 0.08   # ↑0.06→0.08，每注最低 $50，門檻更嚴才合理
 EDGE_MIN_RL    = 0.10   # ↑0.08→0.10
 EDGE_MIN_TOT   = 0.09   # ↑0.07→0.09
-EDGE_MIN_ML_FAV= 0.14   # ML低賠（賠率<1.65）額外edge門檻：損益平衡高，需更大優勢
+EDGE_MIN_ML_FAV= 0.11   # ML低賠（賠率<1.65）額外edge門檻（↓0.14→0.11：-170熱門若有11%優勢仍值得下注）
 MIN_MODEL_P_ML  = 0.63  # ML 模型勝率門檻（↓0.65→0.63，P=1.87損益平衡53%，63%仍有buffer）
 MIN_MODEL_P_RL  = 0.65  # RL 門檻（↓0.67→0.65，與ML更一致）
 MIN_MODEL_P_TOT = 0.60  # TOT 門檻：避免貼線邊際注單
@@ -649,13 +649,13 @@ def build_recent_era_cache(pitchers_dict):
             if era is not None:
                 cache[key] = era
                 _avgip = avg_ip if avg_ip else 0
-                _suffix = " ⚠️ 小樣本(avgIP<5.5)" if _avgip < 5.5 else ""
+                _suffix = " ⚠️ 小樣本(avgIP<5.0)" if _avgip < 5.0 else ""
                 log.info("ERA %s(id=%s): %.2f (FIP=%.2f K9=%.1f avgIP=%.1f WHIP=%.2f trend=%+.2f)%s",
                          key, pid, era,
                          fip if fip else 0, k9 if k9 else 0,
                          _avgip, whip if whip else 0,
                          era_trend if era_trend is not None else 0, _suffix)
-                if _avgip < 5.5:
+                if _avgip < 5.0:
                     log.warning("⚠️ SMALL SAMPLE pitcher %s(id=%s): avg %.1f IP/start — ERA reliability LOW",
                                 key, pid, _avgip)
             elif not is_reliever:
@@ -2132,9 +2132,10 @@ def pitcher_confidence(key):
     elif era <= 4.0: era_conf = 0.82
     elif era <= 4.5: era_conf = 0.72
     else:            era_conf = 0.62
-    # 小樣本懲罰：avgIP<5.5 表示近期先發局數不足，ERA可靠性低
-    if avg_ip < 4.5:   ip_mult = 0.70
-    elif avg_ip < 5.5: ip_mult = 0.82
+    # 小樣本懲罰：avgIP<4.0=嚴重短局(開場/傷後復出)；4.0-5.0=短局輕懲；≥5.0=可靠
+    # 5月底投手已有10+先發≈50局，5.0IP門檻比舊5.5更符合實際可靠性
+    if avg_ip < 4.0:   ip_mult = 0.75
+    elif avg_ip < 5.0: ip_mult = 0.88
     else:              ip_mult = 1.0
     return round(era_conf * ip_mult, 3)
 
