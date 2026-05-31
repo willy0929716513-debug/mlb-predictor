@@ -433,9 +433,9 @@
       "away_cn": "小熊",
       "inning": 1,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 8.0,
+      "projected_total": 9.0,
       "market_total": 8.5,
       "bet": null,
       "reason": null
