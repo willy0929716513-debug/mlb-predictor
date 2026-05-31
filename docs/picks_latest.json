@@ -268,15 +268,15 @@
       "away_cn": "費城人",
       "inning": 4,
       "top_inning": false,
-      "home_runs": 1,
+      "home_runs": 2,
       "away_runs": 1,
-      "projected_total": 7.2,
+      "projected_total": 8.2,
       "market_total": 8.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1780197216,
+  "live_updated_ts": 1780197517,
   "game_preds": {
     "white sox|tigers": {
       "home_win_prob": 0.6634,
@@ -339,5 +339,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-05-31 11:13 (台灣時間)"
+  "live_updated_at": "2026-05-31 11:18 (台灣時間)"
 }
