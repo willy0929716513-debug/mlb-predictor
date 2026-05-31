@@ -230,14 +230,14 @@
     {
       "home_cn": "紅雀",
       "away_cn": "小熊",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 6.0,
+      "projected_total": 5.6,
       "market_total": 8.0,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 UNDER",
+      "reason": "第6局僅2分（此時預期4.4分），低分走勢盤口8.0"
     },
     {
       "home_cn": "紅人",
@@ -264,7 +264,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780188428,
+  "live_updated_ts": 1780188730,
   "game_preds": {
     "white sox|tigers": {
       "home_win_prob": 0.6634,
@@ -327,5 +327,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-05-31 08:47 (台灣時間)"
+  "live_updated_at": "2026-05-31 08:52 (台灣時間)"
 }
