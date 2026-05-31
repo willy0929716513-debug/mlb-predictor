@@ -228,18 +228,6 @@
   ],
   "live_games": [
     {
-      "home_cn": "紅雀",
-      "away_cn": "小熊",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 1,
-      "away_runs": 6,
-      "projected_total": 7.4,
-      "market_total": 8.0,
-      "bet": "客隊獨贏",
-      "reason": "第9局客隊領先5分（賽前客隊勝率61%），大局已定"
-    },
-    {
       "home_cn": "落磯",
       "away_cn": "巨人",
       "inning": 4,
@@ -255,10 +243,10 @@
       "home_cn": "運動家",
       "away_cn": "洋基",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 9.5,
+      "projected_total": 9.0,
       "market_total": 9.5,
       "bet": null,
       "reason": null
@@ -288,7 +276,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780193295,
+  "live_updated_ts": 1780193596,
   "game_preds": {
     "white sox|tigers": {
       "home_win_prob": 0.6634,
@@ -351,5 +339,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-05-31 10:08 (台灣時間)"
+  "live_updated_at": "2026-05-31 10:13 (台灣時間)"
 }
