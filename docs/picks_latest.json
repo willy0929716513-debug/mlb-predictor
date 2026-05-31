@@ -443,14 +443,14 @@
     {
       "home_cn": "運動家",
       "away_cn": "洋基",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 7,
       "away_runs": 13,
-      "projected_total": 22.9,
+      "projected_total": 22.3,
       "market_total": 10.5,
-      "bet": "大小分 OVER",
-      "reason": "第7局已得20分（此時預期7.6分），高分走勢盤口10.5"
+      "bet": "客隊獨贏",
+      "reason": "第8局客隊領先6分（賽前客隊勝率60%），大局已定"
     },
     {
       "home_cn": "水手",
@@ -477,7 +477,7 @@
       "reason": "第7局主隊領先7分（賽前主隊勝率74%），大局已定"
     }
   ],
-  "live_updated_ts": 1780266724,
+  "live_updated_ts": 1780267025,
   "game_preds": {
     "orioles|blue jays": {
       "home_win_prob": 0.4777,
@@ -540,5 +540,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-06-01 06:32 (台灣時間)"
+  "live_updated_at": "2026-06-01 06:37 (台灣時間)"
 }
