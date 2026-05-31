@@ -432,10 +432,10 @@
       "home_cn": "國民",
       "away_cn": "教士",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 8.0,
+      "projected_total": 7.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -549,7 +549,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780255876,
+  "live_updated_ts": 1780256177,
   "game_preds": {
     "orioles|blue jays": {
       "home_win_prob": 0.4777,
@@ -612,5 +612,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-06-01 03:31 (台灣時間)"
+  "live_updated_at": "2026-06-01 03:36 (台灣時間)"
 }
