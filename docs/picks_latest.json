@@ -443,11 +443,11 @@
     {
       "home_cn": "水手",
       "away_cn": "響尾蛇",
-      "inning": 9,
-      "top_inning": false,
+      "inning": 10,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 2,
-      "projected_total": 4.4,
+      "projected_total": 4.0,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -465,7 +465,7 @@
       "reason": "第8局主隊領先8分（賽前主隊勝率74%），大局已定"
     }
   ],
-  "live_updated_ts": 1780267929,
+  "live_updated_ts": 1780268230,
   "game_preds": {
     "orioles|blue jays": {
       "home_win_prob": 0.4777,
@@ -528,5 +528,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-06-01 06:52 (台灣時間)"
+  "live_updated_at": "2026-06-01 06:57 (台灣時間)"
 }
