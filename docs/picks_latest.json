@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-31 23:08 (台灣時間)",
+  "generated_at": "2026-05-31 23:26 (台灣時間)",
   "date": "2026-05-31",
   "stats": {
     "settled": 114,
@@ -166,31 +166,31 @@
   "live_updated_ts": 1780201133,
   "game_preds": {
     "orioles|blue jays": {
-      "home_win_prob": 0.4774,
-      "market_total": 8.5
+      "home_win_prob": 0.4908,
+      "market_total": 8.0
     },
     "pirates|twins": {
-      "home_win_prob": 0.6511,
+      "home_win_prob": 0.6469,
       "market_total": 7.5
     },
     "nationals|padres": {
-      "home_win_prob": 0.76,
+      "home_win_prob": 0.7362,
       "market_total": 9.0
     },
     "reds|braves": {
-      "home_win_prob": 0.6121,
+      "home_win_prob": 0.6197,
       "market_total": 8.5
     },
     "guardians|red sox": {
-      "home_win_prob": 0.6778,
+      "home_win_prob": 0.6798,
       "market_total": 7.0
     },
     "rays|angels": {
-      "home_win_prob": 0.7011,
+      "home_win_prob": 0.6977,
       "market_total": 8.0
     },
     "mets|marlins": {
-      "home_win_prob": 0.5408,
+      "home_win_prob": 0.4044,
       "market_total": 7.5
     },
     "white sox|tigers": {
@@ -198,31 +198,31 @@
       "market_total": 8.0
     },
     "astros|brewers": {
-      "home_win_prob": 0.2775,
+      "home_win_prob": 0.2778,
       "market_total": 7.5
     },
     "rangers|royals": {
-      "home_win_prob": 0.6214,
+      "home_win_prob": 0.6169,
       "market_total": 7.5
     },
     "rockies|giants": {
-      "home_win_prob": 0.7145,
+      "home_win_prob": 0.7154,
       "market_total": 11.0
     },
     "athletics|yankees": {
-      "home_win_prob": 0.3963,
+      "home_win_prob": 0.4071,
       "market_total": 10.5
     },
     "mariners|diamondbacks": {
-      "home_win_prob": 0.4686,
+      "home_win_prob": 0.4734,
       "market_total": 7.5
     },
     "dodgers|phillies": {
-      "home_win_prob": 0.7445,
+      "home_win_prob": 0.7426,
       "market_total": 9.0
     },
     "cardinals|cubs": {
-      "home_win_prob": 0.4521,
+      "home_win_prob": 0.4439,
       "market_total": 8.5
     }
   }
