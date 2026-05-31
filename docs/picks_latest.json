@@ -255,10 +255,10 @@
       "home_cn": "水手",
       "away_cn": "響尾蛇",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 4,
       "away_runs": 0,
-      "projected_total": 7.9,
+      "projected_total": 7.5,
       "market_total": 7.0,
       "bet": null,
       "reason": null
