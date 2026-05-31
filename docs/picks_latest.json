@@ -242,11 +242,11 @@
     {
       "home_cn": "紅人",
       "away_cn": "勇士",
-      "inning": 4,
-      "top_inning": false,
+      "inning": 5,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 2,
-      "projected_total": 9.8,
+      "projected_total": 9.3,
       "market_total": 9.5,
       "bet": null,
       "reason": null
