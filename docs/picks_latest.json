@@ -441,7 +441,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780272982,
+  "live_updated_ts": 1780273284,
   "game_preds": {
     "orioles|blue jays": {
       "home_win_prob": 0.4777,
@@ -504,5 +504,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-06-01 08:16 (台灣時間)"
+  "live_updated_at": "2026-06-01 08:21 (台灣時間)"
 }
