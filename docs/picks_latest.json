@@ -431,11 +431,11 @@
     {
       "home_cn": "紅雀",
       "away_cn": "小熊",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 5,
       "away_runs": 0,
-      "projected_total": 11.1,
+      "projected_total": 10.7,
       "market_total": 8.5,
       "bet": "大小分 OVER",
       "reason": "第4局已得5分（此時預期2.8分），高分走勢盤口8.5"
