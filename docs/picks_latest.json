@@ -294,13 +294,13 @@
       "home_cn": "光芒",
       "away_cn": "老虎",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 5,
       "away_runs": 8,
-      "projected_total": 15.7,
+      "projected_total": 15.2,
       "market_total": 8.0,
       "bet": "大小分 OVER",
-      "reason": "第7局已得13分（此時預期5.3分），高分走勢盤口8.0"
+      "reason": "第7局已得13分（此時預期5.8分），高分走勢盤口8.0"
     },
     {
       "home_cn": "國民",
@@ -317,23 +317,23 @@
     {
       "home_cn": "紅人",
       "away_cn": "皇家",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 6,
-      "projected_total": 11.2,
+      "projected_total": 10.8,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第5局已得7分（此時預期4.2分），高分走勢盤口8.5"
+      "reason": "第6局已得7分（此時預期4.7分），高分走勢盤口8.5"
     },
     {
       "home_cn": "雙城",
       "away_cn": "白襪",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 7.3,
+      "projected_total": 6.9,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -363,7 +363,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780360947,
+  "live_updated_ts": 1780361248,
   "game_preds": {
     "rays|tigers": {
       "home_win_prob": 0.6652,
@@ -402,5 +402,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-06-02 08:42 (台灣時間)"
+  "live_updated_at": "2026-06-02 08:47 (台灣時間)"
 }
