@@ -2,28 +2,28 @@
   "generated_at": "2026-06-01 22:58 (台灣時間)",
   "date": "2026-06-01",
   "stats": {
-    "settled": 116,
-    "wins": 80,
-    "win_rate": 69.0,
-    "total_in": 2218.0,
-    "total_pnl": 593.5,
-    "roi": 26.8,
+    "settled": 118,
+    "wins": 82,
+    "win_rate": 69.5,
+    "total_in": 2318.0,
+    "total_pnl": 672.0,
+    "roi": 29.0,
     "by_type": {
       "ML": {
-        "wins": 29,
-        "settled": 45,
-        "win_rate": 64.4,
-        "roi": 5.1
+        "settled": 46,
+        "wins": 30,
+        "win_rate": 65.2,
+        "roi": 8.7
       },
       "RL": {
-        "wins": 34,
-        "settled": 47,
-        "win_rate": 72.3,
-        "roi": 25.6
+        "settled": 48,
+        "wins": 35,
+        "win_rate": 72.9,
+        "roi": 29.0
       },
       "TOT": {
-        "wins": 17,
         "settled": 24,
+        "wins": 17,
         "win_rate": 70.8,
         "roi": 65.8
       }
@@ -159,6 +159,32 @@
   ],
   "recent_history": [
     {
+      "date": "2026-06-02",
+      "home": "diamondbacks",
+      "away": "dodgers",
+      "home_cn": "響尾蛇",
+      "away_cn": "道奇",
+      "bet_type": "讓分",
+      "label": "+1.5",
+      "price": 1.87,
+      "stake": 50.0,
+      "edge": 17.3,
+      "result": "W"
+    },
+    {
+      "date": "2026-06-02",
+      "home": "brewers",
+      "away": "giants",
+      "home_cn": "釀酒人",
+      "away_cn": "巨人",
+      "bet_type": "獨贏",
+      "label": "",
+      "price": 1.7,
+      "stake": 50.0,
+      "edge": 15.2,
+      "result": "W"
+    },
+    {
       "date": "2026-06-01",
       "home": "white sox",
       "away": "tigers",
@@ -260,32 +286,6 @@
       "price": 1.98,
       "stake": 50.0,
       "edge": 17.3,
-      "result": "W"
-    },
-    {
-      "date": "2026-05-26",
-      "home": "orioles",
-      "away": "rays",
-      "home_cn": "金鶯",
-      "away_cn": "光芒",
-      "bet_type": "讓分",
-      "label": "+1.5",
-      "price": 1.65,
-      "stake": 50.0,
-      "edge": 12.7,
-      "result": "W"
-    },
-    {
-      "date": "2026-05-26",
-      "home": "giants",
-      "away": "diamondbacks",
-      "home_cn": "巨人",
-      "away_cn": "響尾蛇",
-      "bet_type": "讓分",
-      "label": "+1.5",
-      "price": 1.54,
-      "stake": 50.0,
-      "edge": 13.0,
       "result": "W"
     }
   ],
