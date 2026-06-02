@@ -305,11 +305,11 @@
     {
       "home_cn": "國民",
       "away_cn": "馬林魚",
-      "inning": 4,
-      "top_inning": false,
+      "inning": 5,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 1,
-      "projected_total": 8.9,
+      "projected_total": 8.4,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -318,10 +318,10 @@
       "home_cn": "紅人",
       "away_cn": "皇家",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 4,
-      "projected_total": 11.6,
+      "projected_total": 11.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -331,9 +331,9 @@
       "away_cn": "白襪",
       "inning": 1,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 7.6,
+      "projected_total": 8.6,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -344,8 +344,8 @@
       "inning": 2,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 6.2,
+      "away_runs": 2,
+      "projected_total": 8.2,
       "market_total": 7.0,
       "bet": null,
       "reason": null
@@ -363,7 +363,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780358232,
+  "live_updated_ts": 1780358534,
   "game_preds": {
     "rays|tigers": {
       "home_win_prob": 0.6652,
@@ -402,5 +402,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-06-02 07:57 (台灣時間)"
+  "live_updated_at": "2026-06-02 08:02 (台灣時間)"
 }
