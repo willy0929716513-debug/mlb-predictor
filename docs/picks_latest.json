@@ -289,45 +289,8 @@
       "result": "W"
     }
   ],
-  "live_games": [
-    {
-      "home_cn": "天使",
-      "away_cn": "落磯",
-      "inning": 8,
-      "top_inning": true,
-      "home_runs": 6,
-      "away_runs": 3,
-      "projected_total": 10.8,
-      "market_total": 8.0,
-      "bet": "主隊獨贏",
-      "reason": "第8局主隊領先3分（賽前主隊勝率61%），大局已定"
-    },
-    {
-      "home_cn": "響尾蛇",
-      "away_cn": "道奇",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 4,
-      "away_runs": 1,
-      "projected_total": 6.0,
-      "market_total": 9.0,
-      "bet": "主隊獨贏",
-      "reason": "第9局主隊領先3分（賽前主隊勝率50%），大局已定"
-    },
-    {
-      "home_cn": "水手",
-      "away_cn": "大都會",
-      "inning": 10,
-      "top_inning": true,
-      "home_runs": 2,
-      "away_runs": 2,
-      "projected_total": 4.0,
-      "market_total": 7.0,
-      "bet": null,
-      "reason": null
-    }
-  ],
-  "live_updated_ts": 1780372702,
+  "live_games": [],
+  "live_updated_ts": 1780373904,
   "game_preds": {
     "rays|tigers": {
       "home_win_prob": 0.6652,
@@ -366,5 +329,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-06-02 11:58 (台灣時間)"
+  "live_updated_at": ""
 }
