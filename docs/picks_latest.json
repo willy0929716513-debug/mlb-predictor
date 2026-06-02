@@ -416,7 +416,7 @@
     }
   ],
   "live_games": [],
-  "live_updated_ts": 1780373904,
+  "live_updated_ts": 1780433832,
   "game_preds": {
     "rays|tigers": {
       "home_win_prob": 0.6712,
@@ -478,5 +478,6 @@
       "home_win_prob": 0.6536,
       "market_total": 7.5
     }
-  }
+  },
+  "live_updated_at": ""
 }
