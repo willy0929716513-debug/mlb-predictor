@@ -420,10 +420,10 @@
       "home_cn": "紅雀",
       "away_cn": "遊騎兵",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 4,
       "away_runs": 7,
-      "projected_total": 11.8,
+      "projected_total": 11.4,
       "market_total": 7.0,
       "bet": null,
       "reason": null
@@ -443,11 +443,11 @@
     {
       "home_cn": "天使",
       "away_cn": "落磯",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 3,
-      "projected_total": 9.1,
+      "projected_total": 8.7,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -456,13 +456,13 @@
       "home_cn": "響尾蛇",
       "away_cn": "道奇",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 4,
-      "projected_total": 11.3,
+      "projected_total": 10.8,
       "market_total": 9.5,
-      "bet": "大小分 OVER",
-      "reason": "第4局已得5分（此時預期3.2分），高分走勢盤口9.5"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "水手",
@@ -477,7 +477,7 @@
       "reason": "第4局已得5分（此時預期2.5分），高分走勢盤口7.5"
     }
   ],
-  "live_updated_ts": 1780454347,
+  "live_updated_ts": 1780454649,
   "game_preds": {
     "rays|tigers": {
       "home_win_prob": 0.6712,
@@ -540,5 +540,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-06-03 10:39 (台灣時間)"
+  "live_updated_at": "2026-06-03 10:44 (台灣時間)"
 }
