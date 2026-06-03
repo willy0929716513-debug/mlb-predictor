@@ -2,28 +2,28 @@
   "generated_at": "2026-06-03 01:10 (台灣時間)",
   "date": "2026-06-03",
   "stats": {
-    "settled": 118,
-    "wins": 82,
-    "win_rate": 69.5,
-    "total_in": 2318.0,
-    "total_pnl": 672.0,
-    "roi": 29.0,
+    "settled": 122,
+    "wins": 85,
+    "win_rate": 69.7,
+    "total_in": 2518.0,
+    "total_pnl": 714.0,
+    "roi": 28.4,
     "by_type": {
       "ML": {
-        "wins": 30,
-        "settled": 46,
-        "win_rate": 65.2,
-        "roi": 8.7
+        "settled": 48,
+        "wins": 31,
+        "win_rate": 64.6,
+        "roi": 6.4
       },
       "RL": {
-        "wins": 35,
-        "settled": 48,
-        "win_rate": 72.9,
-        "roi": 29.0
+        "settled": 50,
+        "wins": 37,
+        "win_rate": 74.0,
+        "roi": 31.7
       },
       "TOT": {
-        "wins": 17,
         "settled": 24,
+        "wins": 17,
         "win_rate": 70.8,
         "roi": 65.8
       }
@@ -295,7 +295,7 @@
       "price": 1.54,
       "stake": 50.0,
       "edge": 16.4,
-      "result": null
+      "result": "W"
     },
     {
       "date": "2026-06-03",
@@ -308,7 +308,7 @@
       "price": 1.59,
       "stake": 50.0,
       "edge": 15.1,
-      "result": null
+      "result": "W"
     },
     {
       "date": "2026-06-03",
@@ -321,7 +321,7 @@
       "price": 1.72,
       "stake": 50.0,
       "edge": 11.2,
-      "result": null
+      "result": "L"
     },
     {
       "date": "2026-06-03",
@@ -334,7 +334,7 @@
       "price": 1.71,
       "stake": 50.0,
       "edge": 11.8,
-      "result": null
+      "result": "W"
     },
     {
       "date": "2026-06-02",
