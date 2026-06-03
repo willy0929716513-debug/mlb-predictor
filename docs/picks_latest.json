@@ -640,9 +640,21 @@
       "market_total": 8.5,
       "bet": null,
       "reason": null
+    },
+    {
+      "home_cn": "洋基",
+      "away_cn": "守護者",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 7.0,
+      "market_total": 7.0,
+      "bet": null,
+      "reason": null
     }
   ],
-  "live_updated_ts": 1780526386,
+  "live_updated_ts": 1780526687,
   "game_preds": {
     "nationals|marlins": {
       "home_win_prob": 0.633,
@@ -705,5 +717,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-04 06:39 (台灣時間)"
+  "live_updated_at": "2026-06-04 06:44 (台灣時間)"
 }
