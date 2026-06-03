@@ -421,12 +421,12 @@
       "away_cn": "海盜",
       "inning": 9,
       "top_inning": false,
-      "home_runs": 5,
+      "home_runs": 6,
       "away_runs": 10,
-      "projected_total": 15.5,
+      "projected_total": 16.5,
       "market_total": 9.0,
       "bet": "客隊獨贏",
-      "reason": "第9局客隊領先5分（賽前客隊勝率72%），大局已定"
+      "reason": "第9局客隊領先4分（賽前客隊勝率72%），大局已定"
     },
     {
       "home_cn": "天使",
@@ -465,7 +465,7 @@
       "reason": "第5局已得6分（此時預期3.3分），高分走勢盤口7.5"
     }
   ],
-  "live_updated_ts": 1780456156,
+  "live_updated_ts": 1780456457,
   "game_preds": {
     "rays|tigers": {
       "home_win_prob": 0.6712,
@@ -528,5 +528,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-06-03 11:09 (台灣時間)"
+  "live_updated_at": "2026-06-03 11:14 (台灣時間)"
 }
