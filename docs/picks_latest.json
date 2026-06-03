@@ -417,28 +417,16 @@
   ],
   "live_games": [
     {
-      "home_cn": "洋基",
-      "away_cn": "守護者",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 4,
-      "away_runs": 9,
-      "projected_total": 13.4,
-      "market_total": 7.5,
-      "bet": null,
-      "reason": null
-    },
-    {
       "home_cn": "釀酒人",
       "away_cn": "巨人",
       "inning": 8,
       "top_inning": false,
-      "home_runs": 4,
+      "home_runs": 8,
       "away_runs": 3,
-      "projected_total": 8.2,
+      "projected_total": 12.2,
       "market_total": 7.5,
-      "bet": null,
-      "reason": null
+      "bet": "主隊獨贏",
+      "reason": "第8局主隊領先5分（賽前主隊勝率76%），大局已定"
     },
     {
       "home_cn": "紅雀",
@@ -449,18 +437,6 @@
       "away_runs": 4,
       "projected_total": 8.8,
       "market_total": 7.0,
-      "bet": null,
-      "reason": null
-    },
-    {
-      "home_cn": "小熊",
-      "away_cn": "運動家",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 1,
-      "away_runs": 2,
-      "projected_total": 3.4,
-      "market_total": 7.5,
       "bet": null,
       "reason": null
     },
@@ -480,10 +456,10 @@
       "home_cn": "天使",
       "away_cn": "落磯",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 3,
-      "projected_total": 9.6,
+      "projected_total": 9.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -504,16 +480,16 @@
       "home_cn": "水手",
       "away_cn": "大都會",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 2,
-      "projected_total": 9.8,
+      "projected_total": 9.4,
       "market_total": 7.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1780453443,
+  "live_updated_ts": 1780453745,
   "game_preds": {
     "rays|tigers": {
       "home_win_prob": 0.6712,
@@ -576,5 +552,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-06-03 10:24 (台灣時間)"
+  "live_updated_at": "2026-06-03 10:29 (台灣時間)"
 }
