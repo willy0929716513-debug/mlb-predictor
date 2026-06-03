@@ -620,17 +620,17 @@
     {
       "home_cn": "水手",
       "away_cn": "大都會",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 7,
-      "projected_total": 9.2,
+      "projected_total": 8.8,
       "market_total": 7.5,
       "bet": "客隊獨贏",
-      "reason": "第8局客隊領先6分（賽前客隊勝率47%），大局已定"
+      "reason": "第9局客隊領先6分（賽前客隊勝率47%），大局已定"
     }
   ],
-  "live_updated_ts": 1780524277,
+  "live_updated_ts": 1780524578,
   "game_preds": {
     "nationals|marlins": {
       "home_win_prob": 0.633,
@@ -693,5 +693,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-04 06:04 (台灣時間)"
+  "live_updated_at": "2026-06-04 06:09 (台灣時間)"
 }
