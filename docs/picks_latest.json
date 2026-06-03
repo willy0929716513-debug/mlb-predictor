@@ -620,11 +620,11 @@
     {
       "home_cn": "費城人",
       "away_cn": "教士",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 6.2,
+      "projected_total": 5.8,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -633,10 +633,10 @@
       "home_cn": "紅襪",
       "away_cn": "金鶯",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 8.6,
+      "projected_total": 8.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -645,10 +645,10 @@
       "home_cn": "洋基",
       "away_cn": "守護者",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 7.0,
+      "projected_total": 6.6,
       "market_total": 7.0,
       "bet": null,
       "reason": null
@@ -690,7 +690,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780528194,
+  "live_updated_ts": 1780528495,
   "game_preds": {
     "nationals|marlins": {
       "home_win_prob": 0.633,
@@ -753,5 +753,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-04 07:09 (台灣時間)"
+  "live_updated_at": "2026-06-04 07:14 (台灣時間)"
 }
