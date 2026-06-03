@@ -432,10 +432,10 @@
       "home_cn": "雙城",
       "away_cn": "白襪",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 6,
       "away_runs": 4,
-      "projected_total": 11.8,
+      "projected_total": 11.3,
       "market_total": 8.0,
       "bet": "客隊讓分(+1.5)",
       "reason": "客隊落後2分 第8局，賽前客隊勝率73%"
@@ -444,13 +444,13 @@
       "home_cn": "釀酒人",
       "away_cn": "巨人",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 4,
-      "away_runs": 2,
-      "projected_total": 7.7,
+      "away_runs": 3,
+      "projected_total": 8.2,
       "market_total": 7.5,
-      "bet": "主隊獨贏",
-      "reason": "第8局主隊領先2分（賽前主隊勝率76%），大局已定"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "紅雀",
@@ -468,10 +468,10 @@
       "home_cn": "小熊",
       "away_cn": "運動家",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 2,
-      "projected_total": 3.8,
+      "projected_total": 3.4,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -492,10 +492,10 @@
       "home_cn": "天使",
       "away_cn": "落磯",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 3,
-      "projected_total": 10.6,
+      "projected_total": 10.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -504,10 +504,10 @@
       "home_cn": "響尾蛇",
       "away_cn": "道奇",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 4,
-      "projected_total": 12.4,
+      "projected_total": 11.9,
       "market_total": 9.5,
       "bet": null,
       "reason": null
@@ -515,17 +515,17 @@
     {
       "home_cn": "水手",
       "away_cn": "大都會",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 0,
-      "projected_total": 8.2,
+      "projected_total": 7.8,
       "market_total": 7.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1780452538,
+  "live_updated_ts": 1780452840,
   "game_preds": {
     "rays|tigers": {
       "home_win_prob": 0.6712,
@@ -588,5 +588,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-06-03 10:08 (台灣時間)"
+  "live_updated_at": "2026-06-03 10:14 (台灣時間)"
 }
