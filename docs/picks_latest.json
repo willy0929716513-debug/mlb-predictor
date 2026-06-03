@@ -630,7 +630,7 @@
       "reason": "第7局已得7分（此時預期5.0分），高分走勢盤口7.5"
     }
   ],
-  "live_updated_ts": 1780522770,
+  "live_updated_ts": 1780523071,
   "game_preds": {
     "nationals|marlins": {
       "home_win_prob": 0.633,
@@ -693,5 +693,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-04 05:39 (台灣時間)"
+  "live_updated_at": "2026-06-04 05:44 (台灣時間)"
 }
