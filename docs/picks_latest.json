@@ -420,13 +420,13 @@
       "home_cn": "天使",
       "away_cn": "落磯",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 8,
-      "projected_total": 12.8,
+      "projected_total": 12.4,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第7局已得10分（此時預期5.7分），高分走勢盤口8.5"
+      "reason": "第7局已得10分（此時預期6.1分），高分走勢盤口8.5"
     },
     {
       "home_cn": "響尾蛇",
@@ -444,16 +444,16 @@
       "home_cn": "水手",
       "away_cn": "大都會",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 8,
       "away_runs": 3,
-      "projected_total": 13.5,
+      "projected_total": 13.1,
       "market_total": 7.5,
       "bet": "大小分 OVER",
-      "reason": "第7局已得11分（此時預期5.0分），高分走勢盤口7.5"
+      "reason": "第7局已得11分（此時預期5.4分），高分走勢盤口7.5"
     }
   ],
-  "live_updated_ts": 1780458869,
+  "live_updated_ts": 1780459170,
   "game_preds": {
     "rays|tigers": {
       "home_win_prob": 0.6712,
@@ -516,5 +516,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-06-03 11:54 (台灣時間)"
+  "live_updated_at": "2026-06-03 11:59 (台灣時間)"
 }
