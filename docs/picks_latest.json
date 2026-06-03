@@ -443,17 +443,17 @@
     {
       "home_cn": "水手",
       "away_cn": "大都會",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 7,
-      "away_runs": 2,
-      "projected_total": 12.8,
+      "away_runs": 3,
+      "projected_total": 13.3,
       "market_total": 7.5,
       "bet": "大小分 OVER",
-      "reason": "第5局已得9分（此時預期3.8分），高分走勢盤口7.5"
+      "reason": "第6局已得10分（此時預期4.2分），高分走勢盤口7.5"
     }
   ],
-  "live_updated_ts": 1780457362,
+  "live_updated_ts": 1780457663,
   "game_preds": {
     "rays|tigers": {
       "home_win_prob": 0.6712,
@@ -516,5 +516,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-06-03 11:29 (台灣時間)"
+  "live_updated_at": "2026-06-03 11:34 (台灣時間)"
 }
