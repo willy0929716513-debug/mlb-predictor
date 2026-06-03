@@ -630,7 +630,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780519454,
+  "live_updated_ts": 1780519755,
   "game_preds": {
     "nationals|marlins": {
       "home_win_prob": 0.633,
@@ -693,5 +693,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-04 04:44 (台灣時間)"
+  "live_updated_at": "2026-06-04 04:49 (台灣時間)"
 }
