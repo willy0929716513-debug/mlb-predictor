@@ -635,8 +635,8 @@
       "inning": 8,
       "top_inning": true,
       "home_runs": 4,
-      "away_runs": 3,
-      "projected_total": 9.0,
+      "away_runs": 4,
+      "projected_total": 10.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -658,9 +658,9 @@
       "away_cn": "落磯",
       "inning": 2,
       "top_inning": false,
-      "home_runs": 3,
+      "home_runs": 5,
       "away_runs": 0,
-      "projected_total": 10.1,
+      "projected_total": 12.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -671,8 +671,8 @@
       "inning": 3,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 2,
-      "projected_total": 9.0,
+      "away_runs": 4,
+      "projected_total": 11.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
