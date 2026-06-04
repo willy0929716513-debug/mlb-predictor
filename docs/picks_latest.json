@@ -645,13 +645,13 @@
       "home_cn": "響尾蛇",
       "away_cn": "道奇",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
-      "away_runs": 5,
-      "projected_total": 8.0,
+      "away_runs": 7,
+      "projected_total": 9.5,
       "market_total": 9.0,
       "bet": "客隊獨贏",
-      "reason": "第7局客隊領先5分（賽前客隊勝率75%），大局已定"
+      "reason": "第7局客隊領先7分（賽前客隊勝率75%），大局已定"
     }
   ],
   "live_updated_ts": 1780544878,
