@@ -233,14 +233,14 @@
       "inning": 7,
       "top_inning": true,
       "home_runs": 3,
-      "away_runs": 10,
-      "projected_total": 16.0,
+      "away_runs": 12,
+      "projected_total": 18.0,
       "market_total": 9.0,
       "bet": "大小分 OVER",
-      "reason": "第7局已得13分（此時預期6.0分），高分走勢盤口9.0"
+      "reason": "第7局已得15分（此時預期6.0分），高分走勢盤口9.0"
     }
   ],
-  "live_updated_ts": 1780605204,
+  "live_updated_ts": 1780605506,
   "game_preds": {
     "phillies|padres": {
       "home_win_prob": 0.5154,
@@ -279,5 +279,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-05 04:33 (台灣時間)"
+  "live_updated_at": "2026-06-05 04:38 (台灣時間)"
 }
