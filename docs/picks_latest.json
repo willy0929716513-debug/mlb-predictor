@@ -228,18 +228,6 @@
   ],
   "live_games": [
     {
-      "home_cn": "費城人",
-      "away_cn": "教士",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 6,
-      "away_runs": 4,
-      "projected_total": 10.9,
-      "market_total": 8.5,
-      "bet": "主隊獨贏",
-      "reason": "第9局主隊領先2分（賽前主隊勝率52%），大局已定"
-    },
-    {
       "home_cn": "紅襪",
       "away_cn": "金鶯",
       "inning": 8,
@@ -276,7 +264,7 @@
       "reason": "第5局已得9分（此時預期4.5分），高分走勢盤口9.0"
     }
   ],
-  "live_updated_ts": 1780602486,
+  "live_updated_ts": 1780602788,
   "game_preds": {
     "phillies|padres": {
       "home_win_prob": 0.5154,
@@ -315,5 +303,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-05 03:48 (台灣時間)"
+  "live_updated_at": "2026-06-05 03:53 (台灣時間)"
 }
