@@ -620,14 +620,14 @@
     {
       "home_cn": "紅雀",
       "away_cn": "遊騎兵",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 5,
       "away_runs": 3,
-      "projected_total": 10.2,
+      "projected_total": 9.8,
       "market_total": 8.0,
       "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後2分 第7局，賽前客隊勝率56%"
+      "reason": "客隊落後2分 第8局，賽前客隊勝率56%"
     },
     {
       "home_cn": "小熊",
@@ -658,9 +658,9 @@
       "away_cn": "落磯",
       "inning": 2,
       "top_inning": false,
-      "home_runs": 2,
+      "home_runs": 3,
       "away_runs": 0,
-      "projected_total": 9.1,
+      "projected_total": 10.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -668,11 +668,11 @@
     {
       "home_cn": "響尾蛇",
       "away_cn": "道奇",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 9.5,
+      "projected_total": 9.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
