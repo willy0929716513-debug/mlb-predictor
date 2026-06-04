@@ -2971,9 +2971,7 @@ def run():
         _a_era_v = get_pitcher_era(away_sp)
         for btype,bside,bteam,bp,bk,model_p,edge_min,blend_p,con_p,conf_mult in candidates:
             if bp is None or bp<=0 or con_p is None or con_p<=0: continue
-            if bp/con_p - 1 > MAX_PRICE_GAP:
-                log.info("  SKIP %s|%s %s/%s: price_gap=%.2f>%.2f", home, away, btype, bside, bp/con_p-1, MAX_PRICE_GAP)
-                continue
+            if bp/con_p - 1 > MAX_PRICE_GAP: continue  # 賠率偏離共識>25%，疑似錯誤或過時報價
             # ★ TOT使用conf_tot（pure_total_tot基礎，RS影響更低）；ML/RL用conf
             _base_conf = conf_tot if btype == BET_TOT else conf
             bet_conf = _base_conf*conf_mult
@@ -2995,9 +2993,6 @@ def run():
                 elif _wr_hist > 0.68: bet_conf = round(min(1.0, bet_conf * 1.05), 4)
             # 統一用 edge×conf ≥ threshold（所有注單類型一致，低信心高edge也會被過濾）
             edge_ok = raw_edge * bet_conf >= edge_min
-            log.info("  CAND %s|%s %s/%s: model=%.3f dv=%.3f edge=%.4f conf=%.3f score=%.4f min=%.3f ok=%s bp=%.2f",
-                     home, away, btype, bside, model_p, _dv.get(bside, 1/bp), raw_edge, bet_conf,
-                     raw_edge*bet_conf, edge_min, edge_ok, bp)
             if not edge_ok: continue
             if bp<MIN_P or bp>MAX_P: continue
             if btype==BET_ML and (blend_p is None or
