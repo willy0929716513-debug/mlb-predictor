@@ -647,11 +647,11 @@
       "inning": 6,
       "top_inning": true,
       "home_runs": 3,
-      "away_runs": 4,
-      "projected_total": 10.6,
+      "away_runs": 5,
+      "projected_total": 11.6,
       "market_total": 8.0,
       "bet": "大小分 OVER",
-      "reason": "第6局已得7分（此時預期4.4分），高分走勢盤口8.0"
+      "reason": "第6局已得8分（此時預期4.4分），高分走勢盤口8.0"
     },
     {
       "home_cn": "天使",
