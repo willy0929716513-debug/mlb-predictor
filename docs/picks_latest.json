@@ -646,21 +646,21 @@
       "away_cn": "海盜",
       "inning": 5,
       "top_inning": false,
-      "home_runs": 2,
+      "home_runs": 3,
       "away_runs": 4,
-      "projected_total": 10.0,
+      "projected_total": 11.0,
       "market_total": 8.0,
       "bet": "大小分 OVER",
-      "reason": "第5局已得6分（此時預期4.0分），高分走勢盤口8.0"
+      "reason": "第5局已得7分（此時預期4.0分），高分走勢盤口8.0"
     },
     {
       "home_cn": "天使",
       "away_cn": "落磯",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 7.6,
+      "projected_total": 7.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
