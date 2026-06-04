@@ -680,11 +680,11 @@
     {
       "home_cn": "紅雀",
       "away_cn": "遊騎兵",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 4,
       "away_runs": 1,
-      "projected_total": 9.0,
+      "projected_total": 8.6,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -738,7 +738,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780536385,
+  "live_updated_ts": 1780536687,
   "game_preds": {
     "nationals|marlins": {
       "home_win_prob": 0.633,
