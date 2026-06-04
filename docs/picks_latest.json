@@ -252,7 +252,7 @@
       "reason": "第6局已得9分（此時預期5.0分），高分走勢盤口9.0"
     }
   ],
-  "live_updated_ts": 1780603392,
+  "live_updated_ts": 1780603694,
   "game_preds": {
     "phillies|padres": {
       "home_win_prob": 0.5154,
@@ -291,5 +291,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-05 04:03 (台灣時間)"
+  "live_updated_at": "2026-06-05 04:08 (台灣時間)"
 }
