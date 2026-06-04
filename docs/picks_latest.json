@@ -231,40 +231,28 @@
       "home_cn": "紅襪",
       "away_cn": "金鶯",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 8,
-      "projected_total": 11.3,
+      "projected_total": 10.8,
       "market_total": 10.5,
-      "bet": null,
-      "reason": null
-    },
-    {
-      "home_cn": "洋基",
-      "away_cn": "守護者",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 2,
-      "away_runs": 1,
-      "projected_total": 3.9,
-      "market_total": 8.5,
       "bet": null,
       "reason": null
     },
     {
       "home_cn": "釀酒人",
       "away_cn": "巨人",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 6,
-      "projected_total": 13.5,
+      "projected_total": 13.0,
       "market_total": 9.0,
       "bet": "大小分 OVER",
-      "reason": "第5局已得9分（此時預期4.5分），高分走勢盤口9.0"
+      "reason": "第6局已得9分（此時預期5.0分），高分走勢盤口9.0"
     }
   ],
-  "live_updated_ts": 1780603090,
+  "live_updated_ts": 1780603392,
   "game_preds": {
     "phillies|padres": {
       "home_win_prob": 0.5154,
@@ -303,5 +291,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-05 03:58 (台灣時間)"
+  "live_updated_at": "2026-06-05 04:03 (台灣時間)"
 }
