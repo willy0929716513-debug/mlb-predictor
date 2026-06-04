@@ -657,10 +657,10 @@
       "home_cn": "紅人",
       "away_cn": "皇家",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 2,
-      "projected_total": 7.8,
+      "projected_total": 7.3,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -668,14 +668,14 @@
     {
       "home_cn": "勇士",
       "away_cn": "藍鳥",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 4,
       "away_runs": 2,
-      "projected_total": 10.2,
+      "projected_total": 9.8,
       "market_total": 8.5,
-      "bet": "大小分 OVER",
-      "reason": "第5局已得6分（此時預期4.2分），高分走勢盤口8.5"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "釀酒人",
@@ -693,10 +693,10 @@
       "home_cn": "紅雀",
       "away_cn": "遊騎兵",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
-      "away_runs": 0,
-      "projected_total": 7.2,
+      "away_runs": 1,
+      "projected_total": 7.8,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -708,7 +708,7 @@
       "top_inning": false,
       "home_runs": 1,
       "away_runs": 2,
-      "projected_total": 10.5,
+      "projected_total": 10.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -717,10 +717,10 @@
       "home_cn": "太空人",
       "away_cn": "海盜",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 7.1,
+      "projected_total": 6.7,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -789,5 +789,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-04 08:35 (台灣時間)"
+  "live_updated_at": "2026-06-04 08:40 (台灣時間)"
 }
