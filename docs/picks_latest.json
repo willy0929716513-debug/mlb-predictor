@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-04 19:58 (台灣時間)",
-  "date": "2026-06-04",
+  "generated_at": "2026-06-05 00:10 (台灣時間)",
+  "date": "2026-06-05",
   "stats": {
     "settled": 122,
     "wins": 85,
@@ -39,13 +39,13 @@
       "home_cn": "響尾蛇",
       "bet_label": "道奇 獨贏",
       "bk": "FanDuel",
-      "bp": 1.74,
-      "con_p": 1.716,
-      "dv_p": 0.5615,
-      "edge": 20.1,
+      "bp": 1.76,
+      "con_p": 1.734,
+      "dv_p": 0.5554,
+      "edge": 21.3,
       "conf": 75.5,
       "stake": 50.0,
-      "model_p": 76.2,
+      "model_p": 76.9,
       "away_sp": "Justin Wrobleski",
       "home_sp": "Ryne Nelson",
       "away_era": 3.18,
@@ -74,7 +74,7 @@
       "ump_adj": null,
       "away_trend": 0.49,
       "home_trend": 0.32,
-      "line_clv": null,
+      "line_clv": -0.65,
       "game_date": "2026-06-05",
       "game_time": "09:41",
       "sp_src": "probable",
@@ -90,69 +90,6 @@
       "away_road_wpct": null,
       "home_l10_wpct": 0.5,
       "away_l10_wpct": 0.8,
-      "home_lineup": [],
-      "away_lineup": []
-    },
-    {
-      "tier": "⭐ 穩定",
-      "btype": "獨贏",
-      "away": "blue jays",
-      "home": "braves",
-      "away_cn": "藍鳥",
-      "home_cn": "勇士",
-      "bet_label": "勇士 獨贏",
-      "bk": "MyBookie.ag",
-      "bp": 1.51,
-      "con_p": 1.483,
-      "dv_p": 0.6468,
-      "edge": 11.3,
-      "conf": 78.7,
-      "stake": 50.0,
-      "model_p": 76.0,
-      "away_sp": "TBD",
-      "home_sp": "Chris Sale",
-      "away_era": 4.8,
-      "home_era": 1.53,
-      "away_fip": null,
-      "home_fip": 1.43,
-      "away_k9": null,
-      "home_k9": 12.0,
-      "away_avgip": null,
-      "home_avgip": 6.0,
-      "away_whip": null,
-      "home_whip": 1.11,
-      "away_rest": null,
-      "home_rest": null,
-      "away_rs": null,
-      "home_rs": 6.33,
-      "away_rpg": 4.21,
-      "home_rpg": 5.09,
-      "pred_away": 3.1,
-      "pred_home": 5.0,
-      "model_total": null,
-      "market_total": null,
-      "park_factor": null,
-      "weather_factor": null,
-      "ump_name": null,
-      "ump_adj": null,
-      "away_trend": null,
-      "home_trend": 0.9,
-      "line_clv": null,
-      "game_date": "2026-06-05",
-      "game_time": "07:15",
-      "sp_src": "probable",
-      "home_hand": "R",
-      "away_hand": null,
-      "home_babip": 0.341,
-      "away_babip": null,
-      "home_lob": 85.7,
-      "away_lob": null,
-      "away_road_days": 6,
-      "away_tz_cross": null,
-      "home_wpct": null,
-      "away_road_wpct": null,
-      "home_l10_wpct": 0.6,
-      "away_l10_wpct": null,
       "home_lineup": [],
       "away_lineup": []
     }
@@ -293,40 +230,40 @@
   "live_updated_ts": 1780546686,
   "game_preds": {
     "phillies|padres": {
-      "home_win_prob": 0.5181,
-      "market_total": 8.0
+      "home_win_prob": 0.5154,
+      "market_total": 8.5
     },
     "red sox|orioles": {
-      "home_win_prob": 0.6965,
-      "market_total": 10.0
+      "home_win_prob": 0.6928,
+      "market_total": 10.5
     },
     "yankees|guardians": {
-      "home_win_prob": 0.5729,
+      "home_win_prob": 0.5677,
       "market_total": 8.5
     },
     "brewers|giants": {
-      "home_win_prob": 0.6895,
+      "home_win_prob": 0.6987,
       "market_total": 9.0
     },
     "braves|blue jays": {
-      "home_win_prob": 0.76,
+      "home_win_prob": 0.7465,
       "market_total": 7.5
     },
     "twins|royals": {
-      "home_win_prob": 0.514,
+      "home_win_prob": 0.5024,
       "market_total": 9.0
     },
     "cubs|athletics": {
-      "home_win_prob": 0.3258,
-      "market_total": 10.0
+      "home_win_prob": 0.3325,
+      "market_total": 10.5
     },
     "astros|pirates": {
-      "home_win_prob": 0.6289,
+      "home_win_prob": 0.6237,
       "market_total": 8.5
     },
     "diamondbacks|dodgers": {
-      "home_win_prob": 0.2375,
-      "market_total": 9.5
+      "home_win_prob": 0.2312,
+      "market_total": 9.0
     }
   }
 }
