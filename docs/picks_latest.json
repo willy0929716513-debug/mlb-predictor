@@ -634,12 +634,12 @@
       "away_cn": "落磯",
       "inning": 6,
       "top_inning": false,
-      "home_runs": 9,
+      "home_runs": 10,
       "away_runs": 3,
-      "projected_total": 15.3,
+      "projected_total": 16.3,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第6局已得12分（此時預期5.2分），高分走勢盤口8.5"
+      "reason": "第6局已得13分（此時預期5.2分），高分走勢盤口8.5"
     },
     {
       "home_cn": "響尾蛇",
@@ -654,7 +654,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780543670,
+  "live_updated_ts": 1780543972,
   "game_preds": {
     "nationals|marlins": {
       "home_win_prob": 0.633,
@@ -717,5 +717,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-04 11:27 (台灣時間)"
+  "live_updated_at": "2026-06-04 11:32 (台灣時間)"
 }
