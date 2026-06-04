@@ -620,14 +620,14 @@
     {
       "home_cn": "洋基",
       "away_cn": "守護者",
-      "inning": 8,
+      "inning": 9,
       "top_inning": false,
       "home_runs": 3,
       "away_runs": 5,
-      "projected_total": 9.2,
+      "projected_total": 8.4,
       "market_total": 7.0,
       "bet": "客隊獨贏",
-      "reason": "第8局客隊領先2分（賽前客隊勝率62%），大局已定"
+      "reason": "第9局客隊領先2分（賽前客隊勝率62%），大局已定"
     },
     {
       "home_cn": "紅人",
@@ -640,18 +640,6 @@
       "market_total": 8.5,
       "bet": null,
       "reason": null
-    },
-    {
-      "home_cn": "勇士",
-      "away_cn": "藍鳥",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 7,
-      "away_runs": 3,
-      "projected_total": 10.9,
-      "market_total": 8.5,
-      "bet": "主隊獨贏",
-      "reason": "第9局主隊領先4分（賽前主隊勝率50%），大局已定"
     },
     {
       "home_cn": "釀酒人",
@@ -680,11 +668,11 @@
     {
       "home_cn": "小熊",
       "away_cn": "運動家",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 4,
       "away_runs": 2,
-      "projected_total": 10.5,
+      "projected_total": 10.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -789,5 +777,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-04 09:35 (台灣時間)"
+  "live_updated_at": "2026-06-04 09:40 (台灣時間)"
 }
