@@ -255,10 +255,10 @@
       "home_cn": "太空人",
       "away_cn": "海盜",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 5,
-      "projected_total": 8.8,
+      "projected_total": 8.4,
       "market_total": 8.5,
       "bet": null,
       "reason": null
