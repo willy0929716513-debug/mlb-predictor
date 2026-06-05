@@ -232,9 +232,9 @@
       "away_cn": "藍鳥",
       "inning": 8,
       "top_inning": false,
-      "home_runs": 1,
+      "home_runs": 2,
       "away_runs": 3,
-      "projected_total": 5.2,
+      "projected_total": 6.2,
       "market_total": 7.5,
       "bet": "主隊讓分(+1.5)",
       "reason": "主隊落後1分 第8局，賽前主隊勝率75%"
@@ -266,14 +266,14 @@
     {
       "home_cn": "太空人",
       "away_cn": "海盜",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 0,
-      "away_runs": 1,
-      "projected_total": 5.2,
+      "away_runs": 2,
+      "projected_total": 5.8,
       "market_total": 8.5,
-      "bet": "主隊讓分(+1.5)",
-      "reason": "主隊落後1分 第5局，賽前主隊勝率62%"
+      "bet": "大小分 UNDER",
+      "reason": "第6局僅2分（此時預期4.7分），低分走勢盤口8.5"
     },
     {
       "home_cn": "響尾蛇",
