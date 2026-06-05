@@ -242,23 +242,23 @@
     {
       "home_cn": "雙城",
       "away_cn": "皇家",
-      "inning": 5,
-      "top_inning": false,
-      "home_runs": 4,
+      "inning": 6,
+      "top_inning": true,
+      "home_runs": 5,
       "away_runs": 3,
-      "projected_total": 11.5,
+      "projected_total": 12.0,
       "market_total": 9.0,
       "bet": "大小分 OVER",
-      "reason": "第5局已得7分（此時預期4.5分），高分走勢盤口9.0"
+      "reason": "第6局已得8分（此時預期5.0分），高分走勢盤口9.0"
     },
     {
       "home_cn": "小熊",
       "away_cn": "運動家",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 6.8,
+      "projected_total": 6.2,
       "market_total": 10.5,
       "bet": null,
       "reason": null
@@ -266,17 +266,17 @@
     {
       "home_cn": "太空人",
       "away_cn": "海盜",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 7.1,
+      "projected_total": 6.7,
       "market_total": 8.5,
-      "bet": null,
-      "reason": null
+      "bet": "主隊讓分(+1.5)",
+      "reason": "主隊落後1分 第4局，賽前主隊勝率62%"
     }
   ],
-  "live_updated_ts": 1780621680,
+  "live_updated_ts": 1780621981,
   "game_preds": {
     "phillies|padres": {
       "home_win_prob": 0.5154,
@@ -315,5 +315,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-05 09:08 (台灣時間)"
+  "live_updated_at": "2026-06-05 09:13 (台灣時間)"
 }
