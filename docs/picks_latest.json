@@ -233,23 +233,23 @@
       "inning": 9,
       "top_inning": true,
       "home_runs": 6,
-      "away_runs": 6,
-      "projected_total": 13.0,
+      "away_runs": 8,
+      "projected_total": 15.0,
       "market_total": 9.0,
-      "bet": null,
-      "reason": null
+      "bet": "客隊獨贏",
+      "reason": "第9局客隊領先2分（賽前客隊勝率50%），大局已定"
     },
     {
       "home_cn": "響尾蛇",
       "away_cn": "道奇",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 4.0,
+      "projected_total": 3.5,
       "market_total": 9.0,
       "bet": "大小分 UNDER",
-      "reason": "第8局僅2分（此時預期7.0分），低分走勢盤口9.0"
+      "reason": "第8局僅2分（此時預期7.5分），低分走勢盤口9.0"
     }
   ],
   "live_updated_ts": 1780630221,
