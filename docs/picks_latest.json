@@ -233,8 +233,8 @@
       "inning": 3,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 5.8,
+      "away_runs": 3,
+      "projected_total": 8.8,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -242,11 +242,11 @@
     {
       "home_cn": "雙城",
       "away_cn": "皇家",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 10.5,
+      "projected_total": 10.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -276,7 +276,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780617763,
+  "live_updated_ts": 1780618064,
   "game_preds": {
     "phillies|padres": {
       "home_win_prob": 0.5154,
@@ -315,5 +315,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-05 08:02 (台灣時間)"
+  "live_updated_at": "2026-06-05 08:07 (台灣時間)"
 }
