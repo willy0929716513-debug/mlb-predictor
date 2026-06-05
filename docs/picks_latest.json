@@ -242,14 +242,14 @@
     {
       "home_cn": "響尾蛇",
       "away_cn": "道奇",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 4.5,
+      "projected_total": 4.0,
       "market_total": 9.0,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅2分（此時預期6.5分），低分走勢盤口9.0"
+      "reason": "第8局僅2分（此時預期7.0分），低分走勢盤口9.0"
     }
   ],
   "live_updated_ts": 1780629920,
