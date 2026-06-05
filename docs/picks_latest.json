@@ -359,8 +359,8 @@
       "inning": 1,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 7.5,
+      "away_runs": 1,
+      "projected_total": 8.5,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -400,9 +400,21 @@
       "market_total": 8.0,
       "bet": null,
       "reason": null
+    },
+    {
+      "home_cn": "馬林魚",
+      "away_cn": "光芒",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 7.5,
+      "market_total": 7.5,
+      "bet": null,
+      "reason": null
     }
   ],
-  "live_updated_ts": 1780699533,
+  "live_updated_ts": 1780699835,
   "game_preds": {
     "cubs|giants": {
       "home_win_prob": 0.5651,
@@ -465,5 +477,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-06 06:45 (台灣時間)"
+  "live_updated_at": "2026-06-06 06:50 (台灣時間)"
 }
