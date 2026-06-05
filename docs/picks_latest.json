@@ -383,8 +383,8 @@
       "inning": 3,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 0,
-      "projected_total": 7.2,
+      "away_runs": 1,
+      "projected_total": 8.2,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -422,6 +422,18 @@
       "away_runs": 0,
       "projected_total": 7.1,
       "market_total": 8.5,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "太空人",
+      "away_cn": "運動家",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 9.0,
+      "market_total": 9.0,
       "bet": null,
       "reason": null
     }
