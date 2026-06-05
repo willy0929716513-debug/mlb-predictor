@@ -231,10 +231,10 @@
       "home_cn": "勇士",
       "away_cn": "藍鳥",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 7,
-      "projected_total": 9.8,
+      "projected_total": 9.4,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -254,11 +254,11 @@
     {
       "home_cn": "小熊",
       "away_cn": "運動家",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 6,
-      "projected_total": 11.9,
+      "projected_total": 11.3,
       "market_total": 10.5,
       "bet": "客隊獨贏",
       "reason": "第8局客隊領先3分（賽前客隊勝率67%），大局已定"
@@ -268,7 +268,7 @@
       "away_cn": "海盜",
       "inning": 6,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 1,
       "away_runs": 5,
       "projected_total": 9.3,
       "market_total": 8.5,
@@ -288,7 +288,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780624795,
+  "live_updated_ts": 1780625096,
   "game_preds": {
     "phillies|padres": {
       "home_win_prob": 0.5154,
@@ -327,5 +327,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-05 09:59 (台灣時間)"
+  "live_updated_at": "2026-06-05 10:04 (台灣時間)"
 }
