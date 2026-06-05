@@ -261,7 +261,7 @@
       "projected_total": 11.9,
       "market_total": 10.5,
       "bet": "客隊獨贏",
-      "reason": "第7局客隊領先3分（賽前客隊勝率67%），大局已定"
+      "reason": "第8局客隊領先3分（賽前客隊勝率67%），大局已定"
     },
     {
       "home_cn": "太空人",
@@ -270,7 +270,7 @@
       "top_inning": false,
       "home_runs": 0,
       "away_runs": 5,
-      "projected_total": 8.8,
+      "projected_total": 9.3,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -279,10 +279,10 @@
       "home_cn": "響尾蛇",
       "away_cn": "道奇",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.0,
+      "projected_total": 7.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
