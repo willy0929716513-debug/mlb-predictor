@@ -252,7 +252,7 @@
       "reason": "第8局僅2分（此時預期7.5分），低分走勢盤口9.0"
     }
   ],
-  "live_updated_ts": 1780630221,
+  "live_updated_ts": 1780630523,
   "game_preds": {
     "phillies|padres": {
       "home_win_prob": 0.5154,
@@ -291,5 +291,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-05 11:30 (台灣時間)"
+  "live_updated_at": "2026-06-05 11:35 (台灣時間)"
 }
