@@ -240,25 +240,13 @@
       "reason": "第7局已得12分（此時預期6.0分），高分走勢盤口9.0"
     },
     {
-      "home_cn": "小熊",
-      "away_cn": "運動家",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 6,
-      "away_runs": 6,
-      "projected_total": 12.6,
-      "market_total": 10.5,
-      "bet": null,
-      "reason": null
-    },
-    {
       "home_cn": "太空人",
       "away_cn": "海盜",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 5,
-      "projected_total": 6.9,
+      "projected_total": 6.5,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -267,7 +255,7 @@
       "home_cn": "響尾蛇",
       "away_cn": "道奇",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
       "projected_total": 6.0,
