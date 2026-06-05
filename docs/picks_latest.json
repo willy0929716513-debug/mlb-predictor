@@ -359,14 +359,14 @@
       "inning": 6,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 10,
-      "projected_total": 14.9,
+      "away_runs": 13,
+      "projected_total": 17.9,
       "market_total": 11.0,
       "bet": "大小分 OVER",
-      "reason": "第6局已得10分（此時預期6.1分），高分走勢盤口11.0"
+      "reason": "第6局已得13分（此時預期6.1分），高分走勢盤口11.0"
     }
   ],
-  "live_updated_ts": 1780693801,
+  "live_updated_ts": 1780694103,
   "game_preds": {
     "cubs|giants": {
       "home_win_prob": 0.5651,
@@ -429,5 +429,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-06 05:10 (台灣時間)"
+  "live_updated_at": "2026-06-06 05:15 (台灣時間)"
 }
