@@ -232,24 +232,24 @@
       "away_cn": "皇家",
       "inning": 6,
       "top_inning": false,
-      "home_runs": 5,
+      "home_runs": 6,
       "away_runs": 6,
-      "projected_total": 14.5,
+      "projected_total": 15.5,
       "market_total": 9.0,
       "bet": "大小分 OVER",
-      "reason": "第6局已得11分（此時預期5.5分），高分走勢盤口9.0"
+      "reason": "第6局已得12分（此時預期5.5分），高分走勢盤口9.0"
     },
     {
       "home_cn": "小熊",
       "away_cn": "運動家",
       "inning": 9,
       "top_inning": false,
-      "home_runs": 4,
+      "home_runs": 5,
       "away_runs": 6,
-      "projected_total": 10.6,
+      "projected_total": 11.6,
       "market_total": 10.5,
-      "bet": "客隊獨贏",
-      "reason": "第9局客隊領先2分（賽前客隊勝率67%），大局已定"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "太空人",
