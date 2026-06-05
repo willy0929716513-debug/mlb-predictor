@@ -356,17 +356,17 @@
     {
       "home_cn": "小熊",
       "away_cn": "巨人",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 3,
-      "away_runs": 16,
-      "projected_total": 20.8,
+      "away_runs": 18,
+      "projected_total": 22.2,
       "market_total": 11.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1780697120,
+  "live_updated_ts": 1780697421,
   "game_preds": {
     "cubs|giants": {
       "home_win_prob": 0.5651,
@@ -429,5 +429,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-06 06:05 (台灣時間)"
+  "live_updated_at": "2026-06-06 06:10 (台灣時間)"
 }
