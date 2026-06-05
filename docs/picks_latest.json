@@ -236,8 +236,8 @@
       "away_runs": 3,
       "projected_total": 6.2,
       "market_total": 7.5,
-      "bet": "主隊讓分(+1.5)",
-      "reason": "主隊落後1分 第8局，賽前主隊勝率75%"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "雙城",
@@ -257,11 +257,11 @@
       "inning": 7,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 4,
-      "projected_total": 8.5,
+      "away_runs": 6,
+      "projected_total": 10.5,
       "market_total": 10.5,
       "bet": "客隊獨贏",
-      "reason": "第7局客隊領先3分（賽前客隊勝率67%），大局已定"
+      "reason": "第7局客隊領先5分（賽前客隊勝率67%），大局已定"
     },
     {
       "home_cn": "太空人",
@@ -288,7 +288,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780623589,
+  "live_updated_ts": 1780623891,
   "game_preds": {
     "phillies|padres": {
       "home_win_prob": 0.5154,
@@ -327,5 +327,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-05 09:39 (台灣時間)"
+  "live_updated_at": "2026-06-05 09:44 (台灣時間)"
 }
