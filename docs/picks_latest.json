@@ -261,7 +261,7 @@
       "projected_total": 9.9,
       "market_total": 10.5,
       "bet": "客隊獨贏",
-      "reason": "第7局客隊領先5分（賽前客隊勝率67%），大局已定"
+      "reason": "第7局客隊領先3分（賽前客隊勝率67%），大局已定"
     },
     {
       "home_cn": "太空人",
@@ -269,8 +269,8 @@
       "inning": 6,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 4,
-      "projected_total": 7.8,
+      "away_runs": 5,
+      "projected_total": 8.8,
       "market_total": 8.5,
       "bet": null,
       "reason": null
