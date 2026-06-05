@@ -231,10 +231,10 @@
       "home_cn": "勇士",
       "away_cn": "藍鳥",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 3,
-      "projected_total": 8.8,
+      "projected_total": 8.4,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -245,8 +245,8 @@
       "inning": 2,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 1,
-      "projected_total": 10.0,
+      "away_runs": 2,
+      "projected_total": 11.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -255,10 +255,10 @@
       "home_cn": "小熊",
       "away_cn": "運動家",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 10.5,
+      "projected_total": 9.9,
       "market_total": 10.5,
       "bet": null,
       "reason": null
@@ -276,7 +276,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780618064,
+  "live_updated_ts": 1780618366,
   "game_preds": {
     "phillies|padres": {
       "home_win_prob": 0.5154,
@@ -315,5 +315,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-05 08:07 (台灣時間)"
+  "live_updated_at": "2026-06-05 08:12 (台灣時間)"
 }
