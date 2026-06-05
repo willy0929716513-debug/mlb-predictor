@@ -257,14 +257,14 @@
       "inning": 5,
       "top_inning": false,
       "home_runs": 0,
-      "away_runs": 1,
-      "projected_total": 6.0,
+      "away_runs": 2,
+      "projected_total": 6.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1780627508,
+  "live_updated_ts": 1780627810,
   "game_preds": {
     "phillies|padres": {
       "home_win_prob": 0.5154,
@@ -303,5 +303,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-05 10:45 (台灣時間)"
+  "live_updated_at": "2026-06-05 10:50 (台灣時間)"
 }
