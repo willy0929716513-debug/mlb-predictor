@@ -228,25 +228,13 @@
   ],
   "live_games": [
     {
-      "home_cn": "雙城",
-      "away_cn": "皇家",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 6,
-      "away_runs": 8,
-      "projected_total": 14.5,
-      "market_total": 9.0,
-      "bet": "客隊獨贏",
-      "reason": "第9局客隊領先2分（賽前客隊勝率50%），大局已定"
-    },
-    {
       "home_cn": "響尾蛇",
       "away_cn": "道奇",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 2,
-      "projected_total": 5.0,
+      "projected_total": 4.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
