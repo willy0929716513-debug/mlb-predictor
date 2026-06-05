@@ -276,7 +276,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780626001,
+  "live_updated_ts": 1780626302,
   "game_preds": {
     "phillies|padres": {
       "home_win_prob": 0.5154,
@@ -315,5 +315,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-05 10:20 (台灣時間)"
+  "live_updated_at": "2026-06-05 10:25 (台灣時間)"
 }
