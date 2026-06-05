@@ -231,10 +231,10 @@
       "home_cn": "雙城",
       "away_cn": "皇家",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 6,
       "away_runs": 8,
-      "projected_total": 15.0,
+      "projected_total": 14.5,
       "market_total": 9.0,
       "bet": "客隊獨贏",
       "reason": "第9局客隊領先2分（賽前客隊勝率50%），大局已定"
@@ -252,7 +252,7 @@
       "reason": "第8局僅3分（此時預期7.5分），低分走勢盤口9.0"
     }
   ],
-  "live_updated_ts": 1780630523,
+  "live_updated_ts": 1780630824,
   "game_preds": {
     "phillies|padres": {
       "home_win_prob": 0.5154,
@@ -291,5 +291,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-05 11:35 (台灣時間)"
+  "live_updated_at": "2026-06-05 11:40 (台灣時間)"
 }
