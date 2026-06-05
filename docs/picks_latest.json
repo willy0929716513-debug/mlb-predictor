@@ -378,7 +378,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780698326,
+  "live_updated_ts": 1780698628,
   "game_preds": {
     "cubs|giants": {
       "home_win_prob": 0.5651,
@@ -441,5 +441,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-06 06:25 (台灣時間)"
+  "live_updated_at": "2026-06-06 06:30 (台灣時間)"
 }
