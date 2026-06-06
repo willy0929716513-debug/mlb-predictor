@@ -356,14 +356,14 @@
     {
       "home_cn": "太空人",
       "away_cn": "運動家",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 5,
       "away_runs": 1,
-      "projected_total": 9.5,
+      "projected_total": 9.0,
       "market_total": 9.0,
-      "bet": null,
-      "reason": null
+      "bet": "主隊獨贏",
+      "reason": "第7局主隊領先4分（賽前主隊勝率54%），大局已定"
     },
     {
       "home_cn": "紅雀",
@@ -392,11 +392,11 @@
     {
       "home_cn": "雙城",
       "away_cn": "皇家",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 9.1,
+      "projected_total": 8.6,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -462,7 +462,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780711318,
+  "live_updated_ts": 1780711620,
   "game_preds": {
     "cubs|giants": {
       "home_win_prob": 0.5651,
@@ -525,5 +525,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-06 10:01 (台灣時間)"
+  "live_updated_at": "2026-06-06 10:07 (台灣時間)"
 }
