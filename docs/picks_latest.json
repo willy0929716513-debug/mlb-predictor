@@ -356,14 +356,14 @@
     {
       "home_cn": "紅雀",
       "away_cn": "紅人",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 10,
       "away_runs": 3,
-      "projected_total": 14.5,
+      "projected_total": 14.0,
       "market_total": 9.0,
       "bet": "主隊獨贏",
-      "reason": "第8局主隊領先7分（賽前主隊勝率67%），大局已定"
+      "reason": "第9局主隊領先7分（賽前主隊勝率67%），大局已定"
     },
     {
       "home_cn": "雙城",
@@ -393,7 +393,7 @@
       "home_cn": "響尾蛇",
       "away_cn": "國民",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 12,
       "projected_total": 17.0,
@@ -426,7 +426,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780715539,
+  "live_updated_ts": 1780715841,
   "game_preds": {
     "cubs|giants": {
       "home_win_prob": 0.5651,
@@ -489,5 +489,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-06 11:12 (台灣時間)"
+  "live_updated_at": "2026-06-06 11:17 (台灣時間)"
 }
