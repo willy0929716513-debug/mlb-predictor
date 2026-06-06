@@ -356,11 +356,11 @@
     {
       "home_cn": "老虎",
       "away_cn": "水手",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 5,
       "away_runs": 2,
-      "projected_total": 9.1,
+      "projected_total": 8.7,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -381,13 +381,13 @@
       "home_cn": "洋基",
       "away_cn": "紅襪",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 5,
-      "projected_total": 10.7,
+      "projected_total": 10.2,
       "market_total": 8.0,
-      "bet": "大小分 OVER",
-      "reason": "第7局已得8分（此時預期5.3分），高分走勢盤口8.0"
+      "bet": "客隊獨贏",
+      "reason": "第7局客隊領先2分（賽前客隊勝率54%），大局已定"
     },
     {
       "home_cn": "藍鳥",
