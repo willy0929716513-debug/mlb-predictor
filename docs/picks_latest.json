@@ -357,10 +357,10 @@
       "home_cn": "老虎",
       "away_cn": "水手",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 1,
-      "projected_total": 7.3,
+      "projected_total": 6.9,
       "market_total": 7.5,
       "bet": "客隊讓分(+1.5)",
       "reason": "客隊落後2分 第6局，賽前客隊勝率77%"
@@ -369,25 +369,25 @@
       "home_cn": "費城人",
       "away_cn": "白襪",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 6,
       "away_runs": 5,
-      "projected_total": 14.8,
+      "projected_total": 14.3,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第6局已得11分（此時預期4.7分），高分走勢盤口8.5"
+      "reason": "第6局已得11分（此時預期5.2分），高分走勢盤口8.5"
     },
     {
       "home_cn": "洋基",
       "away_cn": "紅襪",
       "inning": 5,
       "top_inning": false,
-      "home_runs": 2,
+      "home_runs": 3,
       "away_runs": 5,
-      "projected_total": 11.0,
+      "projected_total": 12.0,
       "market_total": 8.0,
       "bet": "大小分 OVER",
-      "reason": "第5局已得7分（此時預期4.0分），高分走勢盤口8.0"
+      "reason": "第5局已得8分（此時預期4.0分），高分走勢盤口8.0"
     },
     {
       "home_cn": "藍鳥",
@@ -474,7 +474,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780705425,
+  "live_updated_ts": 1780705726,
   "game_preds": {
     "cubs|giants": {
       "home_win_prob": 0.5651,
@@ -537,5 +537,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-06 08:23 (台灣時間)"
+  "live_updated_at": "2026-06-06 08:28 (台灣時間)"
 }
