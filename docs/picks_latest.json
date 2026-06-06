@@ -357,10 +357,10 @@
       "home_cn": "雙城",
       "away_cn": "皇家",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 5,
       "away_runs": 2,
-      "projected_total": 8.9,
+      "projected_total": 8.4,
       "market_total": 8.5,
       "bet": null,
       "reason": null
