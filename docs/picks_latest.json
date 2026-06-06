@@ -566,12 +566,12 @@
       "away_cn": "運動家",
       "inning": 5,
       "top_inning": false,
-      "home_runs": 10,
+      "home_runs": 13,
       "away_runs": 2,
-      "projected_total": 16.5,
+      "projected_total": 19.5,
       "market_total": 9.0,
       "bet": "大小分 OVER",
-      "reason": "第5局已得12分（此時預期4.5分），高分走勢盤口9.0"
+      "reason": "第5局已得15分（此時預期4.5分），高分走勢盤口9.0"
     },
     {
       "home_cn": "勇士",
@@ -598,7 +598,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780783206,
+  "live_updated_ts": 1780783507,
   "game_preds": {
     "tigers|mariners": {
       "home_win_prob": 0.304,
@@ -661,5 +661,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-07 06:00 (台灣時間)"
+  "live_updated_at": "2026-06-07 06:05 (台灣時間)"
 }
