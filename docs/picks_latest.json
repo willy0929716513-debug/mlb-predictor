@@ -360,22 +360,10 @@
       "top_inning": false,
       "home_runs": 3,
       "away_runs": 13,
-      "projected_total": 16.9,
+      "projected_total": 16.4,
       "market_total": 8.0,
       "bet": "客隊獨贏",
       "reason": "第9局客隊領先10分（賽前客隊勝率65%），大局已定"
-    },
-    {
-      "home_cn": "勇士",
-      "away_cn": "海盜",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 6,
-      "away_runs": 3,
-      "projected_total": 9.9,
-      "market_total": 8.5,
-      "bet": "主隊獨贏",
-      "reason": "第9局主隊領先3分（賽前主隊勝率46%），大局已定"
     },
     {
       "home_cn": "太空人",
@@ -416,11 +404,11 @@
     {
       "home_cn": "雙城",
       "away_cn": "皇家",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 10.0,
+      "projected_total": 9.6,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -428,11 +416,11 @@
     {
       "home_cn": "落磯",
       "away_cn": "釀酒人",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 1,
-      "projected_total": 12.7,
+      "projected_total": 12.0,
       "market_total": 12.0,
       "bet": null,
       "reason": null
@@ -472,21 +460,9 @@
       "market_total": 8.0,
       "bet": null,
       "reason": null
-    },
-    {
-      "home_cn": "道奇",
-      "away_cn": "天使",
-      "inning": 1,
-      "top_inning": true,
-      "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 8.0,
-      "market_total": 8.0,
-      "bet": null,
-      "reason": null
     }
   ],
-  "live_updated_ts": 1780710414,
+  "live_updated_ts": 1780710716,
   "game_preds": {
     "cubs|giants": {
       "home_win_prob": 0.5651,
@@ -549,5 +525,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-06 09:46 (台灣時間)"
+  "live_updated_at": "2026-06-06 09:51 (台灣時間)"
 }
