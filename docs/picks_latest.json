@@ -354,18 +354,6 @@
   ],
   "live_games": [
     {
-      "home_cn": "藍鳥",
-      "away_cn": "金鶯",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 3,
-      "away_runs": 13,
-      "projected_total": 16.4,
-      "market_total": 8.0,
-      "bet": "客隊獨贏",
-      "reason": "第9局客隊領先10分（賽前客隊勝率65%），大局已定"
-    },
-    {
       "home_cn": "太空人",
       "away_cn": "運動家",
       "inning": 6,
@@ -405,10 +393,10 @@
       "home_cn": "雙城",
       "away_cn": "皇家",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 9.6,
+      "projected_total": 9.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -428,11 +416,11 @@
     {
       "home_cn": "響尾蛇",
       "away_cn": "國民",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 10.5,
+      "projected_total": 10.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -443,9 +431,21 @@
       "inning": 2,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 6.7,
+      "away_runs": 1,
+      "projected_total": 7.7,
       "market_total": 7.5,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "道奇",
+      "away_cn": "天使",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 8.0,
+      "market_total": 8.0,
       "bet": null,
       "reason": null
     }
