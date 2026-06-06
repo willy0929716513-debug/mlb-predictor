@@ -370,12 +370,12 @@
       "away_cn": "紅人",
       "inning": 6,
       "top_inning": false,
-      "home_runs": 5,
+      "home_runs": 6,
       "away_runs": 3,
-      "projected_total": 11.5,
+      "projected_total": 12.5,
       "market_total": 9.0,
       "bet": "大小分 OVER",
-      "reason": "第6局已得8分（此時預期5.5分），高分走勢盤口9.0"
+      "reason": "第6局已得9分（此時預期5.5分），高分走勢盤口9.0"
     },
     {
       "home_cn": "遊騎兵",
@@ -419,8 +419,8 @@
       "inning": 3,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 3,
-      "projected_total": 10.0,
+      "away_runs": 6,
+      "projected_total": 13.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -432,7 +432,7 @@
       "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 7.8,
+      "projected_total": 7.4,
       "market_total": 7.5,
       "bet": null,
       "reason": null
