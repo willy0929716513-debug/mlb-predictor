@@ -370,12 +370,12 @@
       "away_cn": "紅人",
       "inning": 6,
       "top_inning": false,
-      "home_runs": 4,
+      "home_runs": 5,
       "away_runs": 3,
-      "projected_total": 10.5,
+      "projected_total": 11.5,
       "market_total": 9.0,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第6局已得8分（此時預期5.5分），高分走勢盤口9.0"
     },
     {
       "home_cn": "遊騎兵",
@@ -405,13 +405,13 @@
       "home_cn": "落磯",
       "away_cn": "釀酒人",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 1,
-      "projected_total": 9.3,
+      "projected_total": 8.7,
       "market_total": 12.0,
       "bet": "大小分 UNDER",
-      "reason": "第6局僅4分（此時預期6.7分），低分走勢盤口12.0"
+      "reason": "第6局僅4分（此時預期7.3分），低分走勢盤口12.0"
     },
     {
       "home_cn": "響尾蛇",
@@ -419,8 +419,8 @@
       "inning": 3,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 2,
-      "projected_total": 9.0,
+      "away_runs": 3,
+      "projected_total": 10.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -431,8 +431,8 @@
       "inning": 3,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 1,
-      "projected_total": 6.8,
+      "away_runs": 2,
+      "projected_total": 7.8,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -441,10 +441,10 @@
       "home_cn": "道奇",
       "away_cn": "天使",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.0,
+      "projected_total": 7.6,
       "market_total": 8.0,
       "bet": null,
       "reason": null
