@@ -369,7 +369,7 @@
       "home_cn": "落磯",
       "away_cn": "釀酒人",
       "inning": 10,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 5,
       "away_runs": 9,
       "projected_total": 14.0,
@@ -404,17 +404,17 @@
     {
       "home_cn": "道奇",
       "away_cn": "天使",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 3.1,
+      "projected_total": 2.7,
       "market_total": 8.0,
       "bet": "大小分 UNDER",
-      "reason": "第6局僅0分（此時預期4.9分），低分走勢盤口8.0"
+      "reason": "第7局僅0分（此時預期5.3分），低分走勢盤口8.0"
     }
   ],
-  "live_updated_ts": 1780717650,
+  "live_updated_ts": 1780717951,
   "game_preds": {
     "cubs|giants": {
       "home_win_prob": 0.5651,
@@ -477,5 +477,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-06 11:47 (台灣時間)"
+  "live_updated_at": "2026-06-06 11:52 (台灣時間)"
 }
