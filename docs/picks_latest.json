@@ -538,19 +538,19 @@
   ],
   "live_games": [
     {
-      "home_cn": "太空人",
-      "away_cn": "運動家",
-      "inning": 9,
+      "home_cn": "遊騎兵",
+      "away_cn": "守護者",
+      "inning": 1,
       "top_inning": true,
-      "home_runs": 13,
-      "away_runs": 2,
-      "projected_total": 16.0,
-      "market_total": 9.0,
-      "bet": "主隊獨贏",
-      "reason": "第9局主隊領先11分（賽前主隊勝率62%），大局已定"
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 8.0,
+      "market_total": 8.0,
+      "bet": null,
+      "reason": null
     }
   ],
-  "live_updated_ts": 1780787123,
+  "live_updated_ts": 1780788025,
   "game_preds": {
     "tigers|mariners": {
       "home_win_prob": 0.304,
@@ -613,5 +613,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-07 07:05 (台灣時間)"
+  "live_updated_at": "2026-06-07 07:20 (台灣時間)"
 }
