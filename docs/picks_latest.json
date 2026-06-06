@@ -404,23 +404,23 @@
     {
       "home_cn": "落磯",
       "away_cn": "釀酒人",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 1,
-      "projected_total": 10.0,
+      "projected_total": 9.3,
       "market_total": 12.0,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 UNDER",
+      "reason": "第6局僅4分（此時預期6.7分），低分走勢盤口12.0"
     },
     {
       "home_cn": "響尾蛇",
       "away_cn": "國民",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 9.5,
+      "projected_total": 9.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
