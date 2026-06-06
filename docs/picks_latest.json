@@ -428,11 +428,11 @@
     {
       "home_cn": "太空人",
       "away_cn": "運動家",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 0,
-      "projected_total": 11.5,
+      "projected_total": 11.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -441,10 +441,10 @@
       "home_cn": "紅雀",
       "away_cn": "紅人",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
-      "away_runs": 2,
-      "projected_total": 11.0,
+      "away_runs": 3,
+      "projected_total": 11.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -452,11 +452,11 @@
     {
       "home_cn": "遊騎兵",
       "away_cn": "守護者",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 8.1,
+      "projected_total": 7.7,
       "market_total": 7.5,
       "bet": null,
       "reason": null
