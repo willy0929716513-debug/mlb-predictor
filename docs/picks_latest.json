@@ -393,10 +393,10 @@
       "home_cn": "教士",
       "away_cn": "大都會",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 4,
-      "projected_total": 5.7,
+      "projected_total": 5.2,
       "market_total": 7.5,
       "bet": "客隊獨贏",
       "reason": "第8局客隊領先4分（賽前客隊勝率66%），大局已定"
