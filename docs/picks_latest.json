@@ -396,31 +396,31 @@
       "top_inning": false,
       "home_runs": 1,
       "away_runs": 12,
-      "projected_total": 17.0,
+      "projected_total": 16.5,
       "market_total": 9.0,
       "bet": "大小分 OVER",
-      "reason": "第6局已得13分（此時預期5.0分），高分走勢盤口9.0"
+      "reason": "第6局已得13分（此時預期5.5分），高分走勢盤口9.0"
     },
     {
       "home_cn": "教士",
       "away_cn": "大都會",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 4,
-      "projected_total": 6.9,
+      "projected_total": 6.5,
       "market_total": 7.5,
-      "bet": null,
-      "reason": null
+      "bet": "客隊獨贏",
+      "reason": "第7局客隊領先4分（賽前客隊勝率66%），大局已定"
     },
     {
       "home_cn": "道奇",
       "away_cn": "天使",
-      "inning": 4,
-      "top_inning": false,
+      "inning": 5,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 4.9,
+      "projected_total": 4.4,
       "market_total": 8.0,
       "bet": null,
       "reason": null
