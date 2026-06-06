@@ -356,11 +356,11 @@
     {
       "home_cn": "紅雀",
       "away_cn": "紅人",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 10,
       "away_runs": 3,
-      "projected_total": 15.5,
+      "projected_total": 15.0,
       "market_total": 9.0,
       "bet": "大小分 OVER",
       "reason": "第7局已得13分（此時預期6.5分），高分走勢盤口9.0"
@@ -370,9 +370,9 @@
       "away_cn": "皇家",
       "inning": 6,
       "top_inning": false,
-      "home_runs": 2,
+      "home_runs": 4,
       "away_runs": 2,
-      "projected_total": 7.3,
+      "projected_total": 9.3,
       "market_total": 8.5,
       "bet": "客隊讓分(+1.5)",
       "reason": "客隊落後1分 第6局，賽前客隊勝率59%"
@@ -416,11 +416,11 @@
     {
       "home_cn": "道奇",
       "away_cn": "天使",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 5.8,
+      "projected_total": 5.3,
       "market_total": 8.0,
       "bet": null,
       "reason": null
