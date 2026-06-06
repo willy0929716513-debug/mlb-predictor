@@ -380,11 +380,11 @@
     {
       "home_cn": "遊騎兵",
       "away_cn": "守護者",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 7.9,
+      "projected_total": 7.5,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -429,6 +429,18 @@
       "home_cn": "教士",
       "away_cn": "大都會",
       "inning": 2,
+      "top_inning": false,
+      "home_runs": 0,
+      "away_runs": 1,
+      "projected_total": 7.2,
+      "market_total": 7.5,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "道奇",
+      "away_cn": "天使",
+      "inning": 1,
       "top_inning": true,
       "home_runs": 0,
       "away_runs": 1,
@@ -450,7 +462,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780711017,
+  "live_updated_ts": 1780711318,
   "game_preds": {
     "cubs|giants": {
       "home_win_prob": 0.5651,
@@ -513,5 +525,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-06 09:56 (台灣時間)"
+  "live_updated_at": "2026-06-06 10:01 (台灣時間)"
 }
