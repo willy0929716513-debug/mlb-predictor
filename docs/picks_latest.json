@@ -363,7 +363,7 @@
       "projected_total": 15.5,
       "market_total": 9.0,
       "bet": "大小分 OVER",
-      "reason": "第7局已得13分（此時預期6.0分），高分走勢盤口9.0"
+      "reason": "第7局已得13分（此時預期6.5分），高分走勢盤口9.0"
     },
     {
       "home_cn": "雙城",
@@ -374,8 +374,8 @@
       "away_runs": 2,
       "projected_total": 7.3,
       "market_total": 8.5,
-      "bet": null,
-      "reason": null
+      "bet": "客隊讓分(+1.5)",
+      "reason": "客隊落後1分 第6局，賽前客隊勝率59%"
     },
     {
       "home_cn": "落磯",
@@ -426,7 +426,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780714333,
+  "live_updated_ts": 1780714635,
   "game_preds": {
     "cubs|giants": {
       "home_win_prob": 0.5651,
@@ -489,5 +489,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-06 10:52 (台灣時間)"
+  "live_updated_at": "2026-06-06 10:57 (台灣時間)"
 }
