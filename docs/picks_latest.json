@@ -369,10 +369,10 @@
       "home_cn": "雙城",
       "away_cn": "皇家",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 5,
       "away_runs": 2,
-      "projected_total": 9.8,
+      "projected_total": 9.4,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -381,10 +381,10 @@
       "home_cn": "落磯",
       "away_cn": "釀酒人",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 5,
-      "projected_total": 9.3,
+      "projected_total": 8.7,
       "market_total": 12.0,
       "bet": null,
       "reason": null
@@ -426,7 +426,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780715841,
+  "live_updated_ts": 1780716143,
   "game_preds": {
     "cubs|giants": {
       "home_win_prob": 0.5651,
@@ -489,5 +489,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-06 11:17 (台灣時間)"
+  "live_updated_at": "2026-06-06 11:22 (台灣時間)"
 }
