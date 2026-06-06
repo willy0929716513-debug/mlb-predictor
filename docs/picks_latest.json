@@ -536,8 +536,57 @@
       "result": "W"
     }
   ],
-  "live_games": [],
-  "live_updated_ts": 1780719587,
+  "live_games": [
+    {
+      "home_cn": "老虎",
+      "away_cn": "水手",
+      "inning": 6,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 4,
+      "projected_total": 8.0,
+      "market_total": 9.0,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "雙城",
+      "away_cn": "皇家",
+      "inning": 3,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 1,
+      "projected_total": 7.6,
+      "market_total": 8.5,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "紅雀",
+      "away_cn": "紅人",
+      "inning": 3,
+      "top_inning": true,
+      "home_runs": 3,
+      "away_runs": 0,
+      "projected_total": 10.0,
+      "market_total": 9.0,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "小熊",
+      "away_cn": "巨人",
+      "inning": 2,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 6.7,
+      "market_total": 7.5,
+      "bet": null,
+      "reason": null
+    }
+  ],
+  "live_updated_ts": 1780771754,
   "game_preds": {
     "tigers|mariners": {
       "home_win_prob": 0.304,
@@ -599,5 +648,6 @@
       "home_win_prob": 0.445,
       "market_total": 8.0
     }
-  }
+  },
+  "live_updated_at": "2026-06-07 02:49 (台灣時間)"
 }
