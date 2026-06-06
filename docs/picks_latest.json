@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-06 22:56 (台灣時間)",
-  "date": "2026-06-06",
+  "generated_at": "2026-06-07 00:07 (台灣時間)",
+  "date": "2026-06-07",
   "stats": {
     "settled": 130,
     "wins": 89,
@@ -40,12 +40,12 @@
       "bet_label": "UNDER 9.0",
       "bk": "MyBookie.ag",
       "bp": 2.0,
-      "con_p": 1.863,
-      "dv_p": 0.5128,
-      "edge": 28.8,
+      "con_p": 1.87,
+      "dv_p": 0.5116,
+      "edge": 28.7,
       "conf": 70.6,
-      "stake": 52.9,
-      "model_p": 78.7,
+      "stake": 52.3,
+      "model_p": 78.5,
       "away_sp": "Bryce Miller",
       "home_sp": "Keider Montero",
       "away_era": 1.72,
@@ -69,12 +69,12 @@
       "model_total": 6.7,
       "market_total": 9.0,
       "park_factor": null,
-      "weather_factor": 0.979,
-      "ump_name": "chris segal",
+      "weather_factor": 0.98,
+      "ump_name": null,
       "ump_adj": null,
       "away_trend": 0.05,
       "home_trend": -1.53,
-      "line_clv": null,
+      "line_clv": 0.0,
       "game_date": "2026-06-07",
       "game_time": "01:11",
       "sp_src": "probable",
@@ -193,11 +193,11 @@
       "away_cn": "巨人",
       "home_cn": "小熊",
       "bet_label": "小熊 獨贏",
-      "bk": "FanDuel",
-      "bp": 1.68,
-      "con_p": 1.647,
-      "dv_p": 0.5856,
-      "edge": 17.4,
+      "bk": "BetOnline.ag",
+      "bp": 1.67,
+      "con_p": 1.642,
+      "dv_p": 0.587,
+      "edge": 17.3,
       "conf": 84.9,
       "stake": 50.0,
       "model_p": 76.0,
@@ -220,7 +220,7 @@
       "away_rpg": 4.2,
       "home_rpg": 4.62,
       "pred_away": 3.3,
-      "pred_home": 5.6,
+      "pred_home": 5.5,
       "model_total": null,
       "market_total": null,
       "park_factor": 1.08,
@@ -229,7 +229,7 @@
       "ump_adj": null,
       "away_trend": 6.42,
       "home_trend": -0.7,
-      "line_clv": null,
+      "line_clv": 0.36,
       "game_date": "2026-06-07",
       "game_time": "02:21",
       "sp_src": "probable",
@@ -245,8 +245,100 @@
       "away_road_wpct": null,
       "home_l10_wpct": 0.4,
       "away_l10_wpct": 0.4,
-      "home_lineup": [],
-      "away_lineup": []
+      "home_lineup": [
+        {
+          "order": 1,
+          "name": "Pete Crow-Armstrong",
+          "pos": "CF"
+        },
+        {
+          "order": 2,
+          "name": "Michael Conforto",
+          "pos": "DH"
+        },
+        {
+          "order": 3,
+          "name": "Michael Busch",
+          "pos": "1B"
+        },
+        {
+          "order": 4,
+          "name": "Alex Bregman",
+          "pos": "3B"
+        },
+        {
+          "order": 5,
+          "name": "Ian Happ",
+          "pos": "LF"
+        },
+        {
+          "order": 6,
+          "name": "Seiya Suzuki",
+          "pos": "RF"
+        },
+        {
+          "order": 7,
+          "name": "Nico Hoerner",
+          "pos": "SS"
+        },
+        {
+          "order": 8,
+          "name": "Pedro Ramírez",
+          "pos": "2B"
+        },
+        {
+          "order": 9,
+          "name": "Carson Kelly",
+          "pos": "C"
+        }
+      ],
+      "away_lineup": [
+        {
+          "order": 1,
+          "name": "Casey Schmitt",
+          "pos": "LF"
+        },
+        {
+          "order": 2,
+          "name": "Rafael Devers",
+          "pos": "1B"
+        },
+        {
+          "order": 3,
+          "name": "Luis Arraez",
+          "pos": "2B"
+        },
+        {
+          "order": 4,
+          "name": "Willy Adames",
+          "pos": "SS"
+        },
+        {
+          "order": 5,
+          "name": "Jung Hoo Lee",
+          "pos": "RF"
+        },
+        {
+          "order": 6,
+          "name": "Bryce Eldridge",
+          "pos": "DH"
+        },
+        {
+          "order": 7,
+          "name": "Matt Chapman",
+          "pos": "3B"
+        },
+        {
+          "order": 8,
+          "name": "Eric Haase",
+          "pos": "C"
+        },
+        {
+          "order": 9,
+          "name": "Drew Gilbert",
+          "pos": "CF"
+        }
+      ]
     },
     {
       "tier": "🔥 強力",
@@ -256,11 +348,11 @@
       "away_cn": "國民",
       "home_cn": "響尾蛇",
       "bet_label": "國民 讓分(+1.5)",
-      "bk": "BetUS",
-      "bp": 1.67,
-      "con_p": 1.646,
-      "dv_p": 0.5836,
-      "edge": 18.3,
+      "bk": "BetOnline.ag",
+      "bp": 1.65,
+      "con_p": 1.62,
+      "dv_p": 0.5928,
+      "edge": 17.3,
       "conf": 86.9,
       "stake": 50.0,
       "model_p": 75.0,
@@ -292,7 +384,7 @@
       "ump_adj": null,
       "away_trend": -0.49,
       "home_trend": 0.47,
-      "line_clv": null,
+      "line_clv": 0.73,
       "game_date": "2026-06-07",
       "game_time": "04:11",
       "sp_src": "probable",
@@ -448,15 +540,15 @@
   "live_updated_ts": 1780719587,
   "game_preds": {
     "tigers|mariners": {
-      "home_win_prob": 0.3073,
+      "home_win_prob": 0.304,
       "market_total": 9.0
     },
     "twins|royals": {
-      "home_win_prob": 0.674,
+      "home_win_prob": 0.6658,
       "market_total": 8.5
     },
     "cardinals|reds": {
-      "home_win_prob": 0.6759,
+      "home_win_prob": 0.6676,
       "market_total": 9.0
     },
     "cubs|giants": {
@@ -464,27 +556,27 @@
       "market_total": 7.5
     },
     "blue jays|orioles": {
-      "home_win_prob": 0.3742,
+      "home_win_prob": 0.4642,
       "market_total": 8.5
     },
     "phillies|white sox": {
-      "home_win_prob": 0.5218,
+      "home_win_prob": 0.5212,
       "market_total": 10.0
     },
     "diamondbacks|nationals": {
-      "home_win_prob": 0.3785,
+      "home_win_prob": 0.3739,
       "market_total": 9.0
     },
     "astros|athletics": {
-      "home_win_prob": 0.6112,
-      "market_total": 9.5
+      "home_win_prob": 0.6163,
+      "market_total": 9.0
     },
     "braves|pirates": {
-      "home_win_prob": 0.2701,
+      "home_win_prob": 0.2583,
       "market_total": 8.0
     },
     "marlins|rays": {
-      "home_win_prob": 0.3592,
+      "home_win_prob": 0.3565,
       "market_total": 7.5
     },
     "yankees|red sox": {
@@ -492,7 +584,7 @@
       "market_total": 8.5
     },
     "rangers|guardians": {
-      "home_win_prob": 0.4843,
+      "home_win_prob": 0.4916,
       "market_total": 8.0
     },
     "rockies|brewers": {
@@ -504,7 +596,7 @@
       "market_total": 9.0
     },
     "padres|mets": {
-      "home_win_prob": 0.4378,
+      "home_win_prob": 0.445,
       "market_total": 8.0
     }
   }
