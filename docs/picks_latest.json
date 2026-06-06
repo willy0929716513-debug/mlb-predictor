@@ -354,18 +354,6 @@
   ],
   "live_games": [
     {
-      "home_cn": "洋基",
-      "away_cn": "紅襪",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 3,
-      "away_runs": 5,
-      "projected_total": 8.4,
-      "market_total": 8.0,
-      "bet": "客隊獨贏",
-      "reason": "第9局客隊領先2分（賽前客隊勝率54%），大局已定"
-    },
-    {
       "home_cn": "藍鳥",
       "away_cn": "金鶯",
       "inning": 9,
@@ -429,10 +417,10 @@
       "home_cn": "遊騎兵",
       "away_cn": "守護者",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 6.2,
+      "projected_total": 5.8,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -452,11 +440,11 @@
     {
       "home_cn": "落磯",
       "away_cn": "釀酒人",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 1,
-      "projected_total": 13.0,
+      "projected_total": 12.3,
       "market_total": 12.0,
       "bet": null,
       "reason": null
@@ -486,7 +474,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780709510,
+  "live_updated_ts": 1780709811,
   "game_preds": {
     "cubs|giants": {
       "home_win_prob": 0.5651,
@@ -549,5 +537,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-06 09:31 (台灣時間)"
+  "live_updated_at": "2026-06-06 09:36 (台灣時間)"
 }
