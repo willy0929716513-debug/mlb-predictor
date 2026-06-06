@@ -356,14 +356,14 @@
     {
       "home_cn": "老虎",
       "away_cn": "水手",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 1,
-      "projected_total": 6.9,
+      "projected_total": 6.5,
       "market_total": 7.5,
       "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後2分 第6局，賽前客隊勝率77%"
+      "reason": "客隊落後2分 第7局，賽前客隊勝率77%"
     },
     {
       "home_cn": "費城人",
