@@ -414,7 +414,7 @@
       "reason": "第6局僅0分（此時預期4.4分），低分走勢盤口8.0"
     }
   ],
-  "live_updated_ts": 1780716745,
+  "live_updated_ts": 1780717047,
   "game_preds": {
     "cubs|giants": {
       "home_win_prob": 0.5651,
@@ -477,5 +477,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-06 11:32 (台灣時間)"
+  "live_updated_at": "2026-06-06 11:37 (台灣時間)"
 }
