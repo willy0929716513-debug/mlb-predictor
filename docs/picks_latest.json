@@ -541,10 +541,10 @@
       "home_cn": "費城人",
       "away_cn": "白襪",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 6,
-      "projected_total": 10.1,
+      "projected_total": 9.6,
       "market_total": 10.0,
       "bet": "客隊獨贏",
       "reason": "第9局客隊領先3分（賽前客隊勝率48%），大局已定"
@@ -552,26 +552,14 @@
     {
       "home_cn": "太空人",
       "away_cn": "運動家",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 13,
       "away_runs": 2,
-      "projected_total": 17.5,
+      "projected_total": 17.0,
       "market_total": 9.0,
-      "bet": "大小分 OVER",
-      "reason": "第7局已得15分（此時預期6.5分），高分走勢盤口9.0"
-    },
-    {
-      "home_cn": "勇士",
-      "away_cn": "海盜",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 6,
-      "away_runs": 3,
-      "projected_total": 9.9,
-      "market_total": 8.0,
-      "bet": null,
-      "reason": null
+      "bet": "主隊獨贏",
+      "reason": "第8局主隊領先11分（賽前主隊勝率62%），大局已定"
     },
     {
       "home_cn": "馬林魚",
@@ -579,14 +567,14 @@
       "inning": 9,
       "top_inning": true,
       "home_runs": 4,
-      "away_runs": 1,
-      "projected_total": 5.8,
+      "away_runs": 2,
+      "projected_total": 6.8,
       "market_total": 7.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1780785918,
+  "live_updated_ts": 1780786219,
   "game_preds": {
     "tigers|mariners": {
       "home_win_prob": 0.304,
@@ -649,5 +637,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-07 06:45 (台灣時間)"
+  "live_updated_at": "2026-06-07 06:50 (台灣時間)"
 }
