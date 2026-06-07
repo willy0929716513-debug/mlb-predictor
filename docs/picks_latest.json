@@ -543,11 +543,11 @@
       "inning": 7,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 2,
-      "projected_total": 6.5,
+      "away_runs": 3,
+      "projected_total": 7.5,
       "market_total": 10.5,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅3分（此時預期7.0分），低分走勢盤口10.5"
+      "reason": "第7局僅4分（此時預期7.0分），低分走勢盤口10.5"
     },
     {
       "home_cn": "道奇",
@@ -564,11 +564,11 @@
     {
       "home_cn": "教士",
       "away_cn": "大都會",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 7.8,
+      "projected_total": 7.3,
       "market_total": 8.0,
       "bet": null,
       "reason": null
