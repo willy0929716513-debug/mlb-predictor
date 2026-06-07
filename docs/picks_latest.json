@@ -543,20 +543,20 @@
       "inning": 7,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 3,
-      "projected_total": 7.5,
+      "away_runs": 5,
+      "projected_total": 9.5,
       "market_total": 10.5,
-      "bet": "大小分 UNDER",
-      "reason": "第7局僅4分（此時預期7.0分），低分走勢盤口10.5"
+      "bet": "客隊獨贏",
+      "reason": "第7局客隊領先4分（賽前客隊勝率78%），大局已定"
     },
     {
       "home_cn": "道奇",
       "away_cn": "天使",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 9,
       "away_runs": 1,
-      "projected_total": 17.0,
+      "projected_total": 16.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
