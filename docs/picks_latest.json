@@ -541,10 +541,10 @@
       "home_cn": "遊騎兵",
       "away_cn": "守護者",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 6,
-      "projected_total": 6.9,
+      "projected_total": 6.4,
       "market_total": 8.0,
       "bet": "客隊獨贏",
       "reason": "第9局客隊領先6分（賽前客隊勝率51%），大局已定"
