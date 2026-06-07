@@ -542,9 +542,9 @@
       "away_cn": "釀酒人",
       "inning": 5,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 1,
       "away_runs": 2,
-      "projected_total": 7.2,
+      "projected_total": 8.2,
       "market_total": 10.5,
       "bet": null,
       "reason": null
