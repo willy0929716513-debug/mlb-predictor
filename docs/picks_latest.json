@@ -562,7 +562,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780794207,
+  "live_updated_ts": 1780794508,
   "game_preds": {
     "tigers|mariners": {
       "home_win_prob": 0.304,
@@ -625,5 +625,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-07 09:03 (台灣時間)"
+  "live_updated_at": "2026-06-07 09:08 (台灣時間)"
 }
