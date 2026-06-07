@@ -555,9 +555,21 @@
       "inning": 2,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 1,
-      "projected_total": 10.3,
+      "away_runs": 2,
+      "projected_total": 11.3,
       "market_total": 10.5,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "教士",
+      "away_cn": "大都會",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 8.0,
+      "market_total": 8.0,
       "bet": null,
       "reason": null
     }
