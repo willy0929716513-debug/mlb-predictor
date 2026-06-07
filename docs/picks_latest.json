@@ -552,11 +552,11 @@
     {
       "home_cn": "落磯",
       "away_cn": "釀酒人",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 10.8,
+      "projected_total": 10.2,
       "market_total": 10.5,
       "bet": null,
       "reason": null
