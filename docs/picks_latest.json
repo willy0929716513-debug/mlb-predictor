@@ -415,21 +415,8 @@
       "result": "W"
     }
   ],
-  "live_games": [
-    {
-      "home_cn": "道奇",
-      "away_cn": "天使",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 5,
-      "away_runs": 13,
-      "projected_total": 18.5,
-      "market_total": 8.5,
-      "bet": null,
-      "reason": null
-    }
-  ],
-  "live_updated_ts": 1780875574,
+  "live_games": [],
+  "live_updated_ts": 1780876776,
   "game_preds": {
     "braves|pirates": {
       "home_win_prob": 0.5081,
@@ -492,5 +479,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-08 07:39 (台灣時間)"
+  "live_updated_at": ""
 }
