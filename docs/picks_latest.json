@@ -541,16 +541,16 @@
       "home_cn": "遊騎兵",
       "away_cn": "守護者",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 6.3,
+      "projected_total": 5.9,
       "market_total": 8.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1780792098,
+  "live_updated_ts": 1780792400,
   "game_preds": {
     "tigers|mariners": {
       "home_win_prob": 0.304,
@@ -613,5 +613,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-07 08:28 (台灣時間)"
+  "live_updated_at": "2026-06-07 08:33 (台灣時間)"
 }
