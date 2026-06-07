@@ -565,10 +565,10 @@
       "home_cn": "教士",
       "away_cn": "大都會",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 6.4,
+      "projected_total": 6.0,
       "market_total": 8.0,
       "bet": null,
       "reason": null
