@@ -540,23 +540,23 @@
     {
       "home_cn": "落磯",
       "away_cn": "釀酒人",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 2,
-      "projected_total": 7.1,
+      "projected_total": 6.5,
       "market_total": 10.5,
       "bet": "大小分 UNDER",
-      "reason": "第6局僅3分（此時預期6.4分），低分走勢盤口10.5"
+      "reason": "第7局僅3分（此時預期7.0分），低分走勢盤口10.5"
     },
     {
       "home_cn": "道奇",
       "away_cn": "天使",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 9,
       "away_runs": 1,
-      "projected_total": 17.5,
+      "projected_total": 17.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
