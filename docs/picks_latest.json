@@ -419,23 +419,23 @@
     {
       "home_cn": "費城人",
       "away_cn": "白襪",
-      "inning": 7,
+      "inning": 8,
       "top_inning": true,
       "home_runs": 9,
       "away_runs": 5,
-      "projected_total": 17.0,
+      "projected_total": 16.0,
       "market_total": 9.0,
-      "bet": "大小分 OVER",
-      "reason": "第7局已得14分（此時預期6.0分），高分走勢盤口9.0"
+      "bet": "主隊獨贏",
+      "reason": "第8局主隊領先4分（賽前主隊勝率51%），大局已定"
     },
     {
       "home_cn": "老虎",
       "away_cn": "水手",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 4,
-      "projected_total": 7.9,
+      "projected_total": 7.5,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -455,26 +455,26 @@
     {
       "home_cn": "雙城",
       "away_cn": "皇家",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 6,
-      "projected_total": 8.5,
+      "projected_total": 8.0,
       "market_total": 9.0,
       "bet": "客隊獨贏",
-      "reason": "第8局客隊領先5分（賽前客隊勝率57%），大局已定"
+      "reason": "第9局客隊領先5分（賽前客隊勝率57%），大局已定"
     },
     {
       "home_cn": "紅雀",
       "away_cn": "紅人",
       "inning": 8,
       "top_inning": false,
-      "home_runs": 3,
+      "home_runs": 4,
       "away_runs": 3,
-      "projected_total": 7.5,
+      "projected_total": 8.5,
       "market_total": 9.0,
-      "bet": null,
-      "reason": null
+      "bet": "客隊讓分(+1.5)",
+      "reason": "客隊落後1分 第8局，賽前客隊勝率69%"
     },
     {
       "home_cn": "遊騎兵",
@@ -494,20 +494,20 @@
       "inning": 6,
       "top_inning": true,
       "home_runs": 3,
-      "away_runs": 1,
-      "projected_total": 9.1,
+      "away_runs": 2,
+      "projected_total": 10.1,
       "market_total": 11.5,
       "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後2分 第6局，賽前客隊勝率78%"
+      "reason": "客隊落後1分 第6局，賽前客隊勝率78%"
     },
     {
       "home_cn": "響尾蛇",
       "away_cn": "國民",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 1,
-      "projected_total": 7.7,
+      "projected_total": 7.2,
       "market_total": 8.5,
       "bet": "客隊讓分(+1.5)",
       "reason": "客隊落後1分 第5局，賽前客隊勝率70%"
@@ -528,16 +528,16 @@
       "home_cn": "教士",
       "away_cn": "大都會",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 8.7,
+      "projected_total": 8.2,
       "market_total": 7.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1780864564,
+  "live_updated_ts": 1780864866,
   "game_preds": {
     "braves|pirates": {
       "home_win_prob": 0.5081,
@@ -600,5 +600,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-08 04:36 (台灣時間)"
+  "live_updated_at": "2026-06-08 04:41 (台灣時間)"
 }
