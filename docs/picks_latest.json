@@ -421,12 +421,12 @@
       "away_cn": "釀酒人",
       "inning": 9,
       "top_inning": false,
-      "home_runs": 3,
+      "home_runs": 4,
       "away_runs": 12,
-      "projected_total": 15.6,
+      "projected_total": 16.6,
       "market_total": 11.5,
       "bet": "客隊獨贏",
-      "reason": "第9局客隊領先9分（賽前客隊勝率78%），大局已定"
+      "reason": "第9局客隊領先8分（賽前客隊勝率78%），大局已定"
     },
     {
       "home_cn": "道奇",
@@ -434,11 +434,11 @@
       "inning": 5,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 4,
-      "projected_total": 9.7,
+      "away_runs": 6,
+      "projected_total": 11.7,
       "market_total": 8.5,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第5局已得7分（此時預期3.8分），高分走勢盤口8.5"
     },
     {
       "home_cn": "教士",
@@ -446,14 +446,14 @@
       "inning": 6,
       "top_inning": true,
       "home_runs": 2,
-      "away_runs": 5,
-      "projected_total": 10.3,
+      "away_runs": 6,
+      "projected_total": 11.3,
       "market_total": 7.5,
       "bet": "大小分 OVER",
-      "reason": "第6局已得7分（此時預期4.2分），高分走勢盤口7.5"
+      "reason": "第6局已得8分（此時預期4.2分），高分走勢盤口7.5"
     }
   ],
-  "live_updated_ts": 1780869091,
+  "live_updated_ts": 1780869393,
   "game_preds": {
     "braves|pirates": {
       "home_win_prob": 0.5081,
@@ -516,5 +516,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-08 05:51 (台灣時間)"
+  "live_updated_at": "2026-06-08 05:56 (台灣時間)"
 }
