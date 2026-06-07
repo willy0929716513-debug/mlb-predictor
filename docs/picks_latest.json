@@ -431,35 +431,23 @@
     {
       "home_cn": "洋基",
       "away_cn": "紅襪",
-      "inning": 8,
-      "top_inning": false,
-      "home_runs": 6,
-      "away_runs": 1,
-      "projected_total": 8.3,
-      "market_total": 8.0,
-      "bet": "主隊獨贏",
-      "reason": "第8局主隊領先5分（賽前主隊勝率67%），大局已定"
-    },
-    {
-      "home_cn": "藍鳥",
-      "away_cn": "金鶯",
       "inning": 9,
       "top_inning": true,
       "home_runs": 6,
-      "away_runs": 4,
-      "projected_total": 10.9,
+      "away_runs": 1,
+      "projected_total": 7.9,
       "market_total": 8.0,
-      "bet": null,
-      "reason": null
+      "bet": "主隊獨贏",
+      "reason": "第9局主隊領先5分（賽前主隊勝率67%），大局已定"
     },
     {
       "home_cn": "老虎",
       "away_cn": "水手",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 4,
-      "projected_total": 8.4,
+      "projected_total": 7.9,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -467,26 +455,26 @@
     {
       "home_cn": "太空人",
       "away_cn": "運動家",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 5,
-      "projected_total": 7.5,
+      "projected_total": 7.0,
       "market_total": 9.0,
       "bet": "客隊獨贏",
-      "reason": "第7局客隊領先5分（賽前客隊勝率61%），大局已定"
+      "reason": "第8局客隊領先5分（賽前客隊勝率61%），大局已定"
     },
     {
       "home_cn": "雙城",
       "away_cn": "皇家",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
-      "away_runs": 5,
-      "projected_total": 8.0,
+      "away_runs": 6,
+      "projected_total": 8.5,
       "market_total": 9.0,
       "bet": "客隊獨贏",
-      "reason": "第8局客隊領先4分（賽前客隊勝率57%），大局已定"
+      "reason": "第8局客隊領先5分（賽前客隊勝率57%），大局已定"
     },
     {
       "home_cn": "紅雀",
@@ -516,25 +504,25 @@
       "home_cn": "落磯",
       "away_cn": "釀酒人",
       "inning": 5,
-      "top_inning": true,
-      "home_runs": 2,
+      "top_inning": false,
+      "home_runs": 3,
       "away_runs": 1,
-      "projected_total": 9.4,
+      "projected_total": 9.8,
       "market_total": 11.5,
       "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後1分 第5局，賽前客隊勝率78%"
+      "reason": "客隊落後2分 第5局，賽前客隊勝率78%"
     },
     {
       "home_cn": "響尾蛇",
       "away_cn": "國民",
-      "inning": 4,
-      "top_inning": false,
+      "inning": 5,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 1,
-      "projected_total": 8.2,
+      "projected_total": 7.7,
       "market_total": 8.5,
       "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後1分 第4局，賽前客隊勝率70%"
+      "reason": "客隊落後1分 第5局，賽前客隊勝率70%"
     },
     {
       "home_cn": "道奇",
@@ -561,7 +549,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780863961,
+  "live_updated_ts": 1780864262,
   "game_preds": {
     "braves|pirates": {
       "home_win_prob": 0.5081,
@@ -624,5 +612,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-08 04:26 (台灣時間)"
+  "live_updated_at": "2026-06-08 04:31 (台灣時間)"
 }
