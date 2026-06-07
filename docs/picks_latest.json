@@ -552,17 +552,17 @@
     {
       "home_cn": "落磯",
       "away_cn": "釀酒人",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 10.9,
+      "projected_total": 10.3,
       "market_total": 10.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1780795714,
+  "live_updated_ts": 1780796015,
   "game_preds": {
     "tigers|mariners": {
       "home_win_prob": 0.304,
@@ -625,5 +625,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-07 09:28 (台灣時間)"
+  "live_updated_at": "2026-06-07 09:33 (台灣時間)"
 }
