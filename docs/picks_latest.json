@@ -443,29 +443,29 @@
     {
       "home_cn": "道奇",
       "away_cn": "天使",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 2,
-      "projected_total": 9.1,
+      "projected_total": 8.7,
       "market_total": 8.5,
-      "bet": null,
-      "reason": null
+      "bet": "主隊讓分(+1.5)",
+      "reason": "主隊落後1分 第4局，賽前主隊勝率75%"
     },
     {
       "home_cn": "教士",
       "away_cn": "大都會",
-      "inning": 4,
-      "top_inning": false,
+      "inning": 5,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 6.6,
+      "projected_total": 6.2,
       "market_total": 7.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1780866979,
+  "live_updated_ts": 1780867281,
   "game_preds": {
     "braves|pirates": {
       "home_win_prob": 0.5081,
@@ -528,5 +528,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-08 05:16 (台灣時間)"
+  "live_updated_at": "2026-06-08 05:21 (台灣時間)"
 }
