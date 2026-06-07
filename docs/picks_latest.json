@@ -553,7 +553,7 @@
       "home_cn": "道奇",
       "away_cn": "天使",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
       "projected_total": 10.0,
