@@ -470,11 +470,11 @@
       "inning": 7,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 3,
-      "projected_total": 6.8,
+      "away_runs": 4,
+      "projected_total": 7.8,
       "market_total": 8.5,
       "bet": "客隊獨贏",
-      "reason": "第7局客隊領先2分（賽前客隊勝率66%），大局已定"
+      "reason": "第7局客隊領先3分（賽前客隊勝率66%），大局已定"
     },
     {
       "home_cn": "馬林魚",
@@ -491,11 +491,11 @@
     {
       "home_cn": "太空人",
       "away_cn": "運動家",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 5,
-      "projected_total": 9.5,
+      "projected_total": 9.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -503,11 +503,11 @@
     {
       "home_cn": "雙城",
       "away_cn": "皇家",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 5,
-      "projected_total": 10.5,
+      "projected_total": 10.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -515,14 +515,14 @@
     {
       "home_cn": "紅雀",
       "away_cn": "紅人",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 9.5,
+      "projected_total": 9.0,
       "market_total": 9.0,
       "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後1分 第5局，賽前客隊勝率69%"
+      "reason": "客隊落後1分 第6局，賽前客隊勝率69%"
     },
     {
       "home_cn": "遊騎兵",
@@ -539,11 +539,11 @@
     {
       "home_cn": "落磯",
       "away_cn": "釀酒人",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 1,
-      "projected_total": 12.6,
+      "projected_total": 11.9,
       "market_total": 11.5,
       "bet": null,
       "reason": null
@@ -573,7 +573,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780861546,
+  "live_updated_ts": 1780861848,
   "game_preds": {
     "braves|pirates": {
       "home_win_prob": 0.5081,
@@ -636,5 +636,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-08 03:45 (台灣時間)"
+  "live_updated_at": "2026-06-08 03:50 (台灣時間)"
 }
