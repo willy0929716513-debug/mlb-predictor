@@ -574,7 +574,7 @@
       "reason": "第6局僅2分（此時預期4.4分），低分走勢盤口8.0"
     }
   ],
-  "live_updated_ts": 1780803653,
+  "live_updated_ts": 1780803954,
   "game_preds": {
     "tigers|mariners": {
       "home_win_prob": 0.304,
@@ -637,5 +637,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-07 11:40 (台灣時間)"
+  "live_updated_at": "2026-06-07 11:45 (台灣時間)"
 }
