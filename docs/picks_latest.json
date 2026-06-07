@@ -554,9 +554,9 @@
       "away_cn": "天使",
       "inning": 1,
       "top_inning": false,
-      "home_runs": 4,
+      "home_runs": 9,
       "away_runs": 1,
-      "projected_total": 13.5,
+      "projected_total": 18.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -564,11 +564,11 @@
     {
       "home_cn": "教士",
       "away_cn": "大都會",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 7.7,
+      "projected_total": 7.2,
       "market_total": 8.0,
       "bet": null,
       "reason": null
