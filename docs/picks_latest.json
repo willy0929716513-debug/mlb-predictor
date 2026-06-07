@@ -566,9 +566,9 @@
       "away_cn": "大都會",
       "inning": 3,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 6.8,
+      "projected_total": 7.8,
       "market_total": 8.0,
       "bet": null,
       "reason": null
