@@ -568,13 +568,13 @@
       "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 8.1,
+      "projected_total": 7.7,
       "market_total": 8.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1780799735,
+  "live_updated_ts": 1780800037,
   "game_preds": {
     "tigers|mariners": {
       "home_win_prob": 0.304,
@@ -637,5 +637,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-07 10:35 (台灣時間)"
+  "live_updated_at": "2026-06-07 10:40 (台灣時間)"
 }
