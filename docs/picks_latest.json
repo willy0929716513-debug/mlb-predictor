@@ -552,11 +552,11 @@
     {
       "home_cn": "道奇",
       "away_cn": "天使",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 9,
       "away_runs": 1,
-      "projected_total": 18.5,
+      "projected_total": 18.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
