@@ -429,7 +429,7 @@
       "reason": "第8局僅2分（此時預期6.7分），低分走勢盤口8.0"
     }
   ],
-  "live_updated_ts": 1780886908,
+  "live_updated_ts": 1780887209,
   "game_preds": {
     "braves|pirates": {
       "home_win_prob": 0.5081,
@@ -492,5 +492,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-08 10:48 (台灣時間)"
+  "live_updated_at": "2026-06-08 10:53 (台灣時間)"
 }
