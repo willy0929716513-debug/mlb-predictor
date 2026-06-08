@@ -429,7 +429,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780888113,
+  "live_updated_ts": 1780888415,
   "game_preds": {
     "braves|pirates": {
       "home_win_prob": 0.5081,
@@ -492,5 +492,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-08 11:08 (台灣時間)"
+  "live_updated_at": "2026-06-08 11:13 (台灣時間)"
 }
