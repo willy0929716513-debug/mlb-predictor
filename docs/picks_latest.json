@@ -233,20 +233,20 @@
       "inning": 5,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 0,
-      "projected_total": 6.0,
+      "away_runs": 1,
+      "projected_total": 7.0,
       "market_total": 9.0,
-      "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後1分 第5局，賽前客隊勝率55%"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "光芒",
       "away_cn": "紅襪",
-      "inning": 4,
-      "top_inning": false,
+      "inning": 5,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 6.9,
+      "projected_total": 6.4,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -255,13 +255,13 @@
       "home_cn": "守護者",
       "away_cn": "洋基",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 3,
-      "projected_total": 11.0,
+      "projected_total": 10.6,
       "market_total": 7.5,
       "bet": "大小分 OVER",
-      "reason": "第4局已得6分（此時預期2.5分），高分走勢盤口7.5"
+      "reason": "第4局已得6分（此時預期2.9分），高分走勢盤口7.5"
     },
     {
       "home_cn": "藍鳥",
@@ -269,14 +269,14 @@
       "inning": 3,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 2,
-      "projected_total": 7.8,
+      "away_runs": 5,
+      "projected_total": 10.8,
       "market_total": 7.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1780962461,
+  "live_updated_ts": 1780962762,
   "game_preds": {
     "orioles|mariners": {
       "home_win_prob": 0.4486,
@@ -311,5 +311,5 @@
       "market_total": 11.0
     }
   },
-  "live_updated_at": "2026-06-09 07:47 (台灣時間)"
+  "live_updated_at": "2026-06-09 07:52 (台灣時間)"
 }
