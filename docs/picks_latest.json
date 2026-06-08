@@ -420,16 +420,16 @@
       "home_cn": "小熊",
       "away_cn": "巨人",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 6.4,
+      "projected_total": 6.0,
       "market_total": 8.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1780884195,
+  "live_updated_ts": 1780884497,
   "game_preds": {
     "braves|pirates": {
       "home_win_prob": 0.5081,
@@ -492,5 +492,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-08 10:03 (台灣時間)"
+  "live_updated_at": "2026-06-08 10:08 (台灣時間)"
 }
