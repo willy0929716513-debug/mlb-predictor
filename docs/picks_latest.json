@@ -2,28 +2,28 @@
   "generated_at": "2026-06-08 23:16 (台灣時間)",
   "date": "2026-06-08",
   "stats": {
-    "settled": 133,
-    "wins": 92,
-    "win_rate": 69.2,
-    "total_in": 3100.3,
-    "total_pnl": 774.8,
-    "roi": 25.0,
+    "settled": 134,
+    "wins": 93,
+    "win_rate": 69.4,
+    "total_in": 3150.3,
+    "total_pnl": 801.3,
+    "roi": 25.4,
     "by_type": {
       "ML": {
-        "wins": 33,
         "settled": 53,
+        "wins": 33,
         "win_rate": 62.3,
         "roi": -2.8
       },
       "RL": {
-        "wins": 40,
-        "settled": 54,
-        "win_rate": 74.1,
-        "roi": 31.1
+        "settled": 55,
+        "wins": 41,
+        "win_rate": 74.5,
+        "roi": 32.0
       },
       "TOT": {
-        "wins": 19,
         "settled": 26,
+        "wins": 19,
         "win_rate": 73.1,
         "roi": 71.3
       }
@@ -95,6 +95,19 @@
     }
   ],
   "recent_history": [
+    {
+      "date": "2026-06-09",
+      "home": "guardians",
+      "away": "guardians",
+      "home_cn": "守護者",
+      "away_cn": "守護者",
+      "bet_type": "讓分",
+      "label": "+1.5",
+      "price": 1.53,
+      "stake": 50.0,
+      "edge": 15.8,
+      "result": "W"
+    },
     {
       "date": "2026-06-07",
       "home": "diamondbacks",
@@ -211,19 +224,6 @@
       "stake": 56.5,
       "edge": 11.6,
       "result": "L"
-    },
-    {
-      "date": "2026-06-04",
-      "home": "diamondbacks",
-      "away": "dodgers",
-      "home_cn": "響尾蛇",
-      "away_cn": "道奇",
-      "bet_type": "獨贏",
-      "label": "",
-      "price": 1.55,
-      "stake": 52.4,
-      "edge": 11.9,
-      "result": "W"
     }
   ],
   "live_games": [],
