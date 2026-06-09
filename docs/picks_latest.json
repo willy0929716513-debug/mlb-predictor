@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-09 23:59 (台灣時間)",
-  "date": "2026-06-09",
+  "generated_at": "2026-06-10 00:07 (台灣時間)",
+  "date": "2026-06-10",
   "stats": {
     "settled": 134,
     "wins": 93,
@@ -166,63 +166,63 @@
   "live_updated_ts": 1780978743,
   "game_preds": {
     "orioles|mariners": {
-      "home_win_prob": 0.4587,
+      "home_win_prob": 0.4465,
       "market_total": 9.0
     },
     "marlins|diamondbacks": {
-      "home_win_prob": 0.7188,
+      "home_win_prob": 0.717,
       "market_total": 7.5
     },
     "rays|red sox": {
-      "home_win_prob": 0.3409,
+      "home_win_prob": 0.335,
       "market_total": 7.5
     },
     "guardians|yankees": {
-      "home_win_prob": 0.4235,
+      "home_win_prob": 0.4331,
       "market_total": 8.5
     },
     "tigers|twins": {
-      "home_win_prob": 0.5856,
+      "home_win_prob": 0.5953,
       "market_total": 8.5
     },
     "pirates|dodgers": {
-      "home_win_prob": 0.6021,
+      "home_win_prob": 0.6115,
       "market_total": 8.5
     },
     "blue jays|phillies": {
-      "home_win_prob": 0.4403,
+      "home_win_prob": 0.4409,
       "market_total": 7.5
     },
     "mets|cardinals": {
-      "home_win_prob": 0.4341,
+      "home_win_prob": 0.434,
       "market_total": 8.0
     },
     "white sox|braves": {
-      "home_win_prob": 0.591,
+      "home_win_prob": 0.5874,
       "market_total": 9.0
     },
     "royals|rangers": {
-      "home_win_prob": 0.6019,
+      "home_win_prob": 0.6018,
       "market_total": 9.5
     },
     "rockies|cubs": {
-      "home_win_prob": 0.4215,
+      "home_win_prob": 0.4309,
       "market_total": 12.0
     },
     "angels|astros": {
-      "home_win_prob": 0.6195,
+      "home_win_prob": 0.6136,
       "market_total": 8.5
     },
     "padres|reds": {
-      "home_win_prob": 0.4361,
+      "home_win_prob": 0.4253,
       "market_total": 7.5
     },
     "giants|nationals": {
-      "home_win_prob": 0.3639,
+      "home_win_prob": 0.3719,
       "market_total": 8.5
     },
     "athletics|brewers": {
-      "home_win_prob": 0.5505,
+      "home_win_prob": 0.5484,
       "market_total": 13.0
     }
   }
