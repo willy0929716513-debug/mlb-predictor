@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-10 00:24 (台灣時間)",
+  "generated_at": "2026-06-10 00:48 (台灣時間)",
   "date": "2026-06-10",
   "stats": {
     "settled": 134,
@@ -167,62 +167,62 @@
   "game_preds": {
     "orioles|mariners": {
       "home_win_prob": 0.4518,
-      "market_total": 9.0
+      "market_total": 8.5
     },
     "marlins|diamondbacks": {
-      "home_win_prob": 0.7204,
+      "home_win_prob": 0.7205,
       "market_total": 7.5
     },
     "rays|red sox": {
-      "home_win_prob": 0.3278,
+      "home_win_prob": 0.3399,
       "market_total": 7.5
     },
     "guardians|yankees": {
-      "home_win_prob": 0.436,
+      "home_win_prob": 0.4298,
       "market_total": 8.5
     },
     "tigers|twins": {
-      "home_win_prob": 0.5886,
+      "home_win_prob": 0.5869,
       "market_total": 8.5
     },
     "pirates|dodgers": {
-      "home_win_prob": 0.6046,
+      "home_win_prob": 0.6111,
       "market_total": 8.5
     },
     "blue jays|phillies": {
-      "home_win_prob": 0.4335,
+      "home_win_prob": 0.4319,
       "market_total": 7.5
     },
     "mets|cardinals": {
-      "home_win_prob": 0.4376,
+      "home_win_prob": 0.4367,
       "market_total": 8.0
     },
     "white sox|braves": {
-      "home_win_prob": 0.5822,
+      "home_win_prob": 0.5878,
       "market_total": 9.0
     },
     "royals|rangers": {
-      "home_win_prob": 0.6091,
+      "home_win_prob": 0.5935,
       "market_total": 9.5
     },
     "rockies|cubs": {
-      "home_win_prob": 0.4262,
+      "home_win_prob": 0.4195,
       "market_total": 12.0
     },
     "angels|astros": {
-      "home_win_prob": 0.6121,
+      "home_win_prob": 0.6044,
       "market_total": 8.5
     },
     "padres|reds": {
-      "home_win_prob": 0.4344,
+      "home_win_prob": 0.4389,
       "market_total": 7.5
     },
     "giants|nationals": {
-      "home_win_prob": 0.3657,
+      "home_win_prob": 0.3733,
       "market_total": 8.5
     },
     "athletics|brewers": {
-      "home_win_prob": 0.5541,
+      "home_win_prob": 0.5433,
       "market_total": 13.0
     }
   }
