@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-09 22:41 (台灣時間)",
+  "generated_at": "2026-06-09 23:59 (台灣時間)",
   "date": "2026-06-09",
   "stats": {
     "settled": 134,
@@ -29,71 +29,7 @@
       }
     }
   },
-  "picks": [
-    {
-      "tier": "⭐ 穩定",
-      "btype": "讓分",
-      "away": "cardinals",
-      "home": "mets",
-      "away_cn": "紅雀",
-      "home_cn": "大都會",
-      "bet_label": "紅雀 讓分(+1.5)",
-      "bk": "LowVig.ag",
-      "bp": 1.51,
-      "con_p": 1.5,
-      "dv_p": 0.6405,
-      "edge": 11.8,
-      "conf": 85.6,
-      "stake": 50.0,
-      "model_p": 74.7,
-      "away_sp": "Dustin May",
-      "home_sp": "Freddy Peralta",
-      "away_era": 2.22,
-      "home_era": 3.98,
-      "away_fip": 2.0,
-      "home_fip": 3.91,
-      "away_k9": 13.0,
-      "home_k9": 10.5,
-      "away_avgip": 5.8,
-      "home_avgip": 5.7,
-      "away_whip": 0.98,
-      "home_whip": 1.57,
-      "away_rest": null,
-      "home_rest": null,
-      "away_rs": 2.33,
-      "home_rs": 5.67,
-      "away_rpg": 4.36,
-      "home_rpg": 4.31,
-      "pred_away": 4.0,
-      "pred_home": 3.6,
-      "model_total": null,
-      "market_total": null,
-      "park_factor": null,
-      "weather_factor": 1.018,
-      "ump_name": null,
-      "ump_adj": null,
-      "away_trend": -1.79,
-      "home_trend": -0.09,
-      "line_clv": null,
-      "game_date": "2026-06-10",
-      "game_time": "07:11",
-      "sp_src": "probable",
-      "home_hand": "R",
-      "away_hand": "R",
-      "home_babip": 0.432,
-      "away_babip": 0.293,
-      "home_lob": 78.9,
-      "away_lob": 62.5,
-      "away_road_days": null,
-      "away_tz_cross": null,
-      "home_wpct": null,
-      "away_road_wpct": null,
-      "home_l10_wpct": 0.7,
-      "away_l10_wpct": 0.6,
-      "home_lineup": [],
-      "away_lineup": []
-    }
-  ],
+  "picks": [],
   "recent_history": [
     {
       "date": "2026-06-09",
@@ -230,63 +166,63 @@
   "live_updated_ts": 1780978743,
   "game_preds": {
     "orioles|mariners": {
-      "home_win_prob": 0.4457,
-      "market_total": 8.5
+      "home_win_prob": 0.4587,
+      "market_total": 9.0
     },
     "marlins|diamondbacks": {
-      "home_win_prob": 0.7215,
+      "home_win_prob": 0.7188,
       "market_total": 7.5
     },
     "rays|red sox": {
-      "home_win_prob": 0.3309,
+      "home_win_prob": 0.3409,
       "market_total": 7.5
     },
     "guardians|yankees": {
-      "home_win_prob": 0.4286,
+      "home_win_prob": 0.4235,
       "market_total": 8.5
     },
     "tigers|twins": {
-      "home_win_prob": 0.5952,
+      "home_win_prob": 0.5856,
       "market_total": 8.5
     },
     "pirates|dodgers": {
-      "home_win_prob": 0.6096,
+      "home_win_prob": 0.6021,
       "market_total": 8.5
     },
     "blue jays|phillies": {
-      "home_win_prob": 0.4342,
+      "home_win_prob": 0.4403,
       "market_total": 7.5
     },
     "mets|cardinals": {
-      "home_win_prob": 0.4292,
+      "home_win_prob": 0.4341,
       "market_total": 8.0
     },
     "white sox|braves": {
-      "home_win_prob": 0.5922,
+      "home_win_prob": 0.591,
       "market_total": 9.0
     },
     "royals|rangers": {
-      "home_win_prob": 0.6069,
+      "home_win_prob": 0.6019,
       "market_total": 9.5
     },
     "rockies|cubs": {
-      "home_win_prob": 0.4321,
-      "market_total": 12.5
+      "home_win_prob": 0.4215,
+      "market_total": 12.0
     },
     "angels|astros": {
-      "home_win_prob": 0.6118,
+      "home_win_prob": 0.6195,
       "market_total": 8.5
     },
     "padres|reds": {
-      "home_win_prob": 0.43,
+      "home_win_prob": 0.4361,
       "market_total": 7.5
     },
     "giants|nationals": {
-      "home_win_prob": 0.3693,
+      "home_win_prob": 0.3639,
       "market_total": 8.5
     },
     "athletics|brewers": {
-      "home_win_prob": 0.5442,
+      "home_win_prob": 0.5505,
       "market_total": 13.0
     }
   }
