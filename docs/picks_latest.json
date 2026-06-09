@@ -232,21 +232,21 @@
       "away_cn": "太空人",
       "inning": 7,
       "top_inning": false,
-      "home_runs": 3,
+      "home_runs": 4,
       "away_runs": 3,
-      "projected_total": 8.5,
+      "projected_total": 9.5,
       "market_total": 9.0,
-      "bet": null,
-      "reason": null
+      "bet": "客隊讓分(+1.5)",
+      "reason": "客隊落後1分 第7局，賽前客隊勝率62%"
     },
     {
       "home_cn": "教士",
       "away_cn": "紅人",
       "inning": 7,
       "top_inning": false,
-      "home_runs": 2,
+      "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 6.1,
+      "projected_total": 7.1,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -270,13 +270,13 @@
       "top_inning": false,
       "home_runs": 8,
       "away_runs": 5,
-      "projected_total": 19.1,
+      "projected_total": 18.5,
       "market_total": 11.0,
       "bet": "大小分 OVER",
-      "reason": "第5局已得13分（此時預期4.9分），高分走勢盤口11.0"
+      "reason": "第5局已得13分（此時預期5.5分），高分走勢盤口11.0"
     }
   ],
-  "live_updated_ts": 1780976496,
+  "live_updated_ts": 1780976798,
   "game_preds": {
     "orioles|mariners": {
       "home_win_prob": 0.4486,
@@ -311,5 +311,5 @@
       "market_total": 11.0
     }
   },
-  "live_updated_at": "2026-06-09 11:41 (台灣時間)"
+  "live_updated_at": "2026-06-09 11:46 (台灣時間)"
 }
