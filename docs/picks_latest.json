@@ -256,12 +256,12 @@
       "away_cn": "國民",
       "inning": 6,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 4.1,
+      "projected_total": 5.1,
       "market_total": 8.0,
       "bet": "大小分 UNDER",
-      "reason": "第6局僅1分（此時預期4.9分），低分走勢盤口8.0"
+      "reason": "第6局僅2分（此時預期4.9分），低分走勢盤口8.0"
     },
     {
       "home_cn": "運動家",
@@ -276,7 +276,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1780974687,
+  "live_updated_ts": 1780974988,
   "game_preds": {
     "orioles|mariners": {
       "home_win_prob": 0.4486,
@@ -311,5 +311,5 @@
       "market_total": 11.0
     }
   },
-  "live_updated_at": "2026-06-09 11:11 (台灣時間)"
+  "live_updated_at": "2026-06-09 11:16 (台灣時間)"
 }
