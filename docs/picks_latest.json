@@ -254,14 +254,14 @@
     {
       "home_cn": "巨人",
       "away_cn": "國民",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 4.2,
+      "projected_total": 3.8,
       "market_total": 8.0,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅2分（此時預期5.8分），低分走勢盤口8.0"
+      "reason": "第8局僅2分（此時預期6.2分），低分走勢盤口8.0"
     },
     {
       "home_cn": "運動家",
