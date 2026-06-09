@@ -233,11 +233,11 @@
       "inning": 6,
       "top_inning": true,
       "home_runs": 3,
-      "away_runs": 1,
-      "projected_total": 8.0,
+      "away_runs": 3,
+      "projected_total": 10.0,
       "market_total": 9.0,
-      "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後2分 第6局，賽前客隊勝率62%"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "教士",
