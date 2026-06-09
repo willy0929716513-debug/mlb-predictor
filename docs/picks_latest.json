@@ -242,11 +242,11 @@
     {
       "home_cn": "教士",
       "away_cn": "紅人",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 7.1,
+      "projected_total": 6.7,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -270,13 +270,13 @@
       "top_inning": true,
       "home_runs": 8,
       "away_runs": 5,
-      "projected_total": 18.5,
+      "projected_total": 17.9,
       "market_total": 11.0,
       "bet": "大小分 OVER",
-      "reason": "第5局已得13分（此時預期5.5分），高分走勢盤口11.0"
+      "reason": "第6局已得13分（此時預期6.1分），高分走勢盤口11.0"
     }
   ],
-  "live_updated_ts": 1780976798,
+  "live_updated_ts": 1780977100,
   "game_preds": {
     "orioles|mariners": {
       "home_win_prob": 0.4486,
@@ -311,5 +311,5 @@
       "market_total": 11.0
     }
   },
-  "live_updated_at": "2026-06-09 11:46 (台灣時間)"
+  "live_updated_at": "2026-06-09 11:51 (台灣時間)"
 }
