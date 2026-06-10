@@ -315,7 +315,7 @@
       "reason": "主隊落後1分 第4局，賽前主隊勝率57%"
     }
   ],
-  "live_updated_ts": 1781125520,
+  "live_updated_ts": 1781125822,
   "game_preds": {
     "rays|red sox": {
       "home_win_prob": 0.68,
@@ -378,5 +378,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-11 05:05 (台灣時間)"
+  "live_updated_at": "2026-06-11 05:10 (台灣時間)"
 }
