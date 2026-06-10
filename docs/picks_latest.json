@@ -303,25 +303,13 @@
       "reason": "第6局已得9分（此時預期4.7分），高分走勢盤口8.5"
     },
     {
-      "home_cn": "皇家",
-      "away_cn": "遊騎兵",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 5,
-      "away_runs": 3,
-      "projected_total": 9.1,
-      "market_total": 9.5,
-      "bet": "主隊獨贏",
-      "reason": "第9局主隊領先2分（賽前主隊勝率59%），大局已定"
-    },
-    {
       "home_cn": "白襪",
       "away_cn": "勇士",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 4,
       "away_runs": 4,
-      "projected_total": 10.0,
+      "projected_total": 9.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
