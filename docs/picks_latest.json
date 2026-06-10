@@ -294,10 +294,10 @@
       "home_cn": "巨人",
       "away_cn": "國民",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 6.7,
+      "projected_total": 6.2,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -308,14 +308,14 @@
       "inning": 4,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 0,
-      "projected_total": 6.3,
+      "away_runs": 2,
+      "projected_total": 8.3,
       "market_total": 8.0,
-      "bet": null,
-      "reason": null
+      "bet": "主隊讓分(+1.5)",
+      "reason": "主隊落後1分 第4局，賽前主隊勝率57%"
     }
   ],
-  "live_updated_ts": 1781124916,
+  "live_updated_ts": 1781125218,
   "game_preds": {
     "rays|red sox": {
       "home_win_prob": 0.68,
@@ -378,5 +378,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-11 04:55 (台灣時間)"
+  "live_updated_at": "2026-06-11 05:00 (台灣時間)"
 }
