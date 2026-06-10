@@ -295,24 +295,24 @@
       "away_cn": "國民",
       "inning": 8,
       "top_inning": false,
-      "home_runs": 4,
+      "home_runs": 6,
       "away_runs": 9,
-      "projected_total": 14.4,
+      "projected_total": 16.4,
       "market_total": 8.5,
       "bet": "客隊獨贏",
-      "reason": "第8局客隊領先5分（賽前客隊勝率52%），大局已定"
+      "reason": "第8局客隊領先3分（賽前客隊勝率52%），大局已定"
     },
     {
       "home_cn": "教士",
       "away_cn": "紅人",
       "inning": 8,
       "top_inning": false,
-      "home_runs": 2,
+      "home_runs": 3,
       "away_runs": 4,
-      "projected_total": 7.3,
+      "projected_total": 8.3,
       "market_total": 8.0,
       "bet": "主隊讓分(+1.5)",
-      "reason": "主隊落後2分 第8局，賽前主隊勝率57%"
+      "reason": "主隊落後1分 第8局，賽前主隊勝率57%"
     },
     {
       "home_cn": "金鶯",
@@ -339,6 +339,18 @@
       "reason": null
     },
     {
+      "home_cn": "老虎",
+      "away_cn": "雙城",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 9.0,
+      "market_total": 9.0,
+      "bet": null,
+      "reason": null
+    },
+    {
       "home_cn": "馬林魚",
       "away_cn": "響尾蛇",
       "inning": 1,
@@ -351,7 +363,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1781130050,
+  "live_updated_ts": 1781130352,
   "game_preds": {
     "rays|red sox": {
       "home_win_prob": 0.68,
@@ -414,5 +426,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-11 06:20 (台灣時間)"
+  "live_updated_at": "2026-06-11 06:25 (台灣時間)"
 }
