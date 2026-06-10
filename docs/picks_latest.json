@@ -296,26 +296,26 @@
       "inning": 7,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 8,
-      "projected_total": 11.8,
+      "away_runs": 9,
+      "projected_total": 12.8,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第7局已得9分（此時預期5.7分），高分走勢盤口8.5"
+      "reason": "第7局已得10分（此時預期5.7分），高分走勢盤口8.5"
     },
     {
       "home_cn": "教士",
       "away_cn": "紅人",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 2,
-      "away_runs": 2,
-      "projected_total": 7.1,
+      "away_runs": 3,
+      "projected_total": 7.7,
       "market_total": 8.0,
-      "bet": null,
-      "reason": null
+      "bet": "主隊讓分(+1.5)",
+      "reason": "主隊落後1分 第7局，賽前主隊勝率57%"
     }
   ],
-  "live_updated_ts": 1781127937,
+  "live_updated_ts": 1781128239,
   "game_preds": {
     "rays|red sox": {
       "home_win_prob": 0.68,
@@ -378,5 +378,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-11 05:45 (台灣時間)"
+  "live_updated_at": "2026-06-11 05:50 (台灣時間)"
 }
