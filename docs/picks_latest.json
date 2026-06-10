@@ -330,13 +330,13 @@
       "home_cn": "運動家",
       "away_cn": "釀酒人",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 6,
       "away_runs": 5,
-      "projected_total": 16.8,
+      "projected_total": 16.1,
       "market_total": 13.0,
-      "bet": "大小分 OVER",
-      "reason": "第6局已得11分（此時預期7.2分），高分走勢盤口13.0"
+      "bet": null,
+      "reason": null
     }
   ],
   "live_updated_ts": 1781063411,
