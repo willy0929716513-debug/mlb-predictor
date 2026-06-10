@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-10 23:41 (台灣時間)",
+  "generated_at": "2026-06-10 23:47 (台灣時間)",
   "date": "2026-06-10",
   "stats": {
     "settled": 137,
@@ -42,10 +42,10 @@
       "bp": 1.78,
       "con_p": 1.736,
       "dv_p": 0.5526,
-      "edge": 20.3,
+      "edge": 20.8,
       "conf": 72.6,
       "stake": 50.0,
-      "model_p": 73.7,
+      "model_p": 74.1,
       "away_sp": "Mike Paredes",
       "home_sp": "Framber Valdez",
       "away_era": 4.2,
@@ -74,7 +74,7 @@
       "ump_adj": null,
       "away_trend": null,
       "home_trend": 0.36,
-      "line_clv": -1.29,
+      "line_clv": 0.0,
       "game_date": "2026-06-11",
       "game_time": "06:41",
       "sp_src": "espn",
@@ -137,7 +137,7 @@
       "ump_adj": null,
       "away_trend": 2.35,
       "home_trend": 1.06,
-      "line_clv": 2.29,
+      "line_clv": 0.0,
       "game_date": "2026-06-11",
       "game_time": "06:36",
       "sp_src": "probable",
@@ -155,72 +155,48 @@
       "away_l10_wpct": 0.7,
       "home_lineup": [],
       "away_lineup": []
-    },
-    {
-      "tier": "⭐ 穩定",
-      "btype": "大小分",
-      "away": "braves",
-      "home": "white sox",
-      "away_cn": "勇士",
-      "home_cn": "白襪",
-      "bet_label": "OVER 7.5",
-      "bk": "LowVig.ag",
-      "bp": 1.98,
-      "con_p": 1.957,
-      "dv_p": 0.4881,
-      "edge": 12.5,
-      "conf": 72.7,
-      "stake": 50.0,
-      "model_p": 60.2,
-      "away_sp": "Chris Sale",
-      "home_sp": "TBD",
-      "away_era": 2.19,
-      "home_era": 4.8,
-      "away_fip": 1.76,
-      "home_fip": null,
-      "away_k9": 11.5,
-      "home_k9": null,
-      "away_avgip": 5.7,
-      "home_avgip": null,
-      "away_whip": 1.45,
-      "home_whip": null,
-      "away_rest": null,
-      "home_rest": null,
-      "away_rs": 7.0,
-      "home_rs": null,
-      "away_rpg": 5.05,
-      "home_rpg": 4.58,
-      "pred_away": 4.9,
-      "pred_home": 3.9,
-      "model_total": 8.7,
-      "market_total": 7.5,
-      "park_factor": null,
-      "weather_factor": 0.98,
-      "ump_name": null,
-      "ump_adj": null,
-      "away_trend": 3.06,
-      "home_trend": null,
-      "line_clv": -0.26,
-      "game_date": "2026-06-11",
-      "game_time": "07:41",
-      "sp_src": "probable",
-      "home_hand": null,
-      "away_hand": "R",
-      "home_babip": null,
-      "away_babip": 0.426,
-      "home_lob": null,
-      "away_lob": 77.8,
-      "away_road_days": 1,
-      "away_tz_cross": null,
-      "home_wpct": null,
-      "away_road_wpct": null,
-      "home_l10_wpct": null,
-      "away_l10_wpct": 0.7,
-      "home_lineup": [],
-      "away_lineup": []
     }
   ],
   "recent_history": [
+    {
+      "date": "2026-06-11",
+      "home": "tigers",
+      "away": "twins",
+      "home_cn": "老虎",
+      "away_cn": "雙城",
+      "bet_type": "讓分",
+      "label": "+1.5",
+      "price": 1.78,
+      "stake": 50.0,
+      "edge": 20.3,
+      "result": null
+    },
+    {
+      "date": "2026-06-11",
+      "home": "orioles",
+      "away": "mariners",
+      "home_cn": "金鶯",
+      "away_cn": "水手",
+      "bet_type": "讓分",
+      "label": "+1.5",
+      "price": 1.59,
+      "stake": 50.0,
+      "edge": 12.2,
+      "result": null
+    },
+    {
+      "date": "2026-06-11",
+      "home": "white sox",
+      "away": "braves",
+      "home_cn": "白襪",
+      "away_cn": "勇士",
+      "bet_type": "大小分",
+      "label": "OVER",
+      "price": 1.98,
+      "stake": 50.0,
+      "edge": 12.5,
+      "result": null
+    },
     {
       "date": "2026-06-10",
       "home": "padres",
@@ -311,108 +287,69 @@
       "stake": 52.3,
       "edge": 28.7,
       "result": "W"
-    },
-    {
-      "date": "2026-06-06",
-      "home": "blue jays",
-      "away": "orioles",
-      "home_cn": "藍鳥",
-      "away_cn": "金鶯",
-      "bet_type": "讓分",
-      "label": "+1.5",
-      "price": 1.64,
-      "stake": 50.0,
-      "edge": 17.2,
-      "result": "W"
-    },
-    {
-      "date": "2026-06-06",
-      "home": "tigers",
-      "away": "mariners",
-      "home_cn": "老虎",
-      "away_cn": "水手",
-      "bet_type": "獨贏",
-      "label": "",
-      "price": 1.85,
-      "stake": 50.0,
-      "edge": 23.8,
-      "result": "L"
-    },
-    {
-      "date": "2026-06-06",
-      "home": "dodgers",
-      "away": "angels",
-      "home_cn": "道奇",
-      "away_cn": "天使",
-      "bet_type": "大小分",
-      "label": "UNDER",
-      "price": 1.96,
-      "stake": 50.0,
-      "edge": 10.9,
-      "result": "W"
     }
   ],
   "live_games": [],
   "live_updated_ts": 1781065168,
   "game_preds": {
     "rays|red sox": {
-      "home_win_prob": 0.6824,
+      "home_win_prob": 0.68,
       "market_total": 7.5
     },
     "guardians|yankees": {
-      "home_win_prob": 0.3439,
-      "market_total": 8.0
+      "home_win_prob": 0.3391,
+      "market_total": 7.5
     },
     "giants|nationals": {
-      "home_win_prob": 0.4921,
+      "home_win_prob": 0.4809,
       "market_total": 8.5
     },
     "padres|reds": {
-      "home_win_prob": 0.5598,
+      "home_win_prob": 0.5652,
       "market_total": 8.0
     },
     "orioles|mariners": {
-      "home_win_prob": 0.6627,
+      "home_win_prob": 0.6543,
       "market_total": 9.0
     },
     "marlins|diamondbacks": {
-      "home_win_prob": 0.58,
+      "home_win_prob": 0.5893,
       "market_total": 8.5
     },
     "tigers|twins": {
-      "home_win_prob": 0.4305,
+      "home_win_prob": 0.4281,
       "market_total": 9.0
     },
     "pirates|dodgers": {
-      "home_win_prob": 0.312,
+      "home_win_prob": 0.3202,
       "market_total": 8.5
     },
     "blue jays|phillies": {
-      "home_win_prob": 0.4173,
+      "home_win_prob": 0.4131,
       "market_total": 8.5
     },
     "mets|cardinals": {
-      "home_win_prob": 0.4032,
+      "home_win_prob": 0.3997,
       "market_total": 8.5
     },
     "white sox|braves": {
-      "home_win_prob": 0.3643,
+      "home_win_prob": 0.3574,
       "market_total": 7.5
     },
     "royals|rangers": {
-      "home_win_prob": 0.325,
+      "home_win_prob": 0.3322,
       "market_total": 10.0
     },
     "rockies|cubs": {
-      "home_win_prob": 0.3109,
+      "home_win_prob": 0.3067,
       "market_total": 12.0
     },
     "athletics|brewers": {
-      "home_win_prob": 0.4806,
+      "home_win_prob": 0.4719,
       "market_total": 14.5
     },
     "angels|astros": {
-      "home_win_prob": 0.539,
+      "home_win_prob": 0.5398,
       "market_total": 9.0
     }
   }
