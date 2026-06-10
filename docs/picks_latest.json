@@ -296,11 +296,11 @@
       "inning": 7,
       "top_inning": true,
       "home_runs": 7,
-      "away_runs": 0,
-      "projected_total": 9.8,
+      "away_runs": 1,
+      "projected_total": 10.8,
       "market_total": 8.5,
-      "bet": "主隊獨贏",
-      "reason": "第7局主隊領先7分（賽前主隊勝率61%），大局已定"
+      "bet": "大小分 OVER",
+      "reason": "第7局已得8分（此時預期5.7分），高分走勢盤口8.5"
     },
     {
       "home_cn": "教士",
@@ -317,11 +317,11 @@
     {
       "home_cn": "巨人",
       "away_cn": "國民",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 3,
-      "projected_total": 8.3,
+      "projected_total": 7.8,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -331,12 +331,12 @@
       "away_cn": "釀酒人",
       "inning": 6,
       "top_inning": false,
-      "home_runs": 6,
+      "home_runs": 7,
       "away_runs": 5,
-      "projected_total": 16.1,
+      "projected_total": 17.1,
       "market_total": 13.0,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第6局已得12分（此時預期7.9分），高分走勢盤口13.0"
     }
   ],
   "live_updated_ts": 1781063712,
