@@ -294,13 +294,13 @@
       "home_cn": "天使",
       "away_cn": "太空人",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 7,
       "away_runs": 0,
-      "projected_total": 10.8,
+      "projected_total": 10.3,
       "market_total": 8.5,
-      "bet": "大小分 OVER",
-      "reason": "第6局已得7分（此時預期4.7分），高分走勢盤口8.5"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "教士",
@@ -339,7 +339,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1781062808,
+  "live_updated_ts": 1781063109,
   "game_preds": {
     "orioles|mariners": {
       "home_win_prob": 0.4481,
@@ -402,5 +402,5 @@
       "market_total": 13.0
     }
   },
-  "live_updated_at": "2026-06-10 11:40 (台灣時間)"
+  "live_updated_at": "2026-06-10 11:45 (台灣時間)"
 }
