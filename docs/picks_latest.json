@@ -295,9 +295,9 @@
       "away_cn": "道奇",
       "inning": 9,
       "top_inning": false,
-      "home_runs": 2,
+      "home_runs": 3,
       "away_runs": 12,
-      "projected_total": 14.4,
+      "projected_total": 15.4,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -308,8 +308,8 @@
       "inning": 5,
       "top_inning": true,
       "home_runs": 3,
-      "away_runs": 3,
-      "projected_total": 10.7,
+      "away_runs": 4,
+      "projected_total": 11.7,
       "market_total": 8.5,
       "bet": "大小分 OVER",
       "reason": "第5局已得7分（此時預期3.8分），高分走勢盤口8.5"
@@ -342,13 +342,13 @@
       "home_cn": "落磯",
       "away_cn": "小熊",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 7,
       "away_runs": 1,
-      "projected_total": 16.0,
+      "projected_total": 15.3,
       "market_total": 12.0,
       "bet": "大小分 OVER",
-      "reason": "第4局已得8分（此時預期4.0分），高分走勢盤口12.0"
+      "reason": "第4局已得8分（此時預期4.7分），高分走勢盤口12.0"
     },
     {
       "home_cn": "天使",
@@ -378,10 +378,10 @@
       "home_cn": "巨人",
       "away_cn": "國民",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 10.5,
+      "projected_total": 10.0,
       "market_total": 8.5,
       "bet": null,
       "reason": null
