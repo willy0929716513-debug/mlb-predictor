@@ -339,7 +339,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1781063411,
+  "live_updated_ts": 1781063712,
   "game_preds": {
     "orioles|mariners": {
       "home_win_prob": 0.4481,
@@ -402,5 +402,5 @@
       "market_total": 13.0
     }
   },
-  "live_updated_at": "2026-06-10 11:50 (台灣時間)"
+  "live_updated_at": "2026-06-10 11:55 (台灣時間)"
 }
