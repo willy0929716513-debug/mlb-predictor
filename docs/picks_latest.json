@@ -303,18 +303,6 @@
       "reason": "第7局已得12分（此時預期5.7分），高分走勢盤口8.5"
     },
     {
-      "home_cn": "白襪",
-      "away_cn": "勇士",
-      "inning": 10,
-      "top_inning": false,
-      "home_runs": 4,
-      "away_runs": 5,
-      "projected_total": 9.0,
-      "market_total": 9.0,
-      "bet": null,
-      "reason": null
-    },
-    {
       "home_cn": "落磯",
       "away_cn": "小熊",
       "inning": 7,
@@ -329,23 +317,23 @@
     {
       "home_cn": "天使",
       "away_cn": "太空人",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 7,
       "away_runs": 0,
-      "projected_total": 13.1,
+      "projected_total": 12.7,
       "market_total": 8.5,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第4局已得7分（此時預期2.8分），高分走勢盤口8.5"
     },
     {
       "home_cn": "教士",
       "away_cn": "紅人",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 2,
-      "projected_total": 9.3,
+      "projected_total": 8.9,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -366,10 +354,10 @@
       "home_cn": "運動家",
       "away_cn": "釀酒人",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 15.1,
+      "projected_total": 14.4,
       "market_total": 13.0,
       "bet": null,
       "reason": null
