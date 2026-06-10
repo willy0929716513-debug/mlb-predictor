@@ -307,9 +307,9 @@
       "away_cn": "道奇",
       "inning": 4,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 1,
       "away_runs": 2,
-      "projected_total": 7.2,
+      "projected_total": 8.2,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -378,16 +378,16 @@
       "home_cn": "白襪",
       "away_cn": "勇士",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 7.5,
+      "projected_total": 7.1,
       "market_total": 7.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1781135180,
+  "live_updated_ts": 1781135482,
   "game_preds": {
     "rays|red sox": {
       "home_win_prob": 0.68,
@@ -450,5 +450,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-11 07:46 (台灣時間)"
+  "live_updated_at": "2026-06-11 07:51 (台灣時間)"
 }
