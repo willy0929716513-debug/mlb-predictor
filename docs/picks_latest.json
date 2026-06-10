@@ -294,10 +294,10 @@
       "home_cn": "巨人",
       "away_cn": "國民",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 7.7,
+      "projected_total": 7.2,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -315,7 +315,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1781124313,
+  "live_updated_ts": 1781124614,
   "game_preds": {
     "rays|red sox": {
       "home_win_prob": 0.68,
@@ -378,5 +378,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-11 04:45 (台灣時間)"
+  "live_updated_at": "2026-06-11 04:50 (台灣時間)"
 }
