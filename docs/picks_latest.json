@@ -341,11 +341,11 @@
     {
       "home_cn": "教士",
       "away_cn": "紅人",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 2,
-      "projected_total": 9.8,
+      "projected_total": 9.3,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -365,17 +365,17 @@
     {
       "home_cn": "運動家",
       "away_cn": "釀酒人",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 15.8,
+      "projected_total": 15.1,
       "market_total": 13.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1781059190,
+  "live_updated_ts": 1781059491,
   "game_preds": {
     "orioles|mariners": {
       "home_win_prob": 0.4481,
@@ -438,5 +438,5 @@
       "market_total": 13.0
     }
   },
-  "live_updated_at": "2026-06-10 10:39 (台灣時間)"
+  "live_updated_at": "2026-06-10 10:44 (台灣時間)"
 }
