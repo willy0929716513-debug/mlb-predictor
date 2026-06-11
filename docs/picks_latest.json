@@ -329,14 +329,14 @@
     {
       "home_cn": "馬林魚",
       "away_cn": "響尾蛇",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 8,
       "away_runs": 0,
-      "projected_total": 10.4,
+      "projected_total": 9.9,
       "market_total": 8.5,
       "bet": "主隊獨贏",
-      "reason": "第7局主隊領先8分（賽前主隊勝率59%），大局已定"
+      "reason": "第8局主隊領先8分（賽前主隊勝率59%），大局已定"
     },
     {
       "home_cn": "藍鳥",
@@ -354,13 +354,13 @@
       "home_cn": "大都會",
       "away_cn": "紅雀",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 8,
-      "projected_total": 14.7,
+      "projected_total": 14.2,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第5局已得10分（此時預期3.8分），高分走勢盤口8.5"
+      "reason": "第5局已得10分（此時預期4.2分），高分走勢盤口8.5"
     },
     {
       "home_cn": "皇家",
@@ -384,7 +384,7 @@
       "projected_total": 5.6,
       "market_total": 7.5,
       "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後1分 第4局，賽前客隊勝率64%"
+      "reason": "客隊落後2分 第4局，賽前客隊勝率64%"
     },
     {
       "home_cn": "落磯",
