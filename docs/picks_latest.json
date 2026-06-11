@@ -303,25 +303,13 @@
       "reason": "第7局客隊領先3分（賽前客隊勝率57%），大局已定"
     },
     {
-      "home_cn": "藍鳥",
-      "away_cn": "費城人",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 4,
-      "away_runs": 7,
-      "projected_total": 11.5,
-      "market_total": 8.5,
-      "bet": "客隊獨贏",
-      "reason": "第9局客隊領先3分（賽前客隊勝率59%），大局已定"
-    },
-    {
       "home_cn": "皇家",
       "away_cn": "遊騎兵",
       "inning": 8,
       "top_inning": true,
       "home_runs": 4,
-      "away_runs": 3,
-      "projected_total": 9.2,
+      "away_runs": 4,
+      "projected_total": 10.2,
       "market_total": 10.0,
       "bet": "客隊讓分(+1.5)",
       "reason": "客隊落後1分 第8局，賽前客隊勝率67%"
@@ -341,11 +329,11 @@
     {
       "home_cn": "運動家",
       "away_cn": "釀酒人",
-      "inning": 4,
-      "top_inning": false,
+      "inning": 5,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 3,
-      "projected_total": 11.9,
+      "projected_total": 11.1,
       "market_total": 14.5,
       "bet": null,
       "reason": null
