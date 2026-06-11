@@ -230,17 +230,17 @@
     {
       "home_cn": "皇家",
       "away_cn": "遊騎兵",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 4,
-      "projected_total": 10.1,
+      "projected_total": 9.5,
       "market_total": 10.5,
-      "bet": null,
-      "reason": null
+      "bet": "客隊獨贏",
+      "reason": "第7局客隊領先2分（賽前客隊勝率65%），大局已定"
     }
   ],
-  "live_updated_ts": 1781215798,
+  "live_updated_ts": 1781216100,
   "game_preds": {
     "marlins|diamondbacks": {
       "home_win_prob": 0.6966,
@@ -275,5 +275,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-06-12 06:09 (台灣時間)"
+  "live_updated_at": "2026-06-12 06:15 (台灣時間)"
 }
