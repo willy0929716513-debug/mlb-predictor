@@ -317,11 +317,11 @@
     {
       "home_cn": "老虎",
       "away_cn": "雙城",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 8.5,
+      "projected_total": 8.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -330,13 +330,13 @@
       "home_cn": "馬林魚",
       "away_cn": "響尾蛇",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 8,
       "away_runs": 0,
-      "projected_total": 11.8,
+      "projected_total": 11.3,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第6局已得8分（此時預期4.7分），高分走勢盤口8.5"
+      "reason": "第6局已得8分（此時預期5.2分），高分走勢盤口8.5"
     },
     {
       "home_cn": "藍鳥",
@@ -355,7 +355,7 @@
       "away_cn": "紅雀",
       "inning": 4,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 2,
       "away_runs": 7,
       "projected_total": 12.2,
       "market_total": 8.5,
