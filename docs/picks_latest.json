@@ -294,13 +294,13 @@
       "home_cn": "老虎",
       "away_cn": "雙城",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 4,
-      "projected_total": 11.0,
+      "projected_total": 10.5,
       "market_total": 9.0,
-      "bet": "大小分 OVER",
-      "reason": "第6局已得7分（此時預期5.0分），高分走勢盤口9.0"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "藍鳥",
@@ -378,10 +378,10 @@
       "home_cn": "天使",
       "away_cn": "太空人",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 9.0,
+      "projected_total": 8.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
