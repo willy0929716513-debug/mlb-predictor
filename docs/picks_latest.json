@@ -351,7 +351,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1781145315,
+  "live_updated_ts": 1781145616,
   "game_preds": {
     "rays|red sox": {
       "home_win_prob": 0.68,
@@ -414,5 +414,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-11 10:35 (台灣時間)"
+  "live_updated_at": "2026-06-11 10:40 (台灣時間)"
 }
