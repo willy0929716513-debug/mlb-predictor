@@ -305,8 +305,8 @@
     {
       "home_cn": "藍鳥",
       "away_cn": "費城人",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 4,
       "away_runs": 7,
       "projected_total": 13.4,
@@ -367,9 +367,9 @@
       "away_cn": "太空人",
       "inning": 1,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 8.5,
+      "projected_total": 9.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
