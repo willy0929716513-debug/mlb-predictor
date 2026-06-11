@@ -293,14 +293,14 @@
     {
       "home_cn": "金鶯",
       "away_cn": "水手",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 7,
       "away_runs": 0,
-      "projected_total": 9.5,
+      "projected_total": 9.0,
       "market_total": 9.0,
       "bet": "主隊獨贏",
-      "reason": "第7局主隊領先7分（賽前主隊勝率65%），大局已定"
+      "reason": "第8局主隊領先7分（賽前主隊勝率65%），大局已定"
     },
     {
       "home_cn": "海盜",
@@ -318,10 +318,10 @@
       "home_cn": "老虎",
       "away_cn": "雙城",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 8.0,
+      "projected_total": 7.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
