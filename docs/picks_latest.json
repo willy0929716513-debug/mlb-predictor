@@ -329,14 +329,14 @@
     {
       "home_cn": "白襪",
       "away_cn": "勇士",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 1,
-      "projected_total": 5.1,
+      "projected_total": 4.7,
       "market_total": 7.5,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅3分（此時預期5.4分），低分走勢盤口7.5"
+      "reason": "第8局僅3分（此時預期5.8分），低分走勢盤口7.5"
     },
     {
       "home_cn": "落磯",
