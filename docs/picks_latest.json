@@ -306,10 +306,10 @@
       "home_cn": "天使",
       "away_cn": "太空人",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 2,
-      "projected_total": 5.0,
+      "projected_total": 4.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
