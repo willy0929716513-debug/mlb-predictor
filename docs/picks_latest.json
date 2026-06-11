@@ -315,7 +315,7 @@
       "reason": "第8局僅4分（此時預期7.5分），低分走勢盤口9.0"
     }
   ],
-  "live_updated_ts": 1781148933,
+  "live_updated_ts": 1781149234,
   "game_preds": {
     "rays|red sox": {
       "home_win_prob": 0.68,
@@ -378,5 +378,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-11 11:35 (台灣時間)"
+  "live_updated_at": "2026-06-11 11:40 (台灣時間)"
 }
