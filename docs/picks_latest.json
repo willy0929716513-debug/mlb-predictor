@@ -293,14 +293,14 @@
     {
       "home_cn": "金鶯",
       "away_cn": "水手",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 7,
       "away_runs": 2,
-      "projected_total": 10.5,
+      "projected_total": 10.0,
       "market_total": 9.0,
       "bet": "主隊獨贏",
-      "reason": "第8局主隊領先5分（賽前主隊勝率65%），大局已定"
+      "reason": "第9局主隊領先5分（賽前主隊勝率65%），大局已定"
     },
     {
       "home_cn": "海盜",
@@ -318,10 +318,10 @@
       "home_cn": "老虎",
       "away_cn": "雙城",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 8.0,
+      "projected_total": 7.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -378,10 +378,10 @@
       "home_cn": "白襪",
       "away_cn": "勇士",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 0,
-      "projected_total": 6.2,
+      "projected_total": 5.8,
       "market_total": 7.5,
       "bet": "客隊讓分(+1.5)",
       "reason": "客隊落後2分 第5局，賽前客隊勝率64%"
