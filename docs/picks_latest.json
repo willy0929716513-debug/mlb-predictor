@@ -293,14 +293,14 @@
     {
       "home_cn": "運動家",
       "away_cn": "釀酒人",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 4,
       "away_runs": 3,
-      "projected_total": 9.4,
+      "projected_total": 8.6,
       "market_total": 14.5,
-      "bet": "大小分 UNDER",
-      "reason": "第8局僅7分（此時預期12.1分），低分走勢盤口14.5"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "天使",
@@ -315,7 +315,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1781149234,
+  "live_updated_ts": 1781149536,
   "game_preds": {
     "rays|red sox": {
       "home_win_prob": 0.68,
@@ -378,5 +378,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-11 11:40 (台灣時間)"
+  "live_updated_at": "2026-06-11 11:45 (台灣時間)"
 }
