@@ -233,8 +233,8 @@
       "inning": 3,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 1,
-      "projected_total": 8.4,
+      "away_runs": 3,
+      "projected_total": 10.4,
       "market_total": 9.5,
       "bet": null,
       "reason": null
@@ -243,16 +243,16 @@
       "home_cn": "金鶯",
       "away_cn": "水手",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 9.5,
+      "projected_total": 9.0,
       "market_total": 8.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1781220024,
+  "live_updated_ts": 1781220325,
   "game_preds": {
     "marlins|diamondbacks": {
       "home_win_prob": 0.6966,
@@ -287,5 +287,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-06-12 07:20 (台灣時間)"
+  "live_updated_at": "2026-06-12 07:25 (台灣時間)"
 }
