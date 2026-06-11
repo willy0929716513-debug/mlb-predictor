@@ -295,12 +295,12 @@
       "away_cn": "道奇",
       "inning": 8,
       "top_inning": false,
-      "home_runs": 4,
+      "home_runs": 7,
       "away_runs": 6,
-      "projected_total": 11.4,
+      "projected_total": 14.4,
       "market_total": 8.5,
-      "bet": "客隊獨贏",
-      "reason": "第8局客隊領先2分（賽前客隊勝率68%），大局已定"
+      "bet": "客隊讓分(+1.5)",
+      "reason": "客隊落後1分 第8局，賽前客隊勝率68%"
     },
     {
       "home_cn": "老虎",
@@ -313,18 +313,6 @@
       "market_total": 9.0,
       "bet": null,
       "reason": null
-    },
-    {
-      "home_cn": "馬林魚",
-      "away_cn": "響尾蛇",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 8,
-      "away_runs": 0,
-      "projected_total": 8.9,
-      "market_total": 8.5,
-      "bet": "主隊獨贏",
-      "reason": "第9局主隊領先8分（賽前主隊勝率59%），大局已定"
     },
     {
       "home_cn": "藍鳥",
