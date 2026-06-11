@@ -296,11 +296,11 @@
       "inning": 8,
       "top_inning": true,
       "home_runs": 7,
-      "away_runs": 0,
-      "projected_total": 9.0,
+      "away_runs": 2,
+      "projected_total": 11.0,
       "market_total": 9.0,
       "bet": "主隊獨贏",
-      "reason": "第8局主隊領先7分（賽前主隊勝率65%），大局已定"
+      "reason": "第8局主隊領先5分（賽前主隊勝率65%），大局已定"
     },
     {
       "home_cn": "海盜",
@@ -319,9 +319,9 @@
       "away_cn": "雙城",
       "inning": 3,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 7.5,
+      "projected_total": 8.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -368,20 +368,20 @@
       "inning": 4,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 0,
-      "projected_total": 7.7,
+      "away_runs": 1,
+      "projected_total": 8.7,
       "market_total": 10.0,
-      "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後1分 第4局，賽前客隊勝率67%"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "白襪",
       "away_cn": "勇士",
       "inning": 4,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 4.6,
+      "projected_total": 5.6,
       "market_total": 7.5,
       "bet": "客隊讓分(+1.5)",
       "reason": "客隊落後1分 第4局，賽前客隊勝率64%"
@@ -411,7 +411,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1781138615,
+  "live_updated_ts": 1781138916,
   "game_preds": {
     "rays|red sox": {
       "home_win_prob": 0.68,
@@ -474,5 +474,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-11 08:43 (台灣時間)"
+  "live_updated_at": "2026-06-11 08:48 (台灣時間)"
 }
