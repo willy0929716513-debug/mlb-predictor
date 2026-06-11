@@ -291,18 +291,6 @@
   ],
   "live_games": [
     {
-      "home_cn": "皇家",
-      "away_cn": "遊騎兵",
-      "inning": 10,
-      "top_inning": false,
-      "home_runs": 4,
-      "away_runs": 6,
-      "projected_total": 10.0,
-      "market_total": 10.0,
-      "bet": "客隊獨贏",
-      "reason": "第10局客隊領先2分（賽前客隊勝率67%），大局已定"
-    },
-    {
       "home_cn": "落磯",
       "away_cn": "小熊",
       "inning": 9,
@@ -339,7 +327,7 @@
       "reason": "第7局僅3分（此時預期6.5分），低分走勢盤口9.0"
     }
   ],
-  "live_updated_ts": 1781147727,
+  "live_updated_ts": 1781148028,
   "game_preds": {
     "rays|red sox": {
       "home_win_prob": 0.68,
@@ -402,5 +390,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-11 11:15 (台灣時間)"
+  "live_updated_at": "2026-06-11 11:20 (台灣時間)"
 }
