@@ -242,14 +242,14 @@
     {
       "home_cn": "金鶯",
       "away_cn": "水手",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 7,
       "away_runs": 5,
-      "projected_total": 13.4,
+      "projected_total": 12.9,
       "market_total": 8.5,
-      "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後2分 第8局，賽前客隊勝率58%"
+      "bet": null,
+      "reason": null
     }
   ],
   "live_updated_ts": 1781229111,
