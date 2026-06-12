@@ -230,11 +230,11 @@
     {
       "home_cn": "海盜",
       "away_cn": "道奇",
-      "inning": 4,
-      "top_inning": false,
+      "inning": 5,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 5,
-      "projected_total": 10.8,
+      "projected_total": 10.3,
       "market_total": 9.5,
       "bet": null,
       "reason": null
@@ -243,10 +243,10 @@
       "home_cn": "金鶯",
       "away_cn": "水手",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 7.6,
+      "projected_total": 7.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
