@@ -231,10 +231,10 @@
       "home_cn": "海盜",
       "away_cn": "道奇",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 6,
       "away_runs": 8,
-      "projected_total": 15.1,
+      "projected_total": 14.5,
       "market_total": 9.5,
       "bet": "客隊獨贏",
       "reason": "第9局客隊領先2分（賽前客隊勝率78%），大局已定"
