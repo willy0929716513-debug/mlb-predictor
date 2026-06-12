@@ -106,7 +106,7 @@
     "rl_a": 2.03,
     "rl_h_25": null,
     "rl_a_25": null,
-    "over": 1.87,
+    "over": 1.98,
     "under": 2.04
   },
   "2026-06-13|royals|astros": {
@@ -145,9 +145,9 @@
   "2026-06-13|athletics|rockies": {
     "ts": "2026-06-12",
     "home_ml": 1.51,
-    "away_ml": 2.76,
+    "away_ml": 2.8,
     "rl_h": 1.93,
-    "rl_a": 2.01,
+    "rl_a": 2.03,
     "rl_h_25": null,
     "rl_a_25": null,
     "over": 1.93,
