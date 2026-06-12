@@ -252,7 +252,7 @@
       "reason": "第5局已得11分（此時預期4.2分），高分走勢盤口8.5"
     }
   ],
-  "live_updated_ts": 1781224989,
+  "live_updated_ts": 1781225291,
   "game_preds": {
     "marlins|diamondbacks": {
       "home_win_prob": 0.6966,
@@ -287,5 +287,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-06-12 08:43 (台灣時間)"
+  "live_updated_at": "2026-06-12 08:48 (台灣時間)"
 }
