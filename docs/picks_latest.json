@@ -244,9 +244,9 @@
       "away_cn": "水手",
       "inning": 3,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 7.1,
+      "projected_total": 8.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
