@@ -231,13 +231,13 @@
       "home_cn": "海盜",
       "away_cn": "道奇",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 4,
       "away_runs": 5,
-      "projected_total": 13.2,
+      "projected_total": 12.7,
       "market_total": 9.5,
       "bet": "大小分 OVER",
-      "reason": "第6局已得9分（此時預期5.3分），高分走勢盤口9.5"
+      "reason": "第6局已得9分（此時預期5.8分），高分走勢盤口9.5"
     },
     {
       "home_cn": "金鶯",
@@ -252,7 +252,7 @@
       "reason": "第5局已得11分（此時預期3.8分），高分走勢盤口8.5"
     }
   ],
-  "live_updated_ts": 1781224688,
+  "live_updated_ts": 1781224989,
   "game_preds": {
     "marlins|diamondbacks": {
       "home_win_prob": 0.6966,
@@ -287,5 +287,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-06-12 08:38 (台灣時間)"
+  "live_updated_at": "2026-06-12 08:43 (台灣時間)"
 }
