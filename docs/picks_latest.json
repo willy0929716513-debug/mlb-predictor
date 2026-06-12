@@ -252,7 +252,7 @@
       "reason": "客隊落後2分 第8局，賽前客隊勝率58%"
     }
   ],
-  "live_updated_ts": 1781228809,
+  "live_updated_ts": 1781229111,
   "game_preds": {
     "marlins|diamondbacks": {
       "home_win_prob": 0.6966,
@@ -287,5 +287,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-06-12 09:46 (台灣時間)"
+  "live_updated_at": "2026-06-12 09:51 (台灣時間)"
 }
