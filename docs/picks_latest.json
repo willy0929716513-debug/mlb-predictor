@@ -497,11 +497,11 @@
       "inning": 4,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 0,
-      "projected_total": 6.0,
+      "away_runs": 1,
+      "projected_total": 7.0,
       "market_total": 7.5,
-      "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後1分 第4局，賽前客隊勝率63%"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "金鶯",
@@ -600,7 +600,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1781380741,
+  "live_updated_ts": 1781381042,
   "game_preds": {
     "twins|cardinals": {
       "home_win_prob": 0.4346,
@@ -663,5 +663,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-14 03:59 (台灣時間)"
+  "live_updated_at": "2026-06-14 04:04 (台灣時間)"
 }
