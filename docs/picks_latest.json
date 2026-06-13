@@ -468,10 +468,10 @@
       "home_cn": "天使",
       "away_cn": "光芒",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 4,
       "away_runs": 2,
-      "projected_total": 10.0,
+      "projected_total": 9.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -479,11 +479,11 @@
     {
       "home_cn": "運動家",
       "away_cn": "落磯",
-      "inning": 4,
-      "top_inning": false,
+      "inning": 5,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.2,
+      "projected_total": 7.5,
       "market_total": 13.5,
       "bet": null,
       "reason": null
