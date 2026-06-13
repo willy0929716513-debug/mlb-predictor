@@ -417,25 +417,13 @@
   ],
   "live_games": [
     {
-      "home_cn": "海盜",
-      "away_cn": "馬林魚",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 3,
-      "away_runs": 8,
-      "projected_total": 11.5,
-      "market_total": 8.5,
-      "bet": null,
-      "reason": null
-    },
-    {
       "home_cn": "國民",
       "away_cn": "水手",
       "inning": 2,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 8.0,
+      "away_runs": 3,
+      "projected_total": 11.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -456,10 +444,10 @@
       "home_cn": "守護者",
       "away_cn": "老虎",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 6.9,
+      "projected_total": 6.4,
       "market_total": 8.5,
       "bet": "客隊讓分(+1.5)",
       "reason": "客隊落後1分 第8局，賽前客隊勝率58%"
@@ -468,13 +456,13 @@
       "home_cn": "紅襪",
       "away_cn": "遊騎兵",
       "inning": 7,
-      "top_inning": true,
-      "home_runs": 6,
+      "top_inning": false,
+      "home_runs": 7,
       "away_runs": 1,
-      "projected_total": 9.8,
+      "projected_total": 10.4,
       "market_total": 8.5,
       "bet": "主隊獨贏",
-      "reason": "第7局主隊領先5分（賽前主隊勝率52%），大局已定"
+      "reason": "第7局主隊領先6分（賽前主隊勝率52%），大局已定"
     },
     {
       "home_cn": "紅人",
@@ -482,20 +470,20 @@
       "inning": 6,
       "top_inning": true,
       "home_runs": 2,
-      "away_runs": 1,
-      "projected_total": 7.2,
+      "away_runs": 2,
+      "projected_total": 8.2,
       "market_total": 9.5,
-      "bet": "大小分 UNDER",
-      "reason": "第6局僅3分（此時預期5.3分），低分走勢盤口9.5"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "大都會",
       "away_cn": "勇士",
-      "inning": 2,
-      "top_inning": false,
-      "home_runs": 2,
+      "inning": 3,
+      "top_inning": true,
+      "home_runs": 6,
       "away_runs": 2,
-      "projected_total": 10.7,
+      "projected_total": 14.2,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -517,12 +505,12 @@
       "away_cn": "道奇",
       "inning": 5,
       "top_inning": false,
-      "home_runs": 4,
+      "home_runs": 6,
       "away_runs": 2,
-      "projected_total": 10.5,
+      "projected_total": 12.5,
       "market_total": 9.0,
-      "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後2分 第5局，賽前客隊勝率78%"
+      "bet": "大小分 OVER",
+      "reason": "第5局已得8分（此時預期4.5分），高分走勢盤口9.0"
     },
     {
       "home_cn": "釀酒人",
@@ -573,7 +561,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1781313515,
+  "live_updated_ts": 1781313817,
   "game_preds": {
     "pirates|marlins": {
       "home_win_prob": 0.5892,
@@ -636,5 +624,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-06-13 09:18 (台灣時間)"
+  "live_updated_at": "2026-06-13 09:23 (台灣時間)"
 }
