@@ -420,13 +420,13 @@
       "home_cn": "國民",
       "away_cn": "水手",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 8,
-      "projected_total": 13.0,
+      "projected_total": 12.5,
       "market_total": 9.0,
       "bet": "大小分 OVER",
-      "reason": "第6局已得9分（此時預期5.0分），高分走勢盤口9.0"
+      "reason": "第6局已得9分（此時預期5.5分），高分走勢盤口9.0"
     },
     {
       "home_cn": "紅人",
@@ -450,7 +450,7 @@
       "projected_total": 12.7,
       "market_total": 8.0,
       "bet": "大小分 OVER",
-      "reason": "第6局已得10分（此時預期4.9分），高分走勢盤口8.0"
+      "reason": "第7局已得10分（此時預期5.3分），高分走勢盤口8.0"
     },
     {
       "home_cn": "皇家",
@@ -473,8 +473,8 @@
       "away_runs": 4,
       "projected_total": 11.0,
       "market_total": 9.0,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第7局已得11分（此時預期6.0分），高分走勢盤口9.0"
     },
     {
       "home_cn": "天使",
@@ -504,10 +504,10 @@
       "home_cn": "巨人",
       "away_cn": "小熊",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 7.6,
+      "projected_total": 7.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
