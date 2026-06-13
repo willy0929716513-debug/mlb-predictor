@@ -537,7 +537,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1781317594,
+  "live_updated_ts": 1781317895,
   "game_preds": {
     "pirates|marlins": {
       "home_win_prob": 0.5892,
@@ -600,5 +600,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-06-13 10:26 (台灣時間)"
+  "live_updated_at": "2026-06-13 10:31 (台灣時間)"
 }
