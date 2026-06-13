@@ -480,37 +480,25 @@
   ],
   "live_games": [
     {
-      "home_cn": "雙城",
-      "away_cn": "紅雀",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 5,
-      "away_runs": 9,
-      "projected_total": 14.5,
-      "market_total": 9.0,
-      "bet": "客隊獨贏",
-      "reason": "第9局客隊領先4分（賽前客隊勝率57%），大局已定"
-    },
-    {
       "home_cn": "藍鳥",
       "away_cn": "洋基",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 4.5,
+      "projected_total": 4.1,
       "market_total": 7.5,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅2分（此時預期5.0分），低分走勢盤口7.5"
+      "reason": "第7局僅2分（此時預期5.4分），低分走勢盤口7.5"
     },
     {
       "home_cn": "金鶯",
       "away_cn": "教士",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 4,
-      "projected_total": 13.8,
+      "projected_total": 13.2,
       "market_total": 10.0,
       "bet": null,
       "reason": null
@@ -532,9 +520,9 @@
       "away_cn": "馬林魚",
       "inning": 3,
       "top_inning": false,
-      "home_runs": 1,
+      "home_runs": 2,
       "away_runs": 1,
-      "projected_total": 8.5,
+      "projected_total": 9.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -544,9 +532,9 @@
       "away_cn": "響尾蛇",
       "inning": 3,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 7.9,
+      "projected_total": 8.9,
       "market_total": 9.5,
       "bet": null,
       "reason": null
@@ -555,10 +543,10 @@
       "home_cn": "守護者",
       "away_cn": "老虎",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 7.8,
+      "projected_total": 7.4,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -568,9 +556,9 @@
       "away_cn": "遊騎兵",
       "inning": 3,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 6.4,
+      "projected_total": 7.4,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -578,11 +566,11 @@
     {
       "home_cn": "大都會",
       "away_cn": "勇士",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 7.1,
+      "projected_total": 6.7,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -593,14 +581,14 @@
       "inning": 3,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 3,
-      "projected_total": 9.2,
+      "away_runs": 4,
+      "projected_total": 10.2,
       "market_total": 8.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1781384060,
+  "live_updated_ts": 1781384362,
   "game_preds": {
     "twins|cardinals": {
       "home_win_prob": 0.4346,
@@ -663,5 +651,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-14 04:54 (台灣時間)"
+  "live_updated_at": "2026-06-14 04:59 (台灣時間)"
 }
