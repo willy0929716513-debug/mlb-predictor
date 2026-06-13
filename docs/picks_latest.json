@@ -419,26 +419,26 @@
     {
       "home_cn": "國民",
       "away_cn": "水手",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 5,
-      "projected_total": 11.5,
+      "projected_total": 11.0,
       "market_total": 9.0,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第4局已得5分（此時預期3.0分），高分走勢盤口9.0"
     },
     {
       "home_cn": "紅襪",
       "away_cn": "遊騎兵",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 10,
       "away_runs": 1,
-      "projected_total": 12.4,
+      "projected_total": 11.9,
       "market_total": 8.5,
       "bet": "主隊獨贏",
-      "reason": "第8局主隊領先9分（賽前主隊勝率52%），大局已定"
+      "reason": "第9局主隊領先9分（賽前主隊勝率52%），大局已定"
     },
     {
       "home_cn": "紅人",
@@ -517,9 +517,9 @@
       "away_cn": "光芒",
       "inning": 1,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 2,
       "away_runs": 0,
-      "projected_total": 8.5,
+      "projected_total": 10.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
