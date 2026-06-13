@@ -419,11 +419,11 @@
     {
       "home_cn": "國民",
       "away_cn": "水手",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 9,
-      "projected_total": 12.5,
+      "projected_total": 12.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -432,10 +432,10 @@
       "home_cn": "大都會",
       "away_cn": "勇士",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 7,
       "away_runs": 5,
-      "projected_total": 13.8,
+      "projected_total": 13.3,
       "market_total": 8.0,
       "bet": "主隊獨贏",
       "reason": "第8局主隊領先2分（賽前主隊勝率48%），大局已定"
@@ -446,20 +446,20 @@
       "inning": 9,
       "top_inning": true,
       "home_runs": 8,
-      "away_runs": 9,
-      "projected_total": 18.1,
+      "away_runs": 10,
+      "projected_total": 19.1,
       "market_total": 9.5,
-      "bet": null,
-      "reason": null
+      "bet": "客隊獨贏",
+      "reason": "第9局客隊領先2分（賽前客隊勝率62%），大局已定"
     },
     {
       "home_cn": "雙城",
       "away_cn": "紅雀",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 7,
       "away_runs": 8,
-      "projected_total": 17.0,
+      "projected_total": 16.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -494,14 +494,14 @@
       "inning": 4,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 5.7,
+      "away_runs": 1,
+      "projected_total": 6.7,
       "market_total": 8.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1781320307,
+  "live_updated_ts": 1781320609,
   "game_preds": {
     "pirates|marlins": {
       "home_win_prob": 0.5892,
@@ -564,5 +564,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-06-13 11:11 (台灣時間)"
+  "live_updated_at": "2026-06-13 11:16 (台灣時間)"
 }
