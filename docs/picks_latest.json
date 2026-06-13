@@ -494,17 +494,17 @@
     {
       "home_cn": "釀酒人",
       "away_cn": "費城人",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 6.8,
+      "projected_total": 6.3,
       "market_total": 8.0,
-      "bet": null,
-      "reason": null
+      "bet": "主隊讓分(+1.5)",
+      "reason": "主隊落後1分 第4局，賽前主隊勝率73%"
     }
   ],
-  "live_updated_ts": 1781394763,
+  "live_updated_ts": 1781395065,
   "game_preds": {
     "twins|cardinals": {
       "home_win_prob": 0.4346,
@@ -567,5 +567,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-14 07:52 (台灣時間)"
+  "live_updated_at": "2026-06-14 07:57 (台灣時間)"
 }
