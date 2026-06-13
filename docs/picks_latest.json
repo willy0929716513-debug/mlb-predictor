@@ -455,23 +455,23 @@
     {
       "home_cn": "雙城",
       "away_cn": "紅雀",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 7,
       "away_runs": 7,
-      "projected_total": 16.5,
+      "projected_total": 16.0,
       "market_total": 9.0,
-      "bet": "大小分 OVER",
-      "reason": "第7局已得14分（此時預期6.5分），高分走勢盤口9.0"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "天使",
       "away_cn": "光芒",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 4,
       "away_runs": 2,
-      "projected_total": 10.5,
+      "projected_total": 10.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
