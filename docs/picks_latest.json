@@ -504,7 +504,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1781393722,
+  "live_updated_ts": 1781393859,
   "game_preds": {
     "twins|cardinals": {
       "home_win_prob": 0.4346,
@@ -567,5 +567,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-14 07:35 (台灣時間)"
+  "live_updated_at": "2026-06-14 07:37 (台灣時間)"
 }
