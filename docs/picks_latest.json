@@ -432,10 +432,10 @@
       "home_cn": "金鶯",
       "away_cn": "教士",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 6,
       "away_runs": 2,
-      "projected_total": 15.0,
+      "projected_total": 14.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -470,8 +470,8 @@
       "inning": 3,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 0,
-      "projected_total": 8.4,
+      "away_runs": 1,
+      "projected_total": 9.4,
       "market_total": 9.5,
       "bet": null,
       "reason": null
@@ -491,11 +491,11 @@
     {
       "home_cn": "藍鳥",
       "away_cn": "洋基",
-      "inning": 2,
-      "top_inning": false,
-      "home_runs": 3,
+      "inning": 3,
+      "top_inning": true,
+      "home_runs": 5,
       "away_runs": 0,
-      "projected_total": 9.7,
+      "projected_total": 11.2,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -504,10 +504,10 @@
       "home_cn": "白襪",
       "away_cn": "道奇",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 2,
-      "projected_total": 11.0,
+      "projected_total": 10.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -530,8 +530,8 @@
       "inning": 1,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 9.5,
+      "away_runs": 3,
+      "projected_total": 12.5,
       "market_total": 9.5,
       "bet": null,
       "reason": null
@@ -549,7 +549,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1781309589,
+  "live_updated_ts": 1781309891,
   "game_preds": {
     "pirates|marlins": {
       "home_win_prob": 0.5892,
@@ -612,5 +612,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-06-13 08:13 (台灣時間)"
+  "live_updated_at": "2026-06-13 08:18 (台灣時間)"
 }
