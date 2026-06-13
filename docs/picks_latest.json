@@ -422,11 +422,11 @@
       "inning": 5,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 5,
-      "projected_total": 11.0,
+      "away_runs": 6,
+      "projected_total": 12.0,
       "market_total": 9.0,
       "bet": "大小分 OVER",
-      "reason": "第5局已得6分（此時預期4.0分），高分走勢盤口9.0"
+      "reason": "第5局已得7分（此時預期4.0分），高分走勢盤口9.0"
     },
     {
       "home_cn": "紅人",
@@ -455,14 +455,14 @@
     {
       "home_cn": "藍鳥",
       "away_cn": "洋基",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 8,
       "away_runs": 5,
-      "projected_total": 14.3,
+      "projected_total": 13.9,
       "market_total": 8.0,
       "bet": "主隊獨贏",
-      "reason": "第8局主隊領先3分（賽前主隊勝率51%），大局已定"
+      "reason": "第9局主隊領先3分（賽前主隊勝率51%），大局已定"
     },
     {
       "home_cn": "白襪",
@@ -493,9 +493,9 @@
       "away_cn": "紅雀",
       "inning": 6,
       "top_inning": false,
-      "home_runs": 3,
+      "home_runs": 4,
       "away_runs": 3,
-      "projected_total": 9.5,
+      "projected_total": 10.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -504,10 +504,10 @@
       "home_cn": "天使",
       "away_cn": "光芒",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 0,
-      "projected_total": 9.0,
+      "projected_total": 8.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
