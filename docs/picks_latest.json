@@ -508,21 +508,21 @@
       "away_cn": "馬林魚",
       "inning": 8,
       "top_inning": false,
-      "home_runs": 2,
+      "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 5.5,
+      "projected_total": 6.5,
       "market_total": 9.0,
-      "bet": "大小分 UNDER",
-      "reason": "第8局僅4分（此時預期7.5分），低分走勢盤口9.0"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "紅襪",
       "away_cn": "遊騎兵",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 4,
       "away_runs": 3,
-      "projected_total": 8.7,
+      "projected_total": 8.2,
       "market_total": 7.5,
       "bet": "客隊讓分(+1.5)",
       "reason": "客隊落後1分 第8局，賽前客隊勝率66%"
@@ -531,13 +531,13 @@
       "home_cn": "白襪",
       "away_cn": "道奇",
       "inning": 9,
-      "top_inning": true,
-      "home_runs": 0,
+      "top_inning": false,
+      "home_runs": 1,
       "away_runs": 7,
-      "projected_total": 7.9,
+      "projected_total": 8.4,
       "market_total": 8.0,
       "bet": "客隊獨贏",
-      "reason": "第9局客隊領先7分（賽前客隊勝率78%），大局已定"
+      "reason": "第9局客隊領先6分（賽前客隊勝率78%），大局已定"
     },
     {
       "home_cn": "釀酒人",
@@ -552,7 +552,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1781390705,
+  "live_updated_ts": 1781391006,
   "game_preds": {
     "twins|cardinals": {
       "home_win_prob": 0.4346,
@@ -615,5 +615,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-14 06:45 (台灣時間)"
+  "live_updated_at": "2026-06-14 06:50 (台灣時間)"
 }
