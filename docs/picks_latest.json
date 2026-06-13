@@ -421,12 +421,12 @@
       "away_cn": "水手",
       "inning": 4,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 1,
       "away_runs": 5,
-      "projected_total": 10.5,
+      "projected_total": 11.5,
       "market_total": 9.0,
       "bet": "大小分 OVER",
-      "reason": "第4局已得5分（此時預期3.5分），高分走勢盤口9.0"
+      "reason": "第4局已得6分（此時預期3.5分），高分走勢盤口9.0"
     },
     {
       "home_cn": "紅人",
@@ -491,11 +491,11 @@
     {
       "home_cn": "雙城",
       "away_cn": "紅雀",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 3,
-      "projected_total": 9.5,
+      "projected_total": 9.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -504,10 +504,10 @@
       "home_cn": "天使",
       "away_cn": "光芒",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 0,
-      "projected_total": 10.0,
+      "projected_total": 9.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
