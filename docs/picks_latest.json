@@ -492,13 +492,13 @@
       "home_cn": "白襪",
       "away_cn": "道奇",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 8,
       "away_runs": 2,
-      "projected_total": 14.0,
+      "projected_total": 13.5,
       "market_total": 9.0,
       "bet": "大小分 OVER",
-      "reason": "第6局已得10分（此時預期5.0分），高分走勢盤口9.0"
+      "reason": "第6局已得10分（此時預期5.5分），高分走勢盤口9.0"
     },
     {
       "home_cn": "釀酒人",
