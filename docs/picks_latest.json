@@ -494,17 +494,17 @@
     {
       "home_cn": "藍鳥",
       "away_cn": "洋基",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 7.1,
+      "projected_total": 6.7,
       "market_total": 7.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1781378325,
+  "live_updated_ts": 1781378627,
   "game_preds": {
     "twins|cardinals": {
       "home_win_prob": 0.4346,
@@ -567,5 +567,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-14 03:18 (台灣時間)"
+  "live_updated_at": "2026-06-14 03:23 (台灣時間)"
 }
