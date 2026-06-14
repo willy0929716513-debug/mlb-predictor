@@ -516,7 +516,7 @@
       "reason": "第6局僅1分（此時預期4.9分），低分走勢盤口8.0"
     }
   ],
-  "live_updated_ts": 1781408178,
+  "live_updated_ts": 1781408480,
   "game_preds": {
     "twins|cardinals": {
       "home_win_prob": 0.4346,
@@ -579,5 +579,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-14 11:36 (台灣時間)"
+  "live_updated_at": "2026-06-14 11:41 (台灣時間)"
 }
