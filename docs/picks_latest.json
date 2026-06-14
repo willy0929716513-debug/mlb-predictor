@@ -508,12 +508,12 @@
       "away_cn": "光芒",
       "inning": 6,
       "top_inning": false,
-      "home_runs": 1,
+      "home_runs": 3,
       "away_runs": 0,
-      "projected_total": 4.1,
+      "projected_total": 6.1,
       "market_total": 8.0,
-      "bet": "大小分 UNDER",
-      "reason": "第6局僅1分（此時預期4.9分），低分走勢盤口8.0"
+      "bet": null,
+      "reason": null
     }
   ],
   "live_updated_ts": 1781408781,
