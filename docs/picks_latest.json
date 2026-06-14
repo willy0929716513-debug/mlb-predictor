@@ -497,8 +497,8 @@
       "inning": 3,
       "top_inning": true,
       "home_runs": 2,
-      "away_runs": 0,
-      "projected_total": 13.3,
+      "away_runs": 1,
+      "projected_total": 14.3,
       "market_total": 14.5,
       "bet": null,
       "reason": null
@@ -509,8 +509,8 @@
       "inning": 3,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 1,
-      "projected_total": 7.2,
+      "away_runs": 2,
+      "projected_total": 8.2,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -519,16 +519,16 @@
       "home_cn": "天使",
       "away_cn": "光芒",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 6.2,
+      "projected_total": 5.8,
       "market_total": 8.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1781404864,
+  "live_updated_ts": 1781405165,
   "game_preds": {
     "twins|cardinals": {
       "home_win_prob": 0.4346,
@@ -591,5 +591,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-14 10:41 (台灣時間)"
+  "live_updated_at": "2026-06-14 10:46 (台灣時間)"
 }
