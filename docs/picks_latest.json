@@ -2,30 +2,30 @@
   "generated_at": "2026-06-14 23:35 (台灣時間)",
   "date": "2026-06-14",
   "stats": {
-    "settled": 144,
-    "wins": 101,
-    "win_rate": 70.1,
-    "total_in": 3650.3,
-    "total_pnl": 1001.8,
-    "roi": 27.4,
+    "settled": 149,
+    "wins": 104,
+    "win_rate": 69.8,
+    "total_in": 3900.3,
+    "total_pnl": 1018.3,
+    "roi": 26.1,
     "by_type": {
       "ML": {
-        "wins": 34,
-        "settled": 55,
-        "win_rate": 61.8,
-        "roi": -4.0
+        "settled": 58,
+        "wins": 35,
+        "win_rate": 60.3,
+        "roi": -8.5
       },
       "RL": {
-        "wins": 47,
-        "settled": 61,
-        "win_rate": 77.0,
-        "roi": 39.7
+        "settled": 62,
+        "wins": 48,
+        "win_rate": 77.4,
+        "roi": 40.9
       },
       "TOT": {
-        "wins": 20,
-        "settled": 28,
-        "win_rate": 71.4,
-        "roi": 61.6
+        "settled": 29,
+        "wins": 21,
+        "win_rate": 72.4,
+        "roi": 64.3
       }
     }
   },
@@ -406,6 +406,45 @@
   ],
   "recent_history": [
     {
+      "date": "2026-06-15",
+      "home": "royals",
+      "away": "astros",
+      "home_cn": "皇家",
+      "away_cn": "太空人",
+      "bet_type": "讓分",
+      "label": "+1.5",
+      "price": 1.53,
+      "stake": 50.0,
+      "edge": 17.8,
+      "result": null
+    },
+    {
+      "date": "2026-06-15",
+      "home": "pirates",
+      "away": "marlins",
+      "home_cn": "海盜",
+      "away_cn": "馬林魚",
+      "bet_type": "獨贏",
+      "label": "",
+      "price": 1.68,
+      "stake": 50.0,
+      "edge": 17.3,
+      "result": null
+    },
+    {
+      "date": "2026-06-15",
+      "home": "brewers",
+      "away": "phillies",
+      "home_cn": "釀酒人",
+      "away_cn": "費城人",
+      "bet_type": "大小分",
+      "label": "OVER",
+      "price": 2.02,
+      "stake": 50.0,
+      "edge": 20.4,
+      "result": null
+    },
+    {
       "date": "2026-06-14",
       "home": "reds",
       "away": "diamondbacks",
@@ -416,7 +455,7 @@
       "price": 1.8,
       "stake": 50.0,
       "edge": 20.3,
-      "result": null
+      "result": "W"
     },
     {
       "date": "2026-06-14",
@@ -429,7 +468,7 @@
       "price": 1.81,
       "stake": 50.0,
       "edge": 18.9,
-      "result": null
+      "result": "L"
     },
     {
       "date": "2026-06-14",
@@ -442,7 +481,7 @@
       "price": 1.51,
       "stake": 50.0,
       "edge": 13.5,
-      "result": null
+      "result": "W"
     },
     {
       "date": "2026-06-14",
@@ -455,7 +494,7 @@
       "price": 1.62,
       "stake": 50.0,
       "edge": 12.4,
-      "result": null
+      "result": "L"
     },
     {
       "date": "2026-06-14",
@@ -468,7 +507,7 @@
       "price": 2.02,
       "stake": 50.0,
       "edge": 20.1,
-      "result": null
+      "result": "W"
     },
     {
       "date": "2026-06-13",
@@ -494,45 +533,6 @@
       "price": 1.88,
       "stake": 50.0,
       "edge": 15.2,
-      "result": "W"
-    },
-    {
-      "date": "2026-06-13",
-      "home": "white sox",
-      "away": "dodgers",
-      "home_cn": "白襪",
-      "away_cn": "道奇",
-      "bet_type": "獨贏",
-      "label": "",
-      "price": 1.7,
-      "stake": 50.0,
-      "edge": 20.2,
-      "result": "L"
-    },
-    {
-      "date": "2026-06-13",
-      "home": "nationals",
-      "away": "mariners",
-      "home_cn": "國民",
-      "away_cn": "水手",
-      "bet_type": "大小分",
-      "label": "UNDER",
-      "price": 2.05,
-      "stake": 50.0,
-      "edge": 22.0,
-      "result": "L"
-    },
-    {
-      "date": "2026-06-12",
-      "home": "pirates",
-      "away": "dodgers",
-      "home_cn": "海盜",
-      "away_cn": "道奇",
-      "bet_type": "獨贏",
-      "label": "",
-      "price": 1.61,
-      "stake": 50.0,
-      "edge": 17.4,
       "result": "W"
     }
   ],
