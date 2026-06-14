@@ -483,10 +483,10 @@
       "home_cn": "運動家",
       "away_cn": "落磯",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 4,
       "away_runs": 5,
-      "projected_total": 15.4,
+      "projected_total": 14.6,
       "market_total": 14.5,
       "bet": "主隊讓分(+1.5)",
       "reason": "主隊落後1分 第6局，賽前主隊勝率57%"
