@@ -485,8 +485,8 @@
       "inning": 9,
       "top_inning": true,
       "home_runs": 7,
-      "away_runs": 7,
-      "projected_total": 15.1,
+      "away_runs": 8,
+      "projected_total": 16.1,
       "market_total": 9.5,
       "bet": null,
       "reason": null
@@ -495,7 +495,7 @@
       "home_cn": "運動家",
       "away_cn": "落磯",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 4,
       "away_runs": 5,
       "projected_total": 17.1,
@@ -518,14 +518,14 @@
     {
       "home_cn": "天使",
       "away_cn": "光芒",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 5.0,
+      "projected_total": 4.6,
       "market_total": 8.0,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 UNDER",
+      "reason": "第6局僅1分（此時預期4.4分），低分走勢盤口8.0"
     }
   ],
   "live_updated_ts": 1781407576,
