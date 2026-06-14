@@ -495,7 +495,7 @@
       "home_cn": "運動家",
       "away_cn": "落磯",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 1,
       "projected_total": 14.3,
