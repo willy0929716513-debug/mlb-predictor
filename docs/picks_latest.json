@@ -432,10 +432,10 @@
       "home_cn": "紅襪",
       "away_cn": "遊騎兵",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 4,
-      "projected_total": 12.0,
+      "projected_total": 11.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
