@@ -497,8 +497,8 @@
       "inning": 5,
       "top_inning": true,
       "home_runs": 4,
-      "away_runs": 2,
-      "projected_total": 14.1,
+      "away_runs": 3,
+      "projected_total": 15.1,
       "market_total": 14.5,
       "bet": null,
       "reason": null
@@ -528,7 +528,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1781406973,
+  "live_updated_ts": 1781407274,
   "game_preds": {
     "twins|cardinals": {
       "home_win_prob": 0.4346,
@@ -591,5 +591,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-14 11:16 (台灣時間)"
+  "live_updated_at": "2026-06-14 11:21 (台灣時間)"
 }
