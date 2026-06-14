@@ -497,11 +497,11 @@
       "inning": 5,
       "top_inning": true,
       "home_runs": 4,
-      "away_runs": 3,
-      "projected_total": 15.1,
+      "away_runs": 5,
+      "projected_total": 17.1,
       "market_total": 14.5,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第5局已得9分（此時預期6.4分），高分走勢盤口14.5"
     },
     {
       "home_cn": "巨人",
@@ -509,11 +509,11 @@
       "inning": 4,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 3,
-      "projected_total": 9.3,
+      "away_runs": 4,
+      "projected_total": 10.3,
       "market_total": 8.0,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第4局已得5分（此時預期2.7分），高分走勢盤口8.0"
     },
     {
       "home_cn": "天使",
@@ -528,7 +528,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1781407274,
+  "live_updated_ts": 1781407576,
   "game_preds": {
     "twins|cardinals": {
       "home_win_prob": 0.4346,
@@ -591,5 +591,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-14 11:21 (台灣時間)"
+  "live_updated_at": "2026-06-14 11:26 (台灣時間)"
 }
