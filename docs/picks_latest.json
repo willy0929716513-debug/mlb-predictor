@@ -494,11 +494,11 @@
     {
       "home_cn": "運動家",
       "away_cn": "落磯",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 0,
-      "projected_total": 15.7,
+      "projected_total": 14.9,
       "market_total": 14.5,
       "bet": null,
       "reason": null
