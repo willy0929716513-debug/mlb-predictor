@@ -431,14 +431,14 @@
     {
       "home_cn": "運動家",
       "away_cn": "落磯",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 9,
       "away_runs": 23,
-      "projected_total": 34.3,
+      "projected_total": 33.6,
       "market_total": 14.0,
       "bet": "客隊獨贏",
-      "reason": "第8局客隊領先14分（賽前客隊勝率56%），大局已定"
+      "reason": "第9局客隊領先14分（賽前客隊勝率56%），大局已定"
     },
     {
       "home_cn": "天使",
@@ -446,14 +446,14 @@
       "inning": 8,
       "top_inning": true,
       "home_runs": 3,
-      "away_runs": 3,
-      "projected_total": 8.0,
+      "away_runs": 5,
+      "projected_total": 10.0,
       "market_total": 9.0,
-      "bet": null,
-      "reason": null
+      "bet": "客隊獨贏",
+      "reason": "第8局客隊領先2分（賽前客隊勝率47%），大局已定"
     }
   ],
-  "live_updated_ts": 1781475474,
+  "live_updated_ts": 1781475776,
   "game_preds": {
     "pirates|marlins": {
       "home_win_prob": 0.76,
@@ -516,5 +516,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-15 06:17 (台灣時間)"
+  "live_updated_at": "2026-06-15 06:22 (台灣時間)"
 }
