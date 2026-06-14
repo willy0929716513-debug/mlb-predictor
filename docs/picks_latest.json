@@ -500,8 +500,8 @@
       "away_runs": 9,
       "projected_total": 18.3,
       "market_total": 8.0,
-      "bet": "主隊讓分(+1.5)",
-      "reason": "主隊落後1分 第8局，賽前主隊勝率73%"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "運動家",
@@ -540,7 +540,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1781402754,
+  "live_updated_ts": 1781403055,
   "game_preds": {
     "twins|cardinals": {
       "home_win_prob": 0.4346,
@@ -603,5 +603,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-14 10:05 (台灣時間)"
+  "live_updated_at": "2026-06-14 10:10 (台灣時間)"
 }
