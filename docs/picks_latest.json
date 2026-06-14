@@ -434,14 +434,14 @@
       "inning": 1,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 9.0,
+      "away_runs": 1,
+      "projected_total": 10.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1781479090,
+  "live_updated_ts": 1781479391,
   "game_preds": {
     "pirates|marlins": {
       "home_win_prob": 0.76,
@@ -504,5 +504,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-15 07:18 (台灣時間)"
+  "live_updated_at": "2026-06-15 07:23 (台灣時間)"
 }
