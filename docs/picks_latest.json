@@ -480,18 +480,6 @@
   ],
   "live_games": [
     {
-      "home_cn": "皇家",
-      "away_cn": "太空人",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 7,
-      "away_runs": 8,
-      "projected_total": 15.5,
-      "market_total": 9.5,
-      "bet": null,
-      "reason": null
-    },
-    {
       "home_cn": "運動家",
       "away_cn": "落磯",
       "inning": 6,
