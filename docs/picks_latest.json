@@ -497,14 +497,14 @@
       "inning": 6,
       "top_inning": true,
       "home_runs": 3,
-      "away_runs": 7,
-      "projected_total": 13.6,
+      "away_runs": 8,
+      "projected_total": 14.6,
       "market_total": 8.0,
       "bet": "大小分 OVER",
-      "reason": "第6局已得10分（此時預期4.4分），高分走勢盤口8.0"
+      "reason": "第6局已得11分（此時預期4.4分），高分走勢盤口8.0"
     }
   ],
-  "live_updated_ts": 1781398984,
+  "live_updated_ts": 1781399286,
   "game_preds": {
     "twins|cardinals": {
       "home_win_prob": 0.4346,
@@ -567,5 +567,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-14 09:03 (台灣時間)"
+  "live_updated_at": "2026-06-14 09:08 (台灣時間)"
 }
