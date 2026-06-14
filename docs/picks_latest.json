@@ -429,31 +429,19 @@
   ],
   "live_games": [
     {
-      "home_cn": "運動家",
-      "away_cn": "落磯",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 9,
-      "away_runs": 23,
-      "projected_total": 32.8,
-      "market_total": 14.0,
-      "bet": "客隊獨贏",
-      "reason": "第9局客隊領先14分（賽前客隊勝率56%），大局已定"
-    },
-    {
       "home_cn": "天使",
       "away_cn": "光芒",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 8,
-      "projected_total": 13.0,
+      "projected_total": 12.5,
       "market_total": 9.0,
       "bet": "客隊獨贏",
       "reason": "第8局客隊領先5分（賽前客隊勝率47%），大局已定"
     }
   ],
-  "live_updated_ts": 1781476077,
+  "live_updated_ts": 1781476378,
   "game_preds": {
     "pirates|marlins": {
       "home_win_prob": 0.76,
@@ -516,5 +504,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-15 06:27 (台灣時間)"
+  "live_updated_at": "2026-06-15 06:32 (台灣時間)"
 }
