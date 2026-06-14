@@ -434,26 +434,26 @@
       "inning": 8,
       "top_inning": true,
       "home_runs": 9,
-      "away_runs": 18,
-      "projected_total": 30.1,
+      "away_runs": 22,
+      "projected_total": 34.1,
       "market_total": 14.0,
       "bet": "客隊獨贏",
-      "reason": "第8局客隊領先9分（賽前客隊勝率56%），大局已定"
+      "reason": "第8局客隊領先13分（賽前客隊勝率56%），大局已定"
     },
     {
       "home_cn": "天使",
       "away_cn": "光芒",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 3,
-      "projected_total": 9.0,
+      "projected_total": 8.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1781474571,
+  "live_updated_ts": 1781474872,
   "game_preds": {
     "pirates|marlins": {
       "home_win_prob": 0.76,
@@ -516,5 +516,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-15 06:02 (台灣時間)"
+  "live_updated_at": "2026-06-15 06:07 (台灣時間)"
 }
