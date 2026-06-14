@@ -445,24 +445,24 @@
       "away_cn": "落磯",
       "inning": 5,
       "top_inning": false,
-      "home_runs": 6,
+      "home_runs": 8,
       "away_runs": 14,
-      "projected_total": 27.0,
+      "projected_total": 29.0,
       "market_total": 14.0,
       "bet": "大小分 OVER",
-      "reason": "第5局已得20分（此時預期7.0分），高分走勢盤口14.0"
+      "reason": "第5局已得22分（此時預期7.0分），高分走勢盤口14.0"
     },
     {
       "home_cn": "巨人",
       "away_cn": "小熊",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 0,
-      "projected_total": 5.7,
+      "projected_total": 5.2,
       "market_total": 8.0,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅3分（此時預期5.3分），低分走勢盤口8.0"
+      "reason": "第7局僅3分（此時預期5.8分），低分走勢盤口8.0"
     },
     {
       "home_cn": "天使",
@@ -470,14 +470,14 @@
       "inning": 3,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 0,
-      "projected_total": 8.0,
+      "away_runs": 2,
+      "projected_total": 10.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1781470653,
+  "live_updated_ts": 1781470954,
   "game_preds": {
     "pirates|marlins": {
       "home_win_prob": 0.76,
@@ -540,5 +540,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-15 04:57 (台灣時間)"
+  "live_updated_at": "2026-06-15 05:02 (台灣時間)"
 }
