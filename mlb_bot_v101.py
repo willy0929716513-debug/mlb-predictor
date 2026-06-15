@@ -2622,6 +2622,37 @@ def write_pages_json(picks, hist, now_tw, live_games=None):
         json.dump(payload, f, ensure_ascii=False, indent=2)
     log.info("Wrote docs/picks_latest.json (%d picks)", len(records))
 
+    # 同步上傳到 Supabase Storage（供 Web App 使用）
+    _upload_to_supabase(payload)
+
+
+# ══════════════════════════════════════════════
+# Supabase Storage 上傳
+# ══════════════════════════════════════════════
+
+SUPABASE_URL      = os.getenv("SUPABASE_URL", "")
+SUPABASE_SVC_KEY  = os.getenv("SUPABASE_SERVICE_ROLE_KEY", "")
+
+def _upload_to_supabase(payload: dict):
+    if not SUPABASE_URL or not SUPABASE_SVC_KEY:
+        log.info("Supabase not configured, skipping upload")
+        return
+    try:
+        body = json.dumps(payload, ensure_ascii=False, indent=2).encode("utf-8")
+        url  = f"{SUPABASE_URL}/storage/v1/object/picks/picks_latest.json"
+        headers = {
+            "Authorization": f"Bearer {SUPABASE_SVC_KEY}",
+            "Content-Type": "application/json",
+            "x-upsert": "true",
+        }
+        r = requests.put(url, data=body, headers=headers, timeout=15)
+        if r.status_code in (200, 201):
+            log.info("Supabase Storage upload OK")
+        else:
+            log.warning("Supabase Storage upload failed: %d %s", r.status_code, r.text[:100])
+    except Exception as e:
+        log.warning("Supabase upload error: %s", e)
+
 
 # ══════════════════════════════════════════════
 # Discord
