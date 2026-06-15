@@ -432,16 +432,16 @@
       "home_cn": "紅襪",
       "away_cn": "遊騎兵",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 6,
-      "projected_total": 12.0,
+      "projected_total": 11.5,
       "market_total": 9.0,
-      "bet": "大小分 OVER",
-      "reason": "第7局已得9分（此時預期6.0分），高分走勢盤口9.0"
+      "bet": "客隊獨贏",
+      "reason": "第7局客隊領先3分（賽前客隊勝率46%），大局已定"
     }
   ],
-  "live_updated_ts": 1781486868,
+  "live_updated_ts": 1781487169,
   "game_preds": {
     "pirates|marlins": {
       "home_win_prob": 0.76,
@@ -504,5 +504,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-15 09:27 (台灣時間)"
+  "live_updated_at": "2026-06-15 09:32 (台灣時間)"
 }
