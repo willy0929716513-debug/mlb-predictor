@@ -227,7 +227,7 @@
     }
   ],
   "live_games": [],
-  "live_updated_ts": 1781490526,
+  "live_updated_ts": 1781557687,
   "game_preds": {
     "phillies|marlins": {
       "home_win_prob": 0.4528,
@@ -269,5 +269,6 @@
       "home_win_prob": 0.7501,
       "market_total": 9.5
     }
-  }
+  },
+  "live_updated_at": ""
 }
