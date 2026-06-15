@@ -1,23 +1,42 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Space_Grotesk, Inter } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/Header'
 
-const inter = Inter({ subsets: ['latin'] })
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-display',
+  display: 'swap',
+})
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-body',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
-  title: 'MLB Predictor — 每日 MLB 投注推薦',
-  description: '量化模型驅動的 MLB 每日推薦，勝率 70%+，含 Edge、Kelly 注額計算',
+  title: 'MLB AI Prediction Engine — Real-Time Sports Intelligence',
+  description: 'Institutional-grade MLB analytics powered by Monte Carlo, XGBoost and market models. Edge-based picks with Kelly sizing.',
+  openGraph: {
+    title: 'MLB AI Prediction Engine',
+    description: 'Real-Time Sports Intelligence Platform',
+    type: 'website',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="zh-TW">
-      <body className={`${inter.className} bg-gray-950 text-white min-h-screen`}>
-        <Header />
-        <main className="max-w-5xl mx-auto px-4 py-6">
-          {children}
-        </main>
+    <html lang="zh-TW" className={`${spaceGrotesk.variable} ${inter.variable}`}>
+      <body style={{ fontFamily: 'var(--font-display), var(--font-body), sans-serif' }}>
+        <div className="site-bg" aria-hidden />
+        <div className="relative z-10 flex flex-col min-h-svh">
+          <Header />
+          <main className="flex-1 w-full">
+            {children}
+          </main>
+        </div>
       </body>
     </html>
   )

@@ -5,14 +5,15 @@ import { useRouter } from 'next/navigation'
 import { PLANS } from '@/lib/plans'
 
 export default function PaywallModal({ onClose }: { onClose: () => void }) {
-  const router = useRouter()
+  const router  = useRouter()
   const [loading, setLoading] = useState<string | null>(null)
-  const [agreed, setAgreed] = useState(false)
+  const [agreed, setAgreed]   = useState(false)
 
   const handleCheckout = async (plan: 'monthly' | 'day_pass') => {
+    if (!agreed) return
     setLoading(plan)
     try {
-      const res = await fetch('/api/stripe/checkout', {
+      const res  = await fetch('/api/stripe/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ plan }),
@@ -24,93 +25,209 @@ export default function PaywallModal({ onClose }: { onClose: () => void }) {
         router.push('/login?next=pricing')
       }
     } catch {
-      alert('結帳發生錯誤，請稍後再試')
+      alert('Checkout error — please try again')
     } finally {
       setLoading(null)
     }
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-      <div className="bg-gray-900 border border-gray-700 rounded-2xl max-w-md w-full p-6 relative">
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-white transition"
-        >✕</button>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ background: 'rgba(2,6,23,0.8)', backdropFilter: 'blur(12px)' }}
+      onClick={e => { if (e.target === e.currentTarget) onClose() }}
+    >
+      <div
+        className="glass-card rounded-3xl relative w-full overflow-hidden"
+        style={{ maxWidth: 480 }}
+      >
+        {/* Neon accent bar */}
+        <div
+          style={{
+            height: 3,
+            background: 'linear-gradient(90deg, var(--cyan), var(--green), var(--cyan))',
+            backgroundSize: '200% auto',
+            animation: 'gradient-flow 4s linear infinite',
+          }}
+        />
 
-        <div className="text-center mb-6">
-          <span className="text-3xl">⚾</span>
-          <h2 className="text-xl font-bold text-white mt-2">解鎖今日推薦</h2>
-          <p className="text-sm text-gray-400 mt-1">選擇方案後立即查看完整預測</p>
-        </div>
-
-        <div className="space-y-3">
-          {/* 月訂閱 */}
+        <div className="p-6 sm:p-8">
+          {/* Close */}
           <button
-            onClick={() => handleCheckout('monthly')}
-            disabled={!!loading || !agreed}
-            className="w-full bg-green-700 hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed border border-green-600 rounded-xl p-4 text-left transition group"
+            onClick={onClose}
+            className="absolute top-5 right-5 flex items-center justify-center rounded-xl"
+            style={{
+              width: 36, height: 36,
+              border: '1px solid var(--border)',
+              background: 'rgba(255,255,255,0.04)',
+              color: 'var(--text-2)',
+              fontSize: 14,
+              cursor: 'pointer',
+              transition: 'all .2s',
+            }}
           >
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-white font-bold">{PLANS.monthly.name}</p>
-                <p className="text-xs text-green-300 mt-0.5">{PLANS.monthly.description}</p>
-                <ul className="mt-2 space-y-0.5">
-                  {PLANS.monthly.features.map(f => (
-                    <li key={f} className="text-xs text-gray-300">✓ {f}</li>
-                  ))}
-                </ul>
-              </div>
-              <div className="text-right shrink-0 ml-4">
-                <p className="text-2xl font-bold text-white">NT${PLANS.monthly.price}</p>
-                <p className="text-xs text-gray-400">/月</p>
-                {loading === 'monthly' && <p className="text-xs text-green-300 mt-1">處理中...</p>}
-              </div>
-            </div>
+            ✕
           </button>
 
-          {/* 單日券 */}
-          <button
-            onClick={() => handleCheckout('day_pass')}
-            disabled={!!loading || !agreed}
-            className="w-full bg-gray-800 hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed border border-gray-700 rounded-xl p-4 text-left transition"
-          >
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-white font-bold">{PLANS.day_pass.name}</p>
-                <p className="text-xs text-gray-400 mt-0.5">{PLANS.day_pass.description}</p>
-                <ul className="mt-2 space-y-0.5">
-                  {PLANS.day_pass.features.map(f => (
-                    <li key={f} className="text-xs text-gray-400">✓ {f}</li>
-                  ))}
-                </ul>
-              </div>
-              <div className="text-right shrink-0 ml-4">
-                <p className="text-2xl font-bold text-white">NT${PLANS.day_pass.price}</p>
-                <p className="text-xs text-gray-500">/天</p>
-                {loading === 'day_pass' && <p className="text-xs text-gray-300 mt-1">處理中...</p>}
-              </div>
+          {/* Header */}
+          <div className="text-center mb-6">
+            <div
+              style={{
+                width: 56,
+                height: 56,
+                borderRadius: '50%',
+                background: 'rgba(0,229,255,0.1)',
+                border: '1px solid rgba(0,229,255,0.25)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: 26,
+                margin: '0 auto 14px',
+              }}
+            >
+              ⚾
             </div>
-          </button>
+            <h2 style={{ fontSize: 22, fontWeight: 800, color: 'var(--text-1)' }}>
+              Unlock Full Predictions
+            </h2>
+            <p style={{ fontSize: 14, color: 'var(--text-2)', marginTop: 6 }}>
+              Choose a plan to access every pick with edge, confidence & Kelly stake
+            </p>
+          </div>
+
+          {/* Plans */}
+          <div className="space-y-3">
+            <PlanButton
+              plan="monthly"
+              name={PLANS.monthly.name}
+              desc={PLANS.monthly.description}
+              price={PLANS.monthly.price}
+              unit="/mo"
+              features={PLANS.monthly.features}
+              featured
+              loading={loading === 'monthly'}
+              disabled={!!loading || !agreed}
+              onClick={() => handleCheckout('monthly')}
+            />
+            <PlanButton
+              plan="day_pass"
+              name={PLANS.day_pass.name}
+              desc={PLANS.day_pass.description}
+              price={PLANS.day_pass.price}
+              unit="/day"
+              features={PLANS.day_pass.features}
+              loading={loading === 'day_pass'}
+              disabled={!!loading || !agreed}
+              onClick={() => handleCheckout('day_pass')}
+            />
+          </div>
+
+          {/* Agreement checkbox */}
+          <label
+            className="flex items-start gap-3 mt-5 cursor-pointer"
+            style={{ userSelect: 'none' }}
+          >
+            <div
+              style={{
+                marginTop: 2,
+                width: 18,
+                height: 18,
+                borderRadius: 5,
+                border: `2px solid ${agreed ? 'var(--cyan)' : 'rgba(255,255,255,0.2)'}`,
+                background: agreed ? 'rgba(0,229,255,0.15)' : 'transparent',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+                transition: 'all .2s',
+                cursor: 'pointer',
+              }}
+            >
+              {agreed && (
+                <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                  <path d="M1 4L3.5 6.5L9 1" stroke="#00E5FF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              )}
+            </div>
+            <input
+              type="checkbox"
+              checked={agreed}
+              onChange={e => setAgreed(e.target.checked)}
+              className="sr-only"
+            />
+            <span style={{ fontSize: 12, color: 'var(--text-2)', lineHeight: 1.5 }}>
+              I have read and agree to the{' '}
+              <span style={{ color: 'var(--text-1)' }}>Disclaimer</span>
+              {' '}— predictions are for reference only, not financial advice. Sports betting involves financial risk and I accept full responsibility for my own decisions.
+            </span>
+          </label>
+
+          {/* Footer */}
+          <p
+            className="text-center mt-4"
+            style={{ fontSize: 11, color: 'var(--text-2)' }}
+          >
+            🔒 Secured by Stripe · Cancel monthly anytime
+          </p>
         </div>
-
-        {/* 免責聲明同意 */}
-        <label className="flex items-start gap-2.5 mt-4 cursor-pointer group">
-          <input
-            type="checkbox"
-            checked={agreed}
-            onChange={e => setAgreed(e.target.checked)}
-            className="mt-0.5 h-4 w-4 shrink-0 accent-green-500 cursor-pointer"
-          />
-          <span className="text-xs text-gray-500 group-hover:text-gray-400 transition leading-relaxed">
-            我已閱讀並同意<span className="text-gray-300">免責聲明</span>——本服務推薦僅供參考，不構成財務建議，運動投注涉及風險，本人自行承擔所有投注決策責任
-          </span>
-        </label>
-
-        <p className="text-xs text-center text-gray-600 mt-3">
-          透過 Stripe 安全付款 · 隨時取消
-        </p>
       </div>
     </div>
+  )
+}
+
+function PlanButton({
+  name, desc, price, unit, features, featured, loading, disabled, onClick,
+}: {
+  plan: string; name: string; desc: string; price: number; unit: string
+  features: readonly string[]; featured?: boolean; loading: boolean
+  disabled: boolean; onClick: () => void
+}) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className="w-full text-left rounded-2xl p-4 transition-all duration-200"
+      style={{
+        background: featured
+          ? 'linear-gradient(135deg, rgba(0,229,255,0.1), rgba(0,255,136,0.06))'
+          : 'rgba(255,255,255,0.03)',
+        border: featured
+          ? '1px solid rgba(0,229,255,0.3)'
+          : '1px solid rgba(255,255,255,0.1)',
+        opacity: disabled ? 0.5 : 1,
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        minHeight: 48,
+      }}
+    >
+      <div className="flex justify-between items-start">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <span style={{ fontSize: 14, fontWeight: 800, color: 'var(--text-1)' }}>
+              {name}
+            </span>
+            {featured && (
+              <span className="badge badge-cyan" style={{ fontSize: 9 }}>Best Value</span>
+            )}
+          </div>
+          <p style={{ fontSize: 12, color: 'var(--text-2)', marginTop: 2 }}>{desc}</p>
+          <ul className="mt-2 space-y-0.5">
+            {features.map(f => (
+              <li key={f} style={{ fontSize: 11, color: 'var(--text-2)', display: 'flex', alignItems: 'center', gap: 4 }}>
+                <span style={{ color: 'var(--green)', fontSize: 10 }}>✓</span> {f}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="text-right shrink-0 ml-4">
+          <div style={{ fontSize: 24, fontWeight: 800, color: featured ? 'var(--cyan)' : 'var(--text-1)' }}>
+            NT${price}
+          </div>
+          <div style={{ fontSize: 11, color: 'var(--text-2)' }}>{unit}</div>
+          {loading && (
+            <div style={{ fontSize: 11, color: 'var(--cyan)', marginTop: 4 }}>Processing…</div>
+          )}
+        </div>
+      </div>
+    </button>
   )
 }

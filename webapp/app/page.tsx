@@ -2,28 +2,28 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
+import HeroSection from '@/components/HeroSection'
 import PickCard from '@/components/PickCard'
 import StatsBar from '@/components/StatsBar'
 import PaywallModal from '@/components/PaywallModal'
 import type { PicksData, Subscription } from '@/types'
 
 export default function HomePage() {
-  const [data, setData] = useState<PicksData | null>(null)
+  const [data, setData]               = useState<PicksData | null>(null)
   const [subscription, setSubscription] = useState<Subscription | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading]         = useState(true)
   const [showPaywall, setShowPaywall] = useState(false)
   const supabase = createClient()
 
-  const isActive = subscription?.status === 'active' &&
+  const isActive =
+    subscription?.status === 'active' &&
     new Date(subscription.expires_at) > new Date()
 
   useEffect(() => {
     async function load() {
-      // 取推薦資料
       const res = await fetch('/api/picks')
       if (res.ok) setData(await res.json())
 
-      // 取訂閱狀態
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
         const { data: sub } = await supabase
@@ -45,112 +45,273 @@ export default function HomePage() {
   if (loading) return <LoadingSkeleton />
 
   return (
-    <div className="space-y-6">
-      {/* 免責聲明 */}
-      <div className="bg-yellow-950/30 border border-yellow-800/40 rounded-xl px-4 py-3 text-xs text-gray-500">
-        <p className="font-semibold text-yellow-500/80 mb-1">⚠️ 免責聲明</p>
-        <p>
-          本網站提供之 MLB 投注推薦<strong className="text-gray-400">僅供參考</strong>，不構成任何財務或投資建議。
-          過去績效不代表未來表現，運動投注本質上涉及本金虧損風險。
-          請確認您所在地區合法進行體育投注，並量力而為、理性下注。
-          使用本服務即代表您已充分了解上述風險，並自行承擔所有相關投注決策責任。
-        </p>
-      </div>
+    <>
+      {/* Hero — full viewport */}
+      <HeroSection
+        stats={data?.stats ?? null}
+        onUnlock={() => setShowPaywall(true)}
+        isActive={isActive}
+      />
 
-      {/* 標題 */}
-      <div>
-        <h1 className="text-2xl font-bold text-white">⚾ 今日 MLB 推薦</h1>
-        {data?.generated_at && (
-          <p className="text-sm text-gray-500 mt-1">更新時間：{data.generated_at}</p>
-        )}
-      </div>
+      {/* Dashboard content */}
+      <div id="predictions" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
 
-      {/* 歷史統計 */}
-      {data?.stats && <StatsBar stats={data.stats} />}
-
-      {/* 未訂閱提示 */}
-      {!isActive && (
-        <div className="bg-green-950/40 border border-green-800/50 rounded-xl px-4 py-3 flex items-center justify-between gap-4">
-          <p className="text-sm text-green-300">
-            🔒 推薦方向、賠率、注額已隱藏。訂閱後立即查看完整內容。
-          </p>
-          <button
-            onClick={() => setShowPaywall(true)}
-            className="shrink-0 text-sm bg-green-600 hover:bg-green-500 text-white px-4 py-1.5 rounded-lg transition"
-          >
-            解鎖
-          </button>
-        </div>
-      )}
-
-      {/* 推薦列表 */}
-      {data?.picks?.length ? (
-        <div className="space-y-3">
-          {data.picks.map((pick, i) => (
-            <PickCard key={i} pick={pick} locked={!isActive || pick.bp === null} />
-          ))}
-        </div>
-      ) : (
-        <div className="text-center py-16 text-gray-500">
-          <p className="text-4xl mb-3">⚾</p>
-          <p>今日尚無推薦，請稍後再查看</p>
-        </div>
-      )}
-
-      {/* 歷史記錄 */}
-      {data?.recent_history?.length ? (
-        <section>
-          <h2 className="text-lg font-semibold text-white mb-3">近期戰績</h2>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm text-gray-400 border-collapse">
-              <thead>
-                <tr className="border-b border-gray-800 text-xs text-gray-600 uppercase">
-                  <th className="text-left py-2 pr-4">日期</th>
-                  <th className="text-left py-2 pr-4">場次</th>
-                  <th className="text-left py-2 pr-4">類型</th>
-                  <th className="text-right py-2 pr-4">賠率</th>
-                  <th className="text-right py-2">結果</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.recent_history.map((r, i) => (
-                  <tr key={i} className="border-b border-gray-900 hover:bg-gray-900/50">
-                    <td className="py-2 pr-4 whitespace-nowrap">{r.date}</td>
-                    <td className="py-2 pr-4">{r.away_cn} @ {r.home_cn}</td>
-                    <td className="py-2 pr-4">{r.bet_type} {r.label}</td>
-                    <td className="py-2 pr-4 text-right">{r.price?.toFixed(2)}</td>
-                    <td className="py-2 text-right">
-                      <span className={
-                        r.result === 'W' ? 'text-green-400 font-bold' :
-                        r.result === 'L' ? 'text-red-400' :
-                        r.result === 'P' ? 'text-yellow-400' : 'text-gray-600'
-                      }>
-                        {r.result === 'W' ? '✓ 贏' :
-                         r.result === 'L' ? '✗ 輸' :
-                         r.result === 'P' ? '－平' : '待定'}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        {/* Disclaimer */}
+        <div
+          className="rounded-2xl px-5 py-4"
+          style={{
+            background: 'rgba(255,184,0,0.05)',
+            border: '1px solid rgba(255,184,0,0.2)',
+          }}
+        >
+          <div className="flex items-start gap-3">
+            <span style={{ fontSize: 18, flexShrink: 0, marginTop: 1 }}>⚠️</span>
+            <div>
+              <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--yellow)', marginBottom: 4 }}>
+                Disclaimer / 免責聲明
+              </p>
+              <p style={{ fontSize: 12, color: 'var(--text-2)', lineHeight: 1.7 }}>
+                Predictions are <strong style={{ color: 'var(--text-1)' }}>for reference only</strong> and do not constitute financial advice.
+                Past performance does not guarantee future results. Sports betting involves the risk of losing your principal.
+                Please confirm that sports betting is legal in your region, bet responsibly, and never wager more than you can afford to lose.
+                By using this service you accept full responsibility for all betting decisions.
+              </p>
+            </div>
           </div>
+        </div>
+
+        {/* Performance stats */}
+        {data?.stats && <StatsBar stats={data.stats} />}
+
+        {/* Unlock banner */}
+        {!isActive && (
+          <div
+            className="rounded-2xl px-5 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+            style={{
+              background: 'linear-gradient(135deg, rgba(0,229,255,0.06), rgba(0,255,136,0.04))',
+              border: '1px solid rgba(0,229,255,0.2)',
+            }}
+          >
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span style={{ fontSize: 18 }}>🔒</span>
+                <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-1)' }}>
+                  Full Predictions Locked
+                </span>
+              </div>
+              <p style={{ fontSize: 13, color: 'var(--text-2)' }}>
+                Subscribe to see bet type, direction, exact odds, edge % and Kelly stake for every pick.
+              </p>
+            </div>
+            <button
+              onClick={() => setShowPaywall(true)}
+              className="btn-primary shrink-0"
+              style={{ whiteSpace: 'nowrap' }}
+            >
+              Unlock Access
+            </button>
+          </div>
+        )}
+
+        {/* Today's predictions */}
+        <section>
+          <SectionHeader
+            title="Today's Predictions"
+            sub={data?.date ? `Games for ${data.date}` : undefined}
+            generated={data?.generated_at}
+          />
+
+          {data?.picks?.length ? (
+            <div
+              className="grid gap-4 mt-5"
+              style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 380px), 1fr))' }}
+            >
+              {data.picks.map((pick, i) => (
+                <PickCard
+                  key={i}
+                  pick={pick}
+                  locked={!isActive || pick.bp === null}
+                  onUnlock={() => setShowPaywall(true)}
+                />
+              ))}
+            </div>
+          ) : (
+            <EmptyState
+              icon="⚾"
+              title="No predictions yet"
+              desc="Come back at 2 PM Taiwan time — our AI runs fresh analysis every day."
+            />
+          )}
         </section>
-      ) : null}
+
+        {/* Recent History */}
+        {data?.recent_history?.length ? (
+          <section>
+            <SectionHeader title="Recent Performance" sub="Last settled picks" />
+            <div
+              className="mt-5 rounded-2xl overflow-hidden"
+              style={{ border: '1px solid var(--border)' }}
+            >
+              {/* Desktop table */}
+              <div className="hidden sm:block overflow-x-auto">
+                <table
+                  className="w-full"
+                  style={{ borderCollapse: 'collapse' }}
+                >
+                  <thead>
+                    <tr style={{ background: 'rgba(11,17,33,0.9)', borderBottom: '1px solid var(--border)' }}>
+                      {['Date', 'Matchup', 'Bet', 'Odds', 'Result'].map(h => (
+                        <th
+                          key={h}
+                          style={{
+                            padding: '12px 16px',
+                            fontSize: 10,
+                            fontWeight: 800,
+                            color: 'var(--text-2)',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.8px',
+                            textAlign: h === 'Odds' || h === 'Result' ? 'right' : 'left',
+                          }}
+                        >
+                          {h}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.recent_history.map((r, i) => (
+                      <tr
+                        key={i}
+                        style={{
+                          borderBottom: '1px solid var(--border)',
+                          background: i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.01)',
+                          transition: 'background .15s',
+                        }}
+                        onMouseEnter={e => (e.currentTarget.style.background = 'rgba(0,229,255,0.04)')}
+                        onMouseLeave={e => (e.currentTarget.style.background = i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.01)')}
+                      >
+                        <td style={{ padding: '12px 16px', fontSize: 12, color: 'var(--text-2)', whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums' }}>
+                          {r.date}
+                        </td>
+                        <td style={{ padding: '12px 16px', fontSize: 13, color: 'var(--text-1)' }}>
+                          {r.away_cn} <span style={{ color: 'var(--text-2)' }}>@</span> {r.home_cn}
+                        </td>
+                        <td style={{ padding: '12px 16px' }}>
+                          <span className="badge badge-cyan" style={{ fontSize: 9 }}>{r.bet_type}</span>
+                          {' '}
+                          <span style={{ fontSize: 12, color: 'var(--text-2)' }}>{r.label}</span>
+                        </td>
+                        <td style={{ padding: '12px 16px', fontSize: 13, fontWeight: 700, color: 'var(--text-1)', textAlign: 'right', fontVariantNumeric: 'tabular-nums' }}>
+                          {r.price?.toFixed(2)}
+                        </td>
+                        <td style={{ padding: '12px 16px', textAlign: 'right' }}>
+                          <ResultBadge result={r.result} />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile cards */}
+              <div className="sm:hidden divide-y" style={{ borderColor: 'var(--border)' }}>
+                {data.recent_history.map((r, i) => (
+                  <div key={i} className="px-4 py-4 space-y-2" style={{ background: i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.01)' }}>
+                    <div className="flex items-center justify-between">
+                      <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-1)' }}>
+                        {r.away_cn} @ {r.home_cn}
+                      </span>
+                      <ResultBadge result={r.result} />
+                    </div>
+                    <div className="flex items-center gap-3 flex-wrap">
+                      <span style={{ fontSize: 11, color: 'var(--text-2)' }}>{r.date}</span>
+                      <span className="badge badge-cyan" style={{ fontSize: 9 }}>{r.bet_type}</span>
+                      <span style={{ fontSize: 11, color: 'var(--text-2)' }}>{r.label}</span>
+                      <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-1)' }}>@ {r.price?.toFixed(2)}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        ) : null}
+
+      </div>
 
       {showPaywall && <PaywallModal onClose={() => setShowPaywall(false)} />}
+    </>
+  )
+}
+
+/* ======================================================
+   Sub-components
+   ====================================================== */
+
+function SectionHeader({
+  title, sub, generated,
+}: {
+  title: string; sub?: string; generated?: string
+}) {
+  return (
+    <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+      <div>
+        <div className="flex items-center gap-3">
+          <div style={{ width: 3, height: 22, background: 'var(--cyan)', borderRadius: 2 }} />
+          <h2 style={{ fontSize: 22, fontWeight: 800, color: 'var(--text-1)' }}>{title}</h2>
+        </div>
+        {sub && (
+          <p style={{ fontSize: 13, color: 'var(--text-2)', marginTop: 4, marginLeft: 15 }}>{sub}</p>
+        )}
+      </div>
+      {generated && (
+        <p style={{ fontSize: 11, color: 'var(--text-2)', fontVariantNumeric: 'tabular-nums' }}>
+          Updated {generated}
+        </p>
+      )}
+    </div>
+  )
+}
+
+function ResultBadge({ result }: { result: string | null }) {
+  if (result === 'W') return (
+    <span className="badge badge-green" style={{ fontSize: 10 }}>✓ WIN</span>
+  )
+  if (result === 'L') return (
+    <span className="badge badge-red" style={{ fontSize: 10 }}>✗ LOSS</span>
+  )
+  if (result === 'P') return (
+    <span className="badge badge-yellow" style={{ fontSize: 10 }}>― PUSH</span>
+  )
+  return (
+    <span className="badge badge-gray" style={{ fontSize: 10 }}>PENDING</span>
+  )
+}
+
+function EmptyState({ icon, title, desc }: { icon: string; title: string; desc: string }) {
+  return (
+    <div
+      className="flex flex-col items-center justify-center py-20 text-center rounded-2xl"
+      style={{ border: '1px dashed var(--border)' }}
+    >
+      <span style={{ fontSize: 48, opacity: 0.4 }}>{icon}</span>
+      <p style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-1)', marginTop: 12 }}>{title}</p>
+      <p style={{ fontSize: 13, color: 'var(--text-2)', marginTop: 6, maxWidth: 300 }}>{desc}</p>
     </div>
   )
 }
 
 function LoadingSkeleton() {
   return (
-    <div className="space-y-4 animate-pulse">
-      <div className="h-8 w-48 bg-gray-800 rounded" />
-      <div className="h-24 bg-gray-900 rounded-xl" />
-      {[1, 2, 3].map(i => (
-        <div key={i} className="h-28 bg-gray-900 rounded-xl" />
-      ))}
+    <div className="min-h-svh flex flex-col items-center justify-center gap-8 px-4">
+      <div className="space-y-4 w-full max-w-xs text-center">
+        <div className="skeleton h-12 w-64 mx-auto" />
+        <div className="skeleton h-5 w-48 mx-auto" />
+      </div>
+      <div className="grid gap-4 w-full max-w-7xl" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 380px), 1fr))' }}>
+        {[1, 2, 3].map(i => (
+          <div key={i} className="skeleton" style={{ height: 200, borderRadius: 16 }} />
+        ))}
+      </div>
     </div>
   )
 }

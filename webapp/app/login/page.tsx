@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase'
 
 function LoginForm() {
   const [email, setEmail] = useState('')
-  const [sent, setSent] = useState(false)
+  const [sent, setSent]   = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const searchParams = useSearchParams()
@@ -21,50 +21,132 @@ function LoginForm() {
       email,
       options: { emailRedirectTo: `${window.location.origin}/api/auth/callback?next=${next}` },
     })
-    if (error) {
-      setError(error.message)
-    } else {
-      setSent(true)
-    }
+    if (error) setError(error.message)
+    else setSent(true)
     setLoading(false)
   }
 
   return (
-    <div className="max-w-sm mx-auto mt-16">
-      <div className="text-center mb-8">
-        <span className="text-4xl">⚾</span>
-        <h1 className="text-2xl font-bold text-white mt-3">登入 MLB Predictor</h1>
-        <p className="text-gray-400 text-sm mt-1">輸入 Email，我們寄送一次性登入連結</p>
-      </div>
+    <div
+      className="min-h-svh flex items-center justify-center px-4 py-16"
+    >
+      <div style={{ width: '100%', maxWidth: 400 }}>
 
-      {sent ? (
-        <div className="bg-green-950/50 border border-green-800 rounded-xl p-6 text-center">
-          <p className="text-green-300 font-medium">✉️ 登入連結已寄出！</p>
-          <p className="text-sm text-gray-400 mt-2">請檢查 <strong>{email}</strong> 的收件匣，點擊連結即可登入。</p>
-        </div>
-      ) : (
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label className="block text-sm text-gray-400 mb-1">Email</label>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              placeholder="your@email.com"
-              className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder-gray-600 focus:outline-none focus:border-green-600"
-            />
+        {/* Card */}
+        <div
+          className="glass-card rounded-3xl overflow-hidden"
+        >
+          {/* Accent bar */}
+          <div style={{ height: 3, background: 'linear-gradient(90deg, var(--cyan), var(--green))', backgroundSize: '200% auto', animation: 'gradient-flow 4s linear infinite' }} />
+
+          <div className="p-8">
+            {/* Logo */}
+            <div className="text-center mb-8">
+              <div
+                style={{
+                  width: 64,
+                  height: 64,
+                  borderRadius: '50%',
+                  background: 'rgba(0,229,255,0.1)',
+                  border: '1px solid rgba(0,229,255,0.25)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: 30,
+                  margin: '0 auto 16px',
+                }}
+              >
+                ⚾
+              </div>
+              <h1 style={{ fontSize: 24, fontWeight: 800, color: 'var(--text-1)' }}>
+                Sign In
+              </h1>
+              <p style={{ fontSize: 13, color: 'var(--text-2)', marginTop: 6 }}>
+                Enter your email — we&apos;ll send a magic link
+              </p>
+            </div>
+
+            {sent ? (
+              /* Sent state */
+              <div
+                className="text-center rounded-2xl p-6 space-y-3"
+                style={{ background: 'rgba(0,255,136,0.06)', border: '1px solid rgba(0,255,136,0.2)' }}
+              >
+                <div style={{ fontSize: 40 }}>✉️</div>
+                <p style={{ fontSize: 15, fontWeight: 700, color: 'var(--green)' }}>
+                  Magic link sent!
+                </p>
+                <p style={{ fontSize: 13, color: 'var(--text-2)' }}>
+                  Check <strong style={{ color: 'var(--text-1)' }}>{email}</strong> and click the link to sign in instantly.
+                </p>
+              </div>
+            ) : (
+              /* Form */
+              <form onSubmit={handleLogin} className="space-y-4">
+                <div>
+                  <label
+                    htmlFor="email"
+                    style={{ display: 'block', fontSize: 12, fontWeight: 700, color: 'var(--text-2)', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.5px' }}
+                  >
+                    Email Address
+                  </label>
+                  <input
+                    id="email"
+                    type="email"
+                    required
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    style={{
+                      display: 'block',
+                      width: '100%',
+                      background: 'rgba(255,255,255,0.04)',
+                      border: '1px solid var(--border)',
+                      borderRadius: 12,
+                      padding: '14px 16px',
+                      fontSize: 15,
+                      color: 'var(--text-1)',
+                      outline: 'none',
+                      transition: 'border-color .2s',
+                    }}
+                    onFocus={e => (e.target.style.borderColor = 'var(--border-hi)')}
+                    onBlur={e => (e.target.style.borderColor = 'var(--border)')}
+                  />
+                </div>
+
+                {error && (
+                  <div
+                    className="rounded-xl px-4 py-3"
+                    style={{ background: 'rgba(255,51,102,0.08)', border: '1px solid rgba(255,51,102,0.2)', fontSize: 13, color: 'var(--red)' }}
+                  >
+                    {error}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="btn-primary w-full"
+                  style={{ justifyContent: 'center', marginTop: 8 }}
+                >
+                  {loading ? 'Sending…' : 'Send Magic Link'}
+                </button>
+              </form>
+            )}
+
+            <p className="text-center mt-6" style={{ fontSize: 11, color: 'var(--text-2)' }}>
+              No password needed · Instant secure access
+            </p>
           </div>
-          {error && <p className="text-sm text-red-400">{error}</p>}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-green-600 hover:bg-green-500 disabled:opacity-50 text-white font-medium py-2.5 rounded-lg transition"
-          >
-            {loading ? '寄送中...' : '寄送登入連結'}
-          </button>
-        </form>
-      )}
+        </div>
+
+        {/* Back link */}
+        <p className="text-center mt-6">
+          <a href="/" style={{ fontSize: 13, color: 'var(--text-2)', textDecoration: 'none' }}>
+            ← Back to Dashboard
+          </a>
+        </p>
+      </div>
     </div>
   )
 }
@@ -72,9 +154,10 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="max-w-sm mx-auto mt-16 animate-pulse">
-        <div className="h-8 bg-gray-800 rounded w-48 mx-auto mb-4" />
-        <div className="h-12 bg-gray-900 rounded-lg" />
+      <div className="min-h-svh flex items-center justify-center px-4">
+        <div style={{ width: '100%', maxWidth: 400 }}>
+          <div className="skeleton" style={{ height: 360, borderRadius: 24 }} />
+        </div>
       </div>
     }>
       <LoginForm />
