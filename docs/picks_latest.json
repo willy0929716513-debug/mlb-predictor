@@ -432,10 +432,10 @@
       "home_cn": "紅襪",
       "away_cn": "遊騎兵",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 4,
       "away_runs": 6,
-      "projected_total": 11.0,
+      "projected_total": 10.5,
       "market_total": 9.0,
       "bet": "客隊獨贏",
       "reason": "第9局客隊領先2分（賽前客隊勝率46%），大局已定"
