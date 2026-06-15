@@ -51,6 +51,7 @@ BLOWOUT_ERA_POOR = 4.20 # 弱投手ERA門檻（≥此值且ERA差距大，拒絕
 ELITE_ERA_DUAL   = 3.50 # 雙方投手都低於此值時視為菁英對決
 ELITE_ERA_OVER_P = 0.68 # 菁英投手對決時，OVER需達更高概率門檻（防RS拉高）
 ACE_ERA_RL       = 2.50 # 面對此ERA以下的真正頂級王牌時，拒絕推薦讓分受讓（↑2.20→2.50）
+ACE_ERA_OVER     = 2.20 # 任一先發ERA≤此值時，直接封鎖OVER（單王牌主導壓低總分）
 FIP_ERA_WARN_GAP = 1.50 # RL: 推薦隊SP的FIP比ERA高超過此值 → 幸運ERA不可持續，拒絕RL
 FIP_ERA_UNDER_GAP= 1.00 # UNDER: 任一SP的FIP比ERA高超過此值 → 幸運ERA，失分回歸，拒絕UNDER
 ODDS_SNAP_PATH = "docs/odds_snapshot.json"
@@ -3020,6 +3021,13 @@ def run():
                 if bside in ("rl_h","rl_h_25") and away_sp and away_sp in _RELIEVER_FLAGS:
                     log.info("RL blocked: away bullpen rotation, risky for home +1.5")
                     continue
+                # ① 推薦隊自身SP為牛棚型：起投局數少且表現難預測，讓分受讓不可靠，直接拒絕
+                if bside in ("rl_a","rl_a_25") and away_sp and away_sp in _RELIEVER_FLAGS:
+                    log.info("RL blocked: recommended away SP is reliever (%s)", away_sp)
+                    continue
+                if bside in ("rl_h","rl_h_25") and home_sp and home_sp in _RELIEVER_FLAGS:
+                    log.info("RL blocked: recommended home SP is reliever (%s)", home_sp)
+                    continue
                 _era_diff = _h_era_v - _a_era_v  # 正值=主隊投手較弱
                 _margin   = pred["margin"]        # 正值=主隊模型預期較強
                 if bside in ("rl_a","rl_a_25"):
@@ -3065,6 +3073,10 @@ def run():
                 if _h_era_v < ELITE_ERA_DUAL and _a_era_v < ELITE_ERA_DUAL:
                     if model_p < ELITE_ERA_OVER_P:
                         continue
+                # 單王牌封殺：任一SP近期ERA ≤ 2.20 → 王牌主導壓低總分，直接封鎖OVER
+                if _h_era_v <= ACE_ERA_OVER or _a_era_v <= ACE_ERA_OVER:
+                    log.info("OVER blocked single-ace: h_era=%.2f a_era=%.2f", _h_era_v, _a_era_v)
+                    continue
             # ── ★ UNDER 保護層（依序：TBD→牛棚投手→低局數→高WHIP）──
             if btype == BET_TOT and bside == "under":
                 # ① TBD先發：不知道誰上場幾局，UNDER風險極高，直接拒絕
