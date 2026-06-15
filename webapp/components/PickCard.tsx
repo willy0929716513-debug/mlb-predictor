@@ -12,16 +12,19 @@ const BET_LABEL: Record<string, string> = {
 }
 
 export default function PickCard({ pick, locked }: PickCardProps) {
-  const betShort = BET_LABEL[pick.bet_type] || pick.bet_type
-  const direction = pick.label || (pick.bet_type === '獨贏' ? '獨贏' : pick.label)
+  const betShort = (pick.btype && BET_LABEL[pick.btype]) || pick.btype || '???'
+  const direction = pick.bet_label || (pick.btype === '獨贏' ? '獨贏' : pick.bet_label) || ''
 
   return (
     <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden hover:border-gray-700 transition">
       {/* 場次標題 */}
       <div className="px-4 py-3 border-b border-gray-800 flex items-center justify-between">
-        <div>
+        <div className="flex items-center gap-2">
+          {pick.tier && (
+            <span className="text-xs text-yellow-400">{pick.tier}</span>
+          )}
           <span className="text-white font-semibold">{pick.away_cn}</span>
-          <span className="text-gray-500 mx-2">@</span>
+          <span className="text-gray-500 mx-1">@</span>
           <span className="text-white font-semibold">{pick.home_cn}</span>
         </div>
         <span className="text-xs text-gray-500">{pick.game_time}</span>
@@ -29,9 +32,9 @@ export default function PickCard({ pick, locked }: PickCardProps) {
 
       {/* 先發投手 */}
       <div className="px-4 py-2 text-xs text-gray-500 border-b border-gray-800 flex justify-between">
-        <span>{pick.away_sp || 'TBD'} {pick.away_sp_era != null ? `(${pick.away_sp_era.toFixed(2)})` : ''}</span>
+        <span>{pick.away_sp || 'TBD'} {pick.away_era != null ? `(${pick.away_era.toFixed(2)})` : ''}</span>
         <span>vs</span>
-        <span>{pick.home_sp || 'TBD'} {pick.home_sp_era != null ? `(${pick.home_sp_era.toFixed(2)})` : ''}</span>
+        <span>{pick.home_sp || 'TBD'} {pick.home_era != null ? `(${pick.home_era.toFixed(2)})` : ''}</span>
       </div>
 
       {/* 推薦內容 */}
@@ -59,19 +62,19 @@ export default function PickCard({ pick, locked }: PickCardProps) {
             <div className="flex items-center gap-2 flex-wrap">
               <span className="bg-green-900/50 text-green-400 text-xs px-2 py-0.5 rounded font-medium">{betShort}</span>
               <span className="text-white font-bold">{direction}</span>
-              {pick.price && (
-                <span className="text-green-400 font-bold">@ {pick.price.toFixed(2)}</span>
+              {pick.bp != null && (
+                <span className="text-green-400 font-bold">@ {pick.bp.toFixed(2)}</span>
               )}
-              {pick.book && (
-                <span className="text-xs text-gray-500">({pick.book})</span>
+              {pick.bk && (
+                <span className="text-xs text-gray-500">({pick.bk})</span>
               )}
             </div>
             <div className="flex gap-4 text-xs text-gray-400 flex-wrap">
               {pick.edge != null && (
-                <span>Edge <span className="text-yellow-400">+{(pick.edge * 100).toFixed(1)}%</span></span>
+                <span>Edge <span className="text-yellow-400">+{pick.edge.toFixed(1)}%</span></span>
               )}
               {pick.conf != null && (
-                <span>信心 <span className="text-blue-400">{(pick.conf * 100).toFixed(0)}%</span></span>
+                <span>信心 <span className="text-blue-400">{pick.conf.toFixed(0)}%</span></span>
               )}
               {pick.stake != null && (
                 <span>建議注額 <span className="text-white">${pick.stake.toFixed(0)}</span></span>

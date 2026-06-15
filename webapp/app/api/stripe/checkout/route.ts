@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { stripe, PLANS, type PlanKey } from '@/lib/stripe'
+import { stripe, PRICE_IDS } from '@/lib/stripe'
+import { PLANS, type PlanKey } from '@/lib/plans'
 import { createClient } from '@/lib/supabase-server'
 
 export async function POST(request: NextRequest) {
@@ -16,6 +17,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid plan' }, { status: 400 })
   }
 
+  const priceId = PRICE_IDS[plan]
   const origin = request.headers.get('origin') || process.env.NEXT_PUBLIC_APP_URL!
 
   try {
@@ -25,7 +27,7 @@ export async function POST(request: NextRequest) {
         mode: 'subscription',
         payment_method_types: ['card'],
         customer_email: user.email,
-        line_items: [{ price: planConfig.priceId, quantity: 1 }],
+        line_items: [{ price: priceId, quantity: 1 }],
         success_url: `${origin}/success?plan=monthly&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${origin}/pricing`,
         metadata: { user_id: user.id, plan: 'monthly' },
@@ -37,7 +39,7 @@ export async function POST(request: NextRequest) {
         mode: 'payment',
         payment_method_types: ['card'],
         customer_email: user.email,
-        line_items: [{ price: planConfig.priceId, quantity: 1 }],
+        line_items: [{ price: priceId, quantity: 1 }],
         success_url: `${origin}/success?plan=day_pass&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${origin}/pricing`,
         metadata: { user_id: user.id, plan: 'day_pass' },

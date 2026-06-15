@@ -3,6 +3,8 @@ import { stripe } from '@/lib/stripe'
 import { createServiceClient } from '@/lib/supabase-server'
 import Stripe from 'stripe'
 
+export const runtime = 'nodejs'
+
 export async function POST(request: NextRequest) {
   const body = await request.text()
   const sig = request.headers.get('stripe-signature')!
@@ -17,9 +19,9 @@ export async function POST(request: NextRequest) {
   const supabase = await createServiceClient()
 
   switch (event.type) {
-    // 月訂閱付款成功
+    // 付款完成（單日券 + 月訂閱首次）
     case 'checkout.session.completed': {
-      const session = event.data.object as Stripe.CheckoutSession
+      const session = event.data.object as Stripe.Checkout.Session
       const userId = session.metadata?.user_id
       const plan = session.metadata?.plan
       if (!userId || !plan) break
@@ -32,31 +34,35 @@ export async function POST(request: NextRequest) {
           status: 'active',
           expires_at: expiresAt,
           stripe_customer_id: session.customer as string,
-        })
+        }, { onConflict: 'user_id,plan_type' })
       }
+      // monthly 訂閱由 customer.subscription.created 事件處理
       break
     }
 
-    // 月訂閱付款確認（subscription 啟動）
+    // 月訂閱啟動 / 更新
     case 'customer.subscription.created':
     case 'customer.subscription.updated': {
       const sub = event.data.object as Stripe.Subscription
-      const userId = sub.metadata?.user_id
-
-      // 從 session 取 user_id（subscription 可能沒有直接 metadata）
       const customerId = sub.customer as string
-      const { data: existing } = await supabase
-        .from('subscriptions')
-        .select('user_id')
-        .eq('stripe_customer_id', customerId)
-        .limit(1)
-        .single()
 
-      const uid = userId || existing?.user_id
+      // user_id 從 metadata 或查現有記錄
+      const uid = sub.metadata?.user_id || await (async () => {
+        const { data } = await supabase
+          .from('subscriptions')
+          .select('user_id')
+          .eq('stripe_customer_id', customerId)
+          .limit(1)
+          .single()
+        return data?.user_id
+      })()
       if (!uid) break
 
       const isActive = sub.status === 'active' || sub.status === 'trialing'
-      const expiresAt = new Date((sub.current_period_end ?? 0) * 1000).toISOString()
+      // Stripe v22 移除 current_period_end，用 cancel_at 或下一個計費週期推算
+      const endTs = sub.cancel_at
+        ?? sub.billing_cycle_anchor + 32 * 24 * 60 * 60  // +32天 ≈ 下一個月
+      const expiresAt = new Date(endTs * 1000).toISOString()
 
       await supabase.from('subscriptions').upsert({
         user_id: uid,
@@ -65,16 +71,16 @@ export async function POST(request: NextRequest) {
         expires_at: expiresAt,
         stripe_customer_id: customerId,
         stripe_subscription_id: sub.id,
-      })
+      }, { onConflict: 'user_id,plan_type' })
       break
     }
 
-    // 訂閱取消
+    // 訂閱取消（立即或到期後）
     case 'customer.subscription.deleted': {
       const sub = event.data.object as Stripe.Subscription
       await supabase
         .from('subscriptions')
-        .update({ status: 'cancelled' })
+        .update({ status: 'cancelled', expires_at: new Date().toISOString() })
         .eq('stripe_subscription_id', sub.id)
       break
     }

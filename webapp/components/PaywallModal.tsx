@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { PLANS } from '@/lib/stripe'
+import { PLANS } from '@/lib/plans'
 
 export default function PaywallModal({ onClose }: { onClose: () => void }) {
   const router = useRouter()

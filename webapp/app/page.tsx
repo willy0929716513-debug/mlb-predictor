@@ -49,8 +49,8 @@ export default function HomePage() {
       {/* 標題 */}
       <div>
         <h1 className="text-2xl font-bold text-white">⚾ 今日 MLB 推薦</h1>
-        {data?.updated_at && (
-          <p className="text-sm text-gray-500 mt-1">更新時間：{data.updated_at}</p>
+        {data?.generated_at && (
+          <p className="text-sm text-gray-500 mt-1">更新時間：{data.generated_at}</p>
         )}
       </div>
 
@@ -76,7 +76,7 @@ export default function HomePage() {
       {data?.picks?.length ? (
         <div className="space-y-3">
           {data.picks.map((pick, i) => (
-            <PickCard key={i} pick={pick} locked={!isActive} />
+            <PickCard key={i} pick={pick} locked={!isActive || pick.bp === null} />
           ))}
         </div>
       ) : (

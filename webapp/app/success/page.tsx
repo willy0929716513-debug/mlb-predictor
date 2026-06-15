@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 
-export default function SuccessPage() {
+function SuccessContent() {
   const [countdown, setCountdown] = useState(5)
   const searchParams = useSearchParams()
   const plan = searchParams.get('plan')
@@ -34,5 +34,18 @@ export default function SuccessPage() {
         立即查看推薦
       </Link>
     </div>
+  )
+}
+
+export default function SuccessPage() {
+  return (
+    <Suspense fallback={
+      <div className="max-w-sm mx-auto mt-20 text-center animate-pulse">
+        <div className="text-6xl mb-4">🎉</div>
+        <div className="h-8 bg-gray-800 rounded w-48 mx-auto" />
+      </div>
+    }>
+      <SuccessContent />
+    </Suspense>
   )
 }

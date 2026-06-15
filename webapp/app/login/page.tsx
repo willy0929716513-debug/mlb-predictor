@@ -1,10 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
 
-export default function LoginPage() {
+function LoginForm() {
   const [email, setEmail] = useState('')
   const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -66,5 +66,18 @@ export default function LoginPage() {
         </form>
       )}
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="max-w-sm mx-auto mt-16 animate-pulse">
+        <div className="h-8 bg-gray-800 rounded w-48 mx-auto mb-4" />
+        <div className="h-12 bg-gray-900 rounded-lg" />
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   )
 }

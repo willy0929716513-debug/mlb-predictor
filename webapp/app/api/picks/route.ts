@@ -37,23 +37,29 @@ export async function GET() {
     // 未訂閱用戶：隱藏推薦敏感欄位
     if (!hasAccess && picks.picks) {
       picks.picks = picks.picks.map((p: Record<string, unknown>) => ({
+        // Keep visible fields
         home: p.home,
         away: p.away,
         home_cn: p.home_cn,
         away_cn: p.away_cn,
         game_time: p.game_time,
+        game_date: p.game_date,
         home_sp: p.home_sp,
         away_sp: p.away_sp,
-        home_sp_era: p.home_sp_era,
-        away_sp_era: p.away_sp_era,
-        // 以下欄位隱藏
-        bet_type: '???',
-        label: '',
-        price: null,
+        home_era: p.home_era,
+        away_era: p.away_era,
+        home_k9: p.home_k9,
+        away_k9: p.away_k9,
+        tier: p.tier,
+        // Null out sensitive fields
+        bp: null,
+        bk: null,
         edge: null,
         conf: null,
         stake: null,
-        book: null,
+        model_p: null,
+        bet_label: null,
+        btype: null,
       }))
     }
 
