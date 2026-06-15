@@ -46,6 +46,17 @@ export default function HomePage() {
 
   return (
     <div className="space-y-6">
+      {/* 免責聲明 */}
+      <div className="bg-yellow-950/30 border border-yellow-800/40 rounded-xl px-4 py-3 text-xs text-gray-500">
+        <p className="font-semibold text-yellow-500/80 mb-1">⚠️ 免責聲明</p>
+        <p>
+          本網站提供之 MLB 投注推薦<strong className="text-gray-400">僅供參考</strong>，不構成任何財務或投資建議。
+          過去績效不代表未來表現，運動投注本質上涉及本金虧損風險。
+          請確認您所在地區合法進行體育投注，並量力而為、理性下注。
+          使用本服務即代表您已充分了解上述風險，並自行承擔所有相關投注決策責任。
+        </p>
+      </div>
+
       {/* 標題 */}
       <div>
         <h1 className="text-2xl font-bold text-white">⚾ 今日 MLB 推薦</h1>

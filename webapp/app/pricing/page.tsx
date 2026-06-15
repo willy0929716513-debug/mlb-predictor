@@ -7,6 +7,7 @@ import { PLANS } from '@/lib/plans'
 export default function PricingPage() {
   const router = useRouter()
   const [loading, setLoading] = useState<string | null>(null)
+  const [agreed, setAgreed] = useState(false)
 
   const handleCheckout = async (plan: 'monthly' | 'day_pass') => {
     setLoading(plan)
@@ -36,6 +37,17 @@ export default function PricingPage() {
         <p className="text-gray-400 mt-2">解鎖量化模型每日 MLB 推薦</p>
       </div>
 
+      {/* 免責聲明 */}
+      <div className="bg-yellow-950/30 border border-yellow-800/40 rounded-xl px-4 py-3 text-xs text-gray-500 mb-6">
+        <p className="font-semibold text-yellow-500/80 mb-1">⚠️ 免責聲明</p>
+        <p>
+          本網站提供之 MLB 投注推薦<strong className="text-gray-400">僅供參考</strong>，不構成任何財務或投資建議。
+          過去績效不代表未來表現，運動投注本質上涉及本金虧損風險。
+          請確認您所在地區合法進行體育投注，並量力而為、理性下注。
+          使用本服務即代表您已充分了解上述風險，並自行承擔所有相關投注決策責任。
+        </p>
+      </div>
+
       <div className="grid sm:grid-cols-2 gap-4">
         {/* 月訂閱 */}
         <div className="bg-gray-900 border-2 border-green-700 rounded-2xl p-6 relative">
@@ -57,8 +69,8 @@ export default function PricingPage() {
           </ul>
           <button
             onClick={() => handleCheckout('monthly')}
-            disabled={!!loading}
-            className="w-full bg-green-600 hover:bg-green-500 disabled:opacity-50 text-white font-medium py-2.5 rounded-xl transition"
+            disabled={!!loading || !agreed}
+            className="w-full bg-green-600 hover:bg-green-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium py-2.5 rounded-xl transition"
           >
             {loading === 'monthly' ? '處理中...' : '立即訂閱'}
           </button>
@@ -81,15 +93,28 @@ export default function PricingPage() {
           </ul>
           <button
             onClick={() => handleCheckout('day_pass')}
-            disabled={!!loading}
-            className="w-full bg-gray-700 hover:bg-gray-600 disabled:opacity-50 text-white font-medium py-2.5 rounded-xl transition"
+            disabled={!!loading || !agreed}
+            className="w-full bg-gray-700 hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium py-2.5 rounded-xl transition"
           >
             {loading === 'day_pass' ? '處理中...' : '購買單日券'}
           </button>
         </div>
       </div>
 
-      <p className="text-center text-xs text-gray-600 mt-6">
+      {/* 免責聲明同意 */}
+      <label className="flex items-start gap-2.5 mt-6 cursor-pointer group">
+        <input
+          type="checkbox"
+          checked={agreed}
+          onChange={e => setAgreed(e.target.checked)}
+          className="mt-0.5 h-4 w-4 shrink-0 accent-green-500 cursor-pointer"
+        />
+        <span className="text-xs text-gray-500 group-hover:text-gray-400 transition leading-relaxed">
+          我已閱讀並同意上方<span className="text-gray-300">免責聲明</span>——本服務推薦僅供參考，不構成財務建議，運動投注涉及風險，本人自行承擔所有投注決策責任
+        </span>
+      </label>
+
+      <p className="text-center text-xs text-gray-600 mt-4">
         透過 Stripe 安全付款 · 月訂閱可隨時取消 · 如有問題請聯繫客服
       </p>
     </div>
