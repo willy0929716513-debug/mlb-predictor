@@ -441,7 +441,7 @@
       "reason": "第5局已得8分（此時預期4.0分），高分走勢盤口9.0"
     }
   ],
-  "live_updated_ts": 1781484154,
+  "live_updated_ts": 1781484456,
   "game_preds": {
     "pirates|marlins": {
       "home_win_prob": 0.76,
@@ -504,5 +504,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-15 08:42 (台灣時間)"
+  "live_updated_at": "2026-06-15 08:47 (台灣時間)"
 }
