@@ -2,6 +2,8 @@ name: MLB Bot Daily
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * *'   # UTC 06:00 = TW 14:00（每天下午兩點自動更新）
 
 permissions:
   contents: write
