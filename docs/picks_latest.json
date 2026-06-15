@@ -441,7 +441,7 @@
       "reason": "第9局客隊領先2分（賽前客隊勝率46%），大局已定"
     }
   ],
-  "live_updated_ts": 1781488721,
+  "live_updated_ts": 1781489023,
   "game_preds": {
     "pirates|marlins": {
       "home_win_prob": 0.76,
@@ -504,5 +504,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-06-15 09:58 (台灣時間)"
+  "live_updated_at": "2026-06-15 10:03 (台灣時間)"
 }
