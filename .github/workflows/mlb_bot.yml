@@ -30,9 +30,11 @@ jobs:
 
       - name: Run MLB Bot
         env:
-          ODDS_API_KEY:    ${{ secrets.ODDS_API_KEY }}
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-          GH_TOKEN:        ${{ secrets.GH_TOKEN }}
+          ODDS_API_KEY:              ${{ secrets.ODDS_API_KEY }}
+          DISCORD_WEBHOOK:           ${{ secrets.DISCORD_WEBHOOK }}
+          GH_TOKEN:                  ${{ secrets.GH_TOKEN }}
+          SUPABASE_URL:              ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: python mlb_bot_v101.py
 
       - name: Commit and push picks_latest.json
