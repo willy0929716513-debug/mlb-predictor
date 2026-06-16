@@ -232,12 +232,12 @@
       "away_cn": "天使",
       "inning": 7,
       "top_inning": false,
-      "home_runs": 2,
+      "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 6.5,
+      "projected_total": 7.5,
       "market_total": 9.0,
-      "bet": null,
-      "reason": null
+      "bet": "客隊讓分(+1.5)",
+      "reason": "客隊落後1分 第7局，賽前客隊勝率74%"
     },
     {
       "home_cn": "運動家",
@@ -264,7 +264,7 @@
       "reason": "第5局已得6分（此時預期4.2分），高分走勢盤口9.5"
     }
   ],
-  "live_updated_ts": 1781580307,
+  "live_updated_ts": 1781580610,
   "game_preds": {
     "phillies|marlins": {
       "home_win_prob": 0.4528,
@@ -307,5 +307,5 @@
       "market_total": 9.5
     }
   },
-  "live_updated_at": "2026-06-16 11:25 (台灣時間)"
+  "live_updated_at": "2026-06-16 11:30 (台灣時間)"
 }
