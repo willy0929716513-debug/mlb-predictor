@@ -37,17 +37,21 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: python mlb_bot_v101.py
 
-      - name: Commit and push picks_latest.json
+      - name: Fetch pitcher headshots
+        run: python scripts/fetch_pitcher_photos.py
+
+      - name: Commit and push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add docs/picks_latest.json docs/odds_snapshot.json
+          git add docs/images/ || true
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "chore: update picks_latest.json [skip ci]"
+            git commit -m "chore: update picks + pitcher photos [skip ci]"
             git pull --rebase -X ours origin HEAD || true
             git push origin HEAD
           fi
