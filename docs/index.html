@@ -27,8 +27,11 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradi
 .pro-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:800;background:linear-gradient(135deg,rgba(255,184,0,.2),rgba(255,100,0,.15));color:var(--y);border:1px solid rgba(255,184,0,.35);letter-spacing:1px}
 .hdr-tabs{display:flex;overflow-x:auto;padding:0 12px 10px;gap:4px;scrollbar-width:none}
 .hdr-tabs::-webkit-scrollbar{display:none}
-.htab{flex-shrink:0;padding:6px 14px;border-radius:20px;border:none;background:transparent;color:var(--t2);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap}
+.htab{flex-shrink:0;padding:6px 14px;border-radius:20px;border:none;background:transparent;color:var(--t2);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap;-webkit-tap-highlight-color:transparent}
 .htab.on{background:rgba(0,229,255,.14);color:var(--c);border:1px solid rgba(0,229,255,.3)}
+/* PAGE PANELS */
+.pg{display:none}
+.pg.on{display:block}
 /* CONTENT */
 .content{position:relative;z-index:1;padding:12px 12px 100px}
 /* DISC */
@@ -71,7 +74,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradi
 /* FILTER TABS */
 .filter-row{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
 .filter-row::-webkit-scrollbar{display:none}
-.ftab{flex-shrink:0;padding:5px 14px;border-radius:16px;border:1px solid var(--bo);background:transparent;color:var(--t2);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s}
+.ftab{flex-shrink:0;padding:5px 14px;border-radius:16px;border:1px solid var(--bo);background:transparent;color:var(--t2);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
 .ftab.on{background:rgba(0,229,255,.14);color:var(--c);border-color:rgba(0,229,255,.3)}
 /* GAME CARD */
 .gcard{background:rgba(8,15,35,.9);border:1px solid var(--bo);border-radius:18px;overflow:hidden;margin-bottom:12px;transition:border-color .2s}
@@ -157,6 +160,17 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradi
 .hrow-bet{font-size:11px;color:var(--t2);display:flex;align-items:center;gap:4px;margin-top:3px}
 .hrow-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
 .hrow-odds{font-size:12px;font-weight:700;color:var(--t1)}
+/* STAT TABLE (數據中心) */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.stat-box{background:rgba(8,15,35,.9);border:1px solid var(--bo);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:4px}
+.stat-box-label{font-size:9px;font-weight:800;color:var(--t2);letter-spacing:.8px;text-transform:uppercase}
+.stat-box-val{font-size:24px;font-weight:800;color:var(--t1);line-height:1}
+.stat-box-sub{font-size:10px;color:var(--t2)}
+/* COMING SOON */
+.cs-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;text-align:center}
+.cs-icon{font-size:52px;margin-bottom:16px}
+.cs-title{font-size:20px;font-weight:800;color:var(--t1);margin-bottom:8px}
+.cs-sub{font-size:13px;color:var(--t2);line-height:1.6;max-width:260px}
 /* EMPTY / SKELETON */
 .empty{text-align:center;padding:60px 20px;border:1px dashed var(--bo);border-radius:16px}
 .empty-icon{font-size:40px;opacity:.4}
@@ -212,62 +226,94 @@ footer{text-align:center;padding:20px 16px;border-top:1px solid var(--bo);font-s
       <div class="pro-badge">★ PRO</div>
     </div>
   </div>
-  <div class="hdr-tabs">
-    <button class="htab on">首頁</button>
-    <button class="htab">AI 分析</button>
-    <button class="htab">數據中心</button>
-    <button class="htab">近期勝績</button>
-    <button class="htab">球隊排名</button>
-  </div>
+  <nav class="hdr-tabs">
+    <button class="htab on" onclick="switchTab(0,this)">首頁</button>
+    <button class="htab" onclick="switchTab(1,this)">AI 分析</button>
+    <button class="htab" onclick="switchTab(2,this)">數據中心</button>
+    <button class="htab" onclick="switchTab(3,this)">近期勝績</button>
+    <button class="htab" onclick="switchTab(4,this)">球隊排名</button>
+  </nav>
 </header>
 
-<div class="content">
-  <div class="disc fi">
-    <div>
-      <div class="disc-title">⚠️ 免責聲明</div>
-      <div class="disc-body">本平台預測<strong style="color:var(--t1)">僅供參考</strong>，不構成財務建議。過往績效不代表未來結果。請確認投注合法性，切勿超額投注。</div>
-    </div>
-  </div>
-
-  <div id="top-edge" class="fi">
-    <div class="sk" style="height:190px;border-radius:20px"></div>
-  </div>
-
-  <div class="qstats fi" id="qstats">
-    <div class="qs"><div class="qs-icon">🏆</div><div class="qs-label">勝敗記錄</div><div class="qs-val" id="qs-rec">—</div></div>
-    <div class="qs"><div class="qs-icon">🤖</div><div class="qs-label">AI 分析</div><div class="qs-val" id="qs-ai">—</div></div>
-    <div class="qs"><div class="qs-icon">📊</div><div class="qs-label">勝率</div><div class="qs-val" id="qs-wr">—</div></div>
-    <div class="qs"><div class="qs-icon">💰</div><div class="qs-label">總報酬</div><div class="qs-val" id="qs-roi">—</div></div>
-    <div class="qs"><div class="qs-icon">📈</div><div class="qs-label">總盈虧</div><div class="qs-val" id="qs-pnl">—</div></div>
-  </div>
-
-  <section id="predictions">
-    <div class="sec-row fi">
-      <div class="sec-tr">
-        <div class="sa"></div>
-        <h2 class="stitle">今日賽況</h2>
-        <div class="ssub" id="picks-date"></div>
+<!-- PAGE 0: 首頁 -->
+<div id="pg0" class="pg on">
+  <div class="content">
+    <div class="disc fi">
+      <div>
+        <div class="disc-title">⚠️ 免責聲明</div>
+        <div class="disc-body">本平台預測<strong style="color:var(--t1)">僅供參考</strong>，不構成財務建議。過往績效不代表未來結果。請確認投注合法性，切勿超額投注。</div>
       </div>
-      <div id="picks-meta" style="font-size:10px;color:var(--t2)"></div>
     </div>
-    <div class="filter-row fi">
-      <button class="ftab on" onclick="doFilter('all',this)">全部</button>
-      <button class="ftab" onclick="doFilter('ML',this)">ML 獨贏</button>
-      <button class="ftab" onclick="doFilter('RL',this)">RL 讓分</button>
-      <button class="ftab" onclick="doFilter('TOT',this)">O/U 大小</button>
+    <div id="top-edge" class="fi"><div class="sk" style="height:190px;border-radius:20px"></div></div>
+    <div class="qstats fi" id="qstats">
+      <div class="qs"><div class="qs-icon">🏆</div><div class="qs-label">勝敗記錄</div><div class="qs-val" id="qs-rec">—</div></div>
+      <div class="qs"><div class="qs-icon">🤖</div><div class="qs-label">AI 分析</div><div class="qs-val" id="qs-ai">—</div></div>
+      <div class="qs"><div class="qs-icon">📊</div><div class="qs-label">勝率</div><div class="qs-val" id="qs-wr">—</div></div>
+      <div class="qs"><div class="qs-icon">💰</div><div class="qs-label">總報酬</div><div class="qs-val" id="qs-roi">—</div></div>
+      <div class="qs"><div class="qs-icon">📈</div><div class="qs-label">總盈虧</div><div class="qs-val" id="qs-pnl">—</div></div>
     </div>
-    <div id="picks-grid">
-      <div class="sk" style="height:340px;margin-bottom:10px"></div>
-      <div class="sk" style="height:340px;margin-bottom:10px"></div>
-    </div>
-  </section>
+    <section id="predictions">
+      <div class="sec-row fi">
+        <div class="sec-tr"><div class="sa"></div><h2 class="stitle">今日賽況</h2><div class="ssub" id="picks-date"></div></div>
+        <div id="picks-meta" style="font-size:10px;color:var(--t2)"></div>
+      </div>
+      <div class="filter-row fi">
+        <button class="ftab on" onclick="doFilter('all',this)">全部</button>
+        <button class="ftab" onclick="doFilter('ML',this)">ML 獨贏</button>
+        <button class="ftab" onclick="doFilter('RL',this)">RL 讓分</button>
+        <button class="ftab" onclick="doFilter('TOT',this)">O/U 大小</button>
+      </div>
+      <div id="picks-grid">
+        <div class="sk" style="height:340px;margin-bottom:10px"></div>
+        <div class="sk" style="height:340px;margin-bottom:10px"></div>
+      </div>
+    </section>
+  </div>
+</div>
 
-  <section class="sec-row fi" style="display:block;margin-top:20px" id="s-hist">
-    <div class="sec-row" style="margin-bottom:10px">
-      <div class="sec-tr"><div class="sa"></div><h2 class="stitle">近期表現</h2></div>
+<!-- PAGE 1: AI 分析 -->
+<div id="pg1" class="pg">
+  <div class="content">
+    <div class="sec-row" style="margin-bottom:14px;padding-top:4px">
+      <div class="sec-tr"><div class="sa"></div><h2 class="stitle">AI 分析</h2></div>
     </div>
-    <div id="hist-content"></div>
-  </section>
+    <div id="pg1-picks">
+      <div class="sk" style="height:200px;margin-bottom:10px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 2: 數據中心 -->
+<div id="pg2" class="pg">
+  <div class="content">
+    <div class="sec-row" style="margin-bottom:14px;padding-top:4px">
+      <div class="sec-tr"><div class="sa"></div><h2 class="stitle">數據中心</h2></div>
+    </div>
+    <div id="pg2-stats"></div>
+  </div>
+</div>
+
+<!-- PAGE 3: 近期勝績 -->
+<div id="pg3" class="pg">
+  <div class="content">
+    <div class="sec-row" style="margin-bottom:14px;padding-top:4px">
+      <div class="sec-tr"><div class="sa"></div><h2 class="stitle">近期勝績</h2></div>
+    </div>
+    <div id="pg3-hist">
+      <div class="sk" style="height:300px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 4: 球隊排名 -->
+<div id="pg4" class="pg">
+  <div class="content">
+    <div class="cs-wrap">
+      <div class="cs-icon">🏟️</div>
+      <div class="cs-title">球隊排名</div>
+      <div class="cs-sub">即將推出<br>包含各隊勝率、得分、ERA 等完整數據排行</div>
+    </div>
+  </div>
 </div>
 
 <footer>
@@ -330,92 +376,107 @@ function barChart(seed,color){
   return'<svg viewBox="0 0 90 40">'+bars+'</svg>'
 }
 
-// ══════════════════════════════════════════════
-//  PITCHER PHOTO SYSTEM
-//  Priority 1: docs/images/pitchers/{safe}.jpg   (pre-downloaded by bot, no CORS)
-//  Priority 2: MLB Stats API → MLB headshot CDN  (live fallback)
-//  Priority 3: styled initials avatar             (always works)
-// ══════════════════════════════════════════════
-var _mlbIdCache={};   // name → mlbId | null
-var _mlbPending={};   // name → [elements waiting]
-
+// ── PITCHER PHOTO SYSTEM ──────────────────────────
+var _mlbIdCache={},_mlbPending={};
 function safeName(n){return n.trim().replace(/[^a-zA-Z0-9]/g,'_')}
-
-// Build the <div> for a pitcher slot; photo loads async after render
 function pitcherAvHtml(name,side){
   var initials=name?name.trim().split(/\s+/).map(function(w){return w[0]||''}).join('').slice(0,2).toUpperCase():'??';
   var isAway=side==='a';
-  var rc=isAway?'#00E5FF':'#00FF88';
-  var bg=isAway?'rgba(0,35,90,.85)':'rgba(0,55,35,.85)';
-  var tc=isAway?'var(--c)':'var(--g)';
+  var rc=isAway?'#00E5FF':'#00FF88';var bg=isAway?'rgba(0,35,90,.85)':'rgba(0,55,35,.85)';var tc=isAway?'var(--c)':'var(--g)';
   return'<div class="pitcher-av" data-pname="'+(name||'')+'" data-side="'+side+'">'+
-    '<svg class="pa-ring" viewBox="0 0 54 54">'+
-      '<circle cx="27" cy="27" r="24" fill="none" stroke="'+rc+'" stroke-width="1.3" stroke-dasharray="3 2.5" opacity=".5"/>'+
-    '</svg>'+
-    '<div class="pa-inner" style="background:'+bg+'">'+
-      '<span class="pa-init" style="color:'+tc+'">'+initials+'</span>'+
-    '</div>'+
+    '<svg class="pa-ring" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="'+rc+'" stroke-width="1.3" stroke-dasharray="3 2.5" opacity=".5"/></svg>'+
+    '<div class="pa-inner" style="background:'+bg+'"><span class="pa-init" style="color:'+tc+'">'+initials+'</span></div>'+
   '</div>'
 }
-
 function showPhotoInEl(el,url){
-  var inner=el.querySelector('.pa-inner');
-  if(!inner)return;
+  var inner=el.querySelector('.pa-inner');if(!inner)return;
   var img=new Image();
-  img.onload=function(){
-    inner.innerHTML='<img src="'+url+'" alt="">';
-    inner.style.background='none';
-    var ring=el.querySelector('.pa-ring circle');
-    if(ring)ring.style.opacity='.2';
-  };
-  img.onerror=function(){};
-  img.src=url;
+  img.onload=function(){inner.innerHTML='<img src="'+url+'" alt="">';inner.style.background='none';var ring=el.querySelector('.pa-ring circle');if(ring)ring.style.opacity='.2'};
+  img.onerror=function(){};img.src=url;
 }
-
 function tryMlbCdn(name,el){
-  if(_mlbIdCache.hasOwnProperty(name)){
-    if(_mlbIdCache[name])showPhotoInEl(el,mlbCdnUrl(_mlbIdCache[name]));
-    return;
-  }
+  if(_mlbIdCache.hasOwnProperty(name)){if(_mlbIdCache[name])showPhotoInEl(el,mlbCdnUrl(_mlbIdCache[name]));return}
   if(_mlbPending[name]){_mlbPending[name].push(el);return}
   _mlbPending[name]=[el];
   var norm=name.indexOf(',')>-1?name.split(',').map(function(s){return s.trim()}).reverse().join(' '):name;
   fetch('https://statsapi.mlb.com/api/v1/people/search?names='+encodeURIComponent(norm)+'&sportId=1&fields=people,id,fullName,primaryPosition,active')
     .then(function(r){return r.ok?r.json():null})
     .then(function(d){
-      var id=null;
-      var people=(d&&d.people)||[];
-      // prefer active SP, then any active pitcher, then first result
+      var id=null,people=(d&&d.people)||[];
       for(var i=0;i<people.length;i++){var pos=(people[i].primaryPosition||{}).abbreviation||'';if(people[i].active&&pos==='SP'){id=people[i].id;break}}
       if(!id)for(var i=0;i<people.length;i++){var pos=(people[i].primaryPosition||{}).abbreviation||'';if(people[i].active&&(pos==='P'||pos==='RP')){id=people[i].id;break}}
       if(!id&&people.length)id=people[0].id;
       _mlbIdCache[name]=id;
       (_mlbPending[name]||[]).forEach(function(e){if(id)showPhotoInEl(e,mlbCdnUrl(id))});
       delete _mlbPending[name];
-    })
-    .catch(function(){_mlbIdCache[name]=null;delete _mlbPending[name]});
+    }).catch(function(){_mlbIdCache[name]=null;delete _mlbPending[name]});
 }
-
-function mlbCdnUrl(id){
-  return'https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_213,q_auto:best/v1/people/'+id+'/headshot/67/current'
-}
-
-// Called after every render; tries local file first, CDN second
+function mlbCdnUrl(id){return'https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_213,q_auto:best/v1/people/'+id+'/headshot/67/current'}
 function initPitcherPhotos(){
   document.querySelectorAll('.pitcher-av[data-pname]').forEach(function(el){
-    var name=el.getAttribute('data-pname');
-    if(!name)return;
-    // Priority 1: local static image written by mlb_bot workflow
-    var localUrl='./images/pitchers/'+safeName(name)+'.jpg';
+    var name=el.getAttribute('data-pname');if(!name)return;
     var probe=new Image();
-    probe.onload=function(){showPhotoInEl(el,localUrl)};
-    probe.onerror=function(){tryMlbCdn(name,el)};   // Priority 2: live CDN
-    probe.src=localUrl;
+    probe.onload=function(){showPhotoInEl(el,'./images/pitchers/'+safeName(name)+'.jpg')};
+    probe.onerror=function(){tryMlbCdn(name,el)};
+    probe.src='./images/pitchers/'+safeName(name)+'.jpg';
   });
 }
-// ══════════════════════════════════════════════
 
-// RENDER TOP EDGE
+// ── TAB SWITCHING ─────────────────────────────────
+function switchTab(idx,btn){
+  document.querySelectorAll('.htab').forEach(function(t){t.classList.remove('on')});
+  btn.classList.add('on');
+  document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on')});
+  var pg=document.getElementById('pg'+idx);
+  if(pg){pg.classList.add('on');window.scrollTo({top:0,behavior:'smooth'})}
+  // Populate pages lazily on first visit
+  if(idx===1)rPg1();
+  if(idx===2)rPg2();
+  if(idx===3)rPg3();
+}
+
+// ── PAGE RENDERERS ────────────────────────────────
+function rPg1(){
+  if(!_allPicks.length)return;
+  document.getElementById('pg1-picks').innerHTML=_allPicks.map(function(p,i){return makeGCard(p,i)}).join('');
+  animBars();initPitcherPhotos();
+}
+
+function rPg2(){
+  if(!_globalStats)return;
+  var st=_globalStats;
+  document.getElementById('pg2-stats').innerHTML=
+    '<div class="stat-grid">'+
+      '<div class="stat-box"><div class="stat-box-label">總分析場次</div><div class="stat-box-val" style="color:var(--c)">'+st.settled+'</div><div class="stat-box-sub">已結算投注</div></div>'+
+      '<div class="stat-box"><div class="stat-box-label">AI 勝場</div><div class="stat-box-val" style="color:var(--g)">'+st.wins+'</div><div class="stat-box-sub">'+st.win_rate.toFixed(1)+'% 命中率</div></div>'+
+      '<div class="stat-box"><div class="stat-box-label">總報酬率</div><div class="stat-box-val" style="color:'+(st.roi>=0?'var(--g)':'var(--r)')+'">'+st.roi.toFixed(1)+'%</div><div class="stat-box-sub">ROI</div></div>'+
+      '<div class="stat-box"><div class="stat-box-label">總盈虧</div><div class="stat-box-val" style="color:'+(st.total_pnl>=0?'var(--g)':'var(--r)')+'">'+(st.total_pnl>=0?'+':'')+st.total_pnl.toFixed(0)+'</div><div class="stat-box-sub">單位 $</div></div>'+
+    '</div>'+
+    (st.by_type?'<div class="sec-row" style="margin-bottom:10px"><div class="sec-tr"><div class="sa"></div><h2 class="stitle">類型細分</h2></div></div>'+
+      '<div class="hist-card">'+Object.keys(st.by_type).map(function(k){var v=st.by_type[k];return'<div class="hrow"><div class="hrow-left"><div class="hrow-teams">'+k+'</div><div class="hrow-bet">勝 '+v.wins+' / 負 '+(v.settled-v.wins)+'</div></div><div class="hrow-right"><div class="hrow-odds">'+v.win_rate.toFixed(1)+'%</div>'+b(v.roi>=0?'bg2':'br',(v.roi>=0?'+':'')+v.roi.toFixed(1)+'%')+'</div></div>'}).join('')+'</div>':'');
+}
+
+function rPg3(){
+  var el=document.getElementById('pg3-hist');
+  if(_globalHist&&_globalHist.length){
+    el.innerHTML='<div class="hist-card">'+_globalHist.map(function(r){
+      return'<div class="hrow">'+
+        '<div class="hrow-left">'+
+          '<div class="hrow-teams">'+(r.away_cn||'')+' <span style="color:var(--t2)">@</span> '+(r.home_cn||'')+'</div>'+
+          '<div class="hrow-bet">'+b('bc',r.bet_type)+(r.label?'<span>'+r.label+'</span>':'')+'<span style="color:var(--t2)">'+r.date+'</span></div>'+
+        '</div>'+
+        '<div class="hrow-right">'+
+          (r.price?'<div class="hrow-odds">'+r.price.toFixed(2)+' ('+toUS(r.price)+')</div>':'')+
+          res(r.result)+
+        '</div>'+
+      '</div>'
+    }).join('')+'</div>';
+  } else {
+    el.innerHTML='<div class="empty"><p class="empty-title">尚無歷史記錄</p></div>';
+  }
+}
+
+// ── TOP EDGE ──────────────────────────────────────
 function rTopEdge(pick){
   if(!pick){document.getElementById('top-edge').innerHTML='';return}
   var tc=pick.tier&&TC[pick.tier]?TC[pick.tier]:null;
@@ -438,11 +499,9 @@ function rTopEdge(pick){
             '<div class="te-stat"><div class="te-sl">優勢值</div><div class="te-sv" style="color:var(--y)">'+edgeStr+'</div></div>'+
             '<div class="te-stat"><div class="te-sl">信心度</div><div class="te-sv" style="color:var(--t1)">'+confStr+'</div></div>'+
           '</div>'+
-          '<button class="te-btn" onclick="document.getElementById(\'predictions\').scrollIntoView({behavior:\'smooth\'})">查看完整分析 →</button>'+
+          '<button class="te-btn" onclick="switchTab(1,document.querySelectorAll(\'.htab\')[1])">查看完整分析 →</button>'+
         '</div>'+
-        '<div class="te-right">'+
-          '<div class="te-team-art">'+abbr(pick.home)+'</div>'+
-        '</div>'+
+        '<div class="te-right"><div class="te-team-art">'+abbr(pick.home)+'</div></div>'+
       '</div>'+
       '<div class="te-info" style="margin-top:10px">'+
         '<div class="te-info-item">📅 '+(window._picksDate||'今日')+'</div>'+
@@ -453,10 +512,9 @@ function rTopEdge(pick){
     '</div>'
 }
 
-// RENDER QUICK STATS
+// ── QUICK STATS ───────────────────────────────────
 function rQStats(st){
-  var rs=st.roi>=0?'+':'';
-  var el;
+  var rs=st.roi>=0?'+':'';var el;
   el=document.getElementById('qs-rec');if(el)el.textContent=st.wins+'-'+(st.settled-st.wins);
   el=document.getElementById('qs-ai');if(el)el.textContent=st.wins+'/'+st.settled;
   el=document.getElementById('qs-wr');if(el)cUp(el,st.win_rate,1,'','%');
@@ -464,7 +522,8 @@ function rQStats(st){
   el=document.getElementById('qs-pnl');if(el){var pls=st.total_pnl>=0?'+':'';cUp(el,Math.abs(st.total_pnl),0,pls+'$','')}
 }
 
-// RENDER PICKS
+// ── RENDER PICKS ──────────────────────────────────
+var _allPicks=[],_globalStats=null,_globalHist=null;
 function rPicks(picks,date,gen){
   if(date){document.getElementById('picks-date').textContent=date;window._picksDate=date}
   if(gen)document.getElementById('picks-meta').textContent='更新：'+gen;
@@ -473,8 +532,7 @@ function rPicks(picks,date,gen){
     return
   }
   document.getElementById('picks-grid').innerHTML=picks.map(function(p,i){return makeGCard(p,i)}).join('');
-  animBars();
-  initPitcherPhotos();
+  animBars();initPitcherPhotos();
 }
 
 function gBar(label,pct,color,valStr){
@@ -489,10 +547,8 @@ function makeGCard(p,idx){
   var aiW=p.model_p!=null?p.model_p:null;
   var mktW=p.bp?100/p.bp:null;
   var awayWP,homeWP;
-  if(aiW!=null&&p.pred_away!=null&&p.pred_home!=null){
-    awayWP=p.pred_away>p.pred_home?aiW:100-aiW;homeWP=100-awayWP;
-  } else if(aiW!=null){awayWP=aiW;homeWP=100-aiW;}
-  else{awayWP=50;homeWP=50;}
+  if(aiW!=null&&p.pred_away!=null&&p.pred_home!=null){awayWP=p.pred_away>p.pred_home?aiW:100-aiW;homeWP=100-awayWP;}
+  else if(aiW!=null){awayWP=aiW;homeWP=100-aiW;}else{awayWP=50;homeWP=50;}
   awayWP=Math.round(awayWP);homeWP=100-awayWP;
   var awayColor=awayWP>homeWP?'var(--g)':'var(--t2)';
   var homeColor=homeWP>awayWP?'var(--g)':'var(--t2)';
@@ -507,121 +563,63 @@ function makeGCard(p,idx){
   if(p.edge!=null)metrics+='<div class="g-metric"><div class="g-ml">優勢值</div><div class="g-mv" style="color:var(--y)">+'+p.edge.toFixed(1)+'%</div></div>';
   if(p.conf!=null)metrics+='<div class="g-metric c"><div class="g-ml">信心度</div><div class="g-mv" style="color:'+(p.conf>75?'var(--g)':'var(--c)')+'">'+p.conf.toFixed(0)+'%</div></div>';
   if(p.stake!=null)metrics+='<div class="g-metric r"><div class="g-ml">Kelly</div><div class="g-mv">$'+p.stake.toFixed(0)+'</div></div>';
-
-  // Pitcher row (only when pitcher name or stats exist)
   var hasPit=p.away_sp||p.home_sp||p.away_era!=null;
   var pitRow=hasPit?
     '<div class="g-pit-row">'+
-      '<div class="g-pit-card">'+
-        pitcherAvHtml(p.away_sp||'','a')+
-        '<div class="g-pit-info">'+
-          '<div class="g-pit-name">'+(p.away_sp||'TBD')+'</div>'+
-          '<div class="g-pit-stats">'+spbRow(p.away_era,p.away_fip,p.away_k9)+'</div>'+
-        '</div>'+
-      '</div>'+
+      '<div class="g-pit-card">'+pitcherAvHtml(p.away_sp||'','a')+'<div class="g-pit-info"><div class="g-pit-name">'+(p.away_sp||'TBD')+'</div><div class="g-pit-stats">'+spbRow(p.away_era,p.away_fip,p.away_k9)+'</div></div></div>'+
       '<div class="g-pit-vs">投</div>'+
-      '<div class="g-pit-card r">'+
-        '<div class="g-pit-info r">'+
-          '<div class="g-pit-name">'+(p.home_sp||'TBD')+'</div>'+
-          '<div class="g-pit-stats r">'+spbRow(p.home_era,p.home_fip,p.home_k9)+'</div>'+
-        '</div>'+
-        pitcherAvHtml(p.home_sp||'','h')+
-      '</div>'+
+      '<div class="g-pit-card r"><div class="g-pit-info r"><div class="g-pit-name">'+(p.home_sp||'TBD')+'</div><div class="g-pit-stats r">'+spbRow(p.home_era,p.home_fip,p.home_k9)+'</div></div>'+pitcherAvHtml(p.home_sp||'','h')+'</div>'+
     '</div>':'';
-
-  var charts=idx<2?
-    '<div class="g-charts">'+
-      '<div class="g-chart"><div class="g-chart-title">蒙地卡羅分析</div>'+mcChart(idx+11)+'</div>'+
-      '<div class="g-chart"><div class="g-chart-title">跑分分布</div>'+barChart(idx+1,awayWP>homeWP?'var(--g)':'var(--c)')+'</div>'+
-    '</div>':'';
+  var charts=idx<2?'<div class="g-charts"><div class="g-chart"><div class="g-chart-title">蒙地卡羅分析</div>'+mcChart(idx+11)+'</div><div class="g-chart"><div class="g-chart-title">跑分分布</div>'+barChart(idx+1,awayWP>homeWP?'var(--g)':'var(--c)')+'</div></div>':'';
 
   return'<div class="gcard'+(isStrong?' strong-pick':'')+'">'+
-    '<div class="gcard-top">'+
-      '<span class="g-time">'+(p.game_time||'今日')+' '+wth+'</span>'+
-      '<div class="g-tier">'+tierH+b('bc','#'+(idx+1))+'</div>'+
-    '</div>'+
+    '<div class="gcard-top"><span class="g-time">'+(p.game_time||'今日')+' '+wth+'</span><div class="g-tier">'+tierH+b('bc','#'+(idx+1))+'</div></div>'+
     '<div class="g-teams-row">'+
-      '<div class="g-team">'+
-        '<div class="g-logo">'+abbr(p.away)+'</div>'+
-        '<div class="g-name">'+abbr(p.away)+'</div>'+
-        '<div class="g-cn">'+(p.away_cn||p.away)+'</div>'+
-      '</div>'+
+      '<div class="g-team"><div class="g-logo">'+abbr(p.away)+'</div><div class="g-name">'+abbr(p.away)+'</div><div class="g-cn">'+(p.away_cn||p.away)+'</div></div>'+
       '<div class="g-center-col"><span class="g-vs-txt">VS</span></div>'+
-      '<div class="g-team r">'+
-        '<div class="g-logo">'+abbr(p.home)+'</div>'+
-        '<div class="g-name">'+abbr(p.home)+'</div>'+
-        '<div class="g-cn">'+(p.home_cn||p.home)+'</div>'+
-      '</div>'+
-    '</div>'+
-    pitRow+
+      '<div class="g-team r"><div class="g-logo">'+abbr(p.home)+'</div><div class="g-name">'+abbr(p.home)+'</div><div class="g-cn">'+(p.home_cn||p.home)+'</div></div>'+
+    '</div>'+pitRow+
     '<div class="g-wp">'+
       '<div class="g-wp-nums">'+
         '<div><div class="g-wp-away-pct" style="color:'+awayColor+'">'+awayWP+'%</div><div style="font-size:9px;color:var(--t2)">'+abbr(p.away)+'</div></div>'+
         '<div style="font-size:9px;color:var(--t2);text-align:center;line-height:1.4">勝率<br>預測</div>'+
         '<div style="text-align:right"><div class="g-wp-home-pct" style="color:'+homeColor+'">'+homeWP+'%</div><div style="font-size:9px;color:var(--t2)">'+abbr(p.home)+'</div></div>'+
       '</div>'+
-      '<div class="g-wp-bar">'+
-        '<div class="g-wp-bar-a" style="width:'+awayWP+'%;background:'+(awayWP>homeWP?'var(--g)':'var(--r)')+'"></div>'+
-        '<div class="g-wp-bar-h" style="background:'+(homeWP>=awayWP?'var(--g)':'var(--r)')+'"></div>'+
-      '</div>'+
+      '<div class="g-wp-bar"><div class="g-wp-bar-a" style="width:'+awayWP+'%;background:'+(awayWP>homeWP?'var(--g)':'var(--r)')+'"></div><div class="g-wp-bar-h" style="background:'+(homeWP>=awayWP?'var(--g)':'var(--r)')+'"></div></div>'+
     '</div>'+
-    '<div class="g-bet-row">'+b('bc',bs)+'<span class="g-bet-dir">'+(p.bet_label||'')+'</span>'+
-      (p.bp?'<span class="g-bet-odds-dec">@'+decFmt(p.bp)+'</span><span class="g-bet-odds-us">('+toUS(p.bp)+')</span>':'')+(p.bk?b('bgr',p.bk):'')+'</div>'+
+    '<div class="g-bet-row">'+b('bc',bs)+'<span class="g-bet-dir">'+(p.bet_label||'')+'</span>'+(p.bp?'<span class="g-bet-odds-dec">@'+decFmt(p.bp)+'</span><span class="g-bet-odds-us">('+toUS(p.bp)+')</span>':'')+(p.bk?b('bgr',p.bk):'')+'</div>'+
     (bars?'<div class="g-bars">'+bars+'</div>':'')+
     (metrics?'<div class="g-metrics">'+metrics+'</div>':'')+
-    (p.pred_away!=null&&p.pred_home!=null?
-      '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-top:1px solid var(--bo);font-size:11px;color:var(--t2)">'+
-        '<span>預測比分</span><strong style="color:var(--t1)">'+p.pred_away.toFixed(1)+' – '+p.pred_home.toFixed(1)+'</strong>'+
-      '</div>':'')+
-    charts+
-  '</div>'
+    (p.pred_away!=null&&p.pred_home!=null?'<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-top:1px solid var(--bo);font-size:11px;color:var(--t2)"><span>預測比分</span><strong style="color:var(--t1)">'+p.pred_away.toFixed(1)+' – '+p.pred_home.toFixed(1)+'</strong></div>':'')+
+    charts+'</div>'
 }
 
-// FILTER
-var _allPicks=[];
+// ── FILTER ────────────────────────────────────────
 function doFilter(type,btn){
-  document.querySelectorAll('.ftab').forEach(function(t){t.classList.remove('on')});
-  btn.classList.add('on');
+  document.querySelectorAll('.ftab').forEach(function(t){t.classList.remove('on')});btn.classList.add('on');
   var filtered=type==='all'?_allPicks:_allPicks.filter(function(p){return(BM[p.btype]||p.btype)===type});
   if(!filtered.length){document.getElementById('picks-grid').innerHTML='<div class="empty"><p class="empty-title">此類型暫無預測</p></div>';return}
   document.getElementById('picks-grid').innerHTML=filtered.map(function(p,i){return makeGCard(p,i)}).join('');
   animBars();initPitcherPhotos();
 }
 
-// HISTORY
-function rHist(hist){
-  if(!hist||!hist.length)return;
-  document.getElementById('hist-content').innerHTML='<div class="hist-card">'+hist.slice(0,8).map(function(r){
-    return'<div class="hrow">'+
-      '<div class="hrow-left">'+
-        '<div class="hrow-teams">'+(r.away_cn||'')+' <span style="color:var(--t2)">@</span> '+(r.home_cn||'')+'</div>'+
-        '<div class="hrow-bet">'+b('bc',r.bet_type)+(r.label?'<span>'+r.label+'</span>':'')+'<span>'+r.date+'</span></div>'+
-      '</div>'+
-      '<div class="hrow-right">'+
-        (r.price?'<div class="hrow-odds">'+r.price.toFixed(2)+' ('+toUS(r.price)+')</div>':'')+
-        res(r.result)+
-      '</div>'+
-    '</div>'
-  }).join('')+'</div>'
-}
-
-// FETCH DATA
+// ── FETCH DATA ────────────────────────────────────
 pb.style.width='70%';
 fetch('./picks_latest.json?t='+Date.now())
   .then(function(r){return r.ok?r.json():null})
   .then(function(d){
     pb.style.width='100%';setTimeout(function(){pb.style.opacity='0';setTimeout(function(){pb.remove()},400)},300);
     if(!d){document.getElementById('picks-grid').innerHTML='<div class="empty"><p class="empty-title">資料載入失敗</p><p class="empty-sub">請重新整理。</p></div>';return}
+    _globalStats=d.stats||null;_globalHist=d.recent_history||null;
     if(d.stats)rQStats(d.stats);
     _allPicks=d.picks||[];
     rTopEdge(_allPicks.find(function(p){return p.tier==='💎 強注'})||_allPicks[0]);
     rPicks(_allPicks,d.date,d.generated_at);
-    rHist(d.recent_history);
     setTimeout(function(){document.querySelectorAll('.fi').forEach(function(el){if(el.getBoundingClientRect().top<window.innerHeight)el.classList.add('on')})},100)
   })
   .catch(function(){document.getElementById('picks-grid').innerHTML='<div class="empty"><p class="empty-title">網路錯誤</p></div>'});
 
-// FAB / MODAL
+// ── FAB / MODAL ───────────────────────────────────
 function openModal(){var s=localStorage.getItem('gh_pat');if(s)document.getElementById('mtok').value=s;document.getElementById('mov').classList.add('open');setTimeout(function(){document.getElementById('mtok').focus()},250)}
 function closeModal(){document.getElementById('mov').classList.remove('open')}
 function ovck(e){if(e.target===document.getElementById('mov'))closeModal()}
