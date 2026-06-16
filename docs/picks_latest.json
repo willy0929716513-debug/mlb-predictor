@@ -272,8 +272,8 @@
       "away_runs": 1,
       "projected_total": 12.4,
       "market_total": 10.5,
-      "bet": "大小分 OVER",
-      "reason": "第4局已得6分（此時預期4.1分），高分走勢盤口10.5"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "道奇",
@@ -288,7 +288,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1781578798,
+  "live_updated_ts": 1781579100,
   "game_preds": {
     "phillies|marlins": {
       "home_win_prob": 0.4528,
@@ -331,5 +331,5 @@
       "market_total": 9.5
     }
   },
-  "live_updated_at": "2026-06-16 10:59 (台灣時間)"
+  "live_updated_at": "2026-06-16 11:05 (台灣時間)"
 }
