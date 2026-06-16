@@ -14,7 +14,6 @@ html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--t1);font-family:'Space Grotesk','PingFang TC','Noto Sans TC',-apple-system,sans-serif;overflow-x:hidden;line-height:1.5;max-width:480px;margin:0 auto}
 #pb{position:fixed;top:0;left:0;height:2px;z-index:9999;width:0%;background:linear-gradient(90deg,var(--c),var(--g),var(--c));background-size:200%;animation:pbf 1.2s linear infinite;box-shadow:0 0 10px var(--c);transition:width .4s ease,opacity .4s ease}
 @keyframes pbf{to{background-position:-200%}}
-/* BG */
 body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 80% 55% at 50% -5%,rgba(0,229,255,.12),transparent 55%),radial-gradient(ellipse 50% 50% at 90% 80%,rgba(0,40,180,.1),transparent),linear-gradient(180deg,#020617,#040d1c 50%,#020617);pointer-events:none}
 /* HEADER */
 #hdr{position:sticky;top:0;z-index:50;background:rgba(2,6,23,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--bo)}
@@ -89,10 +88,25 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradi
 .g-logo{width:40px;height:40px;border-radius:10px;background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.15);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--c);letter-spacing:-.5px}
 .g-name{font-size:13px;font-weight:700;color:var(--t1)}
 .g-cn{font-size:10px;color:var(--t2)}
-.g-pitcher{font-size:10px;color:var(--t2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
-.g-era{font-size:9px;color:var(--c);margin-top:1px;font-weight:700}
 .g-center-col{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;flex-shrink:0;padding:0 4px}
 .g-vs-txt{font-size:10px;color:var(--t2);font-weight:700;letter-spacing:1px}
+/* PITCHER ROW */
+.g-pit-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--bo);gap:8px;background:rgba(0,0,0,.15)}
+.g-pit-card{display:flex;align-items:center;gap:9px;flex:1;min-width:0}
+.g-pit-card.r{flex-direction:row-reverse}
+.g-pit-info{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
+.g-pit-info.r{align-items:flex-end}
+.g-pit-name{font-size:11px;font-weight:700;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.g-pit-stats{display:flex;gap:3px;flex-wrap:wrap}
+.g-pit-stats.r{justify-content:flex-end}
+.g-pit-vs{width:24px;text-align:center;font-size:8px;font-weight:800;color:var(--t3);letter-spacing:.5px;flex-shrink:0}
+/* PITCHER AVATAR */
+.pitcher-av{position:relative;width:52px;height:52px;flex-shrink:0}
+.pa-ring{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.pa-ring circle{animation:pa-spin 12s linear infinite;transform-origin:25px 25px}
+@keyframes pa-spin{to{transform:rotate(360deg)}}
+.pa-inner{position:absolute;inset:4px;border-radius:50%;display:flex;align-items:center;justify-content:center;overflow:hidden;background:rgba(0,20,50,.8)}
+.pa-init{font-size:15px;font-weight:800;letter-spacing:-.5px;line-height:1}
 /* WIN PROBABILITY */
 .g-wp{padding:0 14px 12px;border-bottom:1px solid var(--bo)}
 .g-wp-nums{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
@@ -125,14 +139,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradi
 .g-chart{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:8px}
 .g-chart-title{font-size:8px;font-weight:800;color:var(--t2);letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px}
 .g-chart svg{width:100%;height:40px}
-/* SP ROW */
-.g-sp-row{display:flex;justify-content:space-between;padding:8px 14px;border-bottom:1px solid var(--bo)}
-.g-spi{display:flex;flex-direction:column;gap:2px}
-.g-spi.r{align-items:flex-end}
-.g-spn{font-size:11px;font-weight:700;color:var(--t2)}
-.g-spbs{display:flex;gap:3px;flex-wrap:wrap}
-.g-spi.r .g-spbs{justify-content:flex-end}
-.spb{font-size:9px;padding:1px 5px;border-radius:3px;background:rgba(0,229,255,.07);color:var(--c);border:1px solid rgba(0,229,255,.13);font-weight:700}
 /* BADGES */
 .badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:800;letter-spacing:.6px;text-transform:uppercase}
 .bc{background:rgba(0,229,255,.12);color:var(--c);border:1px solid rgba(0,229,255,.22)}
@@ -183,14 +189,11 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradi
 .tok{background:rgba(0,255,136,.1);border:1px solid rgba(0,255,136,.3);color:var(--g)}
 .terr{background:rgba(255,51,102,.1);border:1px solid rgba(255,51,102,.28);color:var(--r)}
 .tinf{background:rgba(0,229,255,.1);border:1px solid rgba(0,229,255,.28);color:var(--c)}
-/* FOOTER */
 footer{text-align:center;padding:20px 16px;border-top:1px solid var(--bo);font-size:11px;color:var(--t2)}
 .fl{font-size:14px;font-weight:800;color:var(--t1);margin-bottom:4px}
-/* LIVE BADGE */
 .lb{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:16px;font-size:9px;font-weight:800;background:rgba(0,255,136,.1);color:var(--g);border:1px solid rgba(0,255,136,.25);letter-spacing:.6px}
 .ld{width:5px;height:5px;border-radius:50%;background:var(--g);animation:lp 1.5s ease-in-out infinite}
 @keyframes lp{0%,100%{opacity:1}50%{opacity:.3}}
-/* FI */
 .fi{opacity:0;transform:translateY(20px);transition:opacity .55s ease,transform .55s ease}
 .fi.on{opacity:1;transform:translateY(0)}
 </style>
@@ -219,7 +222,6 @@ footer{text-align:center;padding:20px 16px;border-top:1px solid var(--bo);font-s
 </header>
 
 <div class="content">
-  <!-- DISCLAIMER -->
   <div class="disc fi">
     <div>
       <div class="disc-title">⚠️ 免責聲明</div>
@@ -227,12 +229,10 @@ footer{text-align:center;padding:20px 16px;border-top:1px solid var(--bo);font-s
     </div>
   </div>
 
-  <!-- TOP EDGE -->
   <div id="top-edge" class="fi">
     <div class="sk" style="height:190px;border-radius:20px"></div>
   </div>
 
-  <!-- QUICK STATS -->
   <div class="qstats fi" id="qstats">
     <div class="qs"><div class="qs-icon">🏆</div><div class="qs-label">勝敗記錄</div><div class="qs-val" id="qs-rec">—</div></div>
     <div class="qs"><div class="qs-icon">🤖</div><div class="qs-label">AI 分析</div><div class="qs-val" id="qs-ai">—</div></div>
@@ -241,7 +241,6 @@ footer{text-align:center;padding:20px 16px;border-top:1px solid var(--bo);font-s
     <div class="qs"><div class="qs-icon">📈</div><div class="qs-label">總盈虧</div><div class="qs-val" id="qs-pnl">—</div></div>
   </div>
 
-  <!-- PICKS -->
   <section id="predictions">
     <div class="sec-row fi">
       <div class="sec-tr">
@@ -258,12 +257,11 @@ footer{text-align:center;padding:20px 16px;border-top:1px solid var(--bo);font-s
       <button class="ftab" data-t="TOT" onclick="doFilter('TOT',this)">O/U 大小</button>
     </div>
     <div id="picks-grid">
-      <div class="sk" style="height:280px;margin-bottom:10px"></div>
-      <div class="sk" style="height:280px;margin-bottom:10px"></div>
+      <div class="sk" style="height:320px;margin-bottom:10px"></div>
+      <div class="sk" style="height:320px;margin-bottom:10px"></div>
     </div>
   </section>
 
-  <!-- HISTORY -->
   <section class="sec-row fi" style="display:block;margin-top:20px" id="s-hist">
     <div class="sec-row" style="margin-bottom:10px">
       <div class="sec-tr"><div class="sa"></div><h2 class="stitle">近期表現</h2></div>
@@ -305,15 +303,6 @@ document.querySelectorAll('.fi').forEach(function(el){fo.observe(el)});
 // COUNTER
 function cUp(el,v,d,p,s,dur){if(!el)return;var st=performance.now(),dr=dur||1200;function tk(n){var pr=Math.min((n-st)/dr,1),e=1-Math.pow(1-pr,3);el.textContent=(p||'')+(v*e).toFixed(d)+(s||'');if(pr<1)requestAnimationFrame(tk)}requestAnimationFrame(tk)}
 
-// GAUGE ANIMATE
-function animGauge(pct){
-  var arc=document.getElementById('garc');if(!arc)return;
-  var circ=2*Math.PI*28;
-  arc.style.strokeDasharray=circ;arc.style.strokeDashoffset=circ;
-  var gp=document.getElementById('gpct');
-  setTimeout(function(){arc.style.transition='stroke-dashoffset 1.5s cubic-bezier(.22,1,.36,1)';arc.style.strokeDashoffset=circ*(1-pct/100);if(gp)cUp(gp,pct,1,'','%')},200)
-}
-
 // ANIMATE BARS
 function animBars(){setTimeout(function(){document.querySelectorAll('.g-bf[data-w]').forEach(function(el){el.style.width=el.getAttribute('data-w')})},200)}
 
@@ -334,13 +323,86 @@ function mcChart(seed){
   var pts=[];
   for(var i=0;i<12;i++){var x=i/11*90;var y=18*(1-Math.exp(-0.5*Math.pow((i-5.5)/2.5,2)));pts.push(x+','+Math.max(1,38-y*1.8+(((seed*i*7)%5)-2.5)*.8))}
   var path='M '+pts.join(' L ');
-  return '<svg viewBox="0 0 90 40"><defs><linearGradient id="mg'+seed+'" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="var(--c)" stop-opacity=".3"/><stop offset="100%" stop-color="var(--c)" stop-opacity="0"/></linearGradient></defs><path d="'+path+' L 90 40 L 0 40 Z" fill="url(#mg'+seed+')" /><path d="'+path+'" fill="none" stroke="var(--c)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+  return'<svg viewBox="0 0 90 40"><defs><linearGradient id="mg'+seed+'" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="var(--c)" stop-opacity=".3"/><stop offset="100%" stop-color="var(--c)" stop-opacity="0"/></linearGradient></defs><path d="'+path+' L 90 40 L 0 40 Z" fill="url(#mg'+seed+')" /><path d="'+path+'" fill="none" stroke="var(--c)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 }
 function barChart(seed,color){
   var bars='';var vals=[30,50,70,85,90,80,60,40,25,15];
   for(var i=0;i<10;i++){var v=vals[i]*(0.8+((seed*(i+1)*13)%20)/100);var h=Math.max(3,v*0.36);bars+='<rect x="'+(i*9+1)+'" y="'+(38-h)+'" width="7" height="'+h+'" rx="1" fill="'+(i===4||i===5?color:'rgba(0,229,255,.35)')+'" opacity="'+(i===4||i===5?1:.7)+'"/>';}
   return'<svg viewBox="0 0 90 40">'+bars+'</svg>'
 }
+
+// ─────────────────────────────────────────────
+// PITCHER PHOTO SYSTEM
+// Fetches MLB player IDs by name, then loads official headshots
+// ─────────────────────────────────────────────
+var _photoCache={};  // name → mlbId (or null)
+var _photoPending={}; // name → [array of waiting elements]
+
+function pitcherAvHtml(name,side){
+  var initials=name?name.trim().split(/\s+/).map(function(w){return w[0]||''}).join('').slice(0,2).toUpperCase():'??';
+  var isAway=side==='a';
+  var ringColor=isAway?'#00E5FF':'#00FF88';
+  var bgColor=isAway?'rgba(0,40,100,.8)':'rgba(0,60,40,.8)';
+  var textColor=isAway?'var(--c)':'var(--g)';
+  return'<div class="pitcher-av" data-name="'+(name||'')+'" data-side="'+side+'">'+
+    '<svg class="pa-ring" viewBox="0 0 50 50">'+
+      '<circle cx="25" cy="25" r="22" fill="none" stroke="'+ringColor+'" stroke-width="1.2" stroke-dasharray="3 2.5" opacity=".55"/>'+
+    '</svg>'+
+    '<div class="pa-inner" style="background:'+bgColor+'">'+
+      '<span class="pa-init" style="color:'+textColor+'">'+initials+'</span>'+
+    '</div>'+
+  '</div>'
+}
+
+function initPitcherPhotos(){
+  document.querySelectorAll('.pitcher-av[data-name]').forEach(function(el){
+    var name=el.getAttribute('data-name');
+    if(!name)return;
+    if(_photoCache.hasOwnProperty(name)){
+      applyPhoto(el,_photoCache[name]);
+    } else {
+      if(_photoPending[name]){
+        _photoPending[name].push(el);
+      } else {
+        _photoPending[name]=[el];
+        fetchMlbId(name);
+      }
+    }
+  });
+}
+
+function fetchMlbId(name){
+  fetch('https://statsapi.mlb.com/api/v1/people/search?names='+encodeURIComponent(name)+'&sportId=1')
+    .then(function(r){return r.ok?r.json():null})
+    .then(function(d){
+      var mlbId=d&&d.people&&d.people.length?d.people[0].id:null;
+      _photoCache[name]=mlbId;
+      (_photoPending[name]||[]).forEach(function(el){applyPhoto(el,mlbId)});
+      delete _photoPending[name];
+    })
+    .catch(function(){
+      _photoCache[name]=null;
+      delete _photoPending[name];
+    });
+}
+
+function applyPhoto(el,mlbId){
+  if(!mlbId)return;
+  var photoUrl='https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_213,q_auto:best/v1/people/'+mlbId+'/headshot/67/current';
+  var img=new Image();
+  img.crossOrigin='anonymous';
+  img.onload=function(){
+    var inner=el.querySelector('.pa-inner');
+    if(inner){
+      inner.innerHTML='<img src="'+photoUrl+'" style="width:100%;height:100%;object-fit:cover;object-position:top center;border-radius:50%">';
+      inner.style.background='none';
+    }
+    el.querySelector('.pa-ring circle').style.opacity='0.25';
+  };
+  img.onerror=function(){};
+  img.src=photoUrl;
+}
+// ─────────────────────────────────────────────
 
 // RENDER TOP EDGE
 function rTopEdge(pick,stats){
@@ -401,7 +463,8 @@ function rPicks(picks,date,gen){
     return
   }
   document.getElementById('picks-grid').innerHTML=picks.map(function(p,idx){return makeGCard(p,idx)}).join('');
-  animBars()
+  animBars();
+  initPitcherPhotos();
 }
 
 function makeGCard(p,idx){
@@ -410,13 +473,11 @@ function makeGCard(p,idx){
   var isStrong=p.tier==='💎 強注';
   var aiW=p.model_p!=null?p.model_p:null;
   var mktW=p.bp?100/p.bp:null;
-  // which side is AI's pick
-  var awayWP, homeWP;
+  var awayWP,homeWP;
   if(aiW!=null&&p.pred_away!=null&&p.pred_home!=null){
     awayWP=p.pred_away>p.pred_home?aiW:100-aiW;
     homeWP=100-awayWP;
   } else if(aiW!=null){
-    // assume bet_label has the team we're backing - default to away having aiW if btype is ML and no score
     awayWP=aiW;homeWP=100-aiW;
   } else {
     awayWP=50;homeWP=50;
@@ -428,15 +489,41 @@ function makeGCard(p,idx){
   var seed=idx+1;
   var wth=p.weather_factor?((p.weather_factor-1)*100>0?'☀️':p.weather_factor<0.98?'🌧️':'⛅'):'⚾';
   var tierH=tc?'<span class="badge" style="font-size:8px;background:'+tc.bg+';color:'+tc.c+';border:1px solid '+tc.c+'33">'+tc.l+'</span>':'';
+
   var bars='';
   if(aiW!=null)bars+=gBar('AI WIN%',aiW,'var(--g)',aiW.toFixed(0)+'%');
   if(mktW!=null)bars+=gBar('MARKET',mktW,'var(--c)',mktW.toFixed(0)+'%');
   if(p.edge!=null)bars+=gBar('EDGE',Math.min(p.edge*4,100),'var(--y)','+'+p.edge.toFixed(1)+'%');
   if(p.conf!=null)bars+=gBar('CONF',p.conf,p.conf>75?'var(--g)':p.conf>60?'var(--c)':'var(--t2)',p.conf.toFixed(0)+'%');
+
   var metrics='';
   if(p.edge!=null)metrics+='<div class="g-metric"><div class="g-ml">優勢值</div><div class="g-mv" style="color:var(--y)">+'+p.edge.toFixed(1)+'%</div></div>';
   if(p.conf!=null)metrics+='<div class="g-metric c"><div class="g-ml">信心度</div><div class="g-mv" style="color:'+(p.conf>75?'var(--g)':'var(--c)')+'">'+p.conf.toFixed(0)+'%</div></div>';
   if(p.stake!=null)metrics+='<div class="g-metric r"><div class="g-ml">Kelly</div><div class="g-mv">$'+p.stake.toFixed(0)+'</div></div>';
+
+  var hasPitcher=p.away_sp||p.home_sp||p.away_era!=null||p.home_era!=null;
+  var pitcherRow='';
+  if(hasPitcher){
+    pitcherRow=
+      '<div class="g-pit-row">'+
+        '<div class="g-pit-card">'+
+          pitcherAvHtml(p.away_sp,'a')+
+          '<div class="g-pit-info">'+
+            '<div class="g-pit-name">'+(p.away_sp||'TBD')+'</div>'+
+            '<div class="g-pit-stats">'+spbRow(p.away_era,p.away_fip,p.away_k9)+'</div>'+
+          '</div>'+
+        '</div>'+
+        '<div class="g-pit-vs">投</div>'+
+        '<div class="g-pit-card r">'+
+          '<div class="g-pit-info r">'+
+            '<div class="g-pit-name">'+(p.home_sp||'TBD')+'</div>'+
+            '<div class="g-pit-stats r">'+spbRow(p.home_era,p.home_fip,p.home_k9)+'</div>'+
+          '</div>'+
+          pitcherAvHtml(p.home_sp,'h')+
+        '</div>'+
+      '</div>'
+  }
+
   var charts='';
   if(idx<2){
     charts='<div class="g-charts">'+
@@ -444,6 +531,7 @@ function makeGCard(p,idx){
       '<div class="g-chart"><div class="g-chart-title">跑分分布</div>'+barChart(seed,awayWP>homeWP?'var(--g)':'var(--c)')+'</div>'+
     '</div>'
   }
+
   return'<div class="gcard'+(isStrong?' strong-pick':'')+'" data-type="'+bs+'">'+
     '<div class="gcard-top">'+
       '<span class="g-time">'+(p.game_time||'今日')+' '+wth+'</span>'+
@@ -454,21 +542,15 @@ function makeGCard(p,idx){
         '<div class="g-logo">'+abbr(p.away)+'</div>'+
         '<div class="g-name">'+abbr(p.away)+'</div>'+
         '<div class="g-cn">'+(p.away_cn||p.away)+'</div>'+
-        (p.away_sp?'<div class="g-pitcher">'+p.away_sp+'</div>':'')+'</div>'+
-      '<div class="g-center-col">'+
-        '<span class="g-vs-txt">VS</span>'+
       '</div>'+
+      '<div class="g-center-col"><span class="g-vs-txt">VS</span></div>'+
       '<div class="g-team r">'+
         '<div class="g-logo">'+abbr(p.home)+'</div>'+
         '<div class="g-name">'+abbr(p.home)+'</div>'+
         '<div class="g-cn">'+(p.home_cn||p.home)+'</div>'+
-        (p.home_sp?'<div class="g-pitcher">'+p.home_sp+'</div>':'')+'</div>'+
+      '</div>'+
     '</div>'+
-    (p.away_era!=null||p.home_era!=null?
-      '<div class="g-sp-row">'+
-        '<div class="g-spi"><div class="g-spn">'+(p.away_sp||'TBD')+'</div><div class="g-spbs">'+spbRow(p.away_era,p.away_fip,p.away_k9)+'</div></div>'+
-        '<div class="g-spi r"><div class="g-spn">'+(p.home_sp||'TBD')+'</div><div class="g-spbs">'+spbRow(p.home_era,p.home_fip,p.home_k9)+'</div></div>'+
-      '</div>':'')+
+    pitcherRow+
     '<div class="g-wp">'+
       '<div class="g-wp-nums">'+
         '<div><div class="g-wp-away-pct" style="color:'+awayColor+'">'+awayWP+'%</div><div style="font-size:9px;color:var(--t2)">'+abbr(p.away)+'</div></div>'+
@@ -508,7 +590,8 @@ function doFilter(type,btn){
     return
   }
   document.getElementById('picks-grid').innerHTML=filtered.map(function(p,i){return makeGCard(p,i)}).join('');
-  animBars()
+  animBars();
+  initPitcherPhotos();
 }
 
 // HISTORY
@@ -528,14 +611,17 @@ function rHist(hist){
   }).join('')+'</div>'
 }
 
-// FETCH
+// SPBADGE STYLE
+document.head.insertAdjacentHTML('beforeend','<style>.spb{font-size:9px;padding:1px 5px;border-radius:3px;background:rgba(0,229,255,.07);color:var(--c);border:1px solid rgba(0,229,255,.13);font-weight:700}</style>');
+
+// FETCH DATA
 pb.style.width='70%';
 fetch('./picks_latest.json?t='+Date.now())
   .then(function(r){return r.ok?r.json():null})
   .then(function(d){
     pb.style.width='100%';setTimeout(function(){pb.style.opacity='0';setTimeout(function(){pb.remove()},400)},300);
     if(!d){document.getElementById('picks-grid').innerHTML='<div class="empty"><p class="empty-title">資料載入失敗</p><p class="empty-sub">請重新整理。</p></div>';return}
-    if(d.stats){rQStats(d.stats)}
+    if(d.stats)rQStats(d.stats);
     _allPicks=d.picks||[];
     var topPick=_allPicks.find(function(p){return p.tier==='💎 強注'})||_allPicks[0];
     rTopEdge(topPick,d.stats);
@@ -548,7 +634,7 @@ fetch('./picks_latest.json?t='+Date.now())
     document.getElementById('picks-grid').innerHTML='<div class="empty"><p class="empty-title">網路錯誤</p></div>'
   });
 
-// FAB/MODAL
+// FAB / MODAL
 function openModal(){var s=localStorage.getItem('gh_pat');if(s)document.getElementById('mtok').value=s;document.getElementById('mov').classList.add('open');setTimeout(function(){document.getElementById('mtok').focus()},250)}
 function closeModal(){document.getElementById('mov').classList.remove('open')}
 function ovck(e){if(e.target===document.getElementById('mov'))closeModal()}
