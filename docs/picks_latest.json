@@ -237,13 +237,13 @@
       "projected_total": 5.1,
       "market_total": 9.5,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅3分（此時預期6.9分），低分走勢盤口9.5"
+      "reason": "第8局僅3分（此時預期7.4分），低分走勢盤口9.5"
     },
     {
       "home_cn": "太空人",
       "away_cn": "老虎",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 8,
       "projected_total": 14.0,
