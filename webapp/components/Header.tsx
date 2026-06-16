@@ -1,38 +1,23 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
-import { createClient } from '@/lib/supabase'
-import type { User } from '@supabase/supabase-js'
+import { useState, useEffect } from 'react'
 
 export default function Header() {
-  const [user, setUser] = useState<User | null>(null)
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const supabase = createClient()
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => setUser(data.user))
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, s) => {
-      setUser(s?.user ?? null)
-    })
     const onScroll = () => setScrolled(window.scrollY > 20)
     window.addEventListener('scroll', onScroll)
-    return () => { subscription.unsubscribe(); window.removeEventListener('scroll', onScroll) }
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
-
-  const signOut = async () => {
-    await supabase.auth.signOut()
-    window.location.href = '/'
-  }
 
   return (
     <header
       className="sticky top-0 z-50 transition-all duration-300"
       style={{
-        background: scrolled
-          ? 'rgba(2, 6, 23, 0.92)'
-          : 'rgba(2, 6, 23, 0.7)',
+        background: scrolled ? 'rgba(2,6,23,0.92)' : 'rgba(2,6,23,0.7)',
         backdropFilter: 'blur(24px)',
         WebkitBackdropFilter: 'blur(24px)',
         borderBottom: scrolled
@@ -44,135 +29,83 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
 
         {/* Logo */}
-        <Link
-          href="/"
-          className="flex items-center gap-2.5 group"
-          style={{ textDecoration: 'none' }}
-        >
+        <Link href="/" className="flex items-center gap-2.5" style={{ textDecoration: 'none' }}>
           <div className="relative w-8 h-8 flex items-center justify-center">
             <div
-              className="absolute inset-0 rounded-full opacity-60"
+              className="absolute inset-0 rounded-full"
               style={{
                 background: 'radial-gradient(circle, rgba(0,229,255,0.3), transparent)',
                 animation: 'pulse-ring 2.5s ease-out infinite',
+                opacity: 0.6,
               }}
             />
             <span style={{ fontSize: 20 }}>⚾</span>
           </div>
           <div>
-            <span
-              className="font-bold tracking-tight"
-              style={{ fontSize: 16, color: 'var(--text-1)' }}
-            >
-              MLB{' '}
-              <span className="neon-cyan" style={{ fontSize: 16 }}>AI</span>
+            <span style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-1)' }}>
+              MLB <span className="neon-cyan">AI</span>
             </span>
-            <span
-              className="hidden sm:inline font-medium"
-              style={{ fontSize: 16, color: 'var(--text-2)', marginLeft: 4 }}
-            >
+            <span className="hidden sm:inline" style={{ fontSize: 16, color: 'var(--text-2)', marginLeft: 4 }}>
               Predictions
             </span>
           </div>
         </Link>
 
-        {/* Desktop Nav */}
+        {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-1">
           <NavLink href="/">Dashboard</NavLink>
-          <NavLink href="/pricing">Pricing</NavLink>
-          <div
-            className="ml-2 h-5"
-            style={{ width: 1, background: 'var(--border)' }}
-          />
-          {user ? (
-            <div className="flex items-center gap-3 ml-2">
-              <span
-                className="text-sm font-mono truncate max-w-[160px]"
-                style={{ color: 'var(--text-2)' }}
-              >
-                {user.email}
-              </span>
-              <button
-                onClick={signOut}
-                className="btn-ghost"
-                style={{ minHeight: 36, padding: '0 16px', fontSize: 13 }}
-              >
-                Sign Out
-              </button>
-            </div>
-          ) : (
-            <Link href="/login" className="btn-primary ml-2" style={{ minHeight: 36, padding: '0 18px', fontSize: 13 }}>
-              Sign In
-            </Link>
-          )}
+          <NavLink href="#predictions">Today&apos;s Picks</NavLink>
         </nav>
 
-        {/* Mobile menu toggle */}
+        {/* Mobile hamburger */}
         <button
-          className="md:hidden flex flex-col gap-1.5 p-2 rounded-lg"
-          style={{ border: '1px solid var(--border)', minHeight: 40, minWidth: 40, justifyContent: 'center', alignItems: 'center' }}
           onClick={() => setMenuOpen(o => !o)}
           aria-label="Menu"
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 5,
+            padding: 8,
+            borderRadius: 10,
+            border: '1px solid var(--border)',
+            background: 'transparent',
+            cursor: 'pointer',
+            minHeight: 40,
+            minWidth: 40,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+          className="md:hidden"
         >
-          <span
-            className="block h-0.5 w-5 transition-all duration-200"
-            style={{
-              background: 'var(--cyan)',
-              transform: menuOpen ? 'rotate(45deg) translate(4px, 4px)' : 'none',
-            }}
-          />
-          <span
-            className="block h-0.5 w-5 transition-all duration-200"
-            style={{
-              background: 'var(--cyan)',
-              opacity: menuOpen ? 0 : 1,
-            }}
-          />
-          <span
-            className="block h-0.5 w-5 transition-all duration-200"
-            style={{
-              background: 'var(--cyan)',
-              transform: menuOpen ? 'rotate(-45deg) translate(4px, -4px)' : 'none',
-            }}
-          />
+          {[0, 1, 2].map(i => (
+            <span
+              key={i}
+              style={{
+                display: 'block',
+                width: 20,
+                height: 2,
+                background: 'var(--cyan)',
+                borderRadius: 2,
+                transition: 'all 0.2s',
+                transform:
+                  i === 0 && menuOpen ? 'rotate(45deg) translate(4px, 5px)' :
+                  i === 2 && menuOpen ? 'rotate(-45deg) translate(4px, -5px)' : 'none',
+                opacity: i === 1 && menuOpen ? 0 : 1,
+              }}
+            />
+          ))}
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile menu */}
       {menuOpen && (
         <div
           className="md:hidden border-t"
-          style={{
-            background: 'rgba(2, 6, 23, 0.97)',
-            borderColor: 'var(--border)',
-          }}
+          style={{ background: 'rgba(2,6,23,0.97)', borderColor: 'var(--border)' }}
         >
           <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-2">
             <MobileNavLink href="/" onClick={() => setMenuOpen(false)}>Dashboard</MobileNavLink>
-            <MobileNavLink href="/pricing" onClick={() => setMenuOpen(false)}>Pricing</MobileNavLink>
-            <div className="divider-neon my-2" />
-            {user ? (
-              <>
-                <p className="text-xs font-mono px-3 py-1" style={{ color: 'var(--text-2)' }}>
-                  {user.email}
-                </p>
-                <button
-                  onClick={() => { setMenuOpen(false); signOut() }}
-                  className="btn-ghost"
-                  style={{ justifyContent: 'flex-start', padding: '0 12px' }}
-                >
-                  Sign Out
-                </button>
-              </>
-            ) : (
-              <Link
-                href="/login"
-                className="btn-primary"
-                onClick={() => setMenuOpen(false)}
-              >
-                Sign In
-              </Link>
-            )}
+            <MobileNavLink href="#predictions" onClick={() => setMenuOpen(false)}>Today&apos;s Picks</MobileNavLink>
           </div>
         </div>
       )}
@@ -184,18 +117,9 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
   return (
     <Link
       href={href}
-      className="px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200"
-      style={{ color: 'var(--text-2)', textDecoration: 'none' }}
-      onMouseEnter={e => {
-        const el = e.currentTarget
-        el.style.color = 'var(--text-1)'
-        el.style.background = 'rgba(0,229,255,0.06)'
-      }}
-      onMouseLeave={e => {
-        const el = e.currentTarget
-        el.style.color = 'var(--text-2)'
-        el.style.background = 'transparent'
-      }}
+      style={{ color: 'var(--text-2)', textDecoration: 'none', padding: '8px 12px', borderRadius: 8, fontSize: 14, fontWeight: 500, transition: 'all .2s' }}
+      onMouseEnter={e => { e.currentTarget.style.color = 'var(--text-1)'; e.currentTarget.style.background = 'rgba(0,229,255,0.06)' }}
+      onMouseLeave={e => { e.currentTarget.style.color = 'var(--text-2)'; e.currentTarget.style.background = 'transparent' }}
     >
       {children}
     </Link>
@@ -207,11 +131,12 @@ function MobileNavLink({ href, onClick, children }: { href: string; onClick: () 
     <Link
       href={href}
       onClick={onClick}
-      className="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium"
       style={{
-        color: 'var(--text-1)',
-        textDecoration: 'none',
+        display: 'flex', alignItems: 'center',
+        padding: '12px 16px', borderRadius: 12,
         border: '1px solid var(--border)',
+        color: 'var(--text-1)', textDecoration: 'none',
+        fontSize: 14, fontWeight: 500,
       }}
     >
       {children}
