@@ -4,51 +4,62 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <meta name="theme-color" content="#020617">
-  <meta name="description" content="Institutional-grade MLB analytics powered by Monte Carlo, XGBoost and market models.">
-  <title>MLB AI Prediction Engine</title>
-  <link rel="manifest" href="./manifest.json">
+  <meta name="description" content="台灣最強 MLB AI 預測引擎，蒙地卡羅・XGBoost・凱利準則驅動，每日免費更新。">
+  <title>MLB AI 預測引擎</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --cyan:   #00E5FF;
-      --green:  #00FF88;
-      --yellow: #FFB800;
-      --red:    #FF3366;
-      --bg:     #020617;
-      --text-1: #e8f0ff;
-      --text-2: #7a8ba8;
-      --border: rgba(0,229,255,0.1);
-      --border-hi: rgba(0,229,255,0.35);
+    :root{
+      --cyan:#00E5FF;--green:#00FF88;--yellow:#FFB800;--red:#FF3366;
+      --bg:#020617;--text-1:#e8f0ff;--text-2:#7a8ba8;
+      --border:rgba(0,229,255,0.1);--border-hi:rgba(0,229,255,0.35);
     }
-    *{box-sizing:border-box;margin:0;padding:0}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
-    body{background:var(--bg);color:var(--text-1);font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,sans-serif;overflow-x:hidden;line-height:1.6}
+    body{background:var(--bg);color:var(--text-1);font-family:'Space Grotesk','PingFang TC','Noto Sans TC','微軟正黑體',-apple-system,sans-serif;overflow-x:hidden;line-height:1.6}
 
-    /* === BACKGROUND === */
+    /* TOP PROGRESS BAR */
+    #pb{position:fixed;top:0;left:0;height:2px;z-index:9999;width:0%;
+      background:linear-gradient(90deg,var(--cyan),var(--green),var(--cyan));
+      background-size:200% auto;animation:pb-flow 1.2s linear infinite;
+      box-shadow:0 0 12px var(--cyan),0 0 24px rgba(0,229,255,.5);
+      transition:width .4s ease,opacity .4s ease}
+    @keyframes pb-flow{to{background-position:-200% center}}
+
+    /* BG */
     .site-bg{position:fixed;inset:0;z-index:0;pointer-events:none}
-    .site-bg::before{content:'';position:absolute;inset:0;background:
-      radial-gradient(ellipse 80% 55% at 50% -5%,rgba(0,229,255,.12) 0%,transparent 60%),
-      radial-gradient(ellipse 45% 45% at 88% 78%,rgba(0,80,255,.09) 0%,transparent 55%),
-      radial-gradient(ellipse 45% 45% at 12% 78%,rgba(0,255,136,.06) 0%,transparent 55%);
+    .site-bg::before{content:'';position:absolute;inset:0;
+      background:
+        radial-gradient(ellipse 80% 55% at 50% -5%,rgba(0,229,255,.14) 0%,transparent 60%),
+        radial-gradient(ellipse 45% 45% at 88% 78%,rgba(0,80,255,.1) 0%,transparent 55%),
+        radial-gradient(ellipse 45% 45% at 12% 78%,rgba(0,255,136,.07) 0%,transparent 55%);
       animation:mesh-breathe 12s ease-in-out infinite alternate}
     .site-bg::after{content:'';position:absolute;inset:0;
-      background-image:linear-gradient(rgba(0,229,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.025) 1px,transparent 1px);
+      background-image:linear-gradient(rgba(0,229,255,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.022) 1px,transparent 1px);
       background-size:48px 48px}
     @keyframes mesh-breathe{from{opacity:.7;transform:scale(1)}to{opacity:1;transform:scale(1.04)}}
-
     .site-content{position:relative;z-index:1}
 
-    /* === GLASS === */
-    .glass-card{background:rgba(11,17,33,.85);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--border);transition:border-color .22s,box-shadow .22s,transform .22s}
-    .glass-card:hover{border-color:var(--border-hi);box-shadow:0 0 28px rgba(0,229,255,.09),0 8px 32px rgba(0,0,0,.35);transform:translateY(-2px)}
+    /* GLASS */
+    .glass-card{background:rgba(11,17,33,.87);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--border);transition:border-color .22s,box-shadow .22s,transform .22s}
+    .glass-card:hover{border-color:var(--border-hi);box-shadow:0 0 40px rgba(0,229,255,.12),0 0 80px rgba(0,229,255,.05),0 8px 32px rgba(0,0,0,.45);transform:translateY(-3px)}
 
-    /* === TEXT === */
+    /* GOLD STRONG PICK */
+    @keyframes gold-pulse{
+      0%,100%{border-color:rgba(255,184,0,.35);box-shadow:0 0 0 0 rgba(255,184,0,0),0 0 20px rgba(255,184,0,.12)}
+      50%{border-color:rgba(255,184,0,.7);box-shadow:0 0 0 3px rgba(255,184,0,.08),0 0 50px rgba(255,184,0,.28),0 0 90px rgba(255,184,0,.1)}
+    }
+    .pcard-strong{animation:gold-pulse 2.8s ease-in-out infinite}
+    .pcard-strong:hover{animation:none;border-color:rgba(255,184,0,.8)!important;
+      box-shadow:0 0 0 2px rgba(255,184,0,.2),0 0 60px rgba(255,184,0,.35),0 10px 40px rgba(0,0,0,.5)!important;
+      transform:translateY(-3px)}
+
+    /* TEXT */
     .gradient-text{background:linear-gradient(135deg,#00E5FF 0%,#00FF88 45%,#00E5FF 100%);background-size:220% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:grad-flow 5s linear infinite}
     @keyframes grad-flow{to{background-position:220% center}}
-    .neon-cyan{color:var(--cyan);text-shadow:0 0 18px rgba(0,229,255,.55)}
+    .neon-cyan{color:var(--cyan);text-shadow:0 0 18px rgba(0,229,255,.6),0 0 40px rgba(0,229,255,.3)}
 
-    /* === BADGES === */
+    /* BADGES */
     .badge{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:5px;font-size:10px;font-weight:800;letter-spacing:.7px;text-transform:uppercase}
     .bc{background:rgba(0,229,255,.12);color:var(--cyan);border:1px solid rgba(0,229,255,.22)}
     .bg2{background:rgba(0,255,136,.12);color:var(--green);border:1px solid rgba(0,255,136,.22)}
@@ -56,13 +67,18 @@
     .br{background:rgba(255,51,102,.1);color:var(--red);border:1px solid rgba(255,51,102,.22)}
     .bgr{background:rgba(255,255,255,.07);color:#8892b0;border:1px solid rgba(255,255,255,.12)}
 
-    /* === BUTTONS === */
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 28px;border-radius:10px;font-family:inherit;font-weight:700;font-size:15px;cursor:pointer;border:1px solid rgba(0,229,255,.45);background:linear-gradient(135deg,rgba(0,229,255,.14),rgba(0,255,136,.08));color:var(--cyan);transition:all .25s;text-decoration:none;white-space:nowrap}
-    .btn:hover{background:linear-gradient(135deg,rgba(0,229,255,.24),rgba(0,255,136,.16));box-shadow:0 0 28px rgba(0,229,255,.28),0 4px 20px rgba(0,0,0,.35);transform:translateY(-1px)}
+    /* BUTTONS */
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 28px;border-radius:10px;font-family:inherit;font-weight:700;font-size:15px;cursor:pointer;border:1px solid rgba(0,229,255,.45);background:linear-gradient(135deg,rgba(0,229,255,.15),rgba(0,255,136,.08));color:var(--cyan);transition:all .25s;text-decoration:none;white-space:nowrap}
+    .btn:hover{background:linear-gradient(135deg,rgba(0,229,255,.27),rgba(0,255,136,.18));box-shadow:0 0 30px rgba(0,229,255,.3),0 0 60px rgba(0,229,255,.1),0 4px 20px rgba(0,0,0,.4);transform:translateY(-2px)}
 
-    /* === HEADER === */
-    #hdr{position:sticky;top:0;z-index:50;transition:all .3s;background:rgba(2,6,23,.7);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(0,229,255,.06)}
-    #hdr.scrolled{background:rgba(2,6,23,.92);border-color:rgba(0,229,255,.12);box-shadow:0 4px 32px rgba(0,0,0,.4)}
+    /* LIVE BADGE */
+    .live-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:800;background:rgba(0,255,136,.1);color:var(--green);border:1px solid rgba(0,255,136,.25);letter-spacing:.8px}
+    .live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:live-p 1.5s ease-in-out infinite}
+    @keyframes live-p{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.65)}}
+
+    /* HEADER */
+    #hdr{position:sticky;top:0;z-index:50;transition:all .3s;background:rgba(2,6,23,.72);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(0,229,255,.06)}
+    #hdr.scrolled{background:rgba(2,6,23,.95);border-color:rgba(0,229,255,.14);box-shadow:0 4px 32px rgba(0,0,0,.55),0 0 0 .5px rgba(0,229,255,.07)}
     .hdr-inner{max-width:1280px;margin:0 auto;padding:0 16px;height:64px;display:flex;align-items:center;justify-content:space-between}
     .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
     .logo-icon{position:relative;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:20px}
@@ -70,84 +86,94 @@
     @keyframes pulse-ring{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.7);opacity:0}}
     .logo-text{font-size:16px;font-weight:700;color:var(--text-1)}
 
-    /* === HERO === */
+    /* HERO */
     #hero{position:relative;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;padding:32px 16px 80px}
-    #canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.85}
-    .scan{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(0,229,255,.4),transparent);animation:scan-s 6s ease-in-out infinite;z-index:3}
+    #canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.88}
+    .scan{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(0,229,255,.5),transparent);animation:scan-s 6s ease-in-out infinite;z-index:3}
     @keyframes scan-s{0%{top:-2px;opacity:0}5%{opacity:1}95%{opacity:1}100%{top:100%;opacity:0}}
-    .hero-c{position:relative;z-index:2;width:100%;max-width:900px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:24px}
-    .hero-title{font-size:clamp(2.6rem,7vw,5.5rem);font-weight:800;line-height:1.08;letter-spacing:-.02em}
-    .hero-sub{font-size:clamp(1rem,2.5vw,1.35rem);color:var(--text-2);max-width:520px}
+    .hero-c{position:relative;z-index:2;width:100%;max-width:920px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:26px}
+    .hero-title{font-size:clamp(2.8rem,7.5vw,6rem);font-weight:800;line-height:1.06;letter-spacing:-.02em}
+    .hero-title-cn{display:block;font-size:clamp(2rem,5vw,3.8rem);font-weight:800;color:var(--text-1);letter-spacing:.02em;text-shadow:0 0 60px rgba(0,229,255,.18),0 2px 0 rgba(0,0,0,.5);margin-top:2px}
+    .hero-desc{font-size:clamp(.95rem,2.3vw,1.25rem);color:var(--text-2);max-width:520px}
+    #tw-cursor{display:inline-block;width:2px;height:1.1em;background:var(--cyan);vertical-align:text-bottom;margin-left:2px;border-radius:1px;animation:cursor-blink .8s step-end infinite}
+    @keyframes cursor-blink{50%{opacity:0}}
     .hero-stats{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
-    .hstat{background:rgba(11,17,33,.9);border:1px solid var(--border);border-radius:14px;padding:14px 18px;min-width:110px;text-align:center}
-    .hstat-v{font-size:22px;font-weight:800;line-height:1}
-    .hstat-l{font-size:11px;color:var(--text-2);margin-top:4px;font-weight:600;letter-spacing:.4px;text-transform:uppercase}
+    .hstat{background:rgba(11,17,33,.92);border:1px solid var(--border);border-radius:14px;padding:14px 20px;min-width:114px;text-align:center;transition:all .25s;backdrop-filter:blur(8px)}
+    .hstat:hover{border-color:rgba(0,229,255,.28);box-shadow:0 0 24px rgba(0,229,255,.1);transform:translateY(-2px)}
+    .hstat-v{font-size:24px;font-weight:800;line-height:1}
+    .hstat-l{font-size:11px;color:var(--text-2);margin-top:5px;font-weight:600;letter-spacing:.5px}
 
-    /* Baseball */
-    .ball-wrap{position:relative;margin-top:8px;animation:float 6s ease-in-out infinite}
-    @keyframes float{0%,100%{transform:translateY(0)}33%{transform:translateY(-10px)}66%{transform:translateY(-4px)}}
-    .ball{width:80px;height:80px;border-radius:50%;background:radial-gradient(circle at 35% 32%,#f5efe0,#c8b89a);box-shadow:inset -6px -6px 18px rgba(0,0,0,.28),inset 3px 3px 10px rgba(255,255,255,.25),0 0 40px rgba(0,229,255,.3),0 0 80px rgba(0,229,255,.1);position:relative;overflow:hidden}
+    /* BASEBALL */
+    .ball-wrap{position:relative;margin-top:4px;animation:float 6s ease-in-out infinite}
+    @keyframes float{0%,100%{transform:translateY(0)}33%{transform:translateY(-12px)}66%{transform:translateY(-5px)}}
+    .ball{width:84px;height:84px;border-radius:50%;background:radial-gradient(circle at 35% 32%,#f5efe0,#c8b89a);box-shadow:inset -6px -6px 18px rgba(0,0,0,.28),inset 3px 3px 10px rgba(255,255,255,.25),0 0 50px rgba(0,229,255,.38),0 0 100px rgba(0,229,255,.14);position:relative;overflow:hidden}
     .ball svg{position:absolute;inset:0;width:100%;height:100%}
-    .ball-ring{position:absolute;inset:-12px;border-radius:50%;border:1px solid rgba(0,229,255,.25);animation:pulse-ring 2.8s ease-out infinite}
+    .ball-ring{position:absolute;inset:-14px;border-radius:50%;border:1px solid rgba(0,229,255,.25);animation:pulse-ring 2.8s ease-out infinite}
     .scroll-ind{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--text-2)}
-    .scroll-ind span{font-size:11px;letter-spacing:1px;text-transform:uppercase}
+    .scroll-ind span{font-size:11px;letter-spacing:1.5px}
     .scroll-line{width:1px;height:32px;background:linear-gradient(to bottom,rgba(0,229,255,.4),transparent)}
 
-    /* === LAYOUT === */
+    /* LAYOUT */
     .wrap{max-width:1280px;margin:0 auto;padding:0 16px}
     @media(min-width:640px){.wrap{padding:0 24px}}
     @media(min-width:1024px){.wrap{padding:0 32px}}
     .dash{padding:64px 0 80px}
     .sec{margin-top:64px}
 
-    /* Section header */
+    /* FADE-IN */
+    .fi{opacity:0;transform:translateY(26px);transition:opacity .65s ease,transform .65s ease}
+    .fi.on{opacity:1;transform:translateY(0)}
+    .fi-1{transition-delay:.08s}.fi-2{transition-delay:.16s}.fi-3{transition-delay:.24s}
+
+    /* SEC HEADER */
     .sec-hdr{display:flex;flex-direction:column;gap:4px;margin-bottom:20px}
     @media(min-width:640px){.sec-hdr{flex-direction:row;align-items:flex-end;justify-content:space-between}}
     .sec-title-row{display:flex;align-items:center;gap:12px}
-    .sec-accent{width:3px;height:22px;background:var(--cyan);border-radius:2px;flex-shrink:0}
+    .sec-accent{width:3px;height:24px;background:linear-gradient(to bottom,var(--cyan),var(--green));border-radius:2px;flex-shrink:0}
     .sec-title{font-size:22px;font-weight:800;color:var(--text-1)}
     .sec-sub{font-size:13px;color:var(--text-2);margin-top:4px;padding-left:15px}
     .sec-meta{font-size:11px;color:var(--text-2)}
 
-    /* Disclaimer */
+    /* DISCLAIMER */
     .disc{border-radius:16px;padding:16px 20px;background:rgba(255,184,0,.05);border:1px solid rgba(255,184,0,.2);display:flex;gap:12px}
     .disc-icon{font-size:18px;flex-shrink:0;margin-top:2px}
     .disc-title{font-size:13px;font-weight:700;color:var(--yellow);margin-bottom:4px}
-    .disc-body{font-size:12px;color:var(--text-2);line-height:1.7}
+    .disc-body{font-size:12px;color:var(--text-2);line-height:1.75}
 
-    /* Stats grid */
-    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:16px}
-    .scard{background:rgba(11,17,33,.9);border:1px solid var(--border);border-radius:16px;padding:18px 20px;transition:border-color .22s,box-shadow .22s}
-    .scard:hover{border-color:rgba(0,229,255,.22);box-shadow:0 0 20px rgba(0,229,255,.06)}
+    /* STATS GRID */
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:16px}
+    .scard{background:rgba(11,17,33,.92);border:1px solid var(--border);border-radius:16px;padding:18px 20px;transition:all .25s}
+    .scard:hover{border-color:rgba(0,229,255,.24);box-shadow:0 0 28px rgba(0,229,255,.08);transform:translateY(-2px)}
     .scard-top{display:flex;justify-content:space-between;align-items:flex-start}
     .scard-label{font-size:11px;color:var(--text-2);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
     .scard-icon{font-size:22px;opacity:.55}
-    .scard-val{font-size:26px;font-weight:800;line-height:1.1;margin-top:6px}
+    .scard-val{font-size:28px;font-weight:800;line-height:1.1;margin-top:6px}
     .scard-sub{font-size:11px;color:var(--text-2);margin-top:4px}
 
-    /* By-type */
+    /* BY-TYPE */
     .btt{border-radius:16px;overflow:hidden;border:1px solid var(--border);background:rgba(11,17,33,.8)}
     .btt-hdr{padding:12px 16px;border-bottom:1px solid var(--border);font-size:11px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:.8px}
-    .btt-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border)}
+    .btt-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);transition:background .15s}
     .btt-row:last-child{border-bottom:none}
+    .btt-row:hover{background:rgba(0,229,255,.03)}
     .btt-l{display:flex;align-items:center;gap:12px}
     .btt-r{display:flex;gap:24px}
     .btt-s{text-align:right}
     .btt-sl{font-size:11px;color:var(--text-2);font-weight:600}
     .btt-sv{font-size:15px;font-weight:800}
-    .btt-rec{font-size:13px;color:var(--text-2)}
 
-    /* Picks grid */
+    /* PICKS GRID */
     .picks-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(min(100%,400px),1fr))}
 
-    /* Pick card */
+    /* PICK CARD */
     .pcard{border-radius:20px;overflow:hidden}
     .pcard-top{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border)}
+    .pcard-rank{width:22px;height:22px;border-radius:50%;background:rgba(0,229,255,.1);border:1px solid rgba(0,229,255,.2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--cyan);flex-shrink:0}
     .pcard-time{font-size:12px;color:var(--text-2)}
     .pcard-teams{display:flex;align-items:center;justify-content:space-between;padding:16px;border-bottom:1px solid var(--border)}
     .tblock{display:flex;flex-direction:column;align-items:flex-start;gap:4px}
     .tblock.r{align-items:flex-end}
-    .tabbr{width:44px;height:44px;border-radius:10px;background:rgba(0,229,255,.07);border:1px solid rgba(0,229,255,.15);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--cyan);letter-spacing:-.5px}
+    .tabbr{width:46px;height:46px;border-radius:10px;background:rgba(0,229,255,.07);border:1px solid rgba(0,229,255,.15);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--cyan);letter-spacing:-.5px}
     .tname{font-size:13px;font-weight:700;color:var(--text-1)}
     .vs-blk{display:flex;flex-direction:column;align-items:center;gap:4px}
     .vs-t{font-size:10px;color:var(--text-2);font-weight:700;letter-spacing:1px}
@@ -165,14 +191,15 @@
     .pred-dir{font-size:16px;font-weight:800;color:var(--text-1)}
     .pred-odds{font-size:16px;font-weight:800;color:var(--green)}
     .pills{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(85px,1fr))}
-    .pill{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:8px 10px}
-    .pill-l{font-size:10px;color:var(--text-2);font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
+    .pill{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:8px 10px;transition:border-color .2s}
+    .pill:hover{border-color:rgba(0,229,255,.2)}
+    .pill-l{font-size:10px;color:var(--text-2);font-weight:600;letter-spacing:.4px;margin-bottom:2px}
     .pill-v{font-size:14px;font-weight:800}
     .pred-detail{display:flex;gap:16px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);flex-wrap:wrap}
     .pd-item{font-size:11px;color:var(--text-2)}
     .pd-item b{color:var(--text-1);font-weight:700}
 
-    /* History */
+    /* HISTORY */
     .hist-wrap{border-radius:16px;overflow:hidden;border:1px solid var(--border)}
     table{width:100%;border-collapse:collapse}
     thead tr{background:rgba(11,17,33,.9);border-bottom:1px solid var(--border)}
@@ -193,18 +220,19 @@
       .hm-det span{font-size:11px;color:var(--text-2)}
     }
 
-    /* Empty */
+    /* EMPTY */
     .empty{text-align:center;padding:80px 20px;border:1px dashed var(--border);border-radius:20px}
     .empty-icon{font-size:48px;opacity:.4}
     .empty-title{font-size:16px;font-weight:700;margin-top:12px}
     .empty-sub{font-size:13px;color:var(--text-2);margin-top:6px;max-width:300px;margin-left:auto;margin-right:auto}
 
-    /* Skeleton */
+    /* SKELETON */
     .sk{background:linear-gradient(90deg,rgba(255,255,255,.04) 0%,rgba(255,255,255,.09) 50%,rgba(255,255,255,.04) 100%);background-size:200% auto;animation:sk-sh 1.6s linear infinite;border-radius:8px}
     @keyframes sk-sh{to{background-position:-200% center}}
 
-    /* Footer */
+    /* FOOTER */
     footer{max-width:1280px;margin:64px auto 0;padding:32px 16px;border-top:1px solid var(--border);text-align:center;font-size:12px;color:var(--text-2)}
+    .footer-logo{font-size:18px;font-weight:800;color:var(--text-1);margin-bottom:8px}
 
     ::-webkit-scrollbar{width:4px;height:4px}
     ::-webkit-scrollbar-track{background:var(--bg)}
@@ -212,6 +240,7 @@
   </style>
 </head>
 <body>
+<div id="pb"></div>
 <div class="site-bg"></div>
 <div class="site-content">
 
@@ -219,13 +248,13 @@
 <header id="hdr">
   <div class="hdr-inner">
     <a href="#" class="logo">
-      <div class="logo-icon">
-        <div class="logo-ring"></div>
-        <span>⚾</span>
-      </div>
-      <span class="logo-text">MLB <span class="neon-cyan">AI</span> <span style="color:var(--text-2);font-weight:500">Predictions</span></span>
+      <div class="logo-icon"><div class="logo-ring"></div><span>⚾</span></div>
+      <span class="logo-text">MLB <span class="neon-cyan">AI</span> <span style="color:var(--text-2);font-weight:500">預測</span></span>
     </a>
-    <a href="#predictions" class="btn" style="min-height:40px;padding:0 18px;font-size:13px">Today's Picks</a>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="live-badge"><div class="live-dot"></div>即時更新</div>
+      <a href="#predictions" class="btn" style="min-height:40px;padding:0 18px;font-size:13px">今日預測 ↓</a>
+    </div>
   </div>
 </header>
 
@@ -234,16 +263,19 @@
   <canvas id="canvas"></canvas>
   <div class="scan"></div>
   <div class="hero-c">
-    <div class="badge bc" style="font-size:11px;padding:5px 14px;border-radius:20px">⚡ AI-Powered · Quantitative Edge · Free Daily Updates</div>
-    <h1 class="hero-title gradient-text">MLB AI<br>Prediction Engine</h1>
-    <p class="hero-sub">Real-Time Sports Intelligence Platform</p>
+    <div class="badge bc" style="font-size:11px;padding:5px 14px;border-radius:20px">⚡ AI 驅動・量化優勢・每日免費更新</div>
+    <h1 class="hero-title">
+      <span class="gradient-text">MLB AI</span>
+      <span class="hero-title-cn">預測引擎</span>
+    </h1>
+    <p class="hero-desc" style="min-height:1.5em"><span id="tw"></span><span id="tw-cursor"></span></p>
     <div class="hero-stats" id="hero-stats">
-      <div class="hstat"><div class="sk" style="height:22px;width:60px;margin:0 auto 4px"></div><div class="sk" style="height:11px;width:50px;margin:0 auto"></div></div>
-      <div class="hstat"><div class="sk" style="height:22px;width:60px;margin:0 auto 4px"></div><div class="sk" style="height:11px;width:50px;margin:0 auto"></div></div>
-      <div class="hstat"><div class="sk" style="height:22px;width:60px;margin:0 auto 4px"></div><div class="sk" style="height:11px;width:50px;margin:0 auto"></div></div>
-      <div class="hstat"><div class="sk" style="height:22px;width:60px;margin:0 auto 4px"></div><div class="sk" style="height:11px;width:50px;margin:0 auto"></div></div>
+      <div class="hstat"><div class="sk" style="height:24px;width:70px;margin:0 auto 5px"></div><div class="sk" style="height:11px;width:50px;margin:0 auto"></div></div>
+      <div class="hstat"><div class="sk" style="height:24px;width:70px;margin:0 auto 5px"></div><div class="sk" style="height:11px;width:50px;margin:0 auto"></div></div>
+      <div class="hstat"><div class="sk" style="height:24px;width:70px;margin:0 auto 5px"></div><div class="sk" style="height:11px;width:50px;margin:0 auto"></div></div>
+      <div class="hstat"><div class="sk" style="height:24px;width:70px;margin:0 auto 5px"></div><div class="sk" style="height:11px;width:50px;margin:0 auto"></div></div>
     </div>
-    <a href="#predictions" class="btn">View Today's Predictions ↓</a>
+    <a href="#predictions" class="btn" style="font-size:15px">查看今日預測 ↓</a>
     <div class="ball-wrap">
       <div class="ball">
         <svg viewBox="0 0 80 80">
@@ -256,25 +288,28 @@
       <div class="ball-ring"></div>
     </div>
   </div>
-  <div class="scroll-ind"><span>Scroll</span><div class="scroll-line"></div></div>
+  <div class="scroll-ind"><span>向下滑動</span><div class="scroll-line"></div></div>
 </section>
 
 <!-- DASHBOARD -->
 <div class="dash wrap">
 
   <!-- Disclaimer -->
-  <div class="disc">
+  <div class="disc fi">
     <div class="disc-icon">⚠️</div>
     <div>
-      <div class="disc-title">Disclaimer / 免責聲明</div>
-      <div class="disc-body">Predictions are <strong style="color:var(--text-1)">for reference only</strong> and do not constitute financial advice. Past performance does not guarantee future results. Sports betting involves the risk of losing your principal. Please ensure betting is legal in your region and never wager more than you can afford to lose. 本服務推薦僅供參考，不構成財務建議，使用者自行承擔所有投注決策責任。</div>
+      <div class="disc-title">免責聲明 / Disclaimer</div>
+      <div class="disc-body">
+        本平台所有預測<strong style="color:var(--text-1)">僅供參考</strong>，不構成任何財務或投資建議。過往績效不代表未來結果。運動投注涉及損失本金的風險，請確認您所在地區的合法性，且切勿投注超過您可承擔損失的金額。
+        All predictions are for reference only and do not constitute financial advice.
+      </div>
     </div>
   </div>
 
   <!-- Stats -->
-  <div class="sec" id="s-stats">
+  <div class="sec fi" id="s-stats">
     <div class="sec-hdr">
-      <div><div class="sec-title-row"><div class="sec-accent"></div><h2 class="sec-title">Performance Dashboard</h2></div></div>
+      <div><div class="sec-title-row"><div class="sec-accent"></div><h2 class="sec-title">績效儀表板</h2></div></div>
     </div>
     <div class="stats-grid" id="stats-grid">
       <div class="scard sk" style="height:100px"></div>
@@ -287,24 +322,24 @@
 
   <!-- Picks -->
   <div class="sec" id="predictions">
-    <div class="sec-hdr">
+    <div class="sec-hdr fi">
       <div>
-        <div class="sec-title-row"><div class="sec-accent"></div><h2 class="sec-title">Today's Predictions</h2></div>
+        <div class="sec-title-row"><div class="sec-accent"></div><h2 class="sec-title">今日預測</h2></div>
         <div class="sec-sub" id="picks-sub"></div>
       </div>
       <div class="sec-meta" id="picks-meta"></div>
     </div>
     <div class="picks-grid" id="picks-grid">
-      <div class="sk" style="height:280px;border-radius:20px"></div>
-      <div class="sk" style="height:280px;border-radius:20px"></div>
-      <div class="sk" style="height:280px;border-radius:20px"></div>
+      <div class="sk" style="height:300px;border-radius:20px"></div>
+      <div class="sk" style="height:300px;border-radius:20px"></div>
+      <div class="sk" style="height:300px;border-radius:20px"></div>
     </div>
   </div>
 
   <!-- History -->
-  <div class="sec" id="s-hist">
+  <div class="sec fi" id="s-hist">
     <div class="sec-hdr">
-      <div class="sec-title-row"><div class="sec-accent"></div><h2 class="sec-title">Recent Performance</h2></div>
+      <div class="sec-title-row"><div class="sec-accent"></div><h2 class="sec-title">近期表現</h2></div>
     </div>
     <div id="hist-content"></div>
   </div>
@@ -312,119 +347,206 @@
 </div>
 
 <footer>
-  <p>⚾ MLB AI Prediction Engine · Updated daily at 2 PM Taiwan Time</p>
-  <p style="margin-top:8px">Powered by Monte Carlo · XGBoost · Kelly Criterion · 10+ quantitative models</p>
+  <div class="footer-logo">⚾ <span class="neon-cyan">MLB AI</span> 預測引擎</div>
+  <p>每日台灣時間下午 2 點自動更新</p>
+  <p style="margin-top:6px;font-size:11px;opacity:.7">由 蒙地卡羅・XGBoost・凱利準則・10+ 量化模型 驅動</p>
 </footer>
-
 </div>
 
 <script>
+// === PROGRESS BAR ===
+var pb=document.getElementById('pb');
+pb.style.width='30%';
+
 // === PARTICLES ===
 (function(){
-  var cv=document.getElementById('canvas'),ctx=cv.getContext('2d'),ps=[],anim;
+  var cv=document.getElementById('canvas'),ctx=cv.getContext('2d'),ps=[];
   function resize(){cv.width=cv.offsetWidth;cv.height=cv.offsetHeight}
-  function P(){this.x=Math.random()*cv.width;this.y=Math.random()*cv.height;this.vx=(Math.random()-.5)*.4;this.vy=(Math.random()-.5)*.4;this.sz=Math.random()*1.5+.3;this.a=Math.random()*.6+.1;var r=Math.random();this.c=r<.55?'0,229,255':r<.85?'0,255,136':'255,184,0'}
-  P.prototype.upd=function(){this.x+=this.vx;this.y+=this.vy;if(this.x<0)this.x=cv.width;if(this.x>cv.width)this.x=0;if(this.y<0)this.y=cv.height;if(this.y>cv.height)this.y=0};
+  function P(){
+    this.x=Math.random()*cv.width;this.y=Math.random()*cv.height;
+    this.vx=(Math.random()-.5)*.45;this.vy=(Math.random()-.5)*.45;
+    this.sz=Math.random()*1.8+.3;this.a=Math.random()*.6+.1;
+    var r=Math.random();
+    this.c=r<.5?'0,229,255':r<.78?'0,255,136':r<.92?'255,184,0':'120,80,255'
+  }
+  P.prototype.upd=function(){
+    this.x+=this.vx;this.y+=this.vy;
+    if(this.x<0)this.x=cv.width;if(this.x>cv.width)this.x=0;
+    if(this.y<0)this.y=cv.height;if(this.y>cv.height)this.y=0
+  };
   P.prototype.drw=function(){ctx.beginPath();ctx.arc(this.x,this.y,this.sz,0,Math.PI*2);ctx.fillStyle='rgba('+this.c+','+this.a+')';ctx.fill()};
   resize();window.addEventListener('resize',resize);
-  for(var i=0;i<150;i++)ps.push(new P());
+  for(var i=0;i<180;i++)ps.push(new P());
   function draw(){
     ctx.clearRect(0,0,cv.width,cv.height);
-    for(var i=0;i<ps.length;i++){for(var j=i+1;j<ps.length;j++){var dx=ps[i].x-ps[j].x,dy=ps[i].y-ps[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<90){ctx.beginPath();ctx.moveTo(ps[i].x,ps[i].y);ctx.lineTo(ps[j].x,ps[j].y);ctx.strokeStyle='rgba(0,229,255,'+(0.08*(1-d/90))+')';ctx.lineWidth=.5;ctx.stroke()}}}
-    ps.forEach(function(p){p.upd();p.drw()});anim=requestAnimationFrame(draw)}
-  draw();
+    for(var i=0;i<ps.length;i++){
+      for(var j=i+1;j<ps.length;j++){
+        var dx=ps[i].x-ps[j].x,dy=ps[i].y-ps[j].y,d=Math.sqrt(dx*dx+dy*dy);
+        if(d<100){ctx.beginPath();ctx.moveTo(ps[i].x,ps[i].y);ctx.lineTo(ps[j].x,ps[j].y);ctx.strokeStyle='rgba(0,229,255,'+(0.07*(1-d/100))+')';ctx.lineWidth=.5;ctx.stroke()}
+      }
+    }
+    ps.forEach(function(p){p.upd();p.drw()});requestAnimationFrame(draw)
+  }
+  draw()
 })();
 
 // === SCROLL HEADER ===
 window.addEventListener('scroll',function(){document.getElementById('hdr').classList.toggle('scrolled',window.scrollY>20)});
 
+// === FADE-IN OBSERVER ===
+var fiObs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('on')})},{threshold:0.07});
+document.querySelectorAll('.fi').forEach(function(el){fiObs.observe(el)});
+
+// === TYPEWRITER ===
+(function(){
+  var el=document.getElementById('tw'),cur=document.getElementById('tw-cursor');
+  var text='即時運動數據智能分析平台';
+  var i=0;
+  var t=setInterval(function(){
+    el.textContent+=text[i++];
+    if(i>=text.length){clearInterval(t);setTimeout(function(){cur.style.display='none'},1200)}
+  },90)
+})();
+
+// === COUNTER ANIMATION ===
+function countUp(el,target,decimals,prefix,suffix){
+  var start=performance.now(),dur=1500;
+  function tick(now){
+    var p=Math.min((now-start)/dur,1),ease=1-Math.pow(1-p,3);
+    el.textContent=(prefix||'')+(target*ease).toFixed(decimals)+(suffix||'');
+    if(p<1)requestAnimationFrame(tick)
+  }
+  requestAnimationFrame(tick)
+}
+
 // === HELPERS ===
 var BM={'獨贏':'ML','讓分':'RL','大小分':'TOT'};
-var TC={'💎 強注':{l:'💎 STRONG',c:'#FFB800',bg:'rgba(255,184,0,0.1)'},'⭐ 穩定':{l:'⭐ SOLID',c:'#00FF88',bg:'rgba(0,255,136,0.1)'}};
+var TC={
+  '💎 強注':{l:'💎 強注',c:'#FFB800',bg:'rgba(255,184,0,0.1)'},
+  '⭐ 穩定':{l:'⭐ 穩注',c:'#00FF88',bg:'rgba(0,255,136,0.1)'}
+};
 function b(cls,t){return'<span class="badge '+cls+'">'+t+'</span>'}
-function res(r){if(r==='W')return b('bg2','✓ WIN');if(r==='L')return b('br','✗ LOSS');if(r==='P')return b('by','― PUSH');return b('bgr','PENDING')}
-function abbr(n){if(!n)return'???';var w=n.trim().split(/\s+/);return w.length>1?(w[0][0]+w[1][0]).toUpperCase():n.slice(0,3).toUpperCase()}
+function res(r){if(r==='W')return b('bg2','✓ 勝');if(r==='L')return b('br','✗ 敗');if(r==='P')return b('by','― 平');return b('bgr','待結算')}
+function abbr(n){if(!n)return'???';var w=n.trim().split(/\s+/);return(w.length>1?(w[0][0]+w[1][0]):n.slice(0,3)).toUpperCase()}
 function ec(e){return e>15?'var(--green)':e>8?'var(--cyan)':'var(--yellow)'}
 function cc(c){return c>75?'var(--green)':c>60?'var(--cyan)':'var(--text-2)'}
-function spBadges(era,fip,k9){var o=[];if(era!=null)o.push('<span class="spb">ERA '+era.toFixed(2)+'</span>');if(fip!=null)o.push('<span class="spb">FIP '+fip.toFixed(2)+'</span>');if(k9!=null)o.push('<span class="spb">K/9 '+k9.toFixed(1)+'</span>');return o.join('')}
+function spBadges(era,fip,k9){
+  var o=[];
+  if(era!=null)o.push('<span class="spb">ERA '+era.toFixed(2)+'</span>');
+  if(fip!=null)o.push('<span class="spb">FIP '+fip.toFixed(2)+'</span>');
+  if(k9!=null)o.push('<span class="spb">K/9 '+k9.toFixed(1)+'</span>');
+  return o.join('')
+}
 
 // === RENDER HERO STATS ===
 function rHero(st){
-  var rec=st.wins+'-'+(st.settled-st.wins),rsign=st.roi>=0?'+':'';
+  var rec=st.wins+'-'+(st.settled-st.wins),rs=st.roi>=0?'+':'';
   document.getElementById('hero-stats').innerHTML=[
-    {l:'Win Rate',v:st.win_rate.toFixed(1)+'%',c:'var(--green)'},
-    {l:'Record',v:rec,c:'var(--cyan)'},
-    {l:'ROI',v:rsign+st.roi.toFixed(1)+'%',c:st.roi>=0?'var(--green)':'var(--red)'},
-    {l:'Settled',v:st.settled,c:'var(--cyan)'},
-  ].map(function(s){return'<div class="hstat"><div class="hstat-v" style="color:'+s.c+'">'+s.v+'</div><div class="hstat-l">'+s.l+'</div></div>'}).join('')}
+    {l:'勝率',v:st.win_rate.toFixed(1)+'%',c:'var(--green)',id:'h0',_v:st.win_rate,_d:1,_s:'%',_p:''},
+    {l:'戰績',v:rec,c:'var(--cyan)',id:'h1'},
+    {l:'報酬率',v:rs+st.roi.toFixed(1)+'%',c:st.roi>=0?'var(--green)':'var(--red)',id:'h2',_v:Math.abs(st.roi),_d:1,_s:'%',_p:rs},
+    {l:'已結算',v:st.settled+'場',c:'var(--cyan)',id:'h3'},
+  ].map(function(s){return'<div class="hstat"><div class="hstat-v" id="'+s.id+'" style="color:'+s.c+'">'+s.v+'</div><div class="hstat-l">'+s.l+'</div></div>'}).join('');
+  setTimeout(function(){
+    [{id:'h0',v:st.win_rate,d:1,p:'',s:'%'},{id:'h2',v:Math.abs(st.roi),d:1,p:st.roi>=0?'+':'-',s:'%'}]
+    .forEach(function(e){var el=document.getElementById(e.id);if(el)countUp(el,e.v,e.d,e.p,e.s)})
+  },200)
+}
 
 // === RENDER STATS ===
 function rStats(st){
   var rs=st.roi>=0?'+':'',ps=st.total_pnl>=0?'+':'';
   document.getElementById('stats-grid').innerHTML=[
-    {l:'Win Rate',v:st.win_rate.toFixed(1)+'%',sub:st.wins+'W / '+(st.settled-st.wins)+'L',c:'var(--green)',i:'📈'},
-    {l:'Total ROI',v:rs+st.roi.toFixed(1)+'%',sub:st.settled+' settled picks',c:st.roi>=0?'var(--green)':'var(--red)',i:'💰'},
-    {l:'Total Picks',v:st.settled,sub:'all-time record',c:'var(--cyan)',i:'⚾'},
-    {l:'Total P&L',v:ps+'$'+Math.round(st.total_pnl),sub:'units profit',c:st.total_pnl>=0?'var(--green)':'var(--red)',i:'📊'},
-  ].map(function(s){return'<div class="scard"><div class="scard-top"><div class="scard-label">'+s.l+'</div><div class="scard-icon">'+s.i+'</div></div><div class="scard-val" style="color:'+s.c+'">'+s.v+'</div><div class="scard-sub">'+s.sub+'</div></div>'}).join('');
-  var types=['ML','RL','TOT'];
-  var rows=types.filter(function(t){return st.by_type&&st.by_type[t]}).map(function(t){
-    var d=st.by_type[t],rs=d.roi>=0?'+':'',rc=d.roi>=0?'var(--green)':'var(--red)',wc=d.win_rate>55?'var(--green)':'var(--text-1)';
-    return'<div class="btt-row"><div class="btt-l">'+b('bc',t)+'<span class="btt-rec">'+d.wins+'W / '+(d.settled-d.wins)+'L</span></div><div class="btt-r"><div class="btt-s"><div class="btt-sl">Win%</div><div class="btt-sv" style="color:'+wc+'">'+d.win_rate.toFixed(0)+'%</div></div><div class="btt-s"><div class="btt-sl">ROI</div><div class="btt-sv" style="color:'+rc+'">'+rs+d.roi.toFixed(1)+'%</div></div></div></div>'
+    {l:'勝率',sub:st.wins+'勝 / '+(st.settled-st.wins)+'敗',c:'var(--green)',i:'📈',id:'sc0',v:st.win_rate,d:1,p:'',s:'%'},
+    {l:'總報酬率',sub:st.settled+' 場已結算',c:st.roi>=0?'var(--green)':'var(--red)',i:'💰',id:'sc1',v:Math.abs(st.roi),d:1,p:rs,s:'%'},
+    {l:'總場次',sub:'歷史記錄',c:'var(--cyan)',i:'⚾',id:'sc2',v:st.settled,d:0,p:'',s:'場'},
+    {l:'總盈虧',sub:'單位利潤',c:st.total_pnl>=0?'var(--green)':'var(--red)',i:'📊',id:'sc3',v:Math.abs(st.total_pnl),d:0,p:ps+'$',s:''},
+  ].map(function(s){
+    return'<div class="scard"><div class="scard-top"><div class="scard-label">'+s.l+'</div><div class="scard-icon">'+s.i+'</div></div><div class="scard-val" id="'+s.id+'" style="color:'+s.c+'">…</div><div class="scard-sub">'+s.sub+'</div></div>'
   }).join('');
-  document.getElementById('btt').innerHTML='<div class="btt-hdr">Breakdown by Bet Type</div>'+rows}
+  [{id:'sc0',v:st.win_rate,d:1,p:'',s:'%'},{id:'sc1',v:Math.abs(st.roi),d:1,p:rs,s:'%'},{id:'sc2',v:st.settled,d:0,p:'',s:'場'},{id:'sc3',v:Math.abs(st.total_pnl),d:0,p:ps+'$',s:''}]
+  .forEach(function(e){var el=document.getElementById(e.id);if(el)countUp(el,e.v,e.d,e.p,e.s)});
+
+  var rows=['ML','RL','TOT'].filter(function(t){return st.by_type&&st.by_type[t]}).map(function(t){
+    var d=st.by_type[t],rs=d.roi>=0?'+':'',rc=d.roi>=0?'var(--green)':'var(--red)',wc=d.win_rate>55?'var(--green)':'var(--text-1)';
+    return'<div class="btt-row"><div class="btt-l">'+b('bc',t)+'<span style="font-size:13px;color:var(--text-2)">'+d.wins+'勝 '+(d.settled-d.wins)+'敗</span></div><div class="btt-r"><div class="btt-s"><div class="btt-sl">勝率</div><div class="btt-sv" style="color:'+wc+'">'+d.win_rate.toFixed(0)+'%</div></div><div class="btt-s"><div class="btt-sl">報酬率</div><div class="btt-sv" style="color:'+rc+'">'+rs+d.roi.toFixed(1)+'%</div></div></div></div>'
+  }).join('');
+  document.getElementById('btt').innerHTML='<div class="btt-hdr">各投注類型分析</div>'+rows
+}
 
 // === RENDER PICKS ===
 function rPicks(picks,date,gen){
-  if(date)document.getElementById('picks-sub').textContent='Games for '+date;
-  if(gen)document.getElementById('picks-meta').textContent='Updated '+gen;
-  if(!picks||!picks.length){document.getElementById('picks-grid').innerHTML='<div class="empty" style="grid-column:1/-1"><div class="empty-icon">⚾</div><p class="empty-title">No predictions yet</p><p class="empty-sub">Our AI runs daily analysis at 2 PM Taiwan time. Check back soon.</p></div>';return}
-  document.getElementById('picks-grid').innerHTML=picks.map(function(p){
+  if(date)document.getElementById('picks-sub').textContent='賽事日期：'+date;
+  if(gen)document.getElementById('picks-meta').textContent='更新時間：'+gen;
+  if(!picks||!picks.length){
+    document.getElementById('picks-grid').innerHTML='<div class="empty" style="grid-column:1/-1"><div class="empty-icon">⚾</div><p class="empty-title">今日尚無預測</p><p class="empty-sub">AI 每日台灣時間下午2點執行分析，請稍後回來查看。</p></div>';
+    return
+  }
+  document.getElementById('picks-grid').innerHTML=picks.map(function(p,idx){
     var tc=p.tier&&TC[p.tier]?TC[p.tier]:null;
     var bs=BM[p.btype]||p.btype||'???';
-    var tierH=tc?'<span class="badge" style="background:'+tc.bg+';color:'+tc.c+';border:1px solid '+tc.c+'33;font-size:10px">'+tc.l+'</span>':'';
+    var isStrong=p.tier==='💎 強注';
+    var tierH=tc?'<span class="badge" style="font-size:10px;background:'+tc.bg+';color:'+tc.c+';border:1px solid '+tc.c+'33">'+tc.l+'</span>':'';
     var det=[];
-    if(p.model_p!=null)det.push('<div class="pd-item">Model Win% <b>'+p.model_p.toFixed(0)+'%</b></div>');
-    if(p.pred_away!=null&&p.pred_home!=null)det.push('<div class="pd-item">Pred Score <b>'+p.pred_away.toFixed(1)+' – '+p.pred_home.toFixed(1)+'</b></div>');
-    if(p.weather_factor!=null)det.push('<div class="pd-item">Weather <b>'+((p.weather_factor-1)*100>=0?'+':'')+((p.weather_factor-1)*100).toFixed(0)+'%</b></div>');
-    if(p.park_factor!=null)det.push('<div class="pd-item">Park Factor <b>'+p.park_factor.toFixed(2)+'</b></div>');
-    return'<div class="glass-card pcard">'+
-      '<div class="pcard-top"><div>'+tierH+'</div><span class="pcard-time">'+(p.game_time||'')+'</span></div>'+
-      '<div class="pcard-teams"><div class="tblock"><div class="tabbr">'+abbr(p.away)+'</div><div class="tname">'+(p.away_cn||p.away)+'</div></div>'+
-      '<div class="vs-blk"><span class="vs-t">VS</span><span class="away-lbl">AWAY</span></div>'+
-      '<div class="tblock r"><div class="tabbr">'+abbr(p.home)+'</div><div class="tname">'+(p.home_cn||p.home)+'</div></div></div>'+
-      '<div class="pcard-sp"><div class="spinfo"><div class="spname">'+(p.away_sp||'TBD')+'</div><div class="spbadges">'+spBadges(p.away_era,p.away_fip,p.away_k9)+'</div></div>'+
-      '<span class="sp-lbl">SP</span>'+
-      '<div class="spinfo r"><div class="spname">'+(p.home_sp||'TBD')+'</div><div class="spbadges">'+spBadges(p.home_era,p.home_fip,p.home_k9)+'</div></div></div>'+
+    if(p.model_p!=null)det.push('<div class="pd-item">模型勝率 <b>'+p.model_p.toFixed(0)+'%</b></div>');
+    if(p.pred_away!=null&&p.pred_home!=null)det.push('<div class="pd-item">預測比分 <b>'+p.pred_away.toFixed(1)+'&ndash;'+p.pred_home.toFixed(1)+'</b></div>');
+    if(p.weather_factor!=null)det.push('<div class="pd-item">天氣影響 <b>'+((p.weather_factor-1)*100>=0?'+':'')+((p.weather_factor-1)*100).toFixed(0)+'%</b></div>');
+    if(p.park_factor!=null)det.push('<div class="pd-item">球場因子 <b>'+p.park_factor.toFixed(2)+'</b></div>');
+    return'<div class="glass-card pcard'+(isStrong?' pcard-strong':'')+'">'+
+      '<div class="pcard-top"><div style="display:flex;align-items:center;gap:8px"><div class="pcard-rank">'+(idx+1)+'</div>'+tierH+'</div><span class="pcard-time">'+(p.game_time||'')+'</span></div>'+
+      '<div class="pcard-teams">'+
+        '<div class="tblock"><div class="tabbr">'+abbr(p.away)+'</div><div class="tname">'+(p.away_cn||p.away)+'</div></div>'+
+        '<div class="vs-blk"><span class="vs-t">VS</span><span class="away-lbl">客隊</span></div>'+
+        '<div class="tblock r"><div class="tabbr">'+abbr(p.home)+'</div><div class="tname">'+(p.home_cn||p.home)+'</div></div>'+
+      '</div>'+
+      '<div class="pcard-sp">'+
+        '<div class="spinfo"><div class="spname">'+(p.away_sp||'TBD')+'</div><div class="spbadges">'+spBadges(p.away_era,p.away_fip,p.away_k9)+'</div></div>'+
+        '<span class="sp-lbl">先發投手</span>'+
+        '<div class="spinfo r"><div class="spname">'+(p.home_sp||'TBD')+'</div><div class="spbadges">'+spBadges(p.home_era,p.home_fip,p.home_k9)+'</div></div>'+
+      '</div>'+
       '<div class="pcard-pred">'+
         '<div class="pred-main">'+b('bc',bs)+'<span class="pred-dir">'+(p.bet_label||'')+'</span>'+(p.bp!=null?'<span class="pred-odds">@ '+p.bp.toFixed(2)+'</span>':'')+(p.bk?b('bgr',p.bk):'')+'</div>'+
         '<div class="pills">'+
-          (p.edge!=null?'<div class="pill"><div class="pill-l">Edge</div><div class="pill-v" style="color:'+ec(p.edge)+'">+'+p.edge.toFixed(1)+'%</div></div>':'')+
-          (p.conf!=null?'<div class="pill"><div class="pill-l">Confidence</div><div class="pill-v" style="color:'+cc(p.conf)+'">'+p.conf.toFixed(0)+'%</div></div>':'')+
-          (p.stake!=null?'<div class="pill"><div class="pill-l">Kelly Stake</div><div class="pill-v" style="color:var(--text-1)">$'+p.stake.toFixed(0)+'</div></div>':'')+
+          (p.edge!=null?'<div class="pill"><div class="pill-l">優勢值</div><div class="pill-v" style="color:'+ec(p.edge)+'">+'+p.edge.toFixed(1)+'%</div></div>':'')+
+          (p.conf!=null?'<div class="pill"><div class="pill-l">信心度</div><div class="pill-v" style="color:'+cc(p.conf)+'">'+p.conf.toFixed(0)+'%</div></div>':'')+
+          (p.stake!=null?'<div class="pill"><div class="pill-l">凱利投注</div><div class="pill-v" style="color:var(--text-1)">$'+p.stake.toFixed(0)+'</div></div>':'')+
         '</div>'+
         (det.length?'<div class="pred-detail">'+det.join('')+'</div>':'')+
       '</div>'+
     '</div>'
-  }).join('')}
+  }).join('')
+}
 
 // === RENDER HISTORY ===
 function rHist(hist){
   if(!hist||!hist.length)return;
-  var rows=hist.map(function(r){return'<tr><td style="font-size:12px;color:var(--text-2);white-space:nowrap">'+r.date+'</td><td>'+r.away_cn+' <span style="color:var(--text-2)">@</span> '+r.home_cn+'</td><td>'+b('bc',r.bet_type)+(r.label?' <span style="font-size:12px;color:var(--text-2)">'+r.label+'</span>':'')+'</td><td class="r" style="font-weight:700">'+( r.price?r.price.toFixed(2):'—')+'</td><td class="r">'+res(r.result)+'</td></tr>'}).join('');
-  var mob=hist.map(function(r){return'<div class="hm-row"><div class="hm-top"><span>'+r.away_cn+' @ '+r.home_cn+'</span>'+res(r.result)+'</div><div class="hm-det"><span>'+r.date+'</span>'+b('bc',r.bet_type)+(r.label?'<span>'+r.label+'</span>':'')+(r.price?'<span>@ '+r.price.toFixed(2)+'</span>':'')+'</div></div>'}).join('');
-  document.getElementById('hist-content').innerHTML='<div class="hist-wrap"><table><thead><tr><th>Date</th><th>Matchup</th><th>Bet</th><th class="r">Odds</th><th class="r">Result</th></tr></thead><tbody>'+rows+'</tbody></table><div class="hist-mobile">'+mob+'</div></div>'}
+  var rows=hist.map(function(r){
+    return'<tr><td style="font-size:12px;color:var(--text-2);white-space:nowrap">'+r.date+'</td><td>'+(r.away_cn||'')+' <span style="color:var(--text-2)">@</span> '+(r.home_cn||'')+'</td><td>'+b('bc',r.bet_type)+(r.label?' <span style="font-size:12px;color:var(--text-2)">'+r.label+'</span>':'')+'</td><td class="r" style="font-weight:700">'+(r.price?r.price.toFixed(2):'—')+'</td><td class="r">'+res(r.result)+'</td></tr>'
+  }).join('');
+  var mob=hist.map(function(r){
+    return'<div class="hm-row"><div class="hm-top"><span>'+(r.away_cn||'')+' @ '+(r.home_cn||'')+'</span>'+res(r.result)+'</div><div class="hm-det"><span>'+r.date+'</span>'+b('bc',r.bet_type)+(r.label?'<span>'+r.label+'</span>':'')+(r.price?'<span>@ '+r.price.toFixed(2)+'</span>':'')+'</div></div>'
+  }).join('');
+  document.getElementById('hist-content').innerHTML=
+    '<div class="hist-wrap"><table><thead><tr><th>日期</th><th>對戰</th><th>投注</th><th class="r">賠率</th><th class="r">結果</th></tr></thead><tbody>'+rows+'</tbody></table><div class="hist-mobile">'+mob+'</div></div>'
+}
 
 // === FETCH ===
+pb.style.width='70%';
 fetch('./picks_latest.json?t='+Date.now())
   .then(function(r){return r.ok?r.json():null})
   .then(function(d){
-    if(!d){document.getElementById('picks-grid').innerHTML='<div class="empty" style="grid-column:1/-1"><div class="empty-icon">⚠️</div><p class="empty-title">Failed to load data</p><p class="empty-sub">Please refresh the page.</p></div>';return}
+    pb.style.width='100%';
+    setTimeout(function(){pb.style.opacity='0';setTimeout(function(){pb.remove()},400)},300);
+    if(!d){document.getElementById('picks-grid').innerHTML='<div class="empty" style="grid-column:1/-1"><div class="empty-icon">⚠️</div><p class="empty-title">資料載入失敗</p><p class="empty-sub">請重新整理頁面。</p></div>';return}
     if(d.stats){rHero(d.stats);rStats(d.stats)}
     rPicks(d.picks,d.date,d.generated_at);
-    rHist(d.recent_history)
+    rHist(d.recent_history);
+    setTimeout(function(){document.querySelectorAll('.fi').forEach(function(el){var r=el.getBoundingClientRect();if(r.top<window.innerHeight)el.classList.add('on')})},100)
   })
-  .catch(function(){document.getElementById('picks-grid').innerHTML='<div class="empty" style="grid-column:1/-1"><p class="empty-title">Network error</p><p class="empty-sub">Please refresh.</p></div>'});
+  .catch(function(){
+    if(pb)pb.style.width='100%';
+    document.getElementById('picks-grid').innerHTML='<div class="empty" style="grid-column:1/-1"><p class="empty-title">網路錯誤</p><p class="empty-sub">請重新整理。</p></div>'
+  });
 </script>
 </body>
 </html>
