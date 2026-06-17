@@ -264,6 +264,9 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradi
 </head>
 <body>
 <div id="pb"></div>
+<script>
+if('serviceWorker'in navigator){navigator.serviceWorker.getRegistrations().then(function(regs){regs.forEach(function(r){r.unregister()})});}
+</script>
 
 <!-- HEADER -->
 <header id="hdr">
@@ -747,7 +750,7 @@ function renderLive(live){
     h+='<div class="live-card fi'+(hasBet?' has-bet':'')+'">'
       +'<div class="live-score">'
         +'<div class="live-team">'
-          +(awTid?('<img class="live-logo" src="https://www.mlbstatic.com/team-logos/'+awTid+'.svg" alt="'+awCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):''
+          +(awTid?('<img class="live-logo" src="https://www.mlbstatic.com/team-logos/'+awTid+'.svg" alt="'+awCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):'')
         +'<span class="live-tn">'+awCn+'</span>'
           +'<span class="live-runs" style="color:'+awColor+'">'+awRuns+'</span>'
         +'</div>'
@@ -756,7 +759,7 @@ function renderLive(live){
           +'<span class="live-inn">'+innStr+'</span>'
         +'</div>'
         +'<div class="live-team">'
-          +(hmTid?('<img class="live-logo" src="https://www.mlbstatic.com/team-logos/'+hmTid+'.svg" alt="'+hmCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):''
+          +(hmTid?('<img class="live-logo" src="https://www.mlbstatic.com/team-logos/'+hmTid+'.svg" alt="'+hmCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):'')
         +'<span class="live-tn">'+hmCn+'</span>'
           +'<span class="live-runs" style="color:'+hmColor+'">'+hmRuns+'</span>'
         +'</div>'
@@ -847,7 +850,7 @@ function renderRecentHistory(history){
         +'<div class="rh-meta">'+(r.date||'')+(lbl?' · '+lbl:'')+(r.edge?' · Edge: '+safeNum(r.edge,0).toFixed(1)+'%':'')+'</div>'
       +'</div>'
       +'<div>'
-        +'<div class="rh-price" style="color:'+(isW?'var(--g)':'var(--r)')+'">'+(price?'@'+price.toFixed(2):'')+'</div>'
+        +'<div class="rh-price" style="color:'+(isW?'var(--g)':'var(--r)')+'">'+( price?'@'+price.toFixed(2):'')+'</div>'
         +'<div class="rh-edge">'+(typeof pnl==='number'?(isW?'+':'')+pnl.toFixed(1):'')+'</div>'
       +'</div>'
     +'</div>';
@@ -942,8 +945,7 @@ window.switchStd=function(key,btn){
       var strk=t.strk||t.streak||'';
       var strkClass=strk.startsWith('W')?'W':strk.startsWith('L')?'L':'';
       h+='<tr>'
-        +'<td>'+(tid2?('<img class="td-logo" src="https://www.mlbstatic.com/team-logos/'+tid2+'.svg" alt="'+(t.team_cn||'')+'" loading="lazy" onerror="this.style.display=\'none\'">'):'')
-        +(t.abbr||t.team_cn||'')+'</td>'
+        +'<td>'+(tid2?('<img class="td-logo" src="https://www.mlbstatic.com/team-logos/'+tid2+'.svg" alt="'+(t.team_cn||'')+'" loading="lazy" onerror="this.style.display=\'none\'">'):'')+(t.abbr||t.team_cn||'')+'</td>'
         +'<td>'+(t.w||0)+'</td>'
         +'<td>'+(t.l||0)+'</td>'
         +'<td>'+(safeNum(t.pct,0).toFixed(3))+'</td>'
@@ -1057,7 +1059,7 @@ function renderLivePage(live,updatedAt){
     h+='<div class="live-card fi'+(hasBet?' has-bet':'')+'">'
       +'<div class="live-score">'
         +'<div class="live-team">'
-          +(awTid?('<img class="live-logo" src="https://www.mlbstatic.com/team-logos/'+awTid+'.svg" alt="'+awCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):''
+          +(awTid?('<img class="live-logo" src="https://www.mlbstatic.com/team-logos/'+awTid+'.svg" alt="'+awCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):'')
         +'<span class="live-tn">'+awCn+'</span>'
           +'<span class="live-runs" style="color:'+awColor+'">'+awRuns+'</span>'
           +'<span style="font-size:9px;color:var(--t2)">客隊</span>'
@@ -1067,7 +1069,7 @@ function renderLivePage(live,updatedAt){
           +'<span class="live-inn">'+innStr+'</span>'
         +'</div>'
         +'<div class="live-team">'
-          +(hmTid?('<img class="live-logo" src="https://www.mlbstatic.com/team-logos/'+hmTid+'.svg" alt="'+hmCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):''
+          +(hmTid?('<img class="live-logo" src="https://www.mlbstatic.com/team-logos/'+hmTid+'.svg" alt="'+hmCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):'')
         +'<span class="live-tn">'+hmCn+'</span>'
           +'<span class="live-runs" style="color:'+hmColor+'">'+hmRuns+'</span>'
           +'<span style="font-size:9px;color:var(--t2)">主隊</span>'
