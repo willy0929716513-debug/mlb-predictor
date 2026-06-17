@@ -437,12 +437,9 @@ function wpDonut(awayPct,homePct,awayAb,homeAb){
 // ── PITCHER AVATAR ─────────────────────────────────────
 function pitcherAv(name,side){
   var initials=name?name.trim().split(/\s+/).map(function(w){return w[0]||''}).join('').slice(0,2).toUpperCase():'??';
-  var isAway=side==='a';
-  var rc=isAway?'#00E5FF':'#00FF88';
-  var bg=isAway?'rgba(0,35,90,.85)':'rgba(0,55,35,.85)';
-  var tc=isAway?'var(--c)':'var(--g)';
+  var tc=side==='a'?'var(--c)':'var(--g)';
   return '<div class="pit-av" data-pname="'+(name||'')+'" data-side="'+side+'">'
-    +'<div class="pit-inner" style="background:'+bg+'"><span class="pit-init" style="color:'+tc+'">'+initials+'</span></div>'
+    +'<div class="pit-inner" style="background:var(--bg2)"><span class="pit-init" style="color:'+tc+'">'+initials+'</span></div>'
   +'</div>';
 }
 
@@ -568,23 +565,18 @@ function makeGCard(pick,idx,showCharts){
   var h='<div class="gc fi'+(isGold?' tier-gold':'')+">"
 
   // card header
-  h+='<div class="gc-hdr">'
-    +'<div class="gc-hdr-l">'
-    +tierBadge(tierKey)
-    +'</div>'
-    +'<span class="gc-time">'+(pick.game_time||'--:--')+'</span>'
-  +'</div>';
+  h+='<div class="gc-hdr">'+tierBadge(tierKey)+'<span class="gc-time">'+(pick.game_time||'--:--')+'</span></div>';
 
   // teams row
   h+='<div class="gc-teams">'
     +'<div class="gc-team">'
-    +(awTid?('<img class="gc-tl" src="https://www.mlbstatic.com/team-logos/'+awTid+'.svg" alt="'+awCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):'<div class="gc-tl" style="display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:var(--t2)">'+awAb+'</div>')
+    +(awTid?('<img class="gc-tl" src="https://www.mlbstatic.com/team-logos/'+awTid+'.svg" alt="'+awCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):' <div class="gc-tl" style="display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:var(--t2)">'+awAb+'</div>')
     +'<span class="gc-ab">'+awAb+'</span>'
     +'<span class="gc-cn">'+awCn+'</span>'
     +'</div>'
     +'<span class="gc-vs">VS</span>'
     +'<div class="gc-team">'
-    +(hmTid?('<img class="gc-tl" src="https://www.mlbstatic.com/team-logos/'+hmTid+'.svg" alt="'+hmCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):'<div class="gc-tl" style="display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:var(--t2)">'+hmAb+'</div>')
+    +(hmTid?('<img class="gc-tl" src="https://www.mlbstatic.com/team-logos/'+hmTid+'.svg" alt="'+hmCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):' <div class="gc-tl" style="display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:var(--t2)">'+hmAb+'</div>')
     +'<span class="gc-ab">'+hmAb+'</span>'
     +'<span class="gc-cn">'+hmCn+'</span>'
     +'</div>'
@@ -750,7 +742,7 @@ function renderLive(live){
     h+='<div class="live-card fi'+(hasBet?' has-bet':'')+'">'
       +'<div class="live-score">'
         +'<div class="live-team">'
-          +(awTid?('<img class="live-logo" src="https://www.mlbstatic.com/team-logos/'+awTid+'.svg" alt="'+awCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):'')
+          +(awTid?('<img class="live-logo" src="https://www.mlbstatic.com/team-logos/'+awTid+'.svg" alt="'+awCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):'')  
         +'<span class="live-tn">'+awCn+'</span>'
           +'<span class="live-runs" style="color:'+awColor+'">'+awRuns+'</span>'
         +'</div>'
@@ -759,7 +751,7 @@ function renderLive(live){
           +'<span class="live-inn">'+innStr+'</span>'
         +'</div>'
         +'<div class="live-team">'
-          +(hmTid?('<img class="live-logo" src="https://www.mlbstatic.com/team-logos/'+hmTid+'.svg" alt="'+hmCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):'')
+          +(hmTid?('<img class="live-logo" src="https://www.mlbstatic.com/team-logos/'+hmTid+'.svg" alt="'+hmCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):'')  
         +'<span class="live-tn">'+hmCn+'</span>'
           +'<span class="live-runs" style="color:'+hmColor+'">'+hmRuns+'</span>'
         +'</div>'
@@ -1059,7 +1051,7 @@ function renderLivePage(live,updatedAt){
     h+='<div class="live-card fi'+(hasBet?' has-bet':'')+'">'
       +'<div class="live-score">'
         +'<div class="live-team">'
-          +(awTid?('<img class="live-logo" src="https://www.mlbstatic.com/team-logos/'+awTid+'.svg" alt="'+awCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):'')
+          +(awTid?('<img class="live-logo" src="https://www.mlbstatic.com/team-logos/'+awTid+'.svg" alt="'+awCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):'')  
         +'<span class="live-tn">'+awCn+'</span>'
           +'<span class="live-runs" style="color:'+awColor+'">'+awRuns+'</span>'
           +'<span style="font-size:9px;color:var(--t2)">客隊</span>'
@@ -1069,7 +1061,7 @@ function renderLivePage(live,updatedAt){
           +'<span class="live-inn">'+innStr+'</span>'
         +'</div>'
         +'<div class="live-team">'
-          +(hmTid?('<img class="live-logo" src="https://www.mlbstatic.com/team-logos/'+hmTid+'.svg" alt="'+hmCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):'')
+          +(hmTid?('<img class="live-logo" src="https://www.mlbstatic.com/team-logos/'+hmTid+'.svg" alt="'+hmCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):'')  
         +'<span class="live-tn">'+hmCn+'</span>'
           +'<span class="live-runs" style="color:'+hmColor+'">'+hmRuns+'</span>'
           +'<span style="font-size:9px;color:var(--t2)">主隊</span>'
