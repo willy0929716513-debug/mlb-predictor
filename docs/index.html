@@ -200,6 +200,33 @@ footer{text-align:center;padding:20px 16px;border-top:1px solid var(--bo);font-s
 @keyframes lp{0%,100%{opacity:1}50%{opacity:.3}}
 .fi{opacity:0;transform:translateY(20px);transition:opacity .55s ease,transform .55s ease}
 .fi.on{opacity:1;transform:translateY(0)}
+/* STANDINGS */
+.std-tabs{display:flex;gap:4px;margin-bottom:14px;background:rgba(8,15,35,.9);border:1px solid var(--bo);border-radius:12px;padding:4px}
+.stab{flex:1;padding:7px 2px;border-radius:8px;border:none;background:transparent;color:var(--t2);font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
+.stab.on{background:rgba(0,229,255,.15);color:var(--c)}
+.std-pnl{display:none}
+.std-pnl.on{display:block}
+.std-card{background:rgba(8,15,35,.9);border:1px solid var(--bo);border-radius:14px;overflow:hidden;margin-bottom:12px}
+.std-div-hdr{font-size:11px;font-weight:800;color:var(--c);letter-spacing:.5px;padding:8px 12px;background:rgba(0,229,255,.04);border-bottom:1px solid var(--bo);display:flex;align-items:center;gap:6px}
+.std-div-hdr::before{content:'';width:3px;height:13px;background:linear-gradient(to bottom,var(--c),var(--g));border-radius:2px;flex-shrink:0}
+.std-head{display:grid;grid-template-columns:1fr 26px 26px 38px 30px 34px 28px;gap:3px;padding:5px 10px;background:rgba(0,0,0,.2);border-bottom:1px solid var(--bo)}
+.std-hl{font-size:8px;font-weight:800;color:var(--t3);letter-spacing:.6px;text-align:center;text-transform:uppercase}
+.std-hl:first-child{text-align:left}
+.std-row{display:grid;grid-template-columns:1fr 26px 26px 38px 30px 34px 28px;gap:3px;padding:7px 10px;border-bottom:1px solid rgba(0,229,255,.05);align-items:center}
+.std-row:last-child{border-bottom:none}
+.std-row.r1 .std-cn{color:var(--y)}
+.std-team{display:flex;align-items:center;gap:6px;min-width:0}
+.std-logo{width:24px;height:24px;border-radius:50%;background:rgba(0,229,255,.06);border:1px solid rgba(0,229,255,.12);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
+.std-logo img{width:17px;height:17px;object-fit:contain}
+.std-logo-init{font-size:7px;font-weight:800;color:var(--c)}
+.std-name{display:flex;flex-direction:column;min-width:0}
+.std-cn{font-size:11px;font-weight:700;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.std-ab{font-size:9px;color:var(--t2)}
+.std-val{font-size:11px;font-weight:700;color:var(--t1);text-align:center}
+.std-pct{font-size:11px;font-weight:700;color:var(--t1);text-align:center}
+.std-gb{font-size:10px;color:var(--t2);text-align:center}
+.std-l10{font-size:10px;color:var(--t2);text-align:center}
+.std-strk{font-size:10px;font-weight:800;text-align:center}
 </style>
 </head>
 <body>
@@ -283,11 +310,18 @@ footer{text-align:center;padding:20px 16px;border-top:1px solid var(--bo);font-s
 </div>
 <div id="pg4" class="pg">
   <div class="content">
-    <div class="cs-wrap">
-      <div class="cs-icon">&#127967;</div>
-      <div class="cs-title">球隊排名</div>
-      <div class="cs-sub">即將推出<br>包含各隊勝率、得分、ERA 等完整數據排行</div>
+    <div class="sec-row" style="margin-bottom:14px;padding-top:4px">
+      <div class="sec-tr"><div class="sa"></div><h2 class="stitle">球隊排名</h2></div>
+      <div id="std-updated" style="font-size:10px;color:var(--t2)"></div>
     </div>
+    <div class="std-tabs">
+      <button class="stab on" onclick="switchStd(0,this)">🔵 美聯</button>
+      <button class="stab" onclick="switchStd(1,this)">🔴 國聯</button>
+      <button class="stab" onclick="switchStd(2,this)">🏆 全聯盟</button>
+    </div>
+    <div id="std-0" class="std-pnl on"><div class="sk" style="height:300px"></div></div>
+    <div id="std-1" class="std-pnl"></div>
+    <div id="std-2" class="std-pnl"></div>
   </div>
 </div>
 <footer>
@@ -363,7 +397,7 @@ function mcChart(seed){
 }
 function barChart(seed,color){
   var bars='';var vals=[30,50,70,85,90,80,60,40,25,15];
-  for(var i=0;i<10;i++){var v=vals[i]*(0.8+((seed*(i+1)*13)%20)/100);var h=Math.max(3,v*0.36);bars+='<rect x="'+(i*9+1)+'" y="'+(38-h)+'" width="7" height="'+h+'" rx="1" fill="'+(i===4||i===5?color:'rgba(0,229,255,.35)')+'" opacity="'+(i===4||i===5?1:.7)+'"/>';}
+  for(var i=0;i<10;i++){var v=vals[i]*(0.8+((seed*(i+1)*13)%20)/100);var h=Math.max(3,v*0.36);bars+='<rect x="'+(i*9+1)+'" y="'+(38-h)+'" width="7" height="'+h+'" rx="1" fill="'+(i===4||i===5?color:'rgba(0,229,255,.35)')+' " opacity="'+(i===4||i===5?1:.7)+'"/>';}
   return'<svg viewBox="0 0 90 40">'+bars+'</svg>'
 }
 
@@ -413,6 +447,70 @@ function initPitcherPhotos(){
   });
 }
 
+/* STANDINGS */
+var _standings=null;
+function switchStd(idx,btn){
+  document.querySelectorAll('.stab').forEach(function(t){t.classList.remove('on')});btn.classList.add('on');
+  document.querySelectorAll('.std-pnl').forEach(function(p){p.classList.remove('on')});
+  document.getElementById('std-'+idx).classList.add('on');
+}
+function stdLogoHtml(t){
+  var ab=t.abbr||'???';
+  if(t.team_id)return'<div class="std-logo"><img src="https://www.mlbstatic.com/team-logos/'+t.team_id+'.svg" alt="'+ab+'" onerror="this.outerHTML=\'<span class=std-logo-init>'+ab+'</span>\'"></div>';
+  return'<div class="std-logo"><span class="std-logo-init">'+ab+'</span></div>';
+}
+function strkHtml(s){
+  if(!s||s==='-')return'<span class="std-strk" style="color:var(--t3)">-</span>';
+  var isW=s.charAt(0)==='W';
+  return'<span class="std-strk" style="color:'+(isW?'var(--g)':'var(--r)')+'">'+s+'</span>';
+}
+function diffHtml2(d){
+  if(d==null)return'<span class="std-val" style="color:var(--t3)">-</span>';
+  var c=d>0?'var(--g)':d<0?'var(--r)':'var(--t2)';
+  return'<span class="std-val" style="color:'+c+'">'+(d>0?'+':'')+d+'</span>';
+}
+var STD_COLS='<span class="std-hl">球隊</span><span class="std-hl">W</span><span class="std-hl">L</span><span class="std-hl">%</span><span class="std-hl">GB</span><span class="std-hl">近10</span><span class="std-hl">連</span>';
+var STD_COLS2='<span class="std-hl">球隊</span><span class="std-hl">W</span><span class="std-hl">L</span><span class="std-hl">%</span><span class="std-hl">+/-</span><span class="std-hl">近10</span><span class="std-hl">連</span>';
+function stdRow(t,isFirst,useGB){
+  return'<div class="std-row'+(isFirst?' r1':'')+'">'+
+    '<div class="std-team">'+stdLogoHtml(t)+'<div class="std-name"><span class="std-cn">'+t.team_cn+'</span><span class="std-ab">'+t.abbr+'</span></div></div>'+
+    '<span class="std-val">'+t.w+'</span>'+
+    '<span class="std-val">'+t.l+'</span>'+
+    '<span class="std-pct">'+t.pct.toFixed(3).replace('0.','.') +'</span>'+
+    (useGB?'<span class="std-gb">'+(t.gb==='-'?'—':t.gb)+'</span>':diffHtml2(t.diff))+
+    '<span class="std-l10">'+t.l10+'</span>'+
+    strkHtml(t.strk)+
+  '</div>';
+}
+function renderDiv(div){
+  return'<div class="std-card">'+
+    '<div class="std-div-hdr">'+div.division_cn+'</div>'+
+    '<div class="std-head">'+STD_COLS+'</div>'+
+    div.teams.map(function(t,i){return stdRow(t,i===0,true)}).join('')+
+  '</div>';
+}
+function renderAllStd(teams){
+  return'<div class="std-card">'+
+    '<div class="std-head">'+STD_COLS2+'</div>'+
+    teams.map(function(t,i){return stdRow(t,i===0,false)}).join('')+
+  '</div>';
+}
+function renderStandings(d){
+  var el=document.getElementById('std-updated');if(el)el.textContent='更新：'+d.updated;
+  document.getElementById('std-0').innerHTML=(d.al||[]).map(renderDiv).join('');
+  document.getElementById('std-1').innerHTML=(d.nl||[]).map(renderDiv).join('');
+  document.getElementById('std-2').innerHTML=renderAllStd(d.all||[]);
+}
+function fetchStandings(){
+  fetch('./standings.json?t='+Date.now())
+    .then(function(r){return r.ok?r.json():null})
+    .then(function(d){
+      if(d){_standings=d;renderStandings(d);}
+      else document.getElementById('std-0').innerHTML='<div class="empty"><p class="empty-title">排名資料載入失敗</p></div>';
+    })
+    .catch(function(){document.getElementById('std-0').innerHTML='<div class="empty"><p class="empty-title">網路錯誤</p></div>';});
+}
+
 /* TAB SWITCHING */
 function switchTab(idx,btn){
   document.querySelectorAll('.htab').forEach(function(t){t.classList.remove('on')});
@@ -423,6 +521,7 @@ function switchTab(idx,btn){
   if(idx===1)rPg1();
   if(idx===2)rPg2();
   if(idx===3)rPg3();
+  if(idx===4&&!_standings)fetchStandings();
 }
 
 /* PAGE RENDERERS */
@@ -438,8 +537,8 @@ function rPg2(){
     '<div class="stat-grid">'+
       '<div class="stat-box"><div class="stat-box-label">總分析場次</div><div class="stat-box-val" style="color:var(--c)">'+st.settled+'</div><div class="stat-box-sub">已結算投注</div></div>'+
       '<div class="stat-box"><div class="stat-box-label">AI 勝場</div><div class="stat-box-val" style="color:var(--g)">'+st.wins+'</div><div class="stat-box-sub">'+st.win_rate.toFixed(1)+'% 命中率</div></div>'+
-      '<div class="stat-box"><div class="stat-box-label">總報酬率</div><div class="stat-box-val" style="color:'+(st.roi>=0?'var(--g)':'var(--r)')+'">'+st.roi.toFixed(1)+'%</div><div class="stat-box-sub">ROI</div></div>'+
-      '<div class="stat-box"><div class="stat-box-label">總盈虧</div><div class="stat-box-val" style="color:'+(st.total_pnl>=0?'var(--g)':'var(--r)')+'">"'+(st.total_pnl>=0?'+':'')+st.total_pnl.toFixed(0)+'</div><div class="stat-box-sub">單位 $</div></div>'+
+      '<div class="stat-box"><div class="stat-box-label">總報酬率</div><div class="stat-box-val" style="color:'+(st.roi>=0?'var(--g)':'var(--r)')+'">' +st.roi.toFixed(1)+'%</div><div class="stat-box-sub">ROI</div></div>'+
+      '<div class="stat-box"><div class="stat-box-label">總盈虧</div><div class="stat-box-val" style="color:'+(st.total_pnl>=0?'var(--g)':'var(--r)')+'">'+( st.total_pnl>=0?'+':'')+st.total_pnl.toFixed(0)+'</div><div class="stat-box-sub">單位 $</div></div>'+
     '</div>'+
     (st.by_type?'<div class="sec-row" style="margin-bottom:10px"><div class="sec-tr"><div class="sa"></div><h2 class="stitle">類型細分</h2></div></div>'+
       '<div class="hist-card">'+Object.keys(st.by_type).map(function(k){var v=st.by_type[k];return'<div class="hrow"><div class="hrow-left"><div class="hrow-teams">'+k+'</div><div class="hrow-bet">勝 '+v.wins+' / 負 '+(v.settled-v.wins)+'</div></div><div class="hrow-right"><div class="hrow-odds">'+v.win_rate.toFixed(1)+'%</div>'+b(v.roi>=0?'bg2':'br',(v.roi>=0?'+':'')+v.roi.toFixed(1)+'%')+'</div></div>'}).join('')+'</div>':'');
@@ -628,3 +727,4 @@ function triggerWF(){
 }
 </script>
 </body>
+</html>
