@@ -489,35 +489,35 @@
     {
       "home_cn": "太空人",
       "away_cn": "老虎",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 4,
       "away_runs": 0,
-      "projected_total": 7.3,
+      "projected_total": 6.8,
       "market_total": 8.5,
-      "bet": null,
-      "reason": null
+      "bet": "主隊獨贏",
+      "reason": "第7局主隊領先4分（賽前主隊勝率54%），大局已定"
     },
     {
       "home_cn": "紅雀",
       "away_cn": "教士",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 3,
-      "projected_total": 7.9,
+      "projected_total": 7.3,
       "market_total": 10.0,
-      "bet": "主隊讓分(+1.5)",
-      "reason": "主隊落後2分 第6局，賽前主隊勝率57%"
+      "bet": "大小分 UNDER",
+      "reason": "第7局僅4分（此時預期6.7分），低分走勢盤口10.0"
     },
     {
       "home_cn": "道奇",
       "away_cn": "光芒",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 4.7,
+      "projected_total": 4.3,
       "market_total": 7.0,
       "bet": null,
       "reason": null
@@ -535,7 +535,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1781726233,
+  "live_updated_ts": 1781726535,
   "game_preds": {
     "reds|mets": {
       "home_win_prob": 0.3223,
@@ -594,5 +594,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-06-18 03:57 (台灣時間)"
+  "live_updated_at": "2026-06-18 04:02 (台灣時間)"
 }
