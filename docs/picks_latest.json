@@ -330,10 +330,10 @@
       "home_cn": "遊騎兵",
       "away_cn": "雙城",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 10,
-      "projected_total": 13.8,
+      "projected_total": 13.3,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -342,22 +342,22 @@
       "home_cn": "太空人",
       "away_cn": "老虎",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 2,
-      "projected_total": 4.9,
+      "projected_total": 4.4,
       "market_total": 8.5,
       "bet": "大小分 UNDER",
-      "reason": "第8局僅3分（此時預期6.6分），低分走勢盤口8.5"
+      "reason": "第8局僅3分（此時預期7.1分），低分走勢盤口8.5"
     },
     {
       "home_cn": "響尾蛇",
       "away_cn": "天使",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 8.1,
+      "projected_total": 7.7,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -365,11 +365,11 @@
     {
       "home_cn": "運動家",
       "away_cn": "海盜",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 4,
       "away_runs": 0,
-      "projected_total": 13.2,
+      "projected_total": 12.6,
       "market_total": 11.0,
       "bet": null,
       "reason": null
@@ -379,9 +379,9 @@
       "away_cn": "金鶯",
       "inning": 3,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 6.4,
+      "projected_total": 7.4,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -389,17 +389,17 @@
     {
       "home_cn": "道奇",
       "away_cn": "光芒",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 7.6,
+      "projected_total": 7.1,
       "market_total": 8.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1781663022,
+  "live_updated_ts": 1781663323,
   "game_preds": {
     "phillies|marlins": {
       "home_win_prob": 0.4576,
@@ -462,5 +462,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-17 10:23 (台灣時間)"
+  "live_updated_at": "2026-06-17 10:28 (台灣時間)"
 }
