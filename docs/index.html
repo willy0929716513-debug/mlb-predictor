@@ -47,8 +47,9 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradi
 @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
 
 /* ── SCROLL REVEAL ── */
-.fi{opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .5s ease}
-.fi.on{opacity:1;transform:translateY(0)}
+.fi{opacity:0;transform:translateY(16px);transition:opacity .45s ease,transform .45s ease;animation:fi-safe 0s 1.8s forwards}
+@keyframes fi-safe{to{opacity:1;transform:none}}
+.fi.on{opacity:1;transform:none;animation:none}
 
 /* ── SKELETON ── */
 .sk{border-radius:8px;background:linear-gradient(90deg,rgba(255,255,255,.04) 25%,rgba(255,255,255,.09) 50%,rgba(255,255,255,.04) 75%);background-size:200% 100%;animation:sks 1.5s infinite}
@@ -880,7 +881,7 @@ function renderDataCenter(data){
       var dec=safeNum(p.bp,null);
       var kv=kelly(safeNum(p.edge,0),dec);
       var edgeV=safeNum(p.edge,0);
-      h+='<tr style="border-top:1px solid rgba(255,255,255,.04)'+(i%2===0?';background:rgba(255,255,255,.015)':'')+'">';
+      h+='<tr style="border-top:1px solid rgba(255,255,255,.04)'+(i%2===0?';background:rgba(255,255,255,.015)':'')+'">'; 
       h+='<td style="padding:8px 10px;color:var(--t1);font-weight:700">'+betAb+' '+betCn+'</td>';
       h+='<td style="padding:8px 10px"><span class="bt-badge '+bt+'" style="font-size:9px;padding:2px 6px">'+bt+'</span></td>';
       h+='<td style="padding:8px 10px;color:var(--g);font-weight:700">'+(dec?dec.toFixed(2):'--')+'</td>';
@@ -979,11 +980,13 @@ function buildTicker(picks,history){
 
 // ── SCROLL REVEAL ──────────────────────────────────────
 var _fo=null;
+function showAll(){document.querySelectorAll('.fi').forEach(function(el){el.classList.add('on')})}
 function initScrollReveal(){
+  if(!window.IntersectionObserver){showAll();return}
   if(_fo){_fo.disconnect()}
   _fo=new IntersectionObserver(function(entries){
     entries.forEach(function(x){if(x.isIntersecting)x.target.classList.add('on')});
-  },{threshold:0.05});
+  },{threshold:0.02,rootMargin:'0px 0px 60px 0px'});
   document.querySelectorAll('.fi:not(.on)').forEach(function(el){_fo.observe(el)});
 }
 
@@ -1175,6 +1178,8 @@ function loadStandings(){
       animateBars();
       initPitcherPhotos();
     },200);
+    // hard fallback: force-show everything after 1.5s
+    setTimeout(showAll,1500);
 
   }).catch(function(e){
     pb.style.opacity='0';
