@@ -490,10 +490,10 @@
       "home_cn": "費城人",
       "away_cn": "馬林魚",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 4,
       "away_runs": 12,
-      "projected_total": 17.1,
+      "projected_total": 16.5,
       "market_total": 9.5,
       "bet": "客隊獨贏",
       "reason": "第9局客隊領先8分（賽前客隊勝率78%），大局已定"
@@ -502,10 +502,10 @@
       "home_cn": "勇士",
       "away_cn": "巨人",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
-      "away_runs": 6,
-      "projected_total": 9.0,
+      "away_runs": 7,
+      "projected_total": 9.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -526,10 +526,10 @@
       "home_cn": "紅雀",
       "away_cn": "教士",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 3,
-      "projected_total": 8.4,
+      "projected_total": 7.9,
       "market_total": 10.0,
       "bet": "主隊讓分(+1.5)",
       "reason": "主隊落後2分 第6局，賽前主隊勝率57%"
@@ -538,10 +538,10 @@
       "home_cn": "道奇",
       "away_cn": "光芒",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 5.4,
+      "projected_total": 5.1,
       "market_total": 7.0,
       "bet": null,
       "reason": null
@@ -559,7 +559,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1781725630,
+  "live_updated_ts": 1781725932,
   "game_preds": {
     "reds|mets": {
       "home_win_prob": 0.3223,
@@ -618,5 +618,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-06-18 03:47 (台灣時間)"
+  "live_updated_at": "2026-06-18 03:52 (台灣時間)"
 }
