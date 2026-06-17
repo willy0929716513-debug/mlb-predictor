@@ -303,7 +303,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1781680806,
+  "live_updated_ts": 1781681108,
   "game_preds": {
     "phillies|marlins": {
       "home_win_prob": 0.4576,
@@ -366,5 +366,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-17 15:20 (台灣時間)"
+  "live_updated_at": "2026-06-17 15:25 (台灣時間)"
 }
