@@ -378,10 +378,10 @@
       "home_cn": "水手",
       "away_cn": "金鶯",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 6.8,
+      "projected_total": 6.4,
       "market_total": 7.5,
       "bet": null,
       "reason": null
