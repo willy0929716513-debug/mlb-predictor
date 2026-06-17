@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
 <meta name="theme-color" content="#020617">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>MLB AI 預測引擎</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -275,7 +278,10 @@ if('serviceWorker'in navigator){navigator.serviceWorker.getRegistrations().then(
       <span class="logo-icon">⚾</span>
       <span class="logo-text">MLB <span>AI</span> 預測引擎</span>
     </div>
-    <span class="pro-badge">⚡ PRO</span>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button onclick="forceRefresh()" title="強制重新整理" style="background:none;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:var(--t2);font-size:15px;cursor:pointer;padding:4px 8px;min-height:36px;line-height:1;-webkit-tap-highlight-color:transparent">↻</button>
+      <span class="pro-badge">⚡ PRO</span>
+    </div>
   </div>
   <div class="hdr-tabs" role="tablist">
     <button class="htab on" onclick="showPg(0,this)" role="tab">首頁</button>
@@ -1095,7 +1101,12 @@ function showPg(n,btn){
 }
 
 // ── MODAL ─────────────────────────────────────────────
-function openModal(){document.getElementById('modal-bg').classList.add('open')}
+function forceRefresh(){window.location.href=window.location.pathname+'?v='+Date.now()}
+function openModal(){
+  document.getElementById('modal-bg').classList.add('open');
+  var saved=localStorage.getItem('mlb_gh_token');
+  if(saved)document.getElementById('gh-token').value=saved;
+}
 function closeModal(){document.getElementById('modal-bg').classList.remove('open');document.getElementById('modal-msg').innerHTML=''}
 function triggerBot(){
   var tok=(document.getElementById('gh-token').value||'').trim();
@@ -1107,6 +1118,7 @@ function triggerBot(){
     body:JSON.stringify({ref:'main'})
   }).then(function(r){
     if(r.status===204||r.ok){
+      localStorage.setItem('mlb_gh_token',tok);
       document.getElementById('modal-msg').innerHTML='<span style="color:var(--g)">✅ 已成功觸發！工作流程執行中。</span>';
     } else {
       return r.json().then(function(d){throw new Error(d.message||r.status)});
