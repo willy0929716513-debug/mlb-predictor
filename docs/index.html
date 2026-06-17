@@ -1136,61 +1136,72 @@ function loadStandings(){
 }
 
 // ── MAIN LOAD ─────────────────────────────────────────
+function renderAll(data){
+  _data=data;
+  var picks=data.picks||[];
+  _allPicks=picks;
+  renderTopEdge(picks);
+  renderQuickStats(data.stats);
+  renderLive(data.live_games||[]);
+  renderPicksSection(picks,'home-picks-section');
+  var aiEl=document.getElementById('ai-picks-section');
+  if(picks.length){
+    var h='<div class="sec-hdr fi"><div class="sec-title"><span class="sec-dot"></span>AI 深度分析</div><span class="sec-count">'+picks.length+' 場</span></div>';
+    h+='<div class="filter-bar">'
+      +'<button class="ftab on" onclick="doFilter(\'all\',this)">全部 ('+picks.length+')</button>'
+      +'<button class="ftab" onclick="doFilter(\'ML\',this)">獨贏 ML</button>'
+      +'<button class="ftab" onclick="doFilter(\'RL\',this)">讓分 RL</button>'
+      +'<button class="ftab" onclick="doFilter(\'TOT\',this)">大小分 TOT</button>'
+    +'</div>';
+    h+='<div id="picks-list-ai-picks-section">';
+    picks.forEach(function(p,i){h+=makeGCard(p,i,i<2)});
+    h+='</div>';
+    aiEl.innerHTML=h;
+  } else {
+    aiEl.innerHTML='<div class="empty"><div class="empty-icon">⚾</div><p>今日暫無 AI 分析</p></div>';
+  }
+  buildTicker(picks,data.recent_history||[]);
+  setTimeout(function(){animateBars();initPitcherPhotos()},200);
+  if(_curPage===5)renderLivePage(data.live_games||[],data.live_updated_at);
+}
+
 (function init(){
   var pb=document.getElementById('pb');
   pb.style.width='30%';
+
+  // 1. Show cached data immediately (no blank page)
+  var cached=null;
+  try{cached=JSON.parse(localStorage.getItem('mlb_picks_cache'));}catch(e){}
+  if(cached){
+    pb.style.width='60%';
+    renderAll(cached);
+    document.getElementById('home-picks-section').insertAdjacentHTML('afterbegin',
+      '<div id="cache-notice" style="font-size:10px;color:var(--t2);text-align:center;padding:4px 0 8px">⏳ 更新中…</div>');
+  }
+
+  // 2. Fetch fresh data in background (with 12s timeout)
   var ctrl=typeof AbortController!=='undefined'?new AbortController():null;
   if(ctrl)setTimeout(function(){ctrl.abort()},12000);
   fetch('./picks_latest.json?t='+Date.now(),ctrl?{signal:ctrl.signal}:{}).then(function(r){
-    pb.style.width='70%';
+    pb.style.width='100%';
     if(!r.ok)throw new Error('HTTP '+r.status);
     return r.json();
   }).then(function(data){
-    pb.style.width='100%';
-    setTimeout(function(){pb.style.opacity='0'},400);
-    _data=data;
-    var picks=data.picks||[];
-    _allPicks=picks;
-
-    // render home page components
-    renderTopEdge(picks);
-    renderQuickStats(data.stats);
-    renderLive(data.live_games||[]);
-    renderPicksSection(picks,'home-picks-section');
-
-    // render AI page
-    var aiEl=document.getElementById('ai-picks-section');
-    if(picks.length){
-      var h='<div class="sec-hdr fi"><div class="sec-title"><span class="sec-dot"></span>AI 深度分析</div><span class="sec-count">'+picks.length+' 場</span></div>';
-      h+='<div class="filter-bar">'
-        +'<button class="ftab on" onclick="doFilter(\'all\',this)">全部 ('+picks.length+')</button>'
-        +'<button class="ftab" onclick="doFilter(\'ML\',this)">獨贏 ML</button>'
-        +'<button class="ftab" onclick="doFilter(\'RL\',this)">讓分 RL</button>'
-        +'<button class="ftab" onclick="doFilter(\'TOT\',this)">大小分 TOT</button>'
-      +'</div>';
-      h+='<div id="picks-list-ai-picks-section">';
-      picks.forEach(function(p,i){h+=makeGCard(p,i,i<2)});
-      h+='</div>';
-      aiEl.innerHTML=h;
-    } else {
-      aiEl.innerHTML='<div class="empty"><div class="empty-icon">⚾</div><p>今日暫無 AI 分析</p></div>';
-    }
-
-    // ticker
-    buildTicker(picks,data.recent_history||[]);
-
-    // bars + pitcher photos
-    setTimeout(function(){
-      animateBars();
-      initPitcherPhotos();
-    },200);
-
+    setTimeout(function(){pb.style.opacity='0'},300);
+    try{localStorage.setItem('mlb_picks_cache',JSON.stringify(data));}catch(e){}
+    var n=document.getElementById('cache-notice');
+    if(n)n.remove();
+    renderAll(data);
   }).catch(function(e){
     pb.style.opacity='0';
-    var errHtml='<div class="error-banner">⚠️ 無法載入數據：'+e.message+'<br><small style="color:var(--t2)">請確認 picks_latest.json 存在並重試。</small></div>';
-    document.getElementById('home-te').innerHTML=errHtml;
-    document.getElementById('home-picks-section').innerHTML='<div class="empty"><div class="empty-icon">📡</div><p>數據載入失敗，請稍後再試</p></div>';
-    buildTicker([],[]);
+    if(!cached){
+      document.getElementById('home-te').innerHTML='<div class="error-banner">⚠️ 無法載入數據：'+e.message+'<br><small style="color:var(--t2)">請重整頁面重試。</small></div>';
+      document.getElementById('home-picks-section').innerHTML='<div class="empty"><div class="empty-icon">📡</div><p>數據載入失敗，請稍後再試</p></div>';
+      buildTicker([],[]);
+    } else {
+      var n=document.getElementById('cache-notice');
+      if(n)n.textContent='⚠️ 使用上次快取資料';
+    }
   });
 })();
 </script>
