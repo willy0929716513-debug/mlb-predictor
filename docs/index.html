@@ -281,6 +281,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradi
     <button class="htab" onclick="showPg(2,this)" role="tab">數據中心</button>
     <button class="htab" onclick="showPg(3,this)" role="tab">近期勝績</button>
     <button class="htab" onclick="showPg(4,this)" role="tab">球隊排名</button>
+    <button class="htab" onclick="showPg(5,this)" role="tab">🔴 場中</button>
   </div>
 </header>
 
@@ -335,6 +336,15 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradi
   </div>
 </div>
 
+<!-- PAGE 5: LIVE GAMES -->
+<div id="pg5" class="pg">
+  <div class="content">
+    <div id="live-page-content">
+      <div class="spinner"></div>
+    </div>
+  </div>
+</div>
+
 <!-- TICKER -->
 <div id="ticker"><div class="ticker-inner" id="ticker-inner">Loading picks...</div></div>
 
@@ -381,7 +391,7 @@ function safeNum(v,d){return (v!=null&&!isNaN(v))?Number(v):d}
 // ── LOGO IMG ──────────────────────────────────────────
 function logoImg(cn,size){
   var url=logoUrl(cn);
-  if(url) return '<img src="'+url+'" width="'+size+'" height="'+size+'" alt="'+cn+'" style="object-fit:contain" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">' 
+  if(url) return '<img src="'+url+'" width="'+size+'" height="'+size+'" alt="'+cn+'" style="object-fit:contain" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'
     +'<div style="display:none;width:'+size+'px;height:'+size+'px;align-items:center;justify-content:center;font-size:'+(size*0.38)+'px;font-weight:800;color:var(--t2)">'+abbr(cn)+'</div>';
   return '<div style="width:'+size+'px;height:'+size+'px;display:flex;align-items:center;justify-content:center;font-size:'+(size*0.38)+'px;font-weight:800;color:var(--t2)">'+abbr(cn)+'</div>';
 }
@@ -546,7 +556,7 @@ function makeGCard(pick,idx,showCharts){
     return parts.join(' · ');
   }
 
-  var h='<div class="gc fi'+(isGold?' tier-gold':'')+">'";
+  var h='<div class="gc fi'+(isGold?' tier-gold':'')+">"; 
 
   // card header
   h+='<div class="gc-hdr">'
@@ -560,13 +570,13 @@ function makeGCard(pick,idx,showCharts){
   // teams row
   h+='<div class="gc-teams">'
     +'<div class="gc-team">'
-    +(awTid?('<img class="gc-tl" src="https://www.mlbstatic.com/team-logos/'+awTid+'.svg" alt="'+awCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):('<div class="gc-tl" style="display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:var(--t2)">'+awAb+'</div>'))
+    +(awTid?('<img class="gc-tl" src="https://www.mlbstatic.com/team-logos/'+awTid+'.svg" alt="'+awCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):"<div class=\"gc-tl\" style=\"display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:var(--t2)\">" +awAb+ "</div>")
     +'<span class="gc-ab">'+awAb+'</span>'
     +'<span class="gc-cn">'+awCn+'</span>'
     +'</div>'
     +'<span class="gc-vs">VS</span>'
     +'<div class="gc-team">'
-    +(hmTid?('<img class="gc-tl" src="https://www.mlbstatic.com/team-logos/'+hmTid+'.svg" alt="'+hmCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):('<div class="gc-tl" style="display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:var(--t2)">'+hmAb+'</div>'))
+    +(hmTid?('<img class="gc-tl" src="https://www.mlbstatic.com/team-logos/'+hmTid+'.svg" alt="'+hmCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):"<div class=\"gc-tl\" style=\"display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:var(--t2)\">" +hmAb+ "</div>")
     +'<span class="gc-ab">'+hmAb+'</span>'
     +'<span class="gc-cn">'+hmCn+'</span>'
     +'</div>'
@@ -832,7 +842,7 @@ function renderRecentHistory(history){
         +'<div class="rh-meta">'+(r.date||'')+(lbl?' · '+lbl:'')+(r.edge?' · Edge: '+safeNum(r.edge,0).toFixed(1)+'%':'')+'</div>'
       +'</div>'
       +'<div>'
-        +'<div class="rh-price" style="color:'+(isW?'var(--g)':'var(--r)')+'">'+( price?'@'+price.toFixed(2):'')+'</div>'
+        +'<div class="rh-price" style="color:'+(isW?'var(--g)':'var(--r)')+'">'+(price?'@'+price.toFixed(2):'')+'</div>'
         +'<div class="rh-edge">'+(typeof pnl==='number'?(isW?'+':'')+pnl.toFixed(1):'')+'</div>'
       +'</div>'
     +'</div>';
@@ -900,7 +910,7 @@ function renderStandings(std){
   var tabs=[{k:'al',l:'美聯'},{k:'nl',l:'國聯'},{k:'all',l:'全聯盟'}];
   var h='<div class="standings-tabs">';
   tabs.forEach(function(t,i){
-    h+='<button class="stab'+(i===0?' on':'')+'+" onclick="switchStd(\''+t.k+'\',this)">'+t.l+'</button>';
+    h+='<button class="stab'+(i===0?' on':'')+" onclick=\"switchStd('"+t.k+"',this)\">'+t.l+'</button>';
   });
   h+='</div>';
   h+='<div id="std-body"></div>';
@@ -1016,6 +1026,58 @@ function tryMlbCdn(name,el){
   }).catch(function(){});
 }
 
+// ── LIVE PAGE ──────────────────────────────────────────
+function renderLivePage(live,updatedAt){
+  var el=document.getElementById('live-page-content');
+  if(!el)return;
+  if(!live||!live.length){
+    el.innerHTML='<div class="empty"><div class="empty-icon">⚾</div><p>目前沒有進行中的比賽</p></div>';
+    return;
+  }
+  var h='<div class="sec-hdr fi"><div class="sec-title"><span class="sec-dot live-dot"></span>場中即時比分</div><span class="sec-count">'+live.length+' 場</span></div>';
+  if(updatedAt)h+='<div style="font-size:10px;color:var(--t2);margin-bottom:10px">更新：'+updatedAt+'</div>';
+  live.forEach(function(g){
+    var hasBet=g.bet&&g.bet!==null;
+    var awRuns=safeNum(g.away_runs,0);
+    var hmRuns=safeNum(g.home_runs,0);
+    var awColor=awRuns>hmRuns?'var(--g)':'var(--t1)';
+    var hmColor=hmRuns>awRuns?'var(--g)':'var(--t1)';
+    var awCn=g.away_cn||'客';
+    var hmCn=g.home_cn||'主';
+    var awTid=tid(awCn);
+    var hmTid=tid(hmCn);
+    var innStr=(g.top_inning?'▲':'▼')+' '+(g.inning||'?')+' 局';
+    h+='<div class="live-card fi'+(hasBet?' has-bet':'')+'">'
+      +'<div class="live-score">'
+        +'<div class="live-team">'
+          +(awTid?('<img class="live-logo" src="https://www.mlbstatic.com/team-logos/'+awTid+'.svg" alt="'+awCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):'' )
+          +'<span class="live-tn">'+awCn+'</span>'
+          +'<span class="live-runs" style="color:'+awColor+'">'+awRuns+'</span>'
+          +'<span style="font-size:9px;color:var(--t2)">客隊</span>'
+        +'</div>'
+        +'<div class="live-mid">'
+          +'<span class="live-dash">–</span>'
+          +'<span class="live-inn">'+innStr+'</span>'
+        +'</div>'
+        +'<div class="live-team">'
+          +(hmTid?('<img class="live-logo" src="https://www.mlbstatic.com/team-logos/'+hmTid+'.svg" alt="'+hmCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):'' )
+          +'<span class="live-tn">'+hmCn+'</span>'
+          +'<span class="live-runs" style="color:'+hmColor+'">'+hmRuns+'</span>'
+          +'<span style="font-size:9px;color:var(--t2)">主隊</span>'
+        +'</div>'
+      +'</div>'
+      +'<div class="live-totals">'
+        +(g.projected_total!=null?('<span class="live-chip">模型預測總分 <b style="color:var(--c)">'+safeNum(g.projected_total,0).toFixed(1)+'</b></span>'):'')
+        +(g.market_total!=null?('<span class="live-chip">市場大小 <b style="color:var(--t1)">'+safeNum(g.market_total,0).toFixed(1)+'</b></span>'):'')
+        +(hasBet?('<span class="live-chip bet">💡 '+g.bet+'</span>'):'')
+      +'</div>'
+      +(g.reason?('<div class="live-reason">'+g.reason+'</div>'):'')
+    +'</div>';
+  });
+  el.innerHTML=h;
+  initScrollReveal();
+}
+
 // ── PAGE SWITCH ────────────────────────────────────────
 function showPg(n,btn){
   document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on')});
@@ -1027,6 +1089,7 @@ function showPg(n,btn){
   if(n===3&&_data&&_data.recent_history){renderRecentHistory(_data.recent_history)}
   if(n===2&&_data){renderDataCenter(_data)}
   if(n===4&&!window._standingsLoaded){loadStandings()}
+  if(n===5&&_data){renderLivePage(_data.live_games||[],_data.live_updated_at)}
   setTimeout(function(){initScrollReveal();animateBars()},100);
 }
 
