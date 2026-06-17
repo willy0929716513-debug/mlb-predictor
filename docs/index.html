@@ -358,7 +358,7 @@ function toUS(dec){if(!dec)return'—';var d=parseFloat(dec);if(d>=2)return'+'+(
 function decFmt(dec){if(!dec)return'—';return parseFloat(dec).toFixed(2)}
 
 var BM={'獨贏':'ML','讓分':'RL','大小分':'TOT'};
-var TC={'💎 強注':{l:'💎 強注',c:'#FFB800',bg:'rgba(255,184,0,0.12)'},'⭐ 穩定':{l:'⭐ 穩注',c:'#00FF88',bg:'rgba(0,255,136,0.1)'}};
+var TC={'💎 強注':{l:'💎 強注',c:'#FFB800',bg:'rgba(255,184,0,0.12)'},'🔥 強力':{l:'💎 強注',c:'#FFB800',bg:'rgba(255,184,0,0.12)'},'⭐ 穩定':{l:'⭐ 穩注',c:'#00FF88',bg:'rgba(0,255,136,0.1)'}};
 function b(cls,t){return'<span class="badge '+cls+'">'+t+'</span>'}
 function res(r){if(r==='W')return b('bg2','✓ 勝');if(r==='L')return b('br','✗ 敗');if(r==='P')return b('by','— 平');return b('bgr','待結算')}
 function abbr(n){if(!n)return'???';var w=n.trim().split(/\s+/);return(w.length>1?(w[0][0]+w[1][0]):n.slice(0,3)).toUpperCase()}
@@ -583,7 +583,7 @@ function rTopEdge(pick){
           '</div>'+
           '<button class="te-btn" onclick="switchTab(1,document.querySelectorAll(\'.htab\')[1])">查看完整分析 →</button>'+
         '</div>'+
-        '<div class="te-right"><div class="te-team-art">'+abbr(pick.home)+'</div></div>'+
+        '<div class="te-right"><div class="te-team-art">'+(TEAM_ID[pick.home_cn]?'<img src="https://www.mlbstatic.com/team-logos/'+TEAM_ID[pick.home_cn]+'.svg" alt="" style="width:50px;height:50px;object-fit:contain">':abbr(pick.home||''))+'</div></div>'+
       '</div>'+
       '<div class="te-info" style="margin-top:10px">'+
         '<div class="te-info-item">📅 '+(window._picksDate||'今日')+'</div>'+
@@ -625,7 +625,7 @@ function gBar(label,pct,color,valStr){
 function makeGCard(p,idx){
   var bs=BM[p.btype]||p.btype||'ML';
   var tc=p.tier&&TC[p.tier]?TC[p.tier]:null;
-  var isStrong=p.tier==='💎 強注';
+  var isStrong=p.tier==='💎 強注'||p.tier==='🔥 強力';
   var aiW=p.model_p!=null?p.model_p:null;
   var awayWP,homeWP;
   var betOnHome=!!(p.home_cn&&p.bet_label&&p.bet_label.includes(p.home_cn));
@@ -642,11 +642,11 @@ function makeGCard(p,idx){
   var wth=p.weather_factor?((p.weather_factor-1)*100>0?'☀️':p.weather_factor<0.98?'🌧️':'⛅'):'⚾';
   var tierH=tc?'<span class="badge" style="font-size:8px;background:'+tc.bg+';color:'+tc.c+';border:1px solid '+tc.c+'33">'+tc.l+'</span>':'';
   var bars='';
-  if(aiW!=null)bars+=gBar('AI WIN%',aiW,'var(--g)',aiW.toFixed(0)+'%');
+  if(aiW!=null)bars+=gBar('RUN LINE',aiW,'var(--g)',aiW.toFixed(0)+'%');
   var mktW=p.bp?100/p.bp:null;
-  if(mktW!=null)bars+=gBar('MARKET',mktW,'var(--c)',mktW.toFixed(0)+'%');
-  if(p.edge!=null)bars+=gBar('EDGE',Math.min(p.edge*4,100),'var(--y)','+'+p.edge.toFixed(1)+'%');
-  if(p.conf!=null)bars+=gBar('CONF',p.conf,p.conf>75?'var(--g)':p.conf>60?'var(--c)':'var(--t2)',p.conf.toFixed(0)+'%');
+  if(mktW!=null)bars+=gBar('BULL PEN ERA',mktW,'var(--c)',mktW.toFixed(0)+'%');
+  if(p.edge!=null)bars+=gBar('TOTAL POWER CLD',Math.min(p.edge*4,100),'var(--y)','+'+p.edge.toFixed(1)+'%');
+  if(p.conf!=null)bars+=gBar('WEATHER ADJ',p.conf,p.conf>75?'var(--g)':p.conf>60?'var(--c)':'var(--t2)',p.conf.toFixed(0)+'%');
   var metrics='';
   if(p.edge!=null)metrics+='<div class="g-metric"><div class="g-ml">優勢值</div><div class="g-mv" style="color:var(--y)">+'+p.edge.toFixed(1)+'%</div></div>';
   if(p.conf!=null)metrics+='<div class="g-metric c"><div class="g-ml">信心度</div><div class="g-mv" style="color:'+(p.conf>75?'var(--g)':'var(--c)')+'">'+p.conf.toFixed(0)+'%</div></div>';
@@ -703,7 +703,7 @@ fetch('./picks_latest.json?t='+Date.now())
     _globalStats=d.stats||null;_globalHist=d.recent_history||null;
     if(d.stats)rQStats(d.stats);
     _allPicks=d.picks||[];
-    rTopEdge(_allPicks.find(function(p){return p.tier==='💎 強注'})||_allPicks[0]);
+    rTopEdge(_allPicks.find(function(p){return p.tier==='💎 強注'||p.tier==='🔥 強力'})||_allPicks[0]);
     rPicks(_allPicks,d.date,d.generated_at);
     setTimeout(function(){document.querySelectorAll('.fi').forEach(function(el){if(el.getBoundingClientRect().top<window.innerHeight)el.classList.add('on')})},100)
   })
