@@ -320,8 +320,8 @@
       "inning": 6,
       "top_inning": true,
       "home_runs": 4,
-      "away_runs": 2,
-      "projected_total": 10.9,
+      "away_runs": 3,
+      "projected_total": 11.9,
       "market_total": 11.0,
       "bet": null,
       "reason": null
@@ -330,13 +330,13 @@
       "home_cn": "水手",
       "away_cn": "金鶯",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 4.5,
+      "projected_total": 4.1,
       "market_total": 7.5,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅2分（此時預期5.0分），低分走勢盤口7.5"
+      "reason": "第7局僅2分（此時預期5.4分），低分走勢盤口7.5"
     },
     {
       "home_cn": "道奇",
@@ -351,7 +351,7 @@
       "reason": "第6局僅0分（此時預期4.4分），低分走勢盤口8.0"
     }
   ],
-  "live_updated_ts": 1781666338,
+  "live_updated_ts": 1781666640,
   "game_preds": {
     "phillies|marlins": {
       "home_win_prob": 0.4576,
@@ -414,5 +414,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-17 11:18 (台灣時間)"
+  "live_updated_at": "2026-06-17 11:24 (台灣時間)"
 }
