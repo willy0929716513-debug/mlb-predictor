@@ -320,8 +320,8 @@
       "inning": 9,
       "top_inning": true,
       "home_runs": 2,
-      "away_runs": 10,
-      "projected_total": 12.9,
+      "away_runs": 12,
+      "projected_total": 14.9,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -331,21 +331,21 @@
       "away_cn": "老虎",
       "inning": 8,
       "top_inning": false,
-      "home_runs": 1,
+      "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 4.4,
+      "projected_total": 6.4,
       "market_total": 8.5,
-      "bet": "大小分 UNDER",
-      "reason": "第8局僅3分（此時預期7.1分），低分走勢盤口8.5"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "響尾蛇",
       "away_cn": "天使",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
-      "away_runs": 2,
-      "projected_total": 7.7,
+      "away_runs": 3,
+      "projected_total": 8.2,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -353,11 +353,11 @@
     {
       "home_cn": "運動家",
       "away_cn": "海盜",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 4,
       "away_runs": 0,
-      "projected_total": 11.9,
+      "projected_total": 11.3,
       "market_total": 11.0,
       "bet": null,
       "reason": null
@@ -366,10 +366,10 @@
       "home_cn": "水手",
       "away_cn": "金鶯",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 7.0,
+      "projected_total": 6.6,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -387,7 +387,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1781663625,
+  "live_updated_ts": 1781663926,
   "game_preds": {
     "phillies|marlins": {
       "home_win_prob": 0.4576,
@@ -450,5 +450,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-17 10:33 (台灣時間)"
+  "live_updated_at": "2026-06-17 10:38 (台灣時間)"
 }
