@@ -122,10 +122,10 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradi
 /* ── GAME CARDS ── */
 .gc{border-radius:16px;margin-bottom:14px;overflow:hidden;position:relative;background:linear-gradient(160deg,rgba(8,15,35,.98),rgba(5,10,25,.95));border:1px solid rgba(255,255,255,.08)}
 .gc.tier-gold{border-color:rgba(255,184,0,.3);animation:gp 3s ease-in-out infinite}
-.gc-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.06);background:rgba(0,0,0,.2)}
-.gc-time{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--t2);font-weight:600}
-.gc-hdr-r{display:flex;align-items:center;gap:6px}
-.gc-num{font-size:10px;color:var(--t2);background:rgba(255,255,255,.06);padding:2px 7px;border-radius:8px}
+.gc-hdr{display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;padding:8px 14px;border-bottom:1px solid rgba(255,255,255,.06);background:rgba(0,0,0,.2);gap:8px}
+.gc-time{font-size:11px;color:var(--t2);font-weight:600;flex-shrink:0;white-space:nowrap}
+.gc-hdr-l{display:flex;align-items:center;gap:6px;flex:1;min-width:0}
+.gc-num{font-size:10px;color:var(--t2);background:rgba(255,255,255,.06);padding:2px 7px;border-radius:8px;flex-shrink:0}
 
 /* teams row */
 .gc-teams{display:flex;align-items:center;justify-content:space-between;padding:14px 14px 10px;gap:8px}
@@ -400,7 +400,7 @@ function safeNum(v,d){return (v!=null&&!isNaN(v))?Number(v):d}
 // ── LOGO IMG ──────────────────────────────────────────
 function logoImg(cn,size){
   var url=logoUrl(cn);
-  if(url) return '<img src="'+url+'" width="'+size+'" height="'+size+'" alt="'+cn+'" style="object-fit:contain" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'  
+  if(url) return '<img src="'+url+'" width="'+size+'" height="'+size+'" alt="'+cn+'" style="object-fit:contain" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'
     +'<div style="display:none;width:'+size+'px;height:'+size+'px;align-items:center;justify-content:center;font-size:'+(size*0.38)+'px;font-weight:800;color:var(--t2)">'+abbr(cn)+'</div>';
   return '<div style="width:'+size+'px;height:'+size+'px;display:flex;align-items:center;justify-content:center;font-size:'+(size*0.38)+'px;font-weight:800;color:var(--t2)">'+abbr(cn)+'</div>';
 }
@@ -564,15 +564,15 @@ function makeGCard(pick,idx,showCharts){
     return parts.join(' · ');
   }
 
-  var h='<div class="gc fi'+(isGold?' tier-gold':'')+">"
+  var h='<div class="gc fi'+(isGold?' tier-gold':'">')
 
   // card header
   h+='<div class="gc-hdr">'
-    +'<div class="gc-time">🕐 '+(pick.game_time||'--:--')+'</div>'
-    +'<div class="gc-hdr-r">'
+    +'<div class="gc-hdr-l">'
     +tierBadge(tierKey)
     +'<span class="gc-num">#'+(idx+1)+'</span>'
     +'</div>'
+    +'<span class="gc-time">'+(pick.game_time||'--:--')+'</span>'
   +'</div>';
 
   // teams row
@@ -850,7 +850,7 @@ function renderRecentHistory(history){
         +'<div class="rh-meta">'+(r.date||'')+(lbl?' · '+lbl:'')+(r.edge?' · Edge: '+safeNum(r.edge,0).toFixed(1)+'%':'')+'</div>'
       +'</div>'
       +'<div>'
-        +'<div class="rh-price" style="color:'+(isW?'var(--g)':'var(--r)')+'">'+( price?'@'+price.toFixed(2):'')+'</div>'
+        +'<div class="rh-price" style="color:'+(isW?'var(--g)':'var(--r)')+'">'+(price?'@'+price.toFixed(2):'')+'</div>'
         +'<div class="rh-edge">'+(typeof pnl==='number'?(isW?'+':'')+pnl.toFixed(1):'')+'</div>'
       +'</div>'
     +'</div>';
@@ -1208,4 +1208,3 @@ function renderAll(data){
 })();
 </script>
 </body>
-</html>
