@@ -294,10 +294,10 @@
       "home_cn": "洋基",
       "away_cn": "白襪",
       "inning": 8,
-      "top_inning": true,
-      "home_runs": 11,
+      "top_inning": false,
+      "home_runs": 12,
       "away_runs": 2,
-      "projected_total": 14.7,
+      "projected_total": 15.2,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -306,10 +306,10 @@
       "home_cn": "紅人",
       "away_cn": "大都會",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 5,
       "away_runs": 3,
-      "projected_total": 10.2,
+      "projected_total": 9.7,
       "market_total": 10.0,
       "bet": "客隊讓分(+1.5)",
       "reason": "客隊落後2分 第8局，賽前客隊勝率62%"
@@ -390,10 +390,10 @@
       "home_cn": "響尾蛇",
       "away_cn": "天使",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.5,
+      "projected_total": 8.0,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -435,7 +435,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1781660630,
+  "live_updated_ts": 1781660931,
   "game_preds": {
     "phillies|marlins": {
       "home_win_prob": 0.4576,
@@ -498,5 +498,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-17 09:43 (台灣時間)"
+  "live_updated_at": "2026-06-17 09:48 (台灣時間)"
 }
