@@ -1,0 +1,106 @@
+{
+  "updated": "2026-06-17",
+  "season": 2026,
+  "al": [
+    {
+      "division": "American League East",
+      "division_cn": "美聯東區",
+      "teams": [
+        {"rank":1,"team_id":147,"team":"New York Yankees","team_cn":"洋基","abbr":"NYY","w":43,"l":27,"pct":0.614,"gb":"-","rs":268,"ra":215,"diff":53,"l10":"7-3","strk":"W2","home":"23-12","away":"20-15"},
+        {"rank":2,"team_id":111,"team":"Boston Red Sox","team_cn":"紅襪","abbr":"BOS","w":39,"l":31,"pct":0.557,"gb":"4.0","rs":245,"ra":231,"diff":14,"l10":"6-4","strk":"L1","home":"21-14","away":"18-17"},
+        {"rank":3,"team_id":141,"team":"Toronto Blue Jays","team_cn":"藍鳥","abbr":"TOR","w":37,"l":33,"pct":0.529,"gb":"6.0","rs":238,"ra":230,"diff":8,"l10":"5-5","strk":"W1","home":"20-15","away":"17-18"},
+        {"rank":4,"team_id":110,"team":"Baltimore Orioles","team_cn":"金鶯","abbr":"BAL","w":34,"l":36,"pct":0.486,"gb":"9.0","rs":221,"ra":238,"diff":-17,"l10":"4-6","strk":"L2","home":"18-17","away":"16-19"},
+        {"rank":5,"team_id":139,"team":"Tampa Bay Rays","team_cn":"光芒","abbr":"TB","w":29,"l":41,"pct":0.414,"gb":"14.0","rs":198,"ra":255,"diff":-57,"l10":"3-7","strk":"L4","home":"16-20","away":"13-21"}
+      ]
+    },
+    {
+      "division": "American League Central",
+      "division_cn": "美聯中區",
+      "teams": [
+        {"rank":1,"team_id":142,"team":"Minnesota Twins","team_cn":"雙城","abbr":"MIN","w":41,"l":29,"pct":0.586,"gb":"-","rs":251,"ra":218,"diff":33,"l10":"6-4","strk":"W3","home":"22-13","away":"19-16"},
+        {"rank":2,"team_id":116,"team":"Detroit Tigers","team_cn":"老虎","abbr":"DET","w":38,"l":32,"pct":0.543,"gb":"3.0","rs":233,"ra":225,"diff":8,"l10":"5-5","strk":"W1","home":"21-14","away":"17-18"},
+        {"rank":3,"team_id":118,"team":"Kansas City Royals","team_cn":"皇家","abbr":"KC","w":36,"l":34,"pct":0.514,"gb":"5.0","rs":228,"ra":233,"diff":-5,"l10":"5-5","strk":"L1","home":"19-16","away":"17-18"},
+        {"rank":4,"team_id":114,"team":"Cleveland Guardians","team_cn":"守護者","abbr":"CLE","w":33,"l":37,"pct":0.471,"gb":"8.0","rs":212,"ra":240,"diff":-28,"l10":"4-6","strk":"L3","home":"18-17","away":"15-20"},
+        {"rank":5,"team_id":145,"team":"Chicago White Sox","team_cn":"白襪","abbr":"CWS","w":22,"l":48,"pct":0.314,"gb":"19.0","rs":176,"ra":291,"diff":-115,"l10":"2-8","strk":"L6","home":"12-24","away":"10-24"}
+      ]
+    },
+    {
+      "division": "American League West",
+      "division_cn": "美聯西區",
+      "teams": [
+        {"rank":1,"team_id":117,"team":"Houston Astros","team_cn":"太空人","abbr":"HOU","w":44,"l":26,"pct":0.629,"gb":"-","rs":272,"ra":208,"diff":64,"l10":"8-2","strk":"W5","home":"24-11","away":"20-15"},
+        {"rank":2,"team_id":136,"team":"Seattle Mariners","team_cn":"水手","abbr":"SEA","w":38,"l":32,"pct":0.543,"gb":"6.0","rs":235,"ra":222,"diff":13,"l10":"5-5","strk":"W2","home":"20-15","away":"18-17"},
+        {"rank":3,"team_id":140,"team":"Texas Rangers","team_cn":"遊騎兵","abbr":"TEX","w":35,"l":35,"pct":0.500,"gb":"9.0","rs":225,"ra":228,"diff":-3,"l10":"5-5","strk":"L1","home":"19-16","away":"16-19"},
+        {"rank":4,"team_id":108,"team":"Los Angeles Angels","team_cn":"天使","abbr":"LAA","w":31,"l":39,"pct":0.443,"gb":"13.0","rs":208,"ra":248,"diff":-40,"l10":"4-6","strk":"W1","home":"17-18","away":"14-21"},
+        {"rank":5,"team_id":133,"team":"Oakland Athletics","team_cn":"運動家","abbr":"OAK","w":27,"l":43,"pct":0.386,"gb":"17.0","rs":193,"ra":265,"diff":-72,"l10":"3-7","strk":"L3","home":"15-20","away":"12-23"}
+      ]
+    }
+  ],
+  "nl": [
+    {
+      "division": "National League East",
+      "division_cn": "國聯東區",
+      "teams": [
+        {"rank":1,"team_id":143,"team":"Philadelphia Phillies","team_cn":"費城人","abbr":"PHI","w":45,"l":25,"pct":0.643,"gb":"-","rs":280,"ra":210,"diff":70,"l10":"8-2","strk":"W4","home":"24-11","away":"21-14"},
+        {"rank":2,"team_id":144,"team":"Atlanta Braves","team_cn":"勇士","abbr":"ATL","w":40,"l":30,"pct":0.571,"gb":"5.0","rs":255,"ra":228,"diff":27,"l10":"6-4","strk":"W1","home":"22-13","away":"18-17"},
+        {"rank":3,"team_id":121,"team":"New York Mets","team_cn":"大都會","abbr":"NYM","w":38,"l":32,"pct":0.543,"gb":"7.0","rs":242,"ra":231,"diff":11,"l10":"5-5","strk":"L2","home":"20-15","away":"18-17"},
+        {"rank":4,"team_id":146,"team":"Miami Marlins","team_cn":"馬林魚","abbr":"MIA","w":29,"l":41,"pct":0.414,"gb":"16.0","rs":196,"ra":255,"diff":-59,"l10":"3-7","strk":"L4","home":"16-20","away":"13-21"},
+        {"rank":5,"team_id":120,"team":"Washington Nationals","team_cn":"國民","abbr":"WSH","w":26,"l":44,"pct":0.371,"gb":"19.0","rs":186,"ra":270,"diff":-84,"l10":"2-8","strk":"L2","home":"14-22","away":"12-22"}
+      ]
+    },
+    {
+      "division": "National League Central",
+      "division_cn": "國聯中區",
+      "teams": [
+        {"rank":1,"team_id":158,"team":"Milwaukee Brewers","team_cn":"釀酒人","abbr":"MIL","w":42,"l":28,"pct":0.600,"gb":"-","rs":258,"ra":215,"diff":43,"l10":"7-3","strk":"W3","home":"23-12","away":"19-16"},
+        {"rank":2,"team_id":112,"team":"Chicago Cubs","team_cn":"小熊","abbr":"CHC","w":39,"l":31,"pct":0.557,"gb":"3.0","rs":247,"ra":229,"diff":18,"l10":"6-4","strk":"L1","home":"21-14","away":"18-17"},
+        {"rank":3,"team_id":138,"team":"St. Louis Cardinals","team_cn":"紅雀","abbr":"STL","w":35,"l":35,"pct":0.500,"gb":"7.0","rs":228,"ra":235,"diff":-7,"l10":"5-5","strk":"W2","home":"19-16","away":"16-19"},
+        {"rank":4,"team_id":113,"team":"Cincinnati Reds","team_cn":"紅人","abbr":"CIN","w":33,"l":37,"pct":0.471,"gb":"9.0","rs":218,"ra":242,"diff":-24,"l10":"4-6","strk":"W1","home":"18-17","away":"15-20"},
+        {"rank":5,"team_id":134,"team":"Pittsburgh Pirates","team_cn":"海盜","abbr":"PIT","w":30,"l":40,"pct":0.429,"gb":"12.0","rs":205,"ra":252,"diff":-47,"l10":"4-6","strk":"L1","home":"16-20","away":"14-20"}
+      ]
+    },
+    {
+      "division": "National League West",
+      "division_cn": "國聯西區",
+      "teams": [
+        {"rank":1,"team_id":119,"team":"Los Angeles Dodgers","team_cn":"道奇","abbr":"LAD","w":48,"l":22,"pct":0.686,"gb":"-","rs":295,"ra":196,"diff":99,"l10":"9-1","strk":"W6","home":"26-9","away":"22-13"},
+        {"rank":2,"team_id":137,"team":"San Francisco Giants","team_cn":"巨人","abbr":"SF","w":37,"l":33,"pct":0.529,"gb":"11.0","rs":234,"ra":227,"diff":7,"l10":"5-5","strk":"L1","home":"20-15","away":"17-18"},
+        {"rank":3,"team_id":135,"team":"San Diego Padres","team_cn":"教士","abbr":"SD","w":36,"l":34,"pct":0.514,"gb":"12.0","rs":231,"ra":228,"diff":3,"l10":"6-4","strk":"W2","home":"20-15","away":"16-19"},
+        {"rank":4,"team_id":109,"team":"Arizona Diamondbacks","team_cn":"響尾蛇","abbr":"ARI","w":34,"l":36,"pct":0.486,"gb":"14.0","rs":222,"ra":237,"diff":-15,"l10":"5-5","strk":"L2","home":"18-17","away":"16-19"},
+        {"rank":5,"team_id":115,"team":"Colorado Rockies","team_cn":"落磯","abbr":"COL","w":23,"l":47,"pct":0.329,"gb":"25.0","rs":188,"ra":278,"diff":-90,"l10":"2-8","strk":"L5","home":"13-22","away":"10-25"}
+      ]
+    }
+  ],
+  "all": [
+    {"rank":1,"team_id":119,"team":"Los Angeles Dodgers","team_cn":"道奇","abbr":"LAD","w":48,"l":22,"pct":0.686,"gb":"-","rs":295,"ra":196,"diff":99,"l10":"9-1","strk":"W6","home":"26-9","away":"22-13"},
+    {"rank":2,"team_id":143,"team":"Philadelphia Phillies","team_cn":"費城人","abbr":"PHI","w":45,"l":25,"pct":0.643,"gb":"-","rs":280,"ra":210,"diff":70,"l10":"8-2","strk":"W4","home":"24-11","away":"21-14"},
+    {"rank":3,"team_id":147,"team":"New York Yankees","team_cn":"洋基","abbr":"NYY","w":43,"l":27,"pct":0.614,"gb":"-","rs":268,"ra":215,"diff":53,"l10":"7-3","strk":"W2","home":"23-12","away":"20-15"},
+    {"rank":4,"team_id":117,"team":"Houston Astros","team_cn":"太空人","abbr":"HOU","w":44,"l":26,"pct":0.629,"gb":"-","rs":272,"ra":208,"diff":64,"l10":"8-2","strk":"W5","home":"24-11","away":"20-15"},
+    {"rank":5,"team_id":158,"team":"Milwaukee Brewers","team_cn":"釀酒人","abbr":"MIL","w":42,"l":28,"pct":0.600,"gb":"-","rs":258,"ra":215,"diff":43,"l10":"7-3","strk":"W3","home":"23-12","away":"19-16"},
+    {"rank":6,"team_id":141,"team":"Minnesota Twins","team_cn":"雙城","abbr":"MIN","w":41,"l":29,"pct":0.586,"gb":"-","rs":251,"ra":218,"diff":33,"l10":"6-4","strk":"W3","home":"22-13","away":"19-16"},
+    {"rank":7,"team_id":144,"team":"Atlanta Braves","team_cn":"勇士","abbr":"ATL","w":40,"l":30,"pct":0.571,"gb":"-","rs":255,"ra":228,"diff":27,"l10":"6-4","strk":"W1","home":"22-13","away":"18-17"},
+    {"rank":8,"team_id":139,"team":"Boston Red Sox","team_cn":"紅襪","abbr":"BOS","w":39,"l":31,"pct":0.557,"gb":"-","rs":245,"ra":231,"diff":14,"l10":"6-4","strk":"L1","home":"21-14","away":"18-17"},
+    {"rank":9,"team_id":112,"team":"Chicago Cubs","team_cn":"小熊","abbr":"CHC","w":39,"l":31,"pct":0.557,"gb":"-","rs":247,"ra":229,"diff":18,"l10":"6-4","strk":"L1","home":"21-14","away":"18-17"},
+    {"rank":10,"team_id":116,"team":"Detroit Tigers","team_cn":"老虎","abbr":"DET","w":38,"l":32,"pct":0.543,"gb":"-","rs":233,"ra":225,"diff":8,"l10":"5-5","strk":"W1","home":"21-14","away":"17-18"},
+    {"rank":11,"team_id":136,"team":"Seattle Mariners","team_cn":"水手","abbr":"SEA","w":38,"l":32,"pct":0.543,"gb":"-","rs":235,"ra":222,"diff":13,"l10":"5-5","strk":"W2","home":"20-15","away":"18-17"},
+    {"rank":12,"team_id":121,"team":"New York Mets","team_cn":"大都會","abbr":"NYM","w":38,"l":32,"pct":0.543,"gb":"-","rs":242,"ra":231,"diff":11,"l10":"5-5","strk":"L2","home":"20-15","away":"18-17"},
+    {"rank":13,"team_id":141,"team":"Toronto Blue Jays","team_cn":"藍鳥","abbr":"TOR","w":37,"l":33,"pct":0.529,"gb":"-","rs":238,"ra":230,"diff":8,"l10":"5-5","strk":"W1","home":"20-15","away":"17-18"},
+    {"rank":14,"team_id":137,"team":"San Francisco Giants","team_cn":"巨人","abbr":"SF","w":37,"l":33,"pct":0.529,"gb":"-","rs":234,"ra":227,"diff":7,"l10":"5-5","strk":"L1","home":"20-15","away":"17-18"},
+    {"rank":15,"team_id":118,"team":"Kansas City Royals","team_cn":"皇家","abbr":"KC","w":36,"l":34,"pct":0.514,"gb":"-","rs":228,"ra":233,"diff":-5,"l10":"5-5","strk":"L1","home":"19-16","away":"17-18"},
+    {"rank":16,"team_id":135,"team":"San Diego Padres","team_cn":"教士","abbr":"SD","w":36,"l":34,"pct":0.514,"gb":"-","rs":231,"ra":228,"diff":3,"l10":"6-4","strk":"W2","home":"20-15","away":"16-19"},
+    {"rank":17,"team_id":138,"team":"St. Louis Cardinals","team_cn":"紅雀","abbr":"STL","w":35,"l":35,"pct":0.500,"gb":"-","rs":228,"ra":235,"diff":-7,"l10":"5-5","strk":"W2","home":"19-16","away":"16-19"},
+    {"rank":18,"team_id":140,"team":"Texas Rangers","team_cn":"遊騎兵","abbr":"TEX","w":35,"l":35,"pct":0.500,"gb":"-","rs":225,"ra":228,"diff":-3,"l10":"5-5","strk":"L1","home":"19-16","away":"16-19"},
+    {"rank":19,"team_id":109,"team":"Arizona Diamondbacks","team_cn":"響尾蛇","abbr":"ARI","w":34,"l":36,"pct":0.486,"gb":"-","rs":222,"ra":237,"diff":-15,"l10":"5-5","strk":"L2","home":"18-17","away":"16-19"},
+    {"rank":20,"team_id":110,"team":"Baltimore Orioles","team_cn":"金鶯","abbr":"BAL","w":34,"l":36,"pct":0.486,"gb":"-","rs":221,"ra":238,"diff":-17,"l10":"4-6","strk":"L2","home":"18-17","away":"16-19"},
+    {"rank":21,"team_id":114,"team":"Cleveland Guardians","team_cn":"守護者","abbr":"CLE","w":33,"l":37,"pct":0.471,"gb":"-","rs":212,"ra":240,"diff":-28,"l10":"4-6","strk":"L3","home":"18-17","away":"15-20"},
+    {"rank":22,"team_id":113,"team":"Cincinnati Reds","team_cn":"紅人","abbr":"CIN","w":33,"l":37,"pct":0.471,"gb":"-","rs":218,"ra":242,"diff":-24,"l10":"4-6","strk":"W1","home":"18-17","away":"15-20"},
+    {"rank":23,"team_id":134,"team":"Pittsburgh Pirates","team_cn":"海盜","abbr":"PIT","w":30,"l":40,"pct":0.429,"gb":"-","rs":205,"ra":252,"diff":-47,"l10":"4-6","strk":"L1","home":"16-20","away":"14-20"},
+    {"rank":24,"team_id":108,"team":"Los Angeles Angels","team_cn":"天使","abbr":"LAA","w":31,"l":39,"pct":0.443,"gb":"-","rs":208,"ra":248,"diff":-40,"l10":"4-6","strk":"W1","home":"17-18","away":"14-21"},
+    {"rank":25,"team_id":146,"team":"Miami Marlins","team_cn":"馬林魚","abbr":"MIA","w":29,"l":41,"pct":0.414,"gb":"-","rs":196,"ra":255,"diff":-59,"l10":"3-7","strk":"L4","home":"16-20","away":"13-21"},
+    {"rank":26,"team_id":139,"team":"Tampa Bay Rays","team_cn":"光芒","abbr":"TB","w":29,"l":41,"pct":0.414,"gb":"-","rs":198,"ra":255,"diff":-57,"l10":"3-7","strk":"L4","home":"16-20","away":"13-21"},
+    {"rank":27,"team_id":133,"team":"Oakland Athletics","team_cn":"運動家","abbr":"OAK","w":27,"l":43,"pct":0.386,"gb":"-","rs":193,"ra":265,"diff":-72,"l10":"3-7","strk":"L3","home":"15-20","away":"12-23"},
+    {"rank":28,"team_id":120,"team":"Washington Nationals","team_cn":"國民","abbr":"WSH","w":26,"l":44,"pct":0.371,"gb":"-","rs":186,"ra":270,"diff":-84,"l10":"2-8","strk":"L2","home":"14-22","away":"12-22"},
+    {"rank":29,"team_id":115,"team":"Colorado Rockies","team_cn":"落磯","abbr":"COL","w":23,"l":47,"pct":0.329,"gb":"-","rs":188,"ra":278,"diff":-90,"l10":"2-8","strk":"L5","home":"13-22","away":"10-25"},
+    {"rank":30,"team_id":145,"team":"Chicago White Sox","team_cn":"白襪","abbr":"CWS","w":22,"l":48,"pct":0.314,"gb":"-","rs":176,"ra":291,"diff":-115,"l10":"2-8","strk":"L6","home":"12-24","away":"10-24"}
+  ]
+}
