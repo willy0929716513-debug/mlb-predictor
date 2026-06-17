@@ -353,11 +353,11 @@
     {
       "home_cn": "道奇",
       "away_cn": "光芒",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 5.8,
+      "projected_total": 5.3,
       "market_total": 8.0,
       "bet": null,
       "reason": null
