@@ -556,7 +556,7 @@ function makeGCard(pick,idx,showCharts){
     return parts.join(' · ');
   }
 
-  var h='<div class="gc fi'+(isGold?' tier-gold':'')+">"; 
+  var h='<div class="gc fi'+(isGold?' tier-gold':'')+'">';
 
   // card header
   h+='<div class="gc-hdr">'
@@ -570,13 +570,13 @@ function makeGCard(pick,idx,showCharts){
   // teams row
   h+='<div class="gc-teams">'
     +'<div class="gc-team">'
-    +(awTid?('<img class="gc-tl" src="https://www.mlbstatic.com/team-logos/'+awTid+'.svg" alt="'+awCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):"<div class=\"gc-tl\" style=\"display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:var(--t2)\">" +awAb+ "</div>")
+    +(awTid?('<img class="gc-tl" src="https://www.mlbstatic.com/team-logos/'+awTid+'.svg" alt="'+awCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):'<div class="gc-tl" style="display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:var(--t2)">'+awAb+'</div>')
     +'<span class="gc-ab">'+awAb+'</span>'
     +'<span class="gc-cn">'+awCn+'</span>'
     +'</div>'
     +'<span class="gc-vs">VS</span>'
     +'<div class="gc-team">'
-    +(hmTid?('<img class="gc-tl" src="https://www.mlbstatic.com/team-logos/'+hmTid+'.svg" alt="'+hmCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):"<div class=\"gc-tl\" style=\"display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:var(--t2)\">" +hmAb+ "</div>")
+    +(hmTid?('<img class="gc-tl" src="https://www.mlbstatic.com/team-logos/'+hmTid+'.svg" alt="'+hmCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):'<div class="gc-tl" style="display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:var(--t2)">'+hmAb+'</div>')
     +'<span class="gc-ab">'+hmAb+'</span>'
     +'<span class="gc-cn">'+hmCn+'</span>'
     +'</div>'
@@ -882,7 +882,7 @@ function renderDataCenter(data){
       var dec=safeNum(p.bp,null);
       var kv=kelly(safeNum(p.edge,0),dec);
       var edgeV=safeNum(p.edge,0);
-      h+='<tr style="border-top:1px solid rgba(255,255,255,.04)'+(i%2===0?';background:rgba(255,255,255,.015)':'')+'">'
+      h+='<tr style="border-top:1px solid rgba(255,255,255,.04)'+(i%2===0?';background:rgba(255,255,255,.015)':'')+'">';
       h+='<td style="padding:8px 10px;color:var(--t1);font-weight:700">'+betAb+' '+betCn+'</td>';
       h+='<td style="padding:8px 10px"><span class="bt-badge '+bt+'" style="font-size:9px;padding:2px 6px">'+bt+'</span></td>';
       h+='<td style="padding:8px 10px;color:var(--g);font-weight:700">'+(dec?dec.toFixed(2):'--')+'</td>';
@@ -910,7 +910,7 @@ function renderStandings(std){
   var tabs=[{k:'al',l:'美聯'},{k:'nl',l:'國聯'},{k:'all',l:'全聯盟'}];
   var h='<div class="standings-tabs">';
   tabs.forEach(function(t,i){
-    h+='<button class="stab'+(i===0?' on':'')+" onclick=\"switchStd('"+t.k+"',this)\">'+t.l+'</button>';
+    h+='<button class="stab'+(i===0?' on':'')'+'" onclick="switchStd(\''+t.k+'\',this)">'+t.l+'</button>';
   });
   h+='</div>';
   h+='<div id="std-body"></div>';
