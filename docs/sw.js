@@ -1,4 +1,5 @@
-const CACHE = "mlb-v152";
+// v200 — force-bust mlb-v152 stale cache
+const CACHE = "mlb-v200";
 const SHELL = ["./", "./index.html", "./manifest.json", "./icon.svg"];
 
 self.addEventListener("install", e => {
@@ -18,22 +19,35 @@ self.addEventListener("activate", e => {
 self.addEventListener("fetch", e => {
   const url = new URL(e.request.url);
 
-  // picks_latest.json: network first, fallback to cache
-  if (url.pathname.endsWith("picks_latest.json")) {
+  // JSON data files: network first, graceful cache fallback
+  if (url.pathname.endsWith(".json")) {
     e.respondWith(
-      fetch(e.request)
+      fetch(e.request, {cache: "no-store"})
         .then(res => {
-          const clone = res.clone();
-          caches.open(CACHE).then(c => c.put(e.request, clone));
+          if (res.ok) {
+            caches.open(CACHE).then(c => c.put(e.request, res.clone()));
+          }
           return res;
         })
-        .catch(() => caches.match(e.request))
+        .catch(() =>
+          caches.match(e.request).then(cached =>
+            cached || new Response(
+              '{"picks":[],"stats":{},"recent_history":[],"live_games":[]}',
+              {status: 200, headers: {"Content-Type": "application/json"}}
+            )
+          )
+        )
     );
     return;
   }
 
-  // App shell: cache first
+  // App shell: network first (so HTML updates are always received)
   e.respondWith(
-    caches.match(e.request).then(cached => cached || fetch(e.request))
+    fetch(e.request)
+      .then(res => {
+        if (res.ok) caches.open(CACHE).then(c => c.put(e.request, res.clone()));
+        return res;
+      })
+      .catch(() => caches.match(e.request))
   );
 });
