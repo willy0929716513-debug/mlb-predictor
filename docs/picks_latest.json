@@ -478,10 +478,10 @@
       "home_cn": "太空人",
       "away_cn": "老虎",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 4,
       "away_runs": 1,
-      "projected_total": 6.9,
+      "projected_total": 6.4,
       "market_total": 8.5,
       "bet": "主隊獨贏",
       "reason": "第8局主隊領先3分（賽前主隊勝率54%），大局已定"
@@ -523,7 +523,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1781727439,
+  "live_updated_ts": 1781727741,
   "game_preds": {
     "reds|mets": {
       "home_win_prob": 0.3223,
@@ -582,5 +582,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-06-18 04:17 (台灣時間)"
+  "live_updated_at": "2026-06-18 04:22 (台灣時間)"
 }
