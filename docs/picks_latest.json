@@ -477,29 +477,29 @@
     {
       "home_cn": "道奇",
       "away_cn": "光芒",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 5,
       "away_runs": 4,
-      "projected_total": 10.9,
+      "projected_total": 10.6,
       "market_total": 7.0,
-      "bet": "大小分 OVER",
-      "reason": "第7局已得9分（此時預期5.1分），高分走勢盤口7.0"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "響尾蛇",
       "away_cn": "天使",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 8,
       "away_runs": 1,
-      "projected_total": 13.0,
+      "projected_total": 12.5,
       "market_total": 9.0,
       "bet": "大小分 OVER",
-      "reason": "第6局已得9分（此時預期5.0分），高分走勢盤口9.0"
+      "reason": "第6局已得9分（此時預期5.5分），高分走勢盤口9.0"
     }
   ],
-  "live_updated_ts": 1781731659,
+  "live_updated_ts": 1781731961,
   "game_preds": {
     "reds|mets": {
       "home_win_prob": 0.3223,
@@ -558,5 +558,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-06-18 05:27 (台灣時間)"
+  "live_updated_at": "2026-06-18 05:32 (台灣時間)"
 }
