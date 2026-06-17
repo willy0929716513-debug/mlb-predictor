@@ -306,10 +306,10 @@
       "home_cn": "響尾蛇",
       "away_cn": "天使",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 7,
-      "projected_total": 8.9,
+      "projected_total": 8.4,
       "market_total": 8.5,
       "bet": "客隊獨贏",
       "reason": "第8局客隊領先7分（賽前客隊勝率78%），大局已定"
@@ -320,11 +320,11 @@
       "inning": 7,
       "top_inning": true,
       "home_runs": 5,
-      "away_runs": 3,
-      "projected_total": 11.7,
+      "away_runs": 5,
+      "projected_total": 13.7,
       "market_total": 11.0,
-      "bet": "主隊獨贏",
-      "reason": "第7局主隊領先2分（賽前主隊勝率50%），大局已定"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "水手",
@@ -341,17 +341,17 @@
     {
       "home_cn": "道奇",
       "away_cn": "光芒",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 3.2,
+      "projected_total": 2.8,
       "market_total": 8.0,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅1分（此時預期5.8分），低分走勢盤口8.0"
+      "reason": "第8局僅1分（此時預期6.2分），低分走勢盤口8.0"
     }
   ],
-  "live_updated_ts": 1781667846,
+  "live_updated_ts": 1781668147,
   "game_preds": {
     "phillies|marlins": {
       "home_win_prob": 0.4576,
@@ -414,5 +414,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-06-17 11:44 (台灣時間)"
+  "live_updated_at": "2026-06-17 11:49 (台灣時間)"
 }
