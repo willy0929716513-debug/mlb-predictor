@@ -475,28 +475,16 @@
   ],
   "live_games": [
     {
-      "home_cn": "勇士",
-      "away_cn": "巨人",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 2,
-      "away_runs": 7,
-      "projected_total": 9.5,
-      "market_total": 9.0,
-      "bet": null,
-      "reason": null
-    },
-    {
       "home_cn": "太空人",
       "away_cn": "老虎",
       "inning": 7,
       "top_inning": true,
       "home_runs": 4,
-      "away_runs": 0,
-      "projected_total": 6.8,
+      "away_runs": 1,
+      "projected_total": 7.8,
       "market_total": 8.5,
       "bet": "主隊獨贏",
-      "reason": "第7局主隊領先4分（賽前主隊勝率54%），大局已定"
+      "reason": "第7局主隊領先3分（賽前主隊勝率54%），大局已定"
     },
     {
       "home_cn": "紅雀",
@@ -525,17 +513,17 @@
     {
       "home_cn": "響尾蛇",
       "away_cn": "天使",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 9.5,
+      "projected_total": 9.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1781726535,
+  "live_updated_ts": 1781726836,
   "game_preds": {
     "reds|mets": {
       "home_win_prob": 0.3223,
@@ -594,5 +582,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-06-18 04:02 (台灣時間)"
+  "live_updated_at": "2026-06-18 04:07 (台灣時間)"
 }
