@@ -503,9 +503,9 @@
       "away_cn": "巨人",
       "inning": 6,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 1,
       "away_runs": 5,
-      "projected_total": 8.5,
+      "projected_total": 9.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -514,13 +514,13 @@
       "home_cn": "釀酒人",
       "away_cn": "守護者",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 5,
       "away_runs": 4,
-      "projected_total": 14.0,
+      "projected_total": 13.6,
       "market_total": 7.5,
       "bet": "大小分 OVER",
-      "reason": "第4局已得9分（此時預期2.5分），高分走勢盤口7.5"
+      "reason": "第4局已得9分（此時預期2.9分），高分走勢盤口7.5"
     },
     {
       "home_cn": "小熊",
@@ -535,7 +535,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1781743782,
+  "live_updated_ts": 1781744083,
   "game_preds": {
     "reds|mets": {
       "home_win_prob": 0.3223,
@@ -594,5 +594,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-06-18 08:49 (台灣時間)"
+  "live_updated_at": "2026-06-18 08:54 (台灣時間)"
 }
