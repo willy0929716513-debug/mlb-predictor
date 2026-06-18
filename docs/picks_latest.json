@@ -478,34 +478,34 @@
       "home_cn": "紅襪",
       "away_cn": "藍鳥",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 6.2,
+      "projected_total": 5.7,
       "market_total": 9.5,
       "bet": "大小分 UNDER",
-      "reason": "第6局僅2分（此時預期5.3分），低分走勢盤口9.5"
+      "reason": "第6局僅2分（此時預期5.8分），低分走勢盤口9.5"
     },
     {
       "home_cn": "洋基",
       "away_cn": "白襪",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 4,
       "away_runs": 3,
-      "projected_total": 11.7,
+      "projected_total": 11.2,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第5局已得7分（此時預期3.8分），高分走勢盤口8.5"
+      "reason": "第5局已得7分（此時預期4.2分），高分走勢盤口8.5"
     },
     {
       "home_cn": "勇士",
       "away_cn": "巨人",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 5,
-      "projected_total": 9.0,
+      "projected_total": 8.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -525,17 +525,17 @@
     {
       "home_cn": "小熊",
       "away_cn": "落磯",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 7,
-      "away_runs": 0,
-      "projected_total": 15.3,
+      "away_runs": 1,
+      "projected_total": 15.8,
       "market_total": 10.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1781743480,
+  "live_updated_ts": 1781743782,
   "game_preds": {
     "reds|mets": {
       "home_win_prob": 0.3223,
@@ -594,5 +594,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-06-18 08:44 (台灣時間)"
+  "live_updated_at": "2026-06-18 08:49 (台灣時間)"
 }
