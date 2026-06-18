@@ -478,10 +478,10 @@
       "home_cn": "小熊",
       "away_cn": "落磯",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 8,
       "away_runs": 5,
-      "projected_total": 15.2,
+      "projected_total": 14.7,
       "market_total": 10.0,
       "bet": "主隊獨贏",
       "reason": "第8局主隊領先3分（賽前主隊勝率72%），大局已定"
@@ -501,17 +501,17 @@
     {
       "home_cn": "水手",
       "away_cn": "金鶯",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 7.4,
+      "projected_total": 7.0,
       "market_total": 7.5,
-      "bet": null,
-      "reason": null
+      "bet": "主隊讓分(+1.5)",
+      "reason": "主隊落後2分 第4局，賽前主隊勝率72%"
     }
   ],
-  "live_updated_ts": 1781749476,
+  "live_updated_ts": 1781749777,
   "game_preds": {
     "reds|mets": {
       "home_win_prob": 0.3223,
@@ -570,5 +570,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-06-18 10:24 (台灣時間)"
+  "live_updated_at": "2026-06-18 10:29 (台灣時間)"
 }
