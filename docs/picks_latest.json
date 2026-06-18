@@ -480,11 +480,11 @@
       "inning": 8,
       "top_inning": true,
       "home_runs": 8,
-      "away_runs": 3,
-      "projected_total": 13.2,
+      "away_runs": 5,
+      "projected_total": 15.2,
       "market_total": 10.0,
       "bet": "主隊獨贏",
-      "reason": "第8局主隊領先5分（賽前主隊勝率72%），大局已定"
+      "reason": "第8局主隊領先3分（賽前主隊勝率72%），大局已定"
     },
     {
       "home_cn": "運動家",
@@ -502,7 +502,7 @@
       "home_cn": "水手",
       "away_cn": "金鶯",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
       "projected_total": 7.8,
