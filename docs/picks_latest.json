@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-18 12:19 (台灣時間)",
+  "generated_at": "2026-06-18 18:28 (台灣時間)",
   "date": "2026-06-18",
   "stats": {
     "settled": 157,
@@ -10,20 +10,20 @@
     "roi": 20.2,
     "by_type": {
       "ML": {
-        "settled": 63,
         "wins": 38,
+        "settled": 63,
         "win_rate": 60.3,
         "roi": -7.3
       },
       "RL": {
-        "settled": 64,
         "wins": 48,
+        "settled": 64,
         "win_rate": 75.0,
         "roi": 32.7
       },
       "TOT": {
-        "settled": 30,
         "wins": 21,
+        "settled": 30,
         "win_rate": 70.0,
         "roi": 54.1
       }
@@ -39,13 +39,13 @@
       "home_cn": "運動家",
       "bet_label": "運動家 獨贏",
       "bk": "BetRivers",
-      "bp": 1.77,
-      "con_p": 1.753,
-      "dv_p": 0.5494,
-      "edge": 16.5,
+      "bp": 1.78,
+      "con_p": 1.75,
+      "dv_p": 0.5501,
+      "edge": 16.4,
       "conf": 75.5,
       "stake": 50.0,
-      "model_p": 71.5,
+      "model_p": 71.4,
       "away_sp": "TBD",
       "home_sp": "Gage Jump",
       "away_era": 4.8,
@@ -63,18 +63,18 @@
       "away_rs": null,
       "home_rs": 4.33,
       "away_rpg": 4.39,
-      "home_rpg": 4.62,
-      "pred_away": 3.5,
+      "home_rpg": 4.61,
+      "pred_away": 3.6,
       "pred_home": 5.0,
       "model_total": null,
       "market_total": null,
       "park_factor": null,
-      "weather_factor": 0.983,
+      "weather_factor": null,
       "ump_name": null,
       "ump_adj": null,
       "away_trend": null,
       "home_trend": -1.32,
-      "line_clv": null,
+      "line_clv": -0.32,
       "game_date": "2026-06-19",
       "game_time": "09:41",
       "sp_src": "probable",
@@ -102,10 +102,10 @@
       "home_cn": "水手",
       "bet_label": "金鶯 讓分(+1.5)",
       "bk": "MyBookie.ag",
-      "bp": 1.64,
-      "con_p": 1.606,
-      "dv_p": 0.5998,
-      "edge": 16.5,
+      "bp": 1.62,
+      "con_p": 1.601,
+      "dv_p": 0.601,
+      "edge": 16.4,
       "conf": 72.6,
       "stake": 50.0,
       "model_p": 75.0,
@@ -132,12 +132,12 @@
       "model_total": null,
       "market_total": null,
       "park_factor": 0.93,
-      "weather_factor": 0.978,
+      "weather_factor": 0.977,
       "ump_name": null,
       "ump_adj": null,
       "away_trend": 0.85,
       "home_trend": 7.64,
-      "line_clv": null,
+      "line_clv": 0.75,
       "game_date": "2026-06-19",
       "game_time": "04:11",
       "sp_src": "probable",
@@ -292,12 +292,8 @@
   "live_games": [],
   "live_updated_ts": 1781758124,
   "game_preds": {
-    "mariners|orioles": {
-      "home_win_prob": 0.3692,
-      "market_total": 8.0
-    },
     "red sox|blue jays": {
-      "home_win_prob": 0.7023,
+      "home_win_prob": 0.7016,
       "market_total": 8.5
     },
     "brewers|guardians": {
@@ -305,27 +301,31 @@
       "market_total": 7.5
     },
     "rangers|twins": {
-      "home_win_prob": 0.2298,
+      "home_win_prob": 0.2371,
       "market_total": 8.0
     },
+    "mariners|orioles": {
+      "home_win_prob": 0.387,
+      "market_total": 7.5
+    },
     "phillies|mets": {
-      "home_win_prob": 0.3761,
+      "home_win_prob": 0.3732,
       "market_total": 9.5
     },
     "yankees|white sox": {
-      "home_win_prob": 0.6359,
+      "home_win_prob": 0.6321,
       "market_total": 9.5
     },
     "braves|giants": {
-      "home_win_prob": 0.6357,
+      "home_win_prob": 0.6216,
       "market_total": 8.0
     },
     "royals|cardinals": {
-      "home_win_prob": 0.599,
+      "home_win_prob": 0.6078,
       "market_total": 9.0
     },
     "athletics|angels": {
-      "home_win_prob": 0.7147,
+      "home_win_prob": 0.7139,
       "market_total": 10.0
     }
   }
