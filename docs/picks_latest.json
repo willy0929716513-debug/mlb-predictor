@@ -490,10 +490,10 @@
       "home_cn": "運動家",
       "away_cn": "海盜",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 5,
-      "projected_total": 12.8,
+      "projected_total": 12.2,
       "market_total": 10.0,
       "bet": null,
       "reason": null
