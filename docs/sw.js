@@ -1,16 +1,9 @@
-// Network-first for HTML navigation — always fetches fresh index.html
+// Kill switch — unregister this SW so it never intercepts requests again
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys()
       .then(keys => Promise.all(keys.map(k => caches.delete(k))))
-      .then(() => self.clients.claim())
+      .then(() => self.registration.unregister())
   );
-});
-self.addEventListener('fetch', e => {
-  if(e.request.mode === 'navigate') {
-    e.respondWith(
-      fetch(e.request.url, {cache: 'no-store'}).catch(() => caches.match(e.request))
-    );
-  }
 });
