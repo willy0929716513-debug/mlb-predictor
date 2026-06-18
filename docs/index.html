@@ -745,30 +745,30 @@ function renderLive(live){
     var awTid=tid(awCn);
     var hmTid=tid(hmCn);
     var innStr=(g.top_inning?'▲':'▼')+' '+(g.inning||'?')+' 局';
-    h+='<div class="live-card fi'+(hasBet?' has-bet':'')+'">';
-    h+='<div class="live-score">';
-    h+='<div class="live-team">';
-    h+=(awTid?('<img class="live-logo" src="https://www.mlbstatic.com/team-logos/'+awTid+'.svg" alt="'+awCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):'');
-    h+='<span class="live-tn">'+awCn+'</span>';
-    h+='<span class="live-runs" style="color:'+awColor+'">'+awRuns+'</span>';
-    h+='</div>';
-    h+='<div class="live-mid">';
-    h+='<span class="live-dash">–</span>';
-    h+='<span class="live-inn">'+innStr+'</span>';
-    h+='</div>';
-    h+='<div class="live-team">';
-    h+=(hmTid?('<img class="live-logo" src="https://www.mlbstatic.com/team-logos/'+hmTid+'.svg" alt="'+hmCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):'');
-    h+='<span class="live-tn">'+hmCn+'</span>';
-    h+='<span class="live-runs" style="color:'+hmColor+'">'+hmRuns+'</span>';
-    h+='</div>';
-    h+='</div>';
-    h+='<div class="live-totals">';
-    h+=(g.projected_total!=null?('<span class="live-chip">預測總分 '+safeNum(g.projected_total,0).toFixed(1)+'</span>'):'');
-    h+=(g.market_total!=null?('<span class="live-chip">市場大小 '+safeNum(g.market_total,0).toFixed(1)+'</span>'):'');
-    h+=(hasBet?('<span class="live-chip bet">'+g.bet+'</span>'):'');
-    h+='</div>';
-    h+=(g.reason?('<div class="live-reason">'+g.reason+'</div>'):'');
-    h+='</div>';
+    h+='<div class="live-card fi'+(hasBet?' has-bet':'')+'">'
+      +'<div class="live-score">'
+        +'<div class="live-team">'
+          +(awTid?('<img class="live-logo" src="https://www.mlbstatic.com/team-logos/'+awTid+'.svg" alt="'+awCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):'')  
+        +'<span class="live-tn">'+awCn+'</span>'
+          +'<span class="live-runs" style="color:'+awColor+'">'+awRuns+'</span>'
+        +'</div>'
+        +'<div class="live-mid">'
+          +'<span class="live-dash">–</span>'
+          +'<span class="live-inn">'+innStr+'</span>'
+        +'</div>'
+        +'<div class="live-team">'
+          +(hmTid?('<img class="live-logo" src="https://www.mlbstatic.com/team-logos/'+hmTid+'.svg" alt="'+hmCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):'')  
+        +'<span class="live-tn">'+hmCn+'</span>'
+          +'<span class="live-runs" style="color:'+hmColor+'">'+hmRuns+'</span>'
+        +'</div>'
+      +'</div>'
+      +'<div class="live-totals">'
+        +(g.projected_total!=null?('<span class="live-chip">預測總分 '+safeNum(g.projected_total,0).toFixed(1)+'</span>'):'')
+        +(g.market_total!=null?('<span class="live-chip">市場大小 '+safeNum(g.market_total,0).toFixed(1)+'</span>'):'')
+        +(hasBet?('<span class="live-chip bet">'+g.bet+'</span>'):'')
+      +'</div>'
+      +(g.reason?('<div class="live-reason">'+g.reason+'</div>'):'')
+    +'</div>';
   });
   el.innerHTML=h;
 }
@@ -848,7 +848,7 @@ function renderRecentHistory(history){
         +'<div class="rh-meta">'+(r.date||'')+(lbl?' · '+lbl:'')+(r.edge?' · Edge: '+safeNum(r.edge,0).toFixed(1)+'%':'')+'</div>'
       +'</div>'
       +'<div>'
-        +'<div class="rh-price" style="color:'+(isW?'var(--g)':'var(--r)')+'">'+( price?'@'+price.toFixed(2):'')+'</div>'
+        +'<div class="rh-price" style="color:'+(isW?'var(--g)':'var(--r)')+'">'+(price?'@'+price.toFixed(2):'')+'</div>'
         +'<div class="rh-edge">'+(typeof pnl==='number'?(isW?'+':'')+pnl.toFixed(1):'')+'</div>'
       +'</div>'
     +'</div>';
@@ -892,7 +892,7 @@ function renderDataCenter(data){
       h+='<td style="padding:8px 10px;color:var(--t1);font-weight:700">'+betAb+' '+betCn+'</td>';
       h+='<td style="padding:8px 10px"><span class="bt-badge '+bt+'" style="font-size:9px;padding:2px 6px">'+bt+'</span></td>';
       h+='<td style="padding:8px 10px;color:var(--g);font-weight:700">'+(dec?dec.toFixed(2):'--')+'</td>';
-      h+='<td style="padding:8px 10px;color:'+(edgeV>=15?'var(--g)':'var(--y)')+'">'+( edgeV).toFixed(1)+'%</td>';
+      h+='<td style="padding:8px 10px;color:'+(edgeV>=15?'var(--g)':'var(--y)')+'">'+(edgeV).toFixed(1)+'%</td>';
       h+='<td style="padding:8px 10px;color:var(--c)">'+safeNum(p.conf,0).toFixed(1)+'%</td>';
       h+='<td style="padding:8px 10px;color:var(--y)">'+kv+'</td>';
       h+='</tr>';
@@ -976,7 +976,7 @@ function buildTicker(picks,history){
       var awCn=r.away_cn||r.away||'客';
       var hmCn=r.home_cn||r.home||'主';
       var price=safeNum(r.price,null);
-      parts.push('<span class="tk-item"><span class="tk-'+(r.result==='W'?'w':'l')+'">' +r.result+'</span> '+awCn+' vs '+hmCn+(price?' <span class="tk-odds">@'+price.toFixed(2)+'</span>':'')+'</span><span class="tk-sep">·</span>');
+      parts.push('<span class="tk-item"><span class="tk-'+(r.result==='W'?'w':'l')+'">'+r.result+'</span> '+awCn+' vs '+hmCn+(price?' <span class="tk-odds">@'+price.toFixed(2)+'</span>':'')+'</span><span class="tk-sep">·</span>');
     });
   }
   if(!parts.length){parts.push('<span class="tk-item">MLB AI 預測引擎 · 今日數據更新中...</span>')}
@@ -1054,32 +1054,32 @@ function renderLivePage(live,updatedAt){
     var awTid=tid(awCn);
     var hmTid=tid(hmCn);
     var innStr=(g.top_inning?'▲':'▼')+' '+(g.inning||'?')+' 局';
-    h+='<div class="live-card fi'+(hasBet?' has-bet':'')+'">';
-    h+='<div class="live-score">';
-    h+='<div class="live-team">';
-    h+=(awTid?('<img class="live-logo" src="https://www.mlbstatic.com/team-logos/'+awTid+'.svg" alt="'+awCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):'');
-    h+='<span class="live-tn">'+awCn+'</span>';
-    h+='<span class="live-runs" style="color:'+awColor+'">'+awRuns+'</span>';
-    h+='<span style="font-size:9px;color:var(--t2)">客隊</span>';
-    h+='</div>';
-    h+='<div class="live-mid">';
-    h+='<span class="live-dash">–</span>';
-    h+='<span class="live-inn">'+innStr+'</span>';
-    h+='</div>';
-    h+='<div class="live-team">';
-    h+=(hmTid?('<img class="live-logo" src="https://www.mlbstatic.com/team-logos/'+hmTid+'.svg" alt="'+hmCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):'');
-    h+='<span class="live-tn">'+hmCn+'</span>';
-    h+='<span class="live-runs" style="color:'+hmColor+'">'+hmRuns+'</span>';
-    h+='<span style="font-size:9px;color:var(--t2)">主隊</span>';
-    h+='</div>';
-    h+='</div>';
-    h+='<div class="live-totals">';
-    h+=(g.projected_total!=null?('<span class="live-chip">模型預測總分 <b style="color:var(--c)">'+safeNum(g.projected_total,0).toFixed(1)+'</b></span>'):'');
-    h+=(g.market_total!=null?('<span class="live-chip">市場大小 <b style="color:var(--t1)">'+safeNum(g.market_total,0).toFixed(1)+'</b></span>'):'');
-    h+=(hasBet?('<span class="live-chip bet">💡 '+g.bet+'</span>'):'');
-    h+='</div>';
-    h+=(g.reason?('<div class="live-reason">'+g.reason+'</div>'):'');
-    h+='</div>';
+    h+='<div class="live-card fi'+(hasBet?' has-bet':'')+'">'
+      +'<div class="live-score">'
+        +'<div class="live-team">'
+          +(awTid?('<img class="live-logo" src="https://www.mlbstatic.com/team-logos/'+awTid+'.svg" alt="'+awCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):'')  
+        +'<span class="live-tn">'+awCn+'</span>'
+          +'<span class="live-runs" style="color:'+awColor+'">'+awRuns+'</span>'
+          +'<span style="font-size:9px;color:var(--t2)">客隊</span>'
+        +'</div>'
+        +'<div class="live-mid">'
+          +'<span class="live-dash">–</span>'
+          +'<span class="live-inn">'+innStr+'</span>'
+        +'</div>'
+        +'<div class="live-team">'
+          +(hmTid?('<img class="live-logo" src="https://www.mlbstatic.com/team-logos/'+hmTid+'.svg" alt="'+hmCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):'')  
+        +'<span class="live-tn">'+hmCn+'</span>'
+          +'<span class="live-runs" style="color:'+hmColor+'">'+hmRuns+'</span>'
+          +'<span style="font-size:9px;color:var(--t2)">主隊</span>'
+        +'</div>'
+      +'</div>'
+      +'<div class="live-totals">'
+        +(g.projected_total!=null?('<span class="live-chip">模型預測總分 <b style="color:var(--c)">'+safeNum(g.projected_total,0).toFixed(1)+'</b></span>'):'')
+        +(g.market_total!=null?('<span class="live-chip">市場大小 <b style="color:var(--t1)">'+safeNum(g.market_total,0).toFixed(1)+'</b></span>'):'')
+        +(hasBet?('<span class="live-chip bet">💡 '+g.bet+'</span>'):'')
+      +'</div>'
+      +(g.reason?('<div class="live-reason">'+g.reason+'</div>'):'')
+    +'</div>';
   });
   el.innerHTML=h;
   initScrollReveal();
