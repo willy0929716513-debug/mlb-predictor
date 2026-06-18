@@ -490,16 +490,16 @@
       "home_cn": "水手",
       "away_cn": "金鶯",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 3,
-      "projected_total": 7.3,
+      "projected_total": 6.9,
       "market_total": 7.5,
       "bet": "主隊讓分(+1.5)",
       "reason": "主隊落後2分 第6局，賽前主隊勝率72%"
     }
   ],
-  "live_updated_ts": 1781752188,
+  "live_updated_ts": 1781752489,
   "game_preds": {
     "reds|mets": {
       "home_win_prob": 0.3223,
@@ -558,5 +558,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-06-18 11:09 (台灣時間)"
+  "live_updated_at": "2026-06-18 11:14 (台灣時間)"
 }
