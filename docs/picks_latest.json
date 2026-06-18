@@ -477,14 +477,14 @@
     {
       "home_cn": "運動家",
       "away_cn": "海盜",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 2,
-      "away_runs": 7,
-      "projected_total": 12.9,
+      "away_runs": 8,
+      "projected_total": 13.3,
       "market_total": 10.0,
       "bet": "大小分 OVER",
-      "reason": "第6局已得9分（此時預期6.1分），高分走勢盤口10.0"
+      "reason": "第7局已得10分（此時預期6.7分），高分走勢盤口10.0"
     },
     {
       "home_cn": "水手",
@@ -499,7 +499,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1781753695,
+  "live_updated_ts": 1781753996,
   "game_preds": {
     "reds|mets": {
       "home_win_prob": 0.3223,
@@ -558,5 +558,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-06-18 11:34 (台灣時間)"
+  "live_updated_at": "2026-06-18 11:39 (台灣時間)"
 }
