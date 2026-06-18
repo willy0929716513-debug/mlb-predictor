@@ -568,7 +568,7 @@ function makeGCard(pick,idx,showCharts){
     return parts.join(' · ');
   }
 
-  var h='<div class="gc fi'+(isGold?' tier-gold':'')+">';
+  var h='<div class="gc fi'+(isGold?' tier-gold':'')+'>';
 
   // card header
   h+='<div class="gc-hdr"><div class="gc-hdr-l">'+tierBadge(tierKey)+'</div><div class="gc-time">'+(pick.game_time||'--:--')+'</div></div>';
@@ -917,7 +917,7 @@ function renderStandings(std){
   var tabs=[{k:'al',l:'美聯'},{k:'nl',l:'國聯'},{k:'all',l:'全聯盟'}];
   var h='<div class="standings-tabs">';
   tabs.forEach(function(t,i){
-    h+='<button class="stab'+(i===0?' on':'')+" onclick=\"switchStd('"+t.k+"',this)\"">'+t.l+'</button>';
+    h+='<button class="stab'+(i===0?' on':'')+'" onclick="switchStd(\''+t.k+'\',this)">'+t.l+'</button>';
   });
   h+='</div>';
   h+='<div id="std-body"></div>';
