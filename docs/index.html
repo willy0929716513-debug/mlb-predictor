@@ -406,7 +406,7 @@ function safeNum(v,d){return (v!=null&&!isNaN(v))?Number(v):d}
 // ── LOGO IMG ──────────────────────────────────────────
 function logoImg(cn,size){
   var url=logoUrl(cn);
-  if(url) return '<img src="'+url+'" width="'+size+'" height="'+size+'" alt="'+cn+'" style="object-fit:contain" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'  
+  if(url) return '<img src="'+url+'" width="'+size+'" height="'+size+'" alt="'+cn+'" style="object-fit:contain" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'
     +'<div style="display:none;width:'+size+'px;height:'+size+'px;align-items:center;justify-content:center;font-size:'+(size*0.38)+'px;font-weight:800;color:var(--t2)">'+abbr(cn)+'</div>';
   return '<div style="width:'+size+'px;height:'+size+'px;display:flex;align-items:center;justify-content:center;font-size:'+(size*0.38)+'px;font-weight:800;color:var(--t2)">'+abbr(cn)+'</div>';
 }
@@ -552,7 +552,8 @@ function makeGCard(pick,idx,showCharts){
   var wxPct=pick.weather_factor!=null?clamp(safeNum(pick.weather_factor,0)*100,0,100):50;
 
   // kelly
-  var kv=kelly(edgeV,decOdds);
+  var stakeV=safeNum(pick.stake,null);
+  var kv=stakeV!=null?('$'+stakeV.toFixed(0)):kelly(edgeV,decOdds);
 
   // predicted score
   var pAway=safeNum(pick.pred_away,null);
@@ -567,7 +568,7 @@ function makeGCard(pick,idx,showCharts){
     return parts.join(' · ');
   }
 
-  var h='<div class="gc fi'+(isGold?' tier-gold':'')+'">';
+  var h='<div class="gc fi'+(isGold?' tier-gold':'')+">"
 
   // card header
   h+='<div class="gc-hdr">'+tierBadge(tierKey)+'<span class="gc-time">'+(pick.game_time||'--:--')+'</span></div>';
@@ -744,10 +745,10 @@ function renderLive(live){
     var awTid=tid(awCn);
     var hmTid=tid(hmCn);
     var innStr=(g.top_inning?'▲':'▼')+' '+(g.inning||'?')+' 局';
-    h+='<div class="live-card fi'+(hasBet?' has-bet':'')+'">';
+    h+='<div class="live-card fi'+(hasBet?' has-bet':'')+">'";
     h+='<div class="live-score">';
     h+='<div class="live-team">';
-    h+=(awTid?('<img class="live-logo" src="https://www.mlbstatic.com/team-logos/'+awTid+'.svg" alt="'+awCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):'')
+    h+=(awTid?('<img class="live-logo" src="https://www.mlbstatic.com/team-logos/'+awTid+'.svg" alt="'+awCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):'');
     h+='<span class="live-tn">'+awCn+'</span>';
     h+='<span class="live-runs" style="color:'+awColor+'">'+awRuns+'</span>';
     h+='</div>';
@@ -756,7 +757,7 @@ function renderLive(live){
     h+='<span class="live-inn">'+innStr+'</span>';
     h+='</div>';
     h+='<div class="live-team">';
-    h+=(hmTid?('<img class="live-logo" src="https://www.mlbstatic.com/team-logos/'+hmTid+'.svg" alt="'+hmCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):'')
+    h+=(hmTid?('<img class="live-logo" src="https://www.mlbstatic.com/team-logos/'+hmTid+'.svg" alt="'+hmCn+'" loading="lazy" onerror="this.style.display=\'none\'">'):'');
     h+='<span class="live-tn">'+hmCn+'</span>';
     h+='<span class="live-runs" style="color:'+hmColor+'">'+hmRuns+'</span>';
     h+='</div>';
@@ -885,7 +886,8 @@ function renderDataCenter(data){
       var betAb=TEAM_ABBR[betCn]||abbr(betCn);
       var bt=BM[p.btype]||'ML';
       var dec=safeNum(p.bp,null);
-      var kv=kelly(safeNum(p.edge,0),dec);
+      var stakeP=safeNum(p.stake,null);
+      var kv=stakeP!=null?('$'+stakeP.toFixed(0)):kelly(safeNum(p.edge,0),dec);
       var edgeV=safeNum(p.edge,0);
       h+='<tr style="border-top:1px solid rgba(255,255,255,.04)'+(i%2===0?';background:rgba(255,255,255,.015)':'')+'">'
       h+='<td style="padding:8px 10px;color:var(--t1);font-weight:700">'+betAb+' '+betCn+'</td>';
@@ -1053,7 +1055,7 @@ function renderLivePage(live,updatedAt){
     var awAb=TEAM_ABBR[awCn]||abbr(awCn);
     var hmAb=TEAM_ABBR[hmCn]||abbr(hmCn);
     var innStr=(g.top_inning?'▲':'▼')+' '+(g.inning||'?')+' 局';
-    h+='<div class="live-card fi'+(hasBet?' has-bet':'')+'">';
+    h+='<div class="live-card fi'+(hasBet?' has-bet':'')+">'";
     h+='<div class="live-score">';
     h+='<div class="live-team">';
     h+=logoImg(awCn,40);
