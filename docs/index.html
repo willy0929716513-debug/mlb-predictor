@@ -268,7 +268,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradi
 <body>
 <div id="pb"></div>
 <script>
-if('serviceWorker'in navigator){navigator.serviceWorker.register('./sw.js');}
+if('serviceWorker'in navigator){navigator.serviceWorker.getRegistrations().then(function(regs){regs.forEach(function(r){r.unregister()})});}
 </script>
 
 <!-- HEADER -->
@@ -1182,8 +1182,8 @@ function renderAll(data){
   try{cached=JSON.parse(localStorage.getItem('mlb_picks_cache'));}catch(e){}
   if(cached){
     pb.style.width='60%';
-    renderAll(cached);
-    document.getElementById('home-picks-section').insertAdjacentHTML('afterbegin',
+    try{renderAll(cached);}catch(e){cached=null;}
+    if(cached)document.getElementById('home-picks-section').insertAdjacentHTML('afterbegin',
       '<div id="cache-notice" style="font-size:10px;color:var(--t2);text-align:center;padding:4px 0 8px">⏳ 更新中…</div>');
   }
 
@@ -1199,7 +1199,9 @@ function renderAll(data){
     try{localStorage.setItem('mlb_picks_cache',JSON.stringify(data));}catch(e){}
     var n=document.getElementById('cache-notice');
     if(n)n.remove();
-    renderAll(data);
+    try{renderAll(data);}catch(err){
+      document.getElementById('home-picks-section').innerHTML='<div class="empty"><div class="empty-icon">⚠️</div><p>渲染錯誤，請按 ↻ 重新整理</p></div>';
+    }
   }).catch(function(e){
     pb.style.opacity='0';
     if(!cached){
