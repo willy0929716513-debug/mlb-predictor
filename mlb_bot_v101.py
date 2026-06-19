@@ -2582,6 +2582,7 @@ def write_pages_json(picks, hist, now_tw, live_games=None):
     recent_history = []
     for r in _hist_sorted:
         _h = r.get("home",""); _a = r.get("away","")
+        _sp_src_r = r.get("sp_src") or ""
         recent_history.append({
             "date":     r.get("date",""),
             "home":     _h, "away": _a,
@@ -2593,6 +2594,7 @@ def write_pages_json(picks, hist, now_tw, live_games=None):
             "stake":    r.get("stake"),
             "edge":     round(r.get("edge",0)*100, 1),
             "result":   r.get("result"),  # "W", "L", "P", None(pending)
+            "sp_confirmed": _sp_src_r in ("probable", "confirmed"),
         })
 
     payload = {
@@ -2691,6 +2693,22 @@ def run():
     hist      = load_hist()
     settled_n = settle_hist(hist)       # 結算昨天以前的未結算紀錄
     if settled_n > 0: save_hist(hist)   # 有更新就立即存回 Gist
+
+    # ★ Series suppression: build set of (home, away, bet_team, bet_type) that lost within 3 days
+    # MLB series are typically 3-4 games; re-betting same direction in same series consistently loses
+    _series_suppress = set()
+    _cutoff_dt = now_tw - datetime.timedelta(days=3)
+    _cutoff_str = _cutoff_dt.strftime("%Y-%m-%d")
+    for _r in hist:
+        if _r.get("result") != "L": continue
+        if not _r.get("date"): continue
+        if _r["date"] < _cutoff_str: continue
+        _rkey = (_r.get("home",""), _r.get("away",""), _r.get("team",""), _r.get("bet_type",""))
+        if all(_rkey): _series_suppress.add(_rkey)
+    if _series_suppress:
+        log.info("SeriesSuppress: %d matchup+direction(s) suppressed (lost in last 3d): %s",
+                 len(_series_suppress),
+                 ", ".join("%s@%s %s %s" % k for k in sorted(_series_suppress)))
 
     # ★ 按投注類型計算歷史勝率（≥MIN_SAMPLE_CALIB 才啟用，防小樣本過擬合）
     wr_by_type = calc_perf_by_type(hist) or {}
@@ -3156,6 +3174,20 @@ def run():
                     if bet_conf < 0.65:
                         log.info("UNDER blocked by weather: wf=%.3f conf→%.3f", _wf_tot, bet_conf)
                         continue
+            # ── ★ 系列賽抑制：同場次同方向近3天內已輸，降低信心15% ──
+            # (ML/RL only — TOT direction is not tied to a team in the same way)
+            if btype in (BET_ML, BET_RL):
+                _suppress_key = (home, away, bteam, btype)
+                if _suppress_key in _series_suppress:
+                    _old_conf = bet_conf
+                    bet_conf = round(bet_conf - 0.15, 4)
+                    if bet_conf < 0.60:
+                        log.info("SeriesSuppress SKIP: %s@%s %s %s — conf %.0f%%→%.0f%% below 60%%",
+                                 away, home, bteam, btype, _old_conf*100, bet_conf*100)
+                        continue
+                    else:
+                        log.info("SeriesSuppress REDUCE: %s@%s %s %s — conf %.0f%%→%.0f%%",
+                                 away, home, bteam, btype, _old_conf*100, bet_conf*100)
             # ── ★ 市場品質：bookmaker數不足時降低信心（非流動市場賠率不可靠）──
             if btype == BET_ML:
                 _n_books = len(con_h_prices) if bside=="home" else len(con_a_prices)
@@ -3519,6 +3551,7 @@ def run():
                     "result":  None,
                     "label":   p.get("hist_label",""),
                     "market_total": p.get("hist_mkt_total"),
+                    "sp_src":  p.get("sp_src","probable"),
                 })
 
     total_settled,wins,wr=calc_perf(hist)
