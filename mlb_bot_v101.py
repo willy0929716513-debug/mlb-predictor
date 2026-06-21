@@ -18,7 +18,7 @@ EDGE_MIN_ML_FAV= 0.11   # ML低賠（賠率<1.65）額外edge門檻（↓0.14→
 MIN_MODEL_P_ML  = 0.63  # ML 模型勝率門檻（↓0.65→0.63，P=1.87損益平衡53%，63%仍有buffer）
 MIN_MODEL_P_RL  = 0.65  # RL 門檻（↓0.67→0.65，與ML更一致）
 MIN_MODEL_P_TOT = 0.60  # TOT 門檻：避免貼線邊際注單
-ML_BET_CONF_MIN = 0.70  # ML 最低信心門檻（↓0.72→0.70，小幅鬆動；blend過濾仍保護ML品質）
+ML_BET_CONF_MIN = 0.70  # ML 最低信心門檻（ML ROI -7%，維持0.70確保不低於此值，過濾邊際低品質ML注單）
 ML_FAV_PRICE    = 1.65  # ML低賠閾值：低於此賠率視為高損益平衡重注
 ML_FAV_KELLY    = 0.80  # ML低賠Kelly折扣（損益平衡高，縮注20%）
 KELLY_BAYES_W   = 0.50  # Kelly計算時，devigged市場概率混入model_p的比重（↑0.35→0.50，ML ROI負抑制過信）
@@ -3116,6 +3116,40 @@ def run():
                     if bet_conf < RL_BET_CONF_MIN:
                         log.info("RL blocked by weather: wf=%.3f conf→%.3f", _wf_rl, bet_conf)
                         continue
+                # ⑥ SP_DELTA_PENALTY：客隊(受讓方)SP ERA明顯差於對手SP → 降低RL信心
+                # 邏輯：rl_a/rl_a_25 = 客隊受讓，客隊SP應為 away_sp，對手SP為 home_sp
+                #       rl_h/rl_h_25 = 主隊受讓，主隊SP應為 home_sp，對手SP為 away_sp
+                if bside in ("rl_a", "rl_a_25"):
+                    _ud_sp_era  = _a_era_v   # 受讓隊SP ERA
+                    _fav_sp_era = _h_era_v   # 強隊SP ERA
+                else:
+                    _ud_sp_era  = _h_era_v
+                    _fav_sp_era = _a_era_v
+                if _ud_sp_era - _fav_sp_era > 0.8:
+                    _old_conf = bet_conf
+                    bet_conf = round(bet_conf - 0.20, 4)
+                    log.info("SP_DELTA_PENALTY: ud_sp_era=%.2f fav_sp_era=%.2f delta=%.2f conf %.2f→%.2f",
+                             _ud_sp_era, _fav_sp_era, _ud_sp_era - _fav_sp_era, _old_conf, bet_conf)
+                    if bet_conf < 0.65:
+                        log.info("SP_DELTA_PENALTY SKIP: conf %.2f below 0.65", bet_conf)
+                        continue
+                # ⑦ SLUMP_LOWCONF_SKIP：低迷期 + 低信心 → 直接跳過RL
+                if _slump_mult < 1.0 and bet_conf < 0.75:
+                    log.info("SLUMP_LOWCONF_SKIP: slump_mult=%.2f conf=%.2f — RL skipped",
+                             _slump_mult, bet_conf)
+                    continue
+                # ⑧ AWAY_UD_PENALTY：客隊弱勢讓分受讓且賠率差距大 → 額外降低信心
+                if bside in ("rl_a", "rl_a_25"):
+                    _h_dv = _dv.get("home", 0.5)
+                    _a_dv = _dv.get("away", 0.5)
+                    if abs(_h_dv - _a_dv) > 0.15:
+                        _old_conf = bet_conf
+                        bet_conf = round(bet_conf - 0.10, 4)
+                        log.info("AWAY_UD_PENALTY: h_dv=%.3f a_dv=%.3f gap=%.3f conf %.2f→%.2f",
+                                 _h_dv, _a_dv, abs(_h_dv - _a_dv), _old_conf, bet_conf)
+                        if bet_conf < RL_BET_CONF_MIN:
+                            log.info("AWAY_UD_PENALTY SKIP: conf %.2f below RL_BET_CONF_MIN", bet_conf)
+                            continue
             # ── ★ 菁英對決保護：雙方ERA均優時，OVER門檻提高 ──
             # 若雙SP ERA < 3.50，RS易誤拉高total，需更高p_over才下Over
             if btype == BET_TOT and bside == "over":
@@ -3215,6 +3249,9 @@ def run():
             if stake <= 0: continue   # Kelly建議不下（負期望值），排除
             stake = round(min(KELLY_MAX, max(KELLY_FLOOR, stake)), 1)
             if stake < KELLY_MIN: continue  # 注額低於最低門檻，排除
+            # ⑤ TOT優先加成：TOT歷史ROI+54%/WR70%最佳，給予微幅信心加成以利競爭
+            if btype == BET_TOT:
+                bet_conf = round(min(1.0, bet_conf + 0.02), 4)
             score = raw_edge * bet_conf
             # ④ 菁英對決中RL降分，讓TOT注單更容易獲選（偏好UNDER而非RL）
             if btype == BET_RL and _h_era_v < ELITE_ERA_DUAL and _a_era_v < ELITE_ERA_DUAL:
