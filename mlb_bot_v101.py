@@ -18,7 +18,7 @@ EDGE_MIN_ML_FAV= 0.11   # ML低賠（賠率<1.65）額外edge門檻（↓0.14→
 MIN_MODEL_P_ML  = 0.63  # ML 模型勝率門檻（↓0.65→0.63，P=1.87損益平衡53%，63%仍有buffer）
 MIN_MODEL_P_RL  = 0.65  # RL 門檻（↓0.67→0.65，與ML更一致）
 MIN_MODEL_P_TOT = 0.60  # TOT 門檻：避免貼線邊際注單
-ML_BET_CONF_MIN = 0.70  # ML 最低信心門檻（ML ROI -7%，維持0.70確保不低於此值，過濾邊際低品質ML注單）
+ML_BET_CONF_MIN = 0.70  # ML 最低信心門檻（↓0.72→0.70，小幅鬆動；blend過濾仍保護ML品質）
 ML_FAV_PRICE    = 1.65  # ML低賠閾值：低於此賠率視為高損益平衡重注
 ML_FAV_KELLY    = 0.80  # ML低賠Kelly折扣（損益平衡高，縮注20%）
 KELLY_BAYES_W   = 0.50  # Kelly計算時，devigged市場概率混入model_p的比重（↑0.35→0.50，ML ROI負抑制過信）
@@ -147,26 +147,25 @@ PARK_FACTOR = {
 }
 
 # ── ★ 牛棚 ERA（2024 賽季）──
+# Auto-updated BULLPEN_ERA (2026 season)
 BULLPEN_ERA = {
-    "dodgers":3.45,"phillies":3.52,"braves":3.58,"astros":3.61,"padres":3.63,
-    "guardians":3.65,"mariners":3.67,"yankees":3.70,"cubs":3.72,"mets":3.75,
-    "rangers":3.78,"brewers":3.80,"red sox":3.82,"blue jays":3.85,"giants":3.87,
-    "royals":3.90,"twins":3.92,"tigers":3.95,"orioles":3.97,"rays":3.98,
-    "pirates":4.02,"diamondbacks":4.05,"cardinals":4.08,"reds":4.10,
-    "athletics":4.15,"angels":4.20,"nationals":4.25,"white sox":4.35,
-    "marlins":4.40,"rockies":4.85,
+    "yankees":3.48,"braves":3.54,"mariners":3.65,"dodgers":3.66,"brewers":3.68,
+    "tigers":3.77,"red sox":3.92,"guardians":3.95,"rangers":3.99,"padres":4.0,
+    "mets":4.03,"blue jays":4.09,"marlins":4.15,"rays":4.2,"cubs":4.24,
+    "cardinals":4.35,"diamondbacks":4.4,"pirates":4.5,"white sox":4.5,"orioles":4.58,
+    "phillies":4.59,"astros":4.62,"giants":4.78,"angels":4.97,"twins":5.05,
+    "reds":5.1,"nationals":5.1,"athletics":5.18,"royals":5.3,"rockies":5.63,
 }
-LEAGUE_BULL_ERA = 3.95
+LEAGUE_BULL_ERA = 4.37
 
 # ── ★ 牛棚深度（1.0=均值，>1.0=陣容深、可靠，<1.0=陣容薄）──
 BULLPEN_DEPTH = {
-    "dodgers":1.20,"braves":1.15,"phillies":1.15,"yankees":1.18,"astros":1.12,
-    "guardians":1.10,"padres":1.08,"mariners":1.08,"cubs":1.05,"mets":1.05,
-    "brewers":1.05,"rangers":1.03,"red sox":1.00,"blue jays":1.00,"giants":1.00,
-    "royals":0.98,"twins":0.97,"tigers":0.97,"orioles":0.97,"rays":0.98,
-    "pirates":0.93,"diamondbacks":0.95,"cardinals":0.95,"reds":0.92,
-    "athletics":0.90,"angels":0.88,"nationals":0.88,"white sox":0.85,
-    "marlins":0.85,"rockies":0.80,
+    "yankees":1.16,"braves":1.15,"dodgers":1.13,"mariners":1.13,"brewers":1.12,
+    "tigers":1.11,"red sox":1.08,"guardians":1.07,"padres":1.07,"rangers":1.07,
+    "mets":1.06,"blue jays":1.05,"marlins":1.04,"rays":1.03,"cubs":1.02,
+    "cardinals":1.0,"diamondbacks":0.99,"pirates":0.98,"white sox":0.98,"orioles":0.96,
+    "phillies":0.96,"astros":0.95,"giants":0.93,"angels":0.89,"twins":0.88,
+    "reds":0.87,"nationals":0.87,"athletics":0.85,"royals":0.83,"rockies":0.77,
 }
 
 # ── ★ 球場外野方向（從本壘板到中外野的方位角，0=北 90=東 180=南 270=西）──
@@ -229,21 +228,36 @@ PITCHER_ERA = {
 
 # ── BASE 隊伍實力 ──────────────────────────────
 BASE = {
-    "dodgers":{"off":5.10,"def":4.15},"yankees":{"off":4.85,"def":4.20},
-    "mets":{"off":4.74,"def":4.21},"braves":{"off":4.76,"def":4.24},
-    "phillies":{"off":4.58,"def":4.30},"mariners":{"off":4.44,"def":4.06},
-    "brewers":{"off":4.62,"def":4.36},"pirates":{"off":4.50,"def":4.32},
-    "blue jays":{"off":4.54,"def":4.38},"tigers":{"off":4.46,"def":4.24},
-    "red sox":{"off":4.46,"def":4.28},"astros":{"off":4.72,"def":4.58},
-    "rangers":{"off":4.50,"def":4.38},"cubs":{"off":4.54,"def":4.41},
-    "orioles":{"off":4.68,"def":4.60},"royals":{"off":4.60,"def":4.58},
-    "rays":{"off":4.34,"def":4.36},"diamondbacks":{"off":4.47,"def":4.58},
-    "reds":{"off":4.42,"def":4.62},"padres":{"off":4.40,"def":4.52},
-    "guardians":{"off":4.30,"def":4.50},"marlins":{"off":4.37,"def":4.54},
-    "giants":{"off":4.22,"def":4.40},"twins":{"off":4.46,"def":4.58},
-    "athletics":{"off":4.66,"def":4.88},"cardinals":{"off":4.28,"def":4.65},
-    "angels":{"off":4.28,"def":4.72},"white sox":{"off":4.18,"def":4.98},
-    "nationals":{"off":4.30,"def":4.98},"rockies":{"off":4.38,"def":5.42},
+    "dodgers":{"off":5.36,"def":3.47},
+    "yankees":{"off":4.88,"def":3.81},
+    "mets":{"off":3.99,"def":4.49},
+    "braves":{"off":4.73,"def":3.7},
+    "phillies":{"off":4.45,"def":4.38},
+    "mariners":{"off":4.09,"def":3.94},
+    "brewers":{"off":5.18,"def":3.65},
+    "pirates":{"off":5.12,"def":4.84},
+    "blue jays":{"off":4.01,"def":4.42},
+    "tigers":{"off":4.19,"def":4.1},
+    "red sox":{"off":3.99,"def":3.98},
+    "astros":{"off":4.51,"def":4.98},
+    "rangers":{"off":4.07,"def":4.1},
+    "cubs":{"off":4.94,"def":4.44},
+    "orioles":{"off":4.56,"def":5.0},
+    "royals":{"off":4.2,"def":5.08},
+    "rays":{"off":4.59,"def":4.22},
+    "diamondbacks":{"off":4.27,"def":4.55},
+    "reds":{"off":4.23,"def":4.92},
+    "padres":{"off":3.93,"def":4.12},
+    "guardians":{"off":3.91,"def":4.06},
+    "marlins":{"off":4.45,"def":4.17},
+    "giants":{"off":4.04,"def":4.71},
+    "twins":{"off":4.84,"def":5.2},
+    "athletics":{"off":4.58,"def":5.34},
+    "cardinals":{"off":4.48,"def":4.55},
+    "angels":{"off":4.49,"def":5.01},
+    "white sox":{"off":4.87,"def":4.51},
+    "nationals":{"off":5.29,"def":5.18},
+    "rockies":{"off":4.62,"def":5.81},
 }
 DEF_BASE = {"off":4.40,"def":4.50}
 
@@ -2817,6 +2831,8 @@ def run():
         sp_info  = pitchers.get((home,away),{})
         home_sp  = sp_info.get("home_pitcher")
         away_sp  = sp_info.get("away_pitcher")
+        _sp_src       = sp_info.get("_src","probable") if sp_info else "probable"
+        _sp_confirmed = (home_sp is not None) and (away_sp is not None)
         bms      = game.get("bookmakers",[])
         if not bms: continue
 
@@ -3042,6 +3058,10 @@ def run():
                 elif _wr_hist < 0.55: bet_conf = round(bet_conf * 0.97, 4)
                 elif _wr_hist > 0.68: bet_conf = round(min(1.0, bet_conf * 1.05), 4)
             # 統一用 edge×conf ≥ threshold（所有注單類型一致，低信心高edge也會被過濾）
+            # SP_UNCONFIRMED_PENALTY: SP not officially confirmed -> conf x0.93
+            if not _sp_confirmed:
+                bet_conf = round(bet_conf * 0.93, 4)
+                log.info("SP_UNCONFIRMED(%s): conf->%.3f", _sp_src, bet_conf)
             edge_ok = raw_edge * bet_conf >= edge_min
             if not edge_ok: continue
             if bp<MIN_P or bp>MAX_P: continue
@@ -3116,29 +3136,27 @@ def run():
                     if bet_conf < RL_BET_CONF_MIN:
                         log.info("RL blocked by weather: wf=%.3f conf→%.3f", _wf_rl, bet_conf)
                         continue
-                # ⑥ SP_DELTA_PENALTY：客隊(受讓方)SP ERA明顯差於對手SP → 降低RL信心
-                # 邏輯：rl_a/rl_a_25 = 客隊受讓，客隊SP應為 away_sp，對手SP為 home_sp
-                #       rl_h/rl_h_25 = 主隊受讓，主隊SP應為 home_sp，對手SP為 away_sp
+                # SP_DELTA_PENALTY: 受讓方SP ERA明顯差於對手SP → 降低RL信心
                 if bside in ("rl_a", "rl_a_25"):
-                    _ud_sp_era  = _a_era_v   # 受讓隊SP ERA
-                    _fav_sp_era = _h_era_v   # 強隊SP ERA
+                    _ud_sp_era = _a_era_v
+                    _fav_sp_era = _h_era_v
                 else:
-                    _ud_sp_era  = _h_era_v
+                    _ud_sp_era = _h_era_v
                     _fav_sp_era = _a_era_v
                 if _ud_sp_era - _fav_sp_era > 0.8:
                     _old_conf = bet_conf
                     bet_conf = round(bet_conf - 0.20, 4)
-                    log.info("SP_DELTA_PENALTY: ud_sp_era=%.2f fav_sp_era=%.2f delta=%.2f conf %.2f→%.2f",
-                             _ud_sp_era, _fav_sp_era, _ud_sp_era - _fav_sp_era, _old_conf, bet_conf)
+                    log.info("SP_DELTA_PENALTY: ud=%.2f fav=%.2f delta=%.2f conf %.2f→%.2f",
+                             _ud_sp_era, _fav_sp_era, _ud_sp_era-_fav_sp_era, _old_conf, bet_conf)
                     if bet_conf < 0.65:
                         log.info("SP_DELTA_PENALTY SKIP: conf %.2f below 0.65", bet_conf)
                         continue
-                # ⑦ SLUMP_LOWCONF_SKIP：低迷期 + 低信心 → 直接跳過RL
+                # SLUMP_LOWCONF_SKIP: 低迷期+低信心 → 跳過RL
                 if _slump_mult < 1.0 and bet_conf < 0.75:
                     log.info("SLUMP_LOWCONF_SKIP: slump_mult=%.2f conf=%.2f — RL skipped",
                              _slump_mult, bet_conf)
                     continue
-                # ⑧ AWAY_UD_PENALTY：客隊弱勢讓分受讓且賠率差距大 → 額外降低信心
+                # AWAY_UD_PENALTY: 客隊弱勢讓分且賠率差距大 → 額外降信心
                 if bside in ("rl_a", "rl_a_25"):
                     _h_dv = _dv.get("home", 0.5)
                     _a_dv = _dv.get("away", 0.5)
@@ -3146,7 +3164,7 @@ def run():
                         _old_conf = bet_conf
                         bet_conf = round(bet_conf - 0.10, 4)
                         log.info("AWAY_UD_PENALTY: h_dv=%.3f a_dv=%.3f gap=%.3f conf %.2f→%.2f",
-                                 _h_dv, _a_dv, abs(_h_dv - _a_dv), _old_conf, bet_conf)
+                                 _h_dv, _a_dv, abs(_h_dv-_a_dv), _old_conf, bet_conf)
                         if bet_conf < RL_BET_CONF_MIN:
                             log.info("AWAY_UD_PENALTY SKIP: conf %.2f below RL_BET_CONF_MIN", bet_conf)
                             continue
@@ -3201,7 +3219,16 @@ def run():
                 _a_k9 = _PITCHER_K9.get(away_sp, 7.0)
                 if _h_k9 >= K9_HIGH_THRESH and _a_k9 >= K9_HIGH_THRESH:
                     bet_conf = min(1.0, bet_conf + K9_UNDER_CONF)
-                # ⑦ 天氣不確定性：壞天氣讓模型低估總分，但實際更難預測，UNDER需更謹慎
+                # ⑦ 市場大幅不認同：模型總分遠低於市場線 → UNDER信心降低（防止模型過度自信）
+                _under_mkt_gap = market_total - pred.get("pure_total_tot", market_total)
+                if _under_mkt_gap > 1.5:
+                    bet_conf = round(bet_conf * 0.85, 4)
+                    log.info("UNDER_MKT_DISAGREE: model_tot=%.1f mkt=%.1f gap=%.1f conf→%.3f",
+                             pred.get("pure_total_tot", market_total), market_total, _under_mkt_gap, bet_conf)
+                    if bet_conf < 0.65:
+                        log.info("UNDER_MKT_DISAGREE SKIP: conf %.2f below 0.65", bet_conf)
+                        continue
+                # ⑧ 天氣不確定性：壞天氣讓模型低估總分，但實際更難預測，UNDER需更謹慎
                 _wf_tot = pred.get("weather_factor", 1.0) or 1.0
                 if _wf_tot <= 0.95:
                     bet_conf = round(bet_conf * 0.90, 4)
@@ -3249,7 +3276,7 @@ def run():
             if stake <= 0: continue   # Kelly建議不下（負期望值），排除
             stake = round(min(KELLY_MAX, max(KELLY_FLOOR, stake)), 1)
             if stake < KELLY_MIN: continue  # 注額低於最低門檻，排除
-            # ⑤ TOT優先加成：TOT歷史ROI+54%/WR70%最佳，給予微幅信心加成以利競爭
+            # TOT優先加成：TOT歷史ROI+54%/WR70%最佳—微幅信心加成以利競爭
             if btype == BET_TOT:
                 bet_conf = round(min(1.0, bet_conf + 0.02), 4)
             score = raw_edge * bet_conf
