@@ -1,23 +1,26 @@
-'use client'
-
-import { useEffect, useState } from 'react'
 import HeroSection from '@/components/HeroSection'
 import PickCard from '@/components/PickCard'
 import StatsBar from '@/components/StatsBar'
+import { createServiceClient } from '@/lib/supabase-server'
 import type { PicksData } from '@/types'
 
-export default function HomePage() {
-  const [data, setData]       = useState<PicksData | null>(null)
-  const [loading, setLoading] = useState(true)
+export const revalidate = 1800 // re-fetch from Supabase every 30 min; picks update once daily
 
-  useEffect(() => {
-    fetch('/api/picks')
-      .then(r => r.ok ? r.json() : null)
-      .then(d => { setData(d); setLoading(false) })
-      .catch(() => setLoading(false))
-  }, [])
+async function fetchPicks(): Promise<PicksData | null> {
+  try {
+    const supabase = await createServiceClient()
+    const { data, error } = await supabase.storage
+      .from('picks')
+      .download('picks_latest.json')
+    if (error || !data) return null
+    return JSON.parse(await data.text()) as PicksData
+  } catch {
+    return null
+  }
+}
 
-  if (loading) return <LoadingSkeleton />
+export default async function HomePage() {
+  const data = await fetchPicks()
 
   return (
     <>
@@ -98,8 +101,6 @@ export default function HomePage() {
                     <tr
                       key={i}
                       style={{ borderBottom: '1px solid var(--border)', transition: 'background .15s' }}
-                      onMouseEnter={e => (e.currentTarget.style.background = 'rgba(0,229,255,0.04)')}
-                      onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                     >
                       <td style={{ padding: '12px 16px', fontSize: 12, color: 'var(--text-2)', whiteSpace: 'nowrap' }}>{r.date}</td>
                       <td style={{ padding: '12px 16px', fontSize: 13, color: 'var(--text-1)' }}>
@@ -179,22 +180,6 @@ function EmptyState({ icon, title, desc }: { icon: string; title: string; desc: 
       <span style={{ fontSize: 48, opacity: 0.4 }}>{icon}</span>
       <p style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-1)', marginTop: 12 }}>{title}</p>
       <p style={{ fontSize: 13, color: 'var(--text-2)', marginTop: 6, maxWidth: 300 }}>{desc}</p>
-    </div>
-  )
-}
-
-function LoadingSkeleton() {
-  return (
-    <div className="min-h-svh flex flex-col items-center justify-center gap-8 px-4">
-      <div className="space-y-4 w-full max-w-xs text-center">
-        <div className="skeleton h-12 w-64 mx-auto" />
-        <div className="skeleton h-5 w-48 mx-auto" />
-      </div>
-      <div className="grid gap-4 w-full max-w-7xl" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 380px), 1fr))' }}>
-        {[1, 2, 3].map(i => (
-          <div key={i} className="skeleton" style={{ height: 200, borderRadius: 16 }} />
-        ))}
-      </div>
     </div>
   )
 }
