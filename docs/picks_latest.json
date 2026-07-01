@@ -318,10 +318,10 @@
       "home_cn": "皇家",
       "away_cn": "光芒",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 10.5,
+      "projected_total": 10.0,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -337,9 +337,21 @@
       "market_total": 8.5,
       "bet": null,
       "reason": null
+    },
+    {
+      "home_cn": "釀酒人",
+      "away_cn": "紅人",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 8.5,
+      "market_total": 8.5,
+      "bet": null,
+      "reason": null
     }
   ],
-  "live_updated_ts": 1782949760,
+  "live_updated_ts": 1782950062,
   "game_preds": {
     "red sox|blue jays": {
       "home_win_prob": 0.7016,
@@ -378,5 +390,5 @@
       "market_total": 10.0
     }
   },
-  "live_updated_at": "2026-07-02 07:49 (台灣時間)"
+  "live_updated_at": "2026-07-02 07:54 (台灣時間)"
 }
