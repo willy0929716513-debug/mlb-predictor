@@ -375,7 +375,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1782956952,
+  "live_updated_ts": 1782957254,
   "game_preds": {
     "red sox|blue jays": {
       "home_win_prob": 0.7016,
@@ -414,5 +414,5 @@
       "market_total": 10.0
     }
   },
-  "live_updated_at": "2026-07-02 09:49 (台灣時間)"
+  "live_updated_at": "2026-07-02 09:54 (台灣時間)"
 }
