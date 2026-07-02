@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02 17:16 (台灣時間)",
+  "generated_at": "2026-07-02 20:58 (台灣時間)",
   "date": "2026-07-02",
   "stats": {
     "settled": 173,
@@ -31,21 +31,21 @@
   },
   "picks": [
     {
-      "tier": "⭐ 穩定",
-      "btype": "獨贏",
+      "tier": "🔥 強力",
+      "btype": "讓分",
       "away": "tigers",
       "home": "rangers",
       "away_cn": "老虎",
       "home_cn": "遊騎兵",
-      "bet_label": "遊騎兵 獨贏",
-      "bk": "BetOnline.ag",
-      "bp": 1.79,
-      "con_p": 1.764,
-      "dv_p": 0.5458,
-      "edge": 13.8,
-      "conf": 92.0,
+      "bet_label": "遊騎兵 讓分(+1.5)",
+      "bk": "BetRivers",
+      "bp": 2.75,
+      "con_p": 2.534,
+      "dv_p": 0.392,
+      "edge": 36.1,
+      "conf": 86.9,
       "stake": 50.0,
-      "model_p": 68.4,
+      "model_p": 72.0,
       "away_sp": "Framber Valdez",
       "home_sp": "Nathan Eovaldi",
       "away_era": 2.85,
@@ -64,17 +64,17 @@
       "home_rs": 5.0,
       "away_rpg": 4.2,
       "home_rpg": 4.07,
-      "pred_away": 3.5,
+      "pred_away": 3.4,
       "pred_home": 4.5,
       "model_total": null,
       "market_total": null,
       "park_factor": 1.12,
-      "weather_factor": 1.068,
+      "weather_factor": 1.062,
       "ump_name": null,
       "ump_adj": null,
       "away_trend": 0.94,
       "home_trend": -3.36,
-      "line_clv": null,
+      "line_clv": -1.37,
       "game_date": "2026-07-03",
       "game_time": "08:06",
       "sp_src": "probable",
@@ -101,11 +101,11 @@
       "away_cn": "紅人",
       "home_cn": "釀酒人",
       "bet_label": "釀酒人 獨贏",
-      "bk": "BetRivers",
+      "bk": "FanDuel",
       "bp": 1.53,
-      "con_p": 1.507,
-      "dv_p": 0.6389,
-      "edge": 12.1,
+      "con_p": 1.512,
+      "dv_p": 0.6369,
+      "edge": 12.3,
       "conf": 74.8,
       "stake": 50.0,
       "model_p": 76.0,
@@ -132,12 +132,12 @@
       "model_total": null,
       "market_total": null,
       "park_factor": 1.05,
-      "weather_factor": 1.114,
+      "weather_factor": 1.11,
       "ump_name": null,
       "ump_adj": null,
       "away_trend": 2.67,
       "home_trend": 2.25,
-      "line_clv": null,
+      "line_clv": 0.0,
       "game_date": "2026-07-03",
       "game_time": "02:11",
       "sp_src": "probable",
@@ -303,39 +303,39 @@
   "live_updated_ts": 1782965703,
   "game_preds": {
     "phillies|pirates": {
-      "home_win_prob": 0.4738,
+      "home_win_prob": 0.4808,
       "market_total": 10.5
     },
     "brewers|reds": {
       "home_win_prob": 0.76,
-      "market_total": 6.5
+      "market_total": 7.0
     },
     "rockies|marlins": {
-      "home_win_prob": 0.6034,
+      "home_win_prob": 0.5947,
       "market_total": 12.0
     },
     "guardians|white sox": {
-      "home_win_prob": 0.2757,
-      "market_total": 8.0
+      "home_win_prob": 0.27,
+      "market_total": 8.5
     },
     "braves|cardinals": {
-      "home_win_prob": 0.2703,
+      "home_win_prob": 0.2668,
       "market_total": 9.0
     },
     "royals|rays": {
-      "home_win_prob": 0.4434,
+      "home_win_prob": 0.4334,
       "market_total": 10.5
     },
     "rangers|tigers": {
-      "home_win_prob": 0.6841,
+      "home_win_prob": 0.6681,
       "market_total": 7.5
     },
     "mariners|angels": {
-      "home_win_prob": 0.5471,
+      "home_win_prob": 0.5481,
       "market_total": 7.5
     },
     "dodgers|padres": {
-      "home_win_prob": 0.7226,
+      "home_win_prob": 0.7206,
       "market_total": 9.0
     }
   }
