@@ -294,22 +294,22 @@
       "home_cn": "費城人",
       "away_cn": "海盜",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 8,
       "away_runs": 4,
-      "projected_total": 16.7,
+      "projected_total": 16.2,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第5局已得12分（此時預期3.8分），高分走勢盤口8.5"
+      "reason": "第5局已得12分（此時預期4.2分），高分走勢盤口8.5"
     },
     {
       "home_cn": "勇士",
       "away_cn": "紅雀",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 1,
-      "projected_total": 7.7,
+      "projected_total": 7.2,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -318,10 +318,10 @@
       "home_cn": "皇家",
       "away_cn": "光芒",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 7.7,
+      "projected_total": 7.2,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -343,9 +343,9 @@
       "away_cn": "紅人",
       "inning": 1,
       "top_inning": false,
-      "home_runs": 1,
+      "home_runs": 2,
       "away_runs": 0,
-      "projected_total": 9.0,
+      "projected_total": 10.0,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -363,7 +363,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1782951872,
+  "live_updated_ts": 1782952174,
   "game_preds": {
     "red sox|blue jays": {
       "home_win_prob": 0.7016,
@@ -402,5 +402,5 @@
       "market_total": 10.0
     }
   },
-  "live_updated_at": "2026-07-02 08:24 (台灣時間)"
+  "live_updated_at": "2026-07-02 08:29 (台灣時間)"
 }
