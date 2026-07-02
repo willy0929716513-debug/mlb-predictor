@@ -346,15 +346,15 @@
       "away_cn": "馬林魚",
       "inning": 3,
       "top_inning": false,
-      "home_runs": 1,
+      "home_runs": 3,
       "away_runs": 3,
-      "projected_total": 12.7,
+      "projected_total": 14.7,
       "market_total": 12.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1783022348,
+  "live_updated_ts": 1783022650,
   "game_preds": {
     "phillies|pirates": {
       "home_win_prob": 0.4846,
@@ -393,5 +393,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-03 03:59 (台灣時間)"
+  "live_updated_at": "2026-07-03 04:04 (台灣時間)"
 }
