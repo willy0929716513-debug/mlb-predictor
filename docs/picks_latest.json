@@ -293,29 +293,29 @@
     {
       "home_cn": "運動家",
       "away_cn": "道奇",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 6,
       "away_runs": 1,
-      "projected_total": 9.4,
+      "projected_total": 8.9,
       "market_total": 8.5,
       "bet": "主隊獨贏",
-      "reason": "第7局主隊領先5分（賽前主隊勝率50%），大局已定"
+      "reason": "第8局主隊領先5分（賽前主隊勝率50%），大局已定"
     },
     {
       "home_cn": "響尾蛇",
       "away_cn": "巨人",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 6,
-      "projected_total": 8.8,
+      "projected_total": 8.4,
       "market_total": 8.5,
       "bet": "客隊獨贏",
       "reason": "第7局客隊領先6分（賽前客隊勝率50%），大局已定"
     }
   ],
-  "live_updated_ts": 1782963294,
+  "live_updated_ts": 1782963596,
   "game_preds": {
     "red sox|blue jays": {
       "home_win_prob": 0.7016,
@@ -354,5 +354,5 @@
       "market_total": 10.0
     }
   },
-  "live_updated_at": "2026-07-02 11:34 (台灣時間)"
+  "live_updated_at": "2026-07-02 11:39 (台灣時間)"
 }
