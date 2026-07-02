@@ -3168,6 +3168,17 @@ def run():
                         if bet_conf < RL_BET_CONF_MIN:
                             log.info("AWAY_UD_PENALTY SKIP: conf %.2f below RL_BET_CONF_MIN", bet_conf)
                             continue
+                # ⑥ RL市場大幅不認同：模型概率遠高於市場devigged概率 → 降低信心或封鎖
+                _rl_mkt_dv = _dv.get(bside, 1.0/con_p)
+                _rl_model_mkt_gap = model_p - _rl_mkt_dv
+                if _rl_model_mkt_gap > 0.20:
+                    _old_conf = bet_conf
+                    bet_conf = round(bet_conf * 0.85, 4)
+                    log.info("RL_MKT_DISAGREE: model_p=%.3f mkt_p=%.3f gap=%.3f conf %.2f→%.2f",
+                             model_p, _rl_mkt_dv, _rl_model_mkt_gap, _old_conf, bet_conf)
+                    if _rl_model_mkt_gap > 0.30 or bet_conf < RL_BET_CONF_MIN:
+                        log.info("RL_MKT_DISAGREE SKIP: gap=%.3f conf=%.2f", _rl_model_mkt_gap, bet_conf)
+                        continue
             # ── ★ 菁英對決保護：雙方ERA均優時，OVER門檻提高 ──
             # 若雙SP ERA < 3.50，RS易誤拉高total，需更高p_over才下Over
             if btype == BET_TOT and bside == "over":
