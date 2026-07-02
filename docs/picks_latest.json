@@ -318,22 +318,22 @@
       "home_cn": "皇家",
       "away_cn": "光芒",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 3,
-      "projected_total": 5.8,
+      "projected_total": 5.4,
       "market_total": 8.5,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅3分（此時預期5.7分），低分走勢盤口8.5"
+      "reason": "第7局僅3分（此時預期6.1分），低分走勢盤口8.5"
     },
     {
       "home_cn": "太空人",
       "away_cn": "雙城",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 5,
-      "projected_total": 13.1,
+      "projected_total": 12.6,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -363,7 +363,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1782954287,
+  "live_updated_ts": 1782954589,
   "game_preds": {
     "red sox|blue jays": {
       "home_win_prob": 0.7016,
@@ -402,5 +402,5 @@
       "market_total": 10.0
     }
   },
-  "live_updated_at": "2026-07-02 09:04 (台灣時間)"
+  "live_updated_at": "2026-07-02 09:09 (台灣時間)"
 }
