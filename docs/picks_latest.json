@@ -311,8 +311,8 @@
       "away_runs": 2,
       "projected_total": 7.4,
       "market_total": 8.5,
-      "bet": null,
-      "reason": null
+      "bet": "主隊獨贏",
+      "reason": "第7局主隊領先2分（賽前主隊勝率50%），大局已定"
     },
     {
       "home_cn": "落磯",
