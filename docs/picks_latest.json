@@ -328,8 +328,45 @@
       "sp_confirmed": true
     }
   ],
-  "live_games": [],
-  "live_updated_ts": 1782965703,
+  "live_games": [
+    {
+      "home_cn": "費城人",
+      "away_cn": "海盜",
+      "inning": 7,
+      "top_inning": false,
+      "home_runs": 1,
+      "away_runs": 3,
+      "projected_total": 6.9,
+      "market_total": 10.5,
+      "bet": "大小分 UNDER",
+      "reason": "第7局僅4分（此時預期7.6分），低分走勢盤口10.5"
+    },
+    {
+      "home_cn": "釀酒人",
+      "away_cn": "紅人",
+      "inning": 4,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 1,
+      "projected_total": 5.7,
+      "market_total": 7.0,
+      "bet": "主隊讓分(+1.5)",
+      "reason": "主隊落後1分 第4局，賽前主隊勝率76%"
+    },
+    {
+      "home_cn": "落磯",
+      "away_cn": "馬林魚",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 12.0,
+      "market_total": 12.0,
+      "bet": null,
+      "reason": null
+    }
+  ],
+  "live_updated_ts": 1783018726,
   "game_preds": {
     "phillies|pirates": {
       "home_win_prob": 0.4846,
@@ -367,5 +404,6 @@
       "home_win_prob": 0.7396,
       "market_total": 9.0
     }
-  }
+  },
+  "live_updated_at": "2026-07-03 02:58 (台灣時間)"
 }
