@@ -311,8 +311,8 @@
       "away_runs": 1,
       "projected_total": 9.2,
       "market_total": 8.5,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第5局已得6分（此時預期4.2分），高分走勢盤口8.5"
     },
     {
       "home_cn": "響尾蛇",
