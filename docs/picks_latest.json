@@ -331,9 +331,9 @@
       "away_cn": "道奇",
       "inning": 4,
       "top_inning": false,
-      "home_runs": 1,
+      "home_runs": 3,
       "away_runs": 1,
-      "projected_total": 7.2,
+      "projected_total": 9.2,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -351,7 +351,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1782960274,
+  "live_updated_ts": 1782960576,
   "game_preds": {
     "red sox|blue jays": {
       "home_win_prob": 0.7016,
@@ -390,5 +390,5 @@
       "market_total": 10.0
     }
   },
-  "live_updated_at": "2026-07-02 10:44 (台灣時間)"
+  "live_updated_at": "2026-07-02 10:49 (台灣時間)"
 }
