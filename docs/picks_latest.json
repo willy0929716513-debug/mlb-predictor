@@ -293,14 +293,14 @@
     {
       "home_cn": "費城人",
       "away_cn": "海盜",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 8,
       "away_runs": 6,
-      "projected_total": 16.4,
+      "projected_total": 15.9,
       "market_total": 8.5,
-      "bet": "大小分 OVER",
-      "reason": "第7局已得14分（此時預期6.1分），高分走勢盤口8.5"
+      "bet": "主隊獨贏",
+      "reason": "第8局主隊領先2分（賽前主隊勝率50%），大局已定"
     },
     {
       "home_cn": "皇家",
