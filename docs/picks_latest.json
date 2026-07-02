@@ -315,7 +315,7 @@
       "reason": "第7局客隊領先6分（賽前客隊勝率50%），大局已定"
     }
   ],
-  "live_updated_ts": 1782963596,
+  "live_updated_ts": 1782963897,
   "game_preds": {
     "red sox|blue jays": {
       "home_win_prob": 0.7016,
@@ -354,5 +354,5 @@
       "market_total": 10.0
     }
   },
-  "live_updated_at": "2026-07-02 11:39 (台灣時間)"
+  "live_updated_at": "2026-07-02 11:44 (台灣時間)"
 }
