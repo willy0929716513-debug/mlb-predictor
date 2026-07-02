@@ -328,8 +328,45 @@
       "sp_confirmed": true
     }
   ],
-  "live_games": [],
-  "live_updated_ts": 1783031095,
+  "live_games": [
+    {
+      "home_cn": "守護者",
+      "away_cn": "白襪",
+      "inning": 3,
+      "top_inning": false,
+      "home_runs": 2,
+      "away_runs": 0,
+      "projected_total": 8.1,
+      "market_total": 8.5,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "勇士",
+      "away_cn": "紅雀",
+      "inning": 1,
+      "top_inning": false,
+      "home_runs": 0,
+      "away_runs": 3,
+      "projected_total": 11.0,
+      "market_total": 8.5,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "皇家",
+      "away_cn": "光芒",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 10.5,
+      "market_total": 10.5,
+      "bet": null,
+      "reason": null
+    }
+  ],
+  "live_updated_ts": 1783035222,
   "game_preds": {
     "phillies|pirates": {
       "home_win_prob": 0.4846,
@@ -368,5 +405,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": ""
+  "live_updated_at": "2026-07-03 07:33 (台灣時間)"
 }
