@@ -306,19 +306,19 @@
       "home_cn": "運動家",
       "away_cn": "道奇",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 6,
       "away_runs": 1,
-      "projected_total": 10.8,
+      "projected_total": 10.3,
       "market_total": 8.5,
-      "bet": "大小分 OVER",
-      "reason": "第6局已得7分（此時預期4.7分），高分走勢盤口8.5"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "響尾蛇",
       "away_cn": "巨人",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 6,
       "projected_total": 9.8,
@@ -327,7 +327,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1782962388,
+  "live_updated_ts": 1782962690,
   "game_preds": {
     "red sox|blue jays": {
       "home_win_prob": 0.7016,
@@ -366,5 +366,5 @@
       "market_total": 10.0
     }
   },
-  "live_updated_at": "2026-07-02 11:19 (台灣時間)"
+  "live_updated_at": "2026-07-02 11:24 (台灣時間)"
 }
