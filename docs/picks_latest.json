@@ -332,14 +332,14 @@
     {
       "home_cn": "遊騎兵",
       "away_cn": "老虎",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 10,
       "away_runs": 4,
-      "projected_total": 15.2,
+      "projected_total": 14.8,
       "market_total": 7.5,
       "bet": "主隊獨贏",
-      "reason": "第8局主隊領先6分（賽前主隊勝率66%），大局已定"
+      "reason": "第9局主隊領先6分（賽前主隊勝率66%），大局已定"
     },
     {
       "home_cn": "水手",
