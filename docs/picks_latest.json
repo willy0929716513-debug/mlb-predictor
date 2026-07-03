@@ -357,10 +357,10 @@
       "home_cn": "皇家",
       "away_cn": "光芒",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 3,
-      "projected_total": 12.2,
+      "projected_total": 11.6,
       "market_total": 10.5,
       "bet": null,
       "reason": null
@@ -378,7 +378,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783038538,
+  "live_updated_ts": 1783038839,
   "game_preds": {
     "phillies|pirates": {
       "home_win_prob": 0.4846,
@@ -417,5 +417,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-03 08:28 (台灣時間)"
+  "live_updated_at": "2026-07-03 08:33 (台灣時間)"
 }
