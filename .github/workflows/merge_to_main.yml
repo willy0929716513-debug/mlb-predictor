@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - 'claude/model-overview-w7p4ya'
-    paths:
-      - 'mlb_bot_v101.py'
 
 permissions:
   contents: write
