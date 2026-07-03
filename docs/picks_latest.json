@@ -335,23 +335,11 @@
       "inning": 9,
       "top_inning": true,
       "home_runs": 5,
-      "away_runs": 10,
-      "projected_total": 15.9,
+      "away_runs": 11,
+      "projected_total": 16.9,
       "market_total": 8.5,
       "bet": "客隊獨贏",
-      "reason": "第9局客隊領先5分（賽前客隊勝率74%），大局已定"
-    },
-    {
-      "home_cn": "皇家",
-      "away_cn": "光芒",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 2,
-      "away_runs": 5,
-      "projected_total": 7.6,
-      "market_total": 10.5,
-      "bet": "客隊獨贏",
-      "reason": "第9局客隊領先3分（賽前客隊勝率56%），大局已定"
+      "reason": "第9局客隊領先6分（賽前客隊勝率74%），大局已定"
     },
     {
       "home_cn": "遊騎兵",
