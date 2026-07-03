@@ -345,22 +345,22 @@
       "home_cn": "勇士",
       "away_cn": "紅雀",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 5,
       "away_runs": 3,
-      "projected_total": 11.8,
+      "projected_total": 11.3,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第6局已得8分（此時預期4.7分），高分走勢盤口8.5"
+      "reason": "第6局已得8分（此時預期5.2分），高分走勢盤口8.5"
     },
     {
       "home_cn": "皇家",
       "away_cn": "光芒",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
-      "away_runs": 3,
-      "projected_total": 9.8,
+      "away_runs": 5,
+      "projected_total": 11.2,
       "market_total": 10.5,
       "bet": null,
       "reason": null
@@ -369,16 +369,16 @@
       "home_cn": "遊騎兵",
       "away_cn": "老虎",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 0,
-      "projected_total": 8.8,
+      "projected_total": 8.4,
       "market_total": 7.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1783040045,
+  "live_updated_ts": 1783040346,
   "game_preds": {
     "phillies|pirates": {
       "home_win_prob": 0.4846,
@@ -417,5 +417,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-03 08:54 (台灣時間)"
+  "live_updated_at": "2026-07-03 08:59 (台灣時間)"
 }
