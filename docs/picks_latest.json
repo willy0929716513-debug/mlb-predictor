@@ -332,14 +332,14 @@
     {
       "home_cn": "遊騎兵",
       "away_cn": "老虎",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 9,
       "away_runs": 3,
-      "projected_total": 14.1,
+      "projected_total": 13.7,
       "market_total": 7.5,
-      "bet": "大小分 OVER",
-      "reason": "第7局已得12分（此時預期5.4分），高分走勢盤口7.5"
+      "bet": "主隊獨贏",
+      "reason": "第8局主隊領先6分（賽前主隊勝率66%），大局已定"
     },
     {
       "home_cn": "水手",
@@ -358,9 +358,9 @@
       "away_cn": "教士",
       "inning": 2,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 2,
       "away_runs": 6,
-      "projected_total": 13.5,
+      "projected_total": 15.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
