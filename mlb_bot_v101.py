@@ -3076,6 +3076,38 @@ def run():
             if btype == BET_RL and bet_conf < RL_BET_CONF_MIN: continue  # RL 需更高信心
             # ML低賠保護：賠率<1.65（損益平衡≥60.6%），需更大的devigged edge
             if btype == BET_ML and bp < 1.65 and raw_edge < EDGE_MIN_ML_FAV: continue
+            # ── ★ ML 保護層（FIP回歸 · 對手強打線 · 模型市場差距）──
+            if btype == BET_ML:
+                _ml_sp = home_sp if bside == "home" else away_sp
+                # ① FIP回歸保護：推薦隊SP的FIP遠高於ERA → 幸運ERA，失分回歸風險
+                _ml_sp_fip = _PITCHER_FIP.get(_ml_sp)
+                _ml_sp_era_raw = _RECENT_ERA.get(_ml_sp)
+                if (_ml_sp_fip and _ml_sp_era_raw and
+                        (_ml_sp_fip - _ml_sp_era_raw) > FIP_ERA_UNDER_GAP):
+                    bet_conf = round(bet_conf * 0.90, 4)
+                    log.info("ML_FIP_PENALTY: %s gap=%.2f (FIP=%.2f ERA=%.2f) conf→%.3f",
+                             _ml_sp, _ml_sp_fip - _ml_sp_era_raw, _ml_sp_fip, _ml_sp_era_raw, bet_conf)
+                    if bet_conf < ML_BET_CONF_MIN:
+                        log.info("ML_FIP_PENALTY SKIP: conf %.2f below ML_BET_CONF_MIN", bet_conf)
+                        continue
+                # ② 對手強打線：對手投手RS過高 → 對手打線強，推薦隊失分風險高
+                _opp_rs = pred.get("a_rs" if bside == "home" else "h_rs")
+                if _opp_rs is not None and _opp_rs >= 6.5:
+                    bet_conf = round(bet_conf * 0.93, 4)
+                    log.info("ML_OPP_RS_PENALTY: opp_rs=%.1f conf→%.3f", _opp_rs, bet_conf)
+                    if bet_conf < ML_BET_CONF_MIN:
+                        log.info("ML_OPP_RS_PENALTY SKIP: conf %.2f below ML_BET_CONF_MIN", bet_conf)
+                        continue
+                # ③ 模型大幅超越市場：model_p遠高於devigged市場概率 → 降低信心
+                _ml_mkt_dv = _dv.get(bside, 1.0/con_p)
+                _ml_model_mkt_gap = model_p - _ml_mkt_dv
+                if _ml_model_mkt_gap > 0.18:
+                    bet_conf = round(bet_conf * 0.88, 4)
+                    log.info("ML_MKT_DISAGREE: model_p=%.3f mkt_p=%.3f gap=%.3f conf→%.3f",
+                             model_p, _ml_mkt_dv, _ml_model_mkt_gap, bet_conf)
+                    if bet_conf < ML_BET_CONF_MIN:
+                        log.info("ML_MKT_DISAGREE SKIP: conf %.2f below ML_BET_CONF_MIN", bet_conf)
+                        continue
             # ── ★ RL 保護層（依序：信心→TBD→爆冷→王牌→菁英對決）──
             if btype == BET_RL:
                 # ① TBD 投手：ERA預設值不可靠，不推薦讓分受讓
