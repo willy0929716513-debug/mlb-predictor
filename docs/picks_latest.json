@@ -366,7 +366,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783048078,
+  "live_updated_ts": 1783048379,
   "game_preds": {
     "phillies|pirates": {
       "home_win_prob": 0.4846,
@@ -405,5 +405,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-03 11:07 (台灣時間)"
+  "live_updated_at": "2026-07-03 11:12 (台灣時間)"
 }
