@@ -345,13 +345,13 @@
       "home_cn": "道奇",
       "away_cn": "教士",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 8,
       "away_runs": 6,
-      "projected_total": 19.0,
+      "projected_total": 18.5,
       "market_total": 9.0,
       "bet": "大小分 OVER",
-      "reason": "第5局已得14分（此時預期4.0分），高分走勢盤口9.0"
+      "reason": "第5局已得14分（此時預期4.5分），高分走勢盤口9.0"
     }
   ],
   "live_updated_ts": 1783050790,
