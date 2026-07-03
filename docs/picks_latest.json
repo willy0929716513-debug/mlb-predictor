@@ -333,10 +333,10 @@
       "home_cn": "守護者",
       "away_cn": "白襪",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 4,
       "away_runs": 5,
-      "projected_total": 9.9,
+      "projected_total": 9.5,
       "market_total": 8.5,
       "bet": null,
       "reason": null
