@@ -345,10 +345,10 @@
       "home_cn": "水手",
       "away_cn": "天使",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 5.4,
+      "projected_total": 5.1,
       "market_total": 7.0,
       "bet": null,
       "reason": null
@@ -357,16 +357,16 @@
       "home_cn": "道奇",
       "away_cn": "教士",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 11.0,
+      "projected_total": 10.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1783045065,
+  "live_updated_ts": 1783045366,
   "game_preds": {
     "phillies|pirates": {
       "home_win_prob": 0.4846,
@@ -405,5 +405,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-03 10:17 (台灣時間)"
+  "live_updated_at": "2026-07-03 10:22 (台灣時間)"
 }
