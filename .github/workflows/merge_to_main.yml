@@ -1,12 +1,11 @@
 name: Merge Feature to Main
 
 on:
-  workflow_dispatch:
-    inputs:
-      source_branch:
-        description: 'Branch to merge into main'
-        required: true
-        default: 'claude/model-overview-w7p4ya'
+  push:
+    branches:
+      - 'claude/model-overview-w7p4ya'
+    paths:
+      - 'mlb_bot_v101.py'
 
 permissions:
   contents: write
@@ -22,11 +21,13 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - name: Merge feature branch
+      - name: Merge feature branch into main
         run: |
           git config user.email "noreply@anthropic.com"
           git config user.name "Claude"
-          git fetch origin ${{ github.event.inputs.source_branch }}
-          git merge --no-ff origin/${{ github.event.inputs.source_branch }} \
-            -m "chore: merge model overhaul (FIP fix, calibration, ML/UNDER protections)"
+          git fetch origin claude/model-overview-w7p4ya
+          git merge --ff-only origin/claude/model-overview-w7p4ya \
+            || git merge --no-ff origin/claude/model-overview-w7p4ya \
+               -m "chore: merge comprehensive model overhaul to main"
           git push origin main
+          echo "Merged successfully to main"
