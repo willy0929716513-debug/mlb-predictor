@@ -19,13 +19,12 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - name: Merge feature branch into main
+      - name: Deploy feature file to main
         run: |
           git config user.email "noreply@anthropic.com"
           git config user.name "Claude"
           git fetch origin claude/model-overview-w7p4ya
-          git merge --ff-only origin/claude/model-overview-w7p4ya \
-            || git merge --no-ff origin/claude/model-overview-w7p4ya \
-               -m "chore: merge comprehensive model overhaul to main"
+          git checkout origin/claude/model-overview-w7p4ya -- mlb_bot_v101.py
+          git commit -m "chore: deploy comprehensive model overhaul to main (FIP fix, calibration, ML/UNDER protections)"
           git push origin main
-          echo "Merged successfully to main"
+          echo "Deployed successfully to main"
