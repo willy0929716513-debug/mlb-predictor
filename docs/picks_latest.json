@@ -388,18 +388,6 @@
       "market_total": 9.0,
       "bet": null,
       "reason": null
-    },
-    {
-      "home_cn": "道奇",
-      "away_cn": "教士",
-      "inning": 1,
-      "top_inning": true,
-      "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 9.0,
-      "market_total": 9.0,
-      "bet": null,
-      "reason": null
     }
   ],
   "live_updated_ts": 1783043558,
