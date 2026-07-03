@@ -332,14 +332,14 @@
     {
       "home_cn": "勇士",
       "away_cn": "紅雀",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 5,
       "away_runs": 10,
-      "projected_total": 16.4,
+      "projected_total": 15.9,
       "market_total": 8.5,
       "bet": "客隊獨贏",
-      "reason": "第8局客隊領先5分（賽前客隊勝率74%），大局已定"
+      "reason": "第9局客隊領先5分（賽前客隊勝率74%），大局已定"
     },
     {
       "home_cn": "皇家",
