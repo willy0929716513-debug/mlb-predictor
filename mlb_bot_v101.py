@@ -2468,15 +2468,23 @@ def calc_perf(hist):
     return len(settled), wins, wins/len(settled)*100 if settled else 0.0
 
 def calc_pnl(hist):
-    total_in = total_pnl = 0.0
+    total_in = total_pnl = vig_cost = 0.0
     for r in hist:
         if r.get("result") not in ("W","L"): continue
         stake = r.get("stake")
         if not stake: continue
         price = r.get("price", 0)
-        total_in  += stake
-        total_pnl += stake * (price - 1) if r["result"] == "W" else -stake
-    return round(total_in, 1), round(total_pnl, 1)
+        total_in += stake
+        if r["result"] == "W":
+            total_pnl += stake * (price - 1)
+            dv_p = r.get("dv_p")
+            if dv_p and 0 < dv_p < 1:
+                # vig cost = difference between fair payout (1/dv_p) and actual payout (price)
+                vig_cost += stake * (1.0 / dv_p - price)
+        else:
+            total_pnl -= stake
+    pnl_novig = total_pnl - vig_cost
+    return round(total_in, 1), round(total_pnl, 1), round(pnl_novig, 1), round(vig_cost, 1)
 
 def calc_perf_by_type(hist):
     """分別計算 ML/RL/TOT 歷史勝率，用於動態信心校正。
@@ -2504,8 +2512,8 @@ def write_pages_json(picks, hist, now_tw, live_games=None):
         except Exception:
             pass
 
-    total_settled, wins, wr = calc_perf(hist)
-    total_in, total_pnl     = calc_pnl(hist)
+    total_settled, wins, wr       = calc_perf(hist)
+    total_in, total_pnl, pnl_novig, vig_cost = calc_pnl(hist)
     roi = round(total_pnl / total_in * 100, 1) if total_in > 0 else None
 
     # ★ 分類型勝率 + ROI（供網頁顯示）
@@ -2622,6 +2630,7 @@ def write_pages_json(picks, hist, now_tw, live_games=None):
             "settled":   total_settled, "wins": wins,
             "win_rate":  round(wr,1),
             "total_in":  round(total_in,1), "total_pnl": round(total_pnl,1), "roi": roi,
+            "pnl_novig": round(pnl_novig,1), "vig_cost": round(vig_cost,1),
             "by_type":   by_type,
         },
         "picks": records,
@@ -3684,6 +3693,7 @@ def run():
                     "stake":   round(p["stake"], 1),
                     "edge":    round(p["edge"], 4),
                     "conf":    round(p["conf"], 3),
+                    "dv_p":    p.get("dv_p"),
                     "bet_type":p["btype"],
                     "result":  None,
                     "label":   p.get("hist_label",""),
