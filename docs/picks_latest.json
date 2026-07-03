@@ -330,43 +330,31 @@
   ],
   "live_games": [
     {
-      "home_cn": "遊騎兵",
-      "away_cn": "老虎",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 10,
-      "away_runs": 4,
-      "projected_total": 14.8,
-      "market_total": 7.5,
-      "bet": "主隊獨贏",
-      "reason": "第9局主隊領先6分（賽前主隊勝率66%），大局已定"
-    },
-    {
       "home_cn": "水手",
       "away_cn": "天使",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 3.7,
+      "projected_total": 3.3,
       "market_total": 7.0,
       "bet": "大小分 UNDER",
-      "reason": "第6局僅1分（此時預期4.3分），低分走勢盤口7.0"
+      "reason": "第7局僅1分（此時預期4.7分），低分走勢盤口7.0"
     },
     {
       "home_cn": "道奇",
       "away_cn": "教士",
-      "inning": 3,
-      "top_inning": false,
-      "home_runs": 3,
+      "inning": 4,
+      "top_inning": true,
+      "home_runs": 4,
       "away_runs": 6,
-      "projected_total": 15.5,
+      "projected_total": 16.0,
       "market_total": 9.0,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第4局已得10分（此時預期3.0分），高分走勢盤口9.0"
     }
   ],
-  "live_updated_ts": 1783048982,
+  "live_updated_ts": 1783049283,
   "game_preds": {
     "phillies|pirates": {
       "home_win_prob": 0.4846,
@@ -405,5 +393,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-03 11:23 (台灣時間)"
+  "live_updated_at": "2026-07-03 11:28 (台灣時間)"
 }
