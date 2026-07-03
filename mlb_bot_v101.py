@@ -79,6 +79,10 @@ FIP_BLEND_MAX  = 0.85   # FIP-ERA缺口 > 1.5：極端幸運ERA，幾乎全信FI
 FIP_MISSING_REGRESS = 0.25  # FIP無資料時，ERA向聯盟均值回歸比例（保守修正）
 ERA_FLOOR_NO_FIP    = 2.50  # FIP無資料時有效ERA下限（防止過信異常低ERA）
 RELIEVER_SP_REGRESS = 0.50  # 牛棚型先發：ERA不代表先發表現，50%回歸聯盟均值
+ML_SP_LOW_IP_THRESH  = 5.5  # ML: SP場均局數低於此值→牛棚依賴度高，ML不確定性增加
+ML_TOT_CONFLICT_GAP  = 0.7  # ML: model總分超市場此值→失分分散，ML信心降低
+ML_OPP_RS_WARN       = 5.5  # ML: 對手RS ≥此值(未達6.5)→軟警告，conf×0.97
+UNDER_MKT_HARD_BLOCK = 2.5  # UNDER: 市場差距超此值→直接拒絕（不僅降低信心）
 K9_HIGH_THRESH = 9.0    # 高三振率門檻（K/9）：雙方達標時UNDER信心加成
 K9_UNDER_CONF  = 0.04   # 雙高K/9 UNDER信心加成幅度
 # ── ★ 投手休息天數 ────────────────────────────────────────
@@ -3092,12 +3096,16 @@ def run():
                         continue
                 # ② 對手強打線：對手投手RS過高 → 對手打線強，推薦隊失分風險高
                 _opp_rs = pred.get("a_rs" if bside == "home" else "h_rs")
-                if _opp_rs is not None and _opp_rs >= 6.5:
-                    bet_conf = round(bet_conf * 0.93, 4)
-                    log.info("ML_OPP_RS_PENALTY: opp_rs=%.1f conf→%.3f", _opp_rs, bet_conf)
-                    if bet_conf < ML_BET_CONF_MIN:
-                        log.info("ML_OPP_RS_PENALTY SKIP: conf %.2f below ML_BET_CONF_MIN", bet_conf)
-                        continue
+                if _opp_rs is not None:
+                    if _opp_rs >= 6.5:
+                        bet_conf = round(bet_conf * 0.93, 4)
+                        log.info("ML_OPP_RS_PENALTY(high): opp_rs=%.1f conf→%.3f", _opp_rs, bet_conf)
+                        if bet_conf < ML_BET_CONF_MIN:
+                            log.info("ML_OPP_RS_PENALTY SKIP: conf %.2f below ML_BET_CONF_MIN", bet_conf)
+                            continue
+                    elif _opp_rs >= ML_OPP_RS_WARN:
+                        bet_conf = round(bet_conf * 0.97, 4)
+                        log.info("ML_OPP_RS_WARN(med): opp_rs=%.1f conf→%.3f", _opp_rs, bet_conf)
                 # ③ 模型大幅超越市場：model_p遠高於devigged市場概率 → 降低信心
                 _ml_mkt_dv = _dv.get(bside, 1.0/con_p)
                 _ml_model_mkt_gap = model_p - _ml_mkt_dv
@@ -3107,6 +3115,23 @@ def run():
                              model_p, _ml_mkt_dv, _ml_model_mkt_gap, bet_conf)
                     if bet_conf < ML_BET_CONF_MIN:
                         log.info("ML_MKT_DISAGREE SKIP: conf %.2f below ML_BET_CONF_MIN", bet_conf)
+                        continue
+                # ④ 模型高總分衝突：model預測總分明顯高於市場→失分分散，ML不確定性增加
+                _ml_pure_tot = pred.get("pure_total_tot")
+                if _ml_pure_tot is not None and _ml_pure_tot > market_total + ML_TOT_CONFLICT_GAP:
+                    bet_conf = round(bet_conf * 0.92, 4)
+                    log.info("ML_TOT_CONFLICT: model_tot=%.1f mkt=%.1f gap=%.1f conf→%.3f",
+                             _ml_pure_tot, market_total, _ml_pure_tot - market_total, bet_conf)
+                    if bet_conf < ML_BET_CONF_MIN:
+                        log.info("ML_TOT_CONFLICT SKIP: conf %.2f below ML_BET_CONF_MIN", bet_conf)
+                        continue
+                # ⑤ SP場均局數不足：牛棚投入更多，ML結果難以預測
+                _ml_sp_ip = _PITCHER_IP.get(_ml_sp, 6.0)
+                if _ml_sp_ip < ML_SP_LOW_IP_THRESH:
+                    bet_conf = round(bet_conf * 0.94, 4)
+                    log.info("ML_LOW_IP: %s avg_ip=%.1f conf→%.3f", _ml_sp, _ml_sp_ip, bet_conf)
+                    if bet_conf < ML_BET_CONF_MIN:
+                        log.info("ML_LOW_IP SKIP: conf %.2f below ML_BET_CONF_MIN", bet_conf)
                         continue
             # ── ★ RL 保護層（依序：信心→TBD→爆冷→王牌→菁英對決）──
             if btype == BET_RL:
@@ -3264,6 +3289,10 @@ def run():
                     bet_conf = min(1.0, bet_conf + K9_UNDER_CONF)
                 # ⑦ 市場大幅不認同：模型總分遠低於市場線 → UNDER信心降低（防止模型過度自信）
                 _under_mkt_gap = market_total - pred.get("pure_total_tot", market_total)
+                if _under_mkt_gap > UNDER_MKT_HARD_BLOCK:
+                    log.info("UNDER_MKT_HARD_BLOCK: model_tot=%.1f mkt=%.1f gap=%.1f — SKIP",
+                             pred.get("pure_total_tot", market_total), market_total, _under_mkt_gap)
+                    continue
                 if _under_mkt_gap > 1.5:
                     bet_conf = round(bet_conf * 0.85, 4)
                     log.info("UNDER_MKT_DISAGREE: model_tot=%.1f mkt=%.1f gap=%.1f conf→%.3f",
