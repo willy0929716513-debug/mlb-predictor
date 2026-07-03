@@ -357,13 +357,13 @@
       "home_cn": "遊騎兵",
       "away_cn": "老虎",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 5,
       "away_runs": 3,
-      "projected_total": 12.2,
+      "projected_total": 11.8,
       "market_total": 7.5,
       "bet": "大小分 OVER",
-      "reason": "第5局已得8分（此時預期3.3分），高分走勢盤口7.5"
+      "reason": "第5局已得8分（此時預期3.8分），高分走勢盤口7.5"
     },
     {
       "home_cn": "水手",
