@@ -332,26 +332,26 @@
     {
       "home_cn": "守護者",
       "away_cn": "白襪",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 5,
-      "projected_total": 11.3,
+      "projected_total": 10.8,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第6局已得8分（此時預期5.2分），高分走勢盤口8.5"
+      "reason": "第7局已得8分（此時預期5.7分），高分走勢盤口8.5"
     },
     {
       "home_cn": "勇士",
       "away_cn": "紅雀",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 5,
       "away_runs": 3,
-      "projected_total": 12.2,
+      "projected_total": 11.8,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第5局已得8分（此時預期4.2分），高分走勢盤口8.5"
+      "reason": "第6局已得8分（此時預期4.7分），高分走勢盤口8.5"
     },
     {
       "home_cn": "皇家",
@@ -378,7 +378,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783039442,
+  "live_updated_ts": 1783039743,
   "game_preds": {
     "phillies|pirates": {
       "home_win_prob": 0.4846,
@@ -417,5 +417,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-03 08:44 (台灣時間)"
+  "live_updated_at": "2026-07-03 08:49 (台灣時間)"
 }
