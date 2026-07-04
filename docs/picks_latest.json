@@ -177,10 +177,10 @@
       "home_cn": "洋基",
       "away_cn": "雙城",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 8.3,
+      "projected_total": 7.8,
       "market_total": 10.0,
       "bet": "客隊讓分(+1.5)",
       "reason": "客隊落後1分 第7局，賽前客隊勝率57%"
@@ -215,11 +215,11 @@
       "inning": 7,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 1,
-      "projected_total": 5.0,
+      "away_runs": 2,
+      "projected_total": 6.0,
       "market_total": 9.0,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅2分（此時預期6.0分），低分走勢盤口9.0"
+      "reason": "第7局僅3分（此時預期6.0分），低分走勢盤口9.0"
     },
     {
       "home_cn": "天使",
@@ -248,11 +248,11 @@
     {
       "home_cn": "響尾蛇",
       "away_cn": "釀酒人",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.0,
+      "projected_total": 7.6,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -282,7 +282,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783130086,
+  "live_updated_ts": 1783130388,
   "game_preds": {
     "cubs|cardinals": {
       "home_win_prob": 0.6076,
@@ -337,5 +337,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-04 09:54 (台灣時間)"
+  "live_updated_at": "2026-07-04 09:59 (台灣時間)"
 }
