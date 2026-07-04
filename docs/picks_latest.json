@@ -303,18 +303,6 @@
   ],
   "live_games": [
     {
-      "home_cn": "洋基",
-      "away_cn": "雙城",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 5,
-      "away_runs": 2,
-      "projected_total": 8.1,
-      "market_total": 9.5,
-      "bet": "主隊獨贏",
-      "reason": "第9局主隊領先3分（賽前主隊勝率48%），大局已定"
-    },
-    {
       "home_cn": "守護者",
       "away_cn": "白襪",
       "inning": 6,
@@ -353,11 +341,11 @@
     {
       "home_cn": "運動家",
       "away_cn": "馬林魚",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 7,
-      "projected_total": 16.6,
+      "projected_total": 16.0,
       "market_total": 10.5,
       "bet": "大小分 OVER",
       "reason": "第4局已得9分（此時預期3.5分），高分走勢盤口10.5"
@@ -377,8 +365,8 @@
     {
       "home_cn": "道奇",
       "away_cn": "教士",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 1,
       "projected_total": 8.1,
@@ -389,11 +377,11 @@
     {
       "home_cn": "水手",
       "away_cn": "藍鳥",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 6.2,
+      "away_runs": 1,
+      "projected_total": 6.8,
       "market_total": 7.5,
       "bet": null,
       "reason": null
