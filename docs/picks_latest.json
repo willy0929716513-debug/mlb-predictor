@@ -371,11 +371,11 @@
       "inning": 8,
       "top_inning": true,
       "home_runs": 4,
-      "away_runs": 8,
-      "projected_total": 14.2,
+      "away_runs": 9,
+      "projected_total": 15.2,
       "market_total": 10.0,
       "bet": "客隊獨贏",
-      "reason": "第8局客隊領先4分（賽前客隊勝率59%），大局已定"
+      "reason": "第8局客隊領先5分（賽前客隊勝率59%），大局已定"
     },
     {
       "home_cn": "遊騎兵",
@@ -393,16 +393,16 @@
       "home_cn": "水手",
       "away_cn": "藍鳥",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 6.7,
+      "projected_total": 6.2,
       "market_total": 7.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1783196959,
+  "live_updated_ts": 1783197260,
   "game_preds": {
     "nationals|pirates": {
       "home_win_prob": 0.4365,
@@ -465,5 +465,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-05 04:29 (台灣時間)"
+  "live_updated_at": "2026-07-05 04:34 (台灣時間)"
 }
