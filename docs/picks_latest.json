@@ -369,13 +369,13 @@
       "home_cn": "洋基",
       "away_cn": "雙城",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 4,
       "away_runs": 6,
-      "projected_total": 14.4,
+      "projected_total": 13.9,
       "market_total": 10.0,
       "bet": "大小分 OVER",
-      "reason": "第6局已得10分（此時預期5.6分），高分走勢盤口10.0"
+      "reason": "第6局已得10分（此時預期6.1分），高分走勢盤口10.0"
     },
     {
       "home_cn": "遊騎兵",
@@ -388,9 +388,21 @@
       "market_total": 8.0,
       "bet": null,
       "reason": null
+    },
+    {
+      "home_cn": "水手",
+      "away_cn": "藍鳥",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 7.5,
+      "market_total": 7.5,
+      "bet": null,
+      "reason": null
     }
   ],
-  "live_updated_ts": 1783193941,
+  "live_updated_ts": 1783194243,
   "game_preds": {
     "nationals|pirates": {
       "home_win_prob": 0.4365,
@@ -453,5 +465,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-05 03:39 (台灣時間)"
+  "live_updated_at": "2026-07-05 03:44 (台灣時間)"
 }
