@@ -382,15 +382,15 @@
       "away_cn": "藍鳥",
       "inning": 6,
       "top_inning": false,
-      "home_runs": 7,
+      "home_runs": 11,
       "away_runs": 0,
-      "projected_total": 9.9,
+      "projected_total": 13.9,
       "market_total": 7.5,
       "bet": "大小分 OVER",
-      "reason": "第6局已得7分（此時預期4.6分），高分走勢盤口7.5"
+      "reason": "第6局已得11分（此時預期4.6分），高分走勢盤口7.5"
     }
   ],
-  "live_updated_ts": 1783202088,
+  "live_updated_ts": 1783202390,
   "game_preds": {
     "nationals|pirates": {
       "home_win_prob": 0.4365,
@@ -453,5 +453,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-05 05:54 (台灣時間)"
+  "live_updated_at": "2026-07-05 05:59 (台灣時間)"
 }
