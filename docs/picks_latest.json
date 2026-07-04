@@ -370,15 +370,15 @@
       "away_cn": "雙城",
       "inning": 5,
       "top_inning": false,
-      "home_runs": 3,
+      "home_runs": 4,
       "away_runs": 6,
-      "projected_total": 14.0,
+      "projected_total": 15.0,
       "market_total": 10.0,
       "bet": "大小分 OVER",
-      "reason": "第5局已得9分（此時預期5.0分），高分走勢盤口10.0"
+      "reason": "第5局已得10分（此時預期5.0分），高分走勢盤口10.0"
     }
   ],
-  "live_updated_ts": 1783193036,
+  "live_updated_ts": 1783193338,
   "game_preds": {
     "nationals|pirates": {
       "home_win_prob": 0.4365,
@@ -441,5 +441,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-05 03:23 (台灣時間)"
+  "live_updated_at": "2026-07-05 03:28 (台灣時間)"
 }
