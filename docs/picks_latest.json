@@ -201,10 +201,10 @@
       "home_cn": "紅人",
       "away_cn": "金鶯",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 3,
-      "projected_total": 10.0,
+      "projected_total": 9.4,
       "market_total": 10.5,
       "bet": null,
       "reason": null
@@ -215,32 +215,32 @@
       "inning": 5,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 0,
-      "projected_total": 5.4,
+      "away_runs": 3,
+      "projected_total": 8.4,
       "market_total": 8.0,
-      "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後1分 第5局，賽前客隊勝率62%"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "勇士",
       "away_cn": "大都會",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 11.9,
+      "projected_total": 11.3,
       "market_total": 9.5,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第4局已得5分（此時預期3.2分），高分走勢盤口9.5"
     },
     {
       "home_cn": "落磯",
       "away_cn": "巨人",
       "inning": 1,
-      "top_inning": true,
-      "home_runs": 0,
+      "top_inning": false,
+      "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 11.0,
+      "projected_total": 11.4,
       "market_total": 11.0,
       "bet": null,
       "reason": null
@@ -249,16 +249,16 @@
       "home_cn": "太空人",
       "away_cn": "光芒",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 9.0,
+      "projected_total": 8.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1783124250,
+  "live_updated_ts": 1783124551,
   "game_preds": {
     "cubs|cardinals": {
       "home_win_prob": 0.6076,
@@ -313,5 +313,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-04 08:17 (台灣時間)"
+  "live_updated_at": "2026-07-04 08:22 (台灣時間)"
 }
