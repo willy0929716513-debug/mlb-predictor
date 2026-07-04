@@ -226,9 +226,9 @@
       "away_cn": "大都會",
       "inning": 5,
       "top_inning": false,
-      "home_runs": 3,
+      "home_runs": 4,
       "away_runs": 2,
-      "projected_total": 9.8,
+      "projected_total": 10.8,
       "market_total": 9.5,
       "bet": null,
       "reason": null
@@ -238,9 +238,9 @@
       "away_cn": "巨人",
       "inning": 2,
       "top_inning": false,
-      "home_runs": 3,
+      "home_runs": 5,
       "away_runs": 0,
-      "projected_total": 12.2,
+      "projected_total": 14.2,
       "market_total": 11.0,
       "bet": null,
       "reason": null
@@ -248,17 +248,17 @@
     {
       "home_cn": "太空人",
       "away_cn": "光芒",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 7.5,
+      "projected_total": 7.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1783125758,
+  "live_updated_ts": 1783126060,
   "game_preds": {
     "cubs|cardinals": {
       "home_win_prob": 0.6076,
@@ -313,5 +313,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-04 08:42 (台灣時間)"
+  "live_updated_at": "2026-07-04 08:47 (台灣時間)"
 }
