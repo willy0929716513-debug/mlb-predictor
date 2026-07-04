@@ -376,9 +376,21 @@
       "market_total": 10.0,
       "bet": "大小分 OVER",
       "reason": "第6局已得10分（此時預期5.6分），高分走勢盤口10.0"
+    },
+    {
+      "home_cn": "遊騎兵",
+      "away_cn": "老虎",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 8.0,
+      "market_total": 8.0,
+      "bet": null,
+      "reason": null
     }
   ],
-  "live_updated_ts": 1783193639,
+  "live_updated_ts": 1783193941,
   "game_preds": {
     "nationals|pirates": {
       "home_win_prob": 0.4365,
@@ -441,5 +453,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-05 03:33 (台灣時間)"
+  "live_updated_at": "2026-07-05 03:39 (台灣時間)"
 }
