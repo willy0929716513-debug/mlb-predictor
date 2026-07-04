@@ -200,14 +200,14 @@
     {
       "home_cn": "紅人",
       "away_cn": "金鶯",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 3,
-      "projected_total": 8.2,
+      "projected_total": 7.7,
       "market_total": 10.5,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 UNDER",
+      "reason": "第6局僅3分（此時預期5.8分），低分走勢盤口10.5"
     },
     {
       "home_cn": "守護者",
@@ -225,10 +225,10 @@
       "home_cn": "勇士",
       "away_cn": "大都會",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 10.3,
+      "projected_total": 9.8,
       "market_total": 9.5,
       "bet": null,
       "reason": null
@@ -237,10 +237,10 @@
       "home_cn": "落磯",
       "away_cn": "巨人",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 0,
-      "projected_total": 12.8,
+      "projected_total": 12.2,
       "market_total": 11.0,
       "bet": null,
       "reason": null
@@ -249,16 +249,16 @@
       "home_cn": "太空人",
       "away_cn": "光芒",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.0,
+      "projected_total": 7.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1783125456,
+  "live_updated_ts": 1783125758,
   "game_preds": {
     "cubs|cardinals": {
       "home_win_prob": 0.6076,
@@ -313,5 +313,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-04 08:37 (台灣時間)"
+  "live_updated_at": "2026-07-04 08:42 (台灣時間)"
 }
