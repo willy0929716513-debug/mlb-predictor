@@ -176,14 +176,14 @@
     {
       "home_cn": "洋基",
       "away_cn": "雙城",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 8.9,
+      "projected_total": 8.3,
       "market_total": 10.0,
       "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後1分 第6局，賽前客隊勝率57%"
+      "reason": "客隊落後1分 第7局，賽前客隊勝率57%"
     },
     {
       "home_cn": "守護者",
@@ -251,8 +251,8 @@
       "inning": 1,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 2,
-      "projected_total": 12.5,
+      "away_runs": 6,
+      "projected_total": 16.5,
       "market_total": 10.5,
       "bet": null,
       "reason": null
