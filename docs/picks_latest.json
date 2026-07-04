@@ -368,11 +368,11 @@
     {
       "home_cn": "遊騎兵",
       "away_cn": "老虎",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 3,
-      "projected_total": 7.0,
+      "projected_total": 6.6,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -381,16 +381,16 @@
       "home_cn": "水手",
       "away_cn": "藍鳥",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 5,
       "away_runs": 0,
-      "projected_total": 9.2,
+      "projected_total": 8.8,
       "market_total": 7.5,
-      "bet": "大小分 OVER",
-      "reason": "第5局已得5分（此時預期3.3分），高分走勢盤口7.5"
+      "bet": null,
+      "reason": null
     }
   ],
-  "live_updated_ts": 1783200278,
+  "live_updated_ts": 1783200579,
   "game_preds": {
     "nationals|pirates": {
       "home_win_prob": 0.4365,
@@ -453,5 +453,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-05 05:24 (台灣時間)"
+  "live_updated_at": "2026-07-05 05:29 (台灣時間)"
 }
