@@ -330,22 +330,22 @@
       "home_cn": "運動家",
       "away_cn": "馬林魚",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 5,
-      "away_runs": 7,
-      "projected_total": 16.7,
+      "away_runs": 8,
+      "projected_total": 17.1,
       "market_total": 10.5,
       "bet": "大小分 OVER",
-      "reason": "第6局已得12分（此時預期5.8分），高分走勢盤口10.5"
+      "reason": "第6局已得13分（此時預期6.4分），高分走勢盤口10.5"
     },
     {
       "home_cn": "響尾蛇",
       "away_cn": "釀酒人",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 3,
-      "projected_total": 10.0,
+      "projected_total": 9.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -353,14 +353,14 @@
     {
       "home_cn": "道奇",
       "away_cn": "教士",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 3,
-      "projected_total": 6.3,
+      "projected_total": 5.8,
       "market_total": 8.5,
       "bet": "大小分 UNDER",
-      "reason": "第6局僅3分（此時預期5.2分），低分走勢盤口8.5"
+      "reason": "第7局僅3分（此時預期5.7分），低分走勢盤口8.5"
     },
     {
       "home_cn": "水手",
