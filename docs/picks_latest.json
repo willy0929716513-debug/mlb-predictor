@@ -178,12 +178,12 @@
       "away_cn": "雙城",
       "inning": 7,
       "top_inning": false,
-      "home_runs": 4,
+      "home_runs": 5,
       "away_runs": 2,
-      "projected_total": 8.8,
+      "projected_total": 9.8,
       "market_total": 10.0,
-      "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後2分 第7局，賽前客隊勝率57%"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "守護者",
@@ -282,7 +282,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783130689,
+  "live_updated_ts": 1783130991,
   "game_preds": {
     "cubs|cardinals": {
       "home_win_prob": 0.6076,
@@ -337,5 +337,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-04 10:04 (台灣時間)"
+  "live_updated_at": "2026-07-04 10:09 (台灣時間)"
 }
