@@ -389,8 +389,8 @@
     {
       "home_cn": "道奇",
       "away_cn": "教士",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 1,
       "projected_total": 9.0,
@@ -411,7 +411,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783131895,
+  "live_updated_ts": 1783132196,
   "game_preds": {
     "yankees|twins": {
       "home_win_prob": 0.485,
