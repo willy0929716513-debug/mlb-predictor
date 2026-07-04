@@ -357,7 +357,7 @@
       "top_inning": true,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 7.2,
+      "projected_total": 6.7,
       "market_total": 8.5,
       "bet": "主隊讓分(+1.5)",
       "reason": "主隊落後2分 第5局，賽前主隊勝率76%"
@@ -375,7 +375,7 @@
       "reason": "主隊落後2分 第4局，賽前主隊勝率65%"
     }
   ],
-  "live_updated_ts": 1783134307,
+  "live_updated_ts": 1783134608,
   "game_preds": {
     "yankees|twins": {
       "home_win_prob": 0.485,
@@ -438,5 +438,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-04 11:05 (台灣時間)"
+  "live_updated_at": "2026-07-04 11:10 (台灣時間)"
 }
