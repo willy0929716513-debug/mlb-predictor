@@ -720,12 +720,24 @@ function renderQuickStats(stats){
   if(!stats){el.innerHTML='';return}
   var pnlColor=safeNum(stats.total_pnl,0)>=0?'var(--g)':'var(--r)';
   var roiColor=safeNum(stats.roi,0)>=0?'var(--g)':'var(--r)';
+  var novig=safeNum(stats.pnl_novig,null);
+  var novigHtml='';
+  if(novig!==null){
+    var novigColor=novig>=0?'var(--g)':'var(--r)';
+    var vigCost=safeNum(stats.vig_cost,0);
+    novigHtml='<div class="qs-box" style="border-color:rgba(255,184,0,.25);background:rgba(255,184,0,.04)">'
+      +'<div class="qs-lbl">扣水盈虧</div>'
+      +'<div class="qs-val" style="color:'+novigColor+'">'+(novig>=0?'+':'')+novig.toFixed(0)+'</div>'
+      +'<div class="qs-sub">水費 '+(vigCost>=0?'+':'')+vigCost.toFixed(0)+'</div>'
+    +'</div>';
+  }
   el.innerHTML='<div class="qs-bar">'
     +'<div class="qs-box"><div class="qs-lbl">勝敗記錄</div><div class="qs-val" style="color:var(--g)">'+(stats.wins||0)+'-'+(safeNum(stats.settled,0)-safeNum(stats.wins,0))+'</div><div class="qs-sub">'+(stats.settled||0)+' 場</div></div>'
     +'<div class="qs-box"><div class="qs-lbl">AI 分析</div><div class="qs-val" style="color:var(--c)">'+(stats.settled||0)+'</div><div class="qs-sub">已結算</div></div>'
     +'<div class="qs-box"><div class="qs-lbl">勝率</div><div class="qs-val" style="color:var(--g)">'+(safeNum(stats.win_rate,0).toFixed(1))+'%</div><div class="qs-sub">命中率</div></div>'
     +'<div class="qs-box"><div class="qs-lbl">總報酬</div><div class="qs-val" style="color:'+roiColor+'">'+(safeNum(stats.roi,0).toFixed(1))+'%</div><div class="qs-sub">ROI</div></div>'
     +'<div class="qs-box"><div class="qs-lbl">總盈虧</div><div class="qs-val" style="color:'+pnlColor+'">'+(safeNum(stats.total_pnl,0)>=0?'+':'')+safeNum(stats.total_pnl,0).toFixed(0)+'</div><div class="qs-sub">單位</div></div>'
+    +novigHtml
   +'</div>';
 }
 
@@ -931,7 +943,9 @@ window.switchStd=function(key,btn){
   document.querySelectorAll('.stab').forEach(function(b){b.classList.remove('on')});
   if(btn) btn.classList.add('on');
   var std=window._std||{};
-  var divisions=std[key]||[];
+  var raw=std[key]||[];
+  // 'all' is a flat team array; wrap it in a single pseudo-division for unified rendering
+  var divisions=(key==='all'&&raw.length&&!raw[0].teams)?[{division_cn:'全聯盟',teams:raw}]:raw;
   var body=document.getElementById('std-body');
   if(!body)return;
   var h='';
