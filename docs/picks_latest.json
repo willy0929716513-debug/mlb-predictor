@@ -371,11 +371,11 @@
       "inning": 7,
       "top_inning": true,
       "home_runs": 4,
-      "away_runs": 6,
-      "projected_total": 13.3,
+      "away_runs": 7,
+      "projected_total": 14.3,
       "market_total": 10.0,
       "bet": "大小分 OVER",
-      "reason": "第7局已得10分（此時預期6.7分），高分走勢盤口10.0"
+      "reason": "第7局已得11分（此時預期6.7分），高分走勢盤口10.0"
     },
     {
       "home_cn": "遊騎兵",
@@ -402,7 +402,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783195148,
+  "live_updated_ts": 1783195450,
   "game_preds": {
     "nationals|pirates": {
       "home_win_prob": 0.4365,
@@ -465,5 +465,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-05 03:59 (台灣時間)"
+  "live_updated_at": "2026-07-05 04:04 (台灣時間)"
 }
