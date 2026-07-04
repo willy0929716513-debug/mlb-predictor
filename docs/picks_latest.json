@@ -378,7 +378,7 @@
       "reason": "第5局已得9分（此時預期5.0分），高分走勢盤口10.0"
     }
   ],
-  "live_updated_ts": 1783192734,
+  "live_updated_ts": 1783193036,
   "game_preds": {
     "nationals|pirates": {
       "home_win_prob": 0.4365,
@@ -441,5 +441,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-05 03:18 (台灣時間)"
+  "live_updated_at": "2026-07-05 03:23 (台灣時間)"
 }
