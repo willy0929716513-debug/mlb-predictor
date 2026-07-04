@@ -214,33 +214,33 @@
       "away_cn": "巨人",
       "inning": 5,
       "top_inning": false,
-      "home_runs": 7,
+      "home_runs": 11,
       "away_runs": 2,
-      "projected_total": 14.5,
+      "projected_total": 18.5,
       "market_total": 11.0,
       "bet": "大小分 OVER",
-      "reason": "第5局已得9分（此時預期5.5分），高分走勢盤口11.0"
+      "reason": "第5局已得13分（此時預期5.5分），高分走勢盤口11.0"
     },
     {
       "home_cn": "太空人",
       "away_cn": "光芒",
       "inning": 6,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 4.5,
+      "projected_total": 5.5,
       "market_total": 9.0,
       "bet": "大小分 UNDER",
-      "reason": "第6局僅1分（此時預期5.5分），低分走勢盤口9.0"
+      "reason": "第6局僅2分（此時預期5.5分），低分走勢盤口9.0"
     },
     {
       "home_cn": "天使",
       "away_cn": "紅襪",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 7.5,
+      "projected_total": 7.1,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -294,7 +294,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783129484,
+  "live_updated_ts": 1783129785,
   "game_preds": {
     "cubs|cardinals": {
       "home_win_prob": 0.6076,
@@ -349,5 +349,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-04 09:44 (台灣時間)"
+  "live_updated_at": "2026-07-04 09:49 (台灣時間)"
 }
