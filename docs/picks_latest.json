@@ -321,7 +321,7 @@
       "top_inning": false,
       "home_runs": 1,
       "away_runs": 3,
-      "projected_total": 7.3,
+      "projected_total": 6.9,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -333,22 +333,10 @@
       "top_inning": true,
       "home_runs": 14,
       "away_runs": 3,
-      "projected_total": 20.3,
+      "projected_total": 19.7,
       "market_total": 12.0,
-      "bet": "大小分 OVER",
-      "reason": "第7局已得17分（此時預期8.7分），高分走勢盤口12.0"
-    },
-    {
-      "home_cn": "太空人",
-      "away_cn": "光芒",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 1,
-      "away_runs": 3,
-      "projected_total": 4.5,
-      "market_total": 9.0,
-      "bet": "客隊獨贏",
-      "reason": "第9局客隊領先2分（賽前客隊勝率50%），大局已定"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "天使",
@@ -371,8 +359,8 @@
       "away_runs": 7,
       "projected_total": 16.6,
       "market_total": 10.5,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第4局已得9分（此時預期3.5分），高分走勢盤口10.5"
     },
     {
       "home_cn": "響尾蛇",
@@ -381,7 +369,7 @@
       "top_inning": false,
       "home_runs": 0,
       "away_runs": 3,
-      "projected_total": 10.0,
+      "projected_total": 9.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -393,7 +381,7 @@
       "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 8.6,
+      "projected_total": 8.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -411,7 +399,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783132497,
+  "live_updated_ts": 1783132799,
   "game_preds": {
     "yankees|twins": {
       "home_win_prob": 0.485,
@@ -474,5 +462,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-04 10:34 (台灣時間)"
+  "live_updated_at": "2026-07-04 10:39 (台灣時間)"
 }
