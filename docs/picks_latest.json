@@ -213,13 +213,13 @@
       "home_cn": "太空人",
       "away_cn": "光芒",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 2,
-      "projected_total": 6.0,
+      "projected_total": 5.5,
       "market_total": 9.0,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅3分（此時預期6.0分），低分走勢盤口9.0"
+      "reason": "第7局僅3分（此時預期6.5分），低分走勢盤口9.0"
     },
     {
       "home_cn": "天使",
@@ -228,7 +228,7 @@
       "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 7.7,
+      "projected_total": 7.2,
       "market_total": 7.5,
       "bet": null,
       "reason": null
