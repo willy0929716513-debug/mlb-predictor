@@ -402,7 +402,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783205407,
+  "live_updated_ts": 1783205708,
   "game_preds": {
     "nationals|pirates": {
       "home_win_prob": 0.4365,
@@ -465,5 +465,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-05 06:50 (台灣時間)"
+  "live_updated_at": "2026-07-05 06:55 (台灣時間)"
 }
