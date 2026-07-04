@@ -301,69 +301,8 @@
       "sp_confirmed": true
     }
   ],
-  "live_games": [
-    {
-      "home_cn": "天使",
-      "away_cn": "紅襪",
-      "inning": 8,
-      "top_inning": false,
-      "home_runs": 2,
-      "away_runs": 5,
-      "projected_total": 8.4,
-      "market_total": 8.5,
-      "bet": "客隊獨贏",
-      "reason": "第8局客隊領先3分（賽前客隊勝率66%），大局已定"
-    },
-    {
-      "home_cn": "運動家",
-      "away_cn": "馬林魚",
-      "inning": 7,
-      "top_inning": true,
-      "home_runs": 5,
-      "away_runs": 8,
-      "projected_total": 16.5,
-      "market_total": 10.5,
-      "bet": "大小分 OVER",
-      "reason": "第7局已得13分（此時預期7.0分），高分走勢盤口10.5"
-    },
-    {
-      "home_cn": "響尾蛇",
-      "away_cn": "釀酒人",
-      "inning": 7,
-      "top_inning": false,
-      "home_runs": 3,
-      "away_runs": 3,
-      "projected_total": 8.5,
-      "market_total": 9.0,
-      "bet": null,
-      "reason": null
-    },
-    {
-      "home_cn": "道奇",
-      "away_cn": "教士",
-      "inning": 7,
-      "top_inning": false,
-      "home_runs": 0,
-      "away_runs": 3,
-      "projected_total": 5.4,
-      "market_total": 8.5,
-      "bet": "大小分 UNDER",
-      "reason": "第7局僅3分（此時預期6.1分），低分走勢盤口8.5"
-    },
-    {
-      "home_cn": "水手",
-      "away_cn": "藍鳥",
-      "inning": 7,
-      "top_inning": false,
-      "home_runs": 0,
-      "away_runs": 2,
-      "projected_total": 4.1,
-      "market_total": 7.5,
-      "bet": "大小分 UNDER",
-      "reason": "第7局僅2分（此時預期5.4分），低分走勢盤口7.5"
-    }
-  ],
-  "live_updated_ts": 1783137320,
+  "live_games": [],
+  "live_updated_ts": 1783138730,
   "game_preds": {
     "yankees|twins": {
       "home_win_prob": 0.485,
