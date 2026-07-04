@@ -176,14 +176,14 @@
     {
       "home_cn": "國民",
       "away_cn": "海盜",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 9,
       "away_runs": 1,
-      "projected_total": 11.6,
+      "projected_total": 11.1,
       "market_total": 9.5,
       "bet": "主隊獨贏",
-      "reason": "第8局主隊領先8分（賽前主隊勝率60%），大局已定"
+      "reason": "第9局主隊領先8分（賽前主隊勝率60%），大局已定"
     },
     {
       "home_cn": "洋基",
@@ -200,14 +200,14 @@
     {
       "home_cn": "紅人",
       "away_cn": "金鶯",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 3,
-      "projected_total": 4.8,
+      "projected_total": 4.2,
       "market_total": 10.5,
-      "bet": "大小分 UNDER",
-      "reason": "第8局僅3分（此時預期8.8分），低分走勢盤口10.5"
+      "bet": "客隊獨贏",
+      "reason": "第9局客隊領先3分（賽前客隊勝率64%），大局已定"
     },
     {
       "home_cn": "守護者",
@@ -224,14 +224,14 @@
     {
       "home_cn": "勇士",
       "away_cn": "大都會",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 4,
       "away_runs": 2,
-      "projected_total": 8.6,
+      "projected_total": 8.1,
       "market_total": 9.5,
       "bet": "主隊獨贏",
-      "reason": "第7局主隊領先2分（賽前主隊勝率72%），大局已定"
+      "reason": "第8局主隊領先2分（賽前主隊勝率72%），大局已定"
     },
     {
       "home_cn": "落磯",
@@ -240,19 +240,19 @@
       "top_inning": false,
       "home_runs": 7,
       "away_runs": 2,
-      "projected_total": 16.3,
+      "projected_total": 15.7,
       "market_total": 11.0,
       "bet": "大小分 OVER",
-      "reason": "第4局已得9分（此時預期3.7分），高分走勢盤口11.0"
+      "reason": "第4局已得9分（此時預期4.3分），高分走勢盤口11.0"
     },
     {
       "home_cn": "太空人",
       "away_cn": "光芒",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 5.0,
+      "projected_total": 4.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -294,7 +294,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783128278,
+  "live_updated_ts": 1783128580,
   "game_preds": {
     "cubs|cardinals": {
       "home_win_prob": 0.6076,
@@ -349,5 +349,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-04 09:24 (台灣時間)"
+  "live_updated_at": "2026-07-04 09:29 (台灣時間)"
 }
