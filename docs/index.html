@@ -943,7 +943,9 @@ window.switchStd=function(key,btn){
   document.querySelectorAll('.stab').forEach(function(b){b.classList.remove('on')});
   if(btn) btn.classList.add('on');
   var std=window._std||{};
-  var divisions=std[key]||[];
+  var raw=std[key]||[];
+  // 'all' is a flat team array; wrap it in a single pseudo-division for unified rendering
+  var divisions=(key==='all'&&raw.length&&!raw[0].teams)?[{division_cn:'全聯盟',teams:raw}]:raw;
   var body=document.getElementById('std-body');
   if(!body)return;
   var h='';
