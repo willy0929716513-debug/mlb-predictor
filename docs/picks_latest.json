@@ -393,13 +393,13 @@
       "home_cn": "天使",
       "away_cn": "紅襪",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 7,
-      "projected_total": 10.8,
+      "projected_total": 10.4,
       "market_total": 8.5,
-      "bet": "大小分 OVER",
-      "reason": "第7局已得8分（此時預期5.7分），高分走勢盤口8.5"
+      "bet": "客隊獨贏",
+      "reason": "第7局客隊領先6分（賽前客隊勝率67%），大局已定"
     },
     {
       "home_cn": "運動家",
