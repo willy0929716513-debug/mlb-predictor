@@ -395,18 +395,6 @@
   ],
   "live_games": [
     {
-      "home_cn": "落磯",
-      "away_cn": "巨人",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 7,
-      "away_runs": 6,
-      "projected_total": 14.4,
-      "market_total": 13.0,
-      "bet": null,
-      "reason": null
-    },
-    {
       "home_cn": "響尾蛇",
       "away_cn": "釀酒人",
       "inning": 9,
@@ -434,16 +422,28 @@
       "home_cn": "水手",
       "away_cn": "藍鳥",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 0,
-      "projected_total": 4.7,
+      "projected_total": 4.2,
       "market_total": 7.5,
       "bet": "大小分 UNDER",
-      "reason": "第8局僅3分（此時預期5.8分），低分走勢盤口7.5"
+      "reason": "第8局僅3分（此時預期6.2分），低分走勢盤口7.5"
+    },
+    {
+      "home_cn": "道奇",
+      "away_cn": "教士",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 9.5,
+      "market_total": 9.5,
+      "bet": null,
+      "reason": null
     }
   ],
-  "live_updated_ts": 1783292060,
+  "live_updated_ts": 1783292361,
   "game_preds": {
     "braves|mets": {
       "home_win_prob": 0.3856,
@@ -506,5 +506,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-06 06:54 (台灣時間)"
+  "live_updated_at": "2026-07-06 06:59 (台灣時間)"
 }
