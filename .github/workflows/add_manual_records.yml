@@ -2,6 +2,9 @@ name: Add Manual History Records
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - 'trigger/add-records'
 
 jobs:
   add-records:
