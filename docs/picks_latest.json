@@ -2,32 +2,30 @@
   "generated_at": "2026-07-05 22:18 (台灣時間)",
   "date": "2026-07-05",
   "stats": {
-    "settled": 175,
-    "wins": 119,
-    "win_rate": 68.0,
-    "total_in": 5196.9,
-    "total_pnl": 1083.9,
-    "roi": 20.9,
-    "pnl_novig": 1083.9,
-    "vig_cost": 0.0,
+    "settled": 180,
+    "wins": 124,
+    "win_rate": 68.9,
+    "total_in": 5446.9,
+    "total_pnl": 1269.9,
+    "roi": 23.3,
     "by_type": {
       "ML": {
-        "wins": 43,
         "settled": 69,
+        "wins": 43,
         "win_rate": 62.3,
         "roi": -0.7
       },
       "RL": {
-        "wins": 51,
-        "settled": 69,
-        "win_rate": 73.9,
-        "roi": 32.2
+        "settled": 72,
+        "wins": 54,
+        "win_rate": 75.0,
+        "roi": 34.2
       },
       "TOT": {
-        "wins": 25,
-        "settled": 37,
-        "win_rate": 67.6,
-        "roi": 40.3
+        "settled": 39,
+        "wins": 27,
+        "win_rate": 69.2,
+        "roi": 44.7
       }
     }
   },
@@ -171,8 +169,7 @@
       "price": 1.56,
       "stake": 50.0,
       "edge": 16.7,
-      "result": null,
-      "sp_confirmed": true
+      "result": "W"
     },
     {
       "date": "2026-07-05",
@@ -185,8 +182,7 @@
       "price": 1.67,
       "stake": 50.0,
       "edge": 15.1,
-      "result": null,
-      "sp_confirmed": true
+      "result": "W"
     },
     {
       "date": "2026-07-05",
@@ -199,8 +195,33 @@
       "price": 1.98,
       "stake": 50.0,
       "edge": 17.5,
-      "result": null,
-      "sp_confirmed": true
+      "result": "W"
+    },
+    {
+      "date": "2026-07-04",
+      "home": "guardians",
+      "away": "whitesox",
+      "home_cn": "守護者",
+      "away_cn": "Whitesox",
+      "bet_type": "讓分",
+      "label": "白襪(+1.5)",
+      "price": 1.59,
+      "stake": 50.0,
+      "edge": 14.4,
+      "result": "W"
+    },
+    {
+      "date": "2026-07-04",
+      "home": "angels",
+      "away": "redsox",
+      "home_cn": "天使",
+      "away_cn": "Redsox",
+      "bet_type": "大小分",
+      "label": "UNDER",
+      "price": 1.92,
+      "stake": 50.0,
+      "edge": 18.8,
+      "result": "W"
     },
     {
       "date": "2026-07-03",
@@ -213,8 +234,7 @@
       "price": 1.53,
       "stake": 50.0,
       "edge": 12.4,
-      "result": "L",
-      "sp_confirmed": true
+      "result": "L"
     },
     {
       "date": "2026-07-02",
@@ -227,8 +247,7 @@
       "price": 2.0,
       "stake": 50.0,
       "edge": 24.2,
-      "result": "L",
-      "sp_confirmed": true
+      "result": "L"
     },
     {
       "date": "2026-07-01",
@@ -241,8 +260,7 @@
       "price": 1.96,
       "stake": 50.0,
       "edge": 15.0,
-      "result": "W",
-      "sp_confirmed": false
+      "result": "W"
     },
     {
       "date": "2026-06-29",
@@ -255,8 +273,7 @@
       "price": 1.74,
       "stake": 50.0,
       "edge": 13.2,
-      "result": "W",
-      "sp_confirmed": true
+      "result": "W"
     },
     {
       "date": "2026-06-29",
@@ -269,36 +286,7 @@
       "price": 1.54,
       "stake": 50.0,
       "edge": 12.4,
-      "result": "W",
-      "sp_confirmed": true
-    },
-    {
-      "date": "2026-06-29",
-      "home": "tigers",
-      "away": "astros",
-      "home_cn": "老虎",
-      "away_cn": "太空人",
-      "bet_type": "大小分",
-      "label": "UNDER",
-      "price": 2.0,
-      "stake": 52.0,
-      "edge": 26.0,
-      "result": "L",
-      "sp_confirmed": true
-    },
-    {
-      "date": "2026-06-29",
-      "home": "giants",
-      "away": "braves",
-      "home_cn": "巨人",
-      "away_cn": "勇士",
-      "bet_type": "大小分",
-      "label": "UNDER",
-      "price": 1.88,
-      "stake": 40.0,
-      "edge": 17.8,
-      "result": "W",
-      "sp_confirmed": true
+      "result": "W"
     }
   ],
   "live_games": [],
