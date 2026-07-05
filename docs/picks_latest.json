@@ -398,37 +398,37 @@
       "home_cn": "守護者",
       "away_cn": "白襪",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 6,
       "away_runs": 7,
-      "projected_total": 15.8,
+      "projected_total": 15.4,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第7局已得13分（此時預期5.7分），高分走勢盤口8.5"
+      "reason": "第7局已得13分（此時預期6.1分），高分走勢盤口8.5"
     },
     {
       "home_cn": "太空人",
       "away_cn": "光芒",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 0,
-      "projected_total": 4.5,
+      "projected_total": 4.0,
       "market_total": 9.0,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅2分（此時預期6.5分），低分走勢盤口9.0"
+      "reason": "第8局僅2分（此時預期7.0分），低分走勢盤口9.0"
     },
     {
       "home_cn": "遊騎兵",
       "away_cn": "老虎",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 6,
-      "projected_total": 10.5,
+      "projected_total": 10.1,
       "market_total": 7.5,
       "bet": "大小分 OVER",
-      "reason": "第7局已得8分（此時預期5.0分），高分走勢盤口7.5"
+      "reason": "第7局已得8分（此時預期5.4分），高分走勢盤口7.5"
     },
     {
       "home_cn": "落磯",
@@ -446,13 +446,13 @@
       "home_cn": "響尾蛇",
       "away_cn": "釀酒人",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 5.0,
+      "projected_total": 4.5,
       "market_total": 9.0,
       "bet": "大小分 UNDER",
-      "reason": "第6局僅1分（此時預期5.0分），低分走勢盤口9.0"
+      "reason": "第6局僅1分（此時預期5.5分），低分走勢盤口9.0"
     },
     {
       "home_cn": "運動家",
@@ -471,15 +471,15 @@
       "away_cn": "藍鳥",
       "inning": 3,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 5.4,
+      "projected_total": 6.4,
       "market_total": 7.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1783287842,
+  "live_updated_ts": 1783288144,
   "game_preds": {
     "braves|mets": {
       "home_win_prob": 0.3856,
@@ -542,5 +542,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-06 05:44 (台灣時間)"
+  "live_updated_at": "2026-07-06 05:49 (台灣時間)"
 }
