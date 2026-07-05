@@ -404,14 +404,14 @@
     {
       "home_cn": "皇家",
       "away_cn": "費城人",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 6,
       "projected_total": 8.5,
       "market_total": 9.0,
       "bet": "客隊獨贏",
-      "reason": "第8局客隊領先5分（賽前客隊勝率61%），大局已定"
+      "reason": "第9局客隊領先5分（賽前客隊勝率61%），大局已定"
     },
     {
       "home_cn": "天使",
@@ -432,7 +432,7 @@
       "top_inning": false,
       "home_runs": 0,
       "away_runs": 3,
-      "projected_total": 11.6,
+      "projected_total": 10.9,
       "market_total": 11.0,
       "bet": null,
       "reason": null
