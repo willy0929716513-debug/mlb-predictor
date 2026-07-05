@@ -382,12 +382,12 @@
       "away_cn": "光芒",
       "inning": 7,
       "top_inning": false,
-      "home_runs": 6,
+      "home_runs": 7,
       "away_runs": 8,
-      "projected_total": 15.9,
+      "projected_total": 16.9,
       "market_total": 7.0,
       "bet": "大小分 OVER",
-      "reason": "第7局已得14分（此時預期5.1分），高分走勢盤口7.0"
+      "reason": "第7局已得15分（此時預期5.1分），高分走勢盤口7.0"
     },
     {
       "home_cn": "守護者",
@@ -405,10 +405,10 @@
       "home_cn": "小熊",
       "away_cn": "紅雀",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 8.1,
+      "projected_total": 7.7,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -486,7 +486,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783215138,
+  "live_updated_ts": 1783215439,
   "game_preds": {
     "nationals|pirates": {
       "home_win_prob": 0.4365,
@@ -549,5 +549,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-05 09:32 (台灣時間)"
+  "live_updated_at": "2026-07-05 09:37 (台灣時間)"
 }
