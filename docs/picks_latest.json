@@ -440,11 +440,11 @@
     {
       "home_cn": "響尾蛇",
       "away_cn": "釀酒人",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 0,
-      "projected_total": 9.5,
+      "projected_total": 9.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
