@@ -369,10 +369,10 @@
       "home_cn": "小熊",
       "away_cn": "紅雀",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 6.4,
+      "projected_total": 6.0,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -382,12 +382,12 @@
       "away_cn": "大都會",
       "inning": 7,
       "top_inning": false,
-      "home_runs": 8,
+      "home_runs": 10,
       "away_runs": 3,
-      "projected_total": 13.2,
+      "projected_total": 15.2,
       "market_total": 8.0,
       "bet": "大小分 OVER",
-      "reason": "第7局已得11分（此時預期5.8分），高分走勢盤口8.0"
+      "reason": "第7局已得13分（此時預期5.8分），高分走勢盤口8.0"
     },
     {
       "home_cn": "落磯",
@@ -417,10 +417,10 @@
       "home_cn": "天使",
       "away_cn": "紅襪",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 3,
-      "projected_total": 10.6,
+      "projected_total": 10.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -428,11 +428,11 @@
     {
       "home_cn": "運動家",
       "away_cn": "馬林魚",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 3,
-      "projected_total": 10.9,
+      "projected_total": 10.3,
       "market_total": 11.0,
       "bet": null,
       "reason": null
@@ -453,16 +453,16 @@
       "home_cn": "道奇",
       "away_cn": "教士",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 7.6,
+      "projected_total": 7.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1783218760,
+  "live_updated_ts": 1783219061,
   "game_preds": {
     "nationals|pirates": {
       "home_win_prob": 0.4365,
@@ -525,5 +525,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-05 10:32 (台灣時間)"
+  "live_updated_at": "2026-07-05 10:37 (台灣時間)"
 }
