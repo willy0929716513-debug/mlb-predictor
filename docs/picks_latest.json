@@ -400,8 +400,8 @@
       "inning": 2,
       "top_inning": true,
       "home_runs": 3,
-      "away_runs": 2,
-      "projected_total": 12.6,
+      "away_runs": 3,
+      "projected_total": 13.6,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -434,10 +434,10 @@
       "home_cn": "洋基",
       "away_cn": "雙城",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 7.7,
+      "projected_total": 7.2,
       "market_total": 8.5,
       "bet": "主隊讓分(+1.5)",
       "reason": "主隊落後2分 第4局，賽前主隊勝率64%"
@@ -446,16 +446,28 @@
       "home_cn": "小熊",
       "away_cn": "紅雀",
       "inning": 1,
+      "top_inning": false,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 8.0,
+      "market_total": 8.5,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "皇家",
+      "away_cn": "費城人",
+      "inning": 1,
       "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.5,
-      "market_total": 8.5,
+      "projected_total": 10.0,
+      "market_total": 10.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1783276995,
+  "live_updated_ts": 1783277296,
   "game_preds": {
     "braves|mets": {
       "home_win_prob": 0.3856,
@@ -518,5 +530,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-06 02:43 (台灣時間)"
+  "live_updated_at": "2026-07-06 02:48 (台灣時間)"
 }
