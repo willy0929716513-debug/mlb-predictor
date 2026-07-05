@@ -1,10 +1,9 @@
 name: Add Manual History Records
 
 on:
-  workflow_dispatch:
   push:
-    branches:
-      - 'trigger/add-records'
+    paths:
+      - '.github/workflows/add_manual_records.yml'
 
 jobs:
   add-records:
