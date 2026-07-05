@@ -54,6 +54,8 @@ ACE_ERA_RL       = 2.50 # 面對此ERA以下的真正頂級王牌時，拒絕推
 ACE_ERA_OVER     = 2.20 # 任一先發ERA≤此值時，直接封鎖OVER（單王牌主導壓低總分）
 FIP_ERA_WARN_GAP = 1.50 # RL: 推薦隊SP的FIP比ERA高超過此值 → 幸運ERA不可持續，拒絕RL
 FIP_ERA_UNDER_GAP= 1.00 # UNDER: 任一SP的FIP比ERA高超過此值 → 幸運ERA，失分回歸，拒絕UNDER
+RL_HOME_ACE_ERA  = 2.00 # 主場王牌ERA門檻：+1.5讓分依賴王牌，一旦爆投便大輸
+RL_OPP_RS_THRESH = 4.0  # 客隊近期RS ≥此值 → 進攻力足以在王牌爆投時擴大分差，主場+1.5風險高
 ODDS_SNAP_PATH = "docs/odds_snapshot.json"
 LEAGUE_ERA     = 4.20
 HIST_TTL       = 90
@@ -3194,6 +3196,12 @@ def run():
                             (_rl_sp_fip - _rl_sp_era_raw) > FIP_ERA_WARN_GAP):
                         log.info("RL blocked FIP-ERA gap: %s gap=%.2f (FIP=%.2f ERA=%.2f)",
                                  home_sp, _rl_sp_fip - _rl_sp_era_raw, _rl_sp_fip, _rl_sp_era_raw)
+                        continue
+                    # ⑤ 主場超級王牌+客隊強攻：主場依賴ERA ≤ 2.0王牌推薦+1.5，但客隊RS高 → 爆投即大輸
+                    _a_rs_v = _PITCHER_RS.get(away_sp)
+                    if (_h_era_v <= RL_HOME_ACE_ERA and
+                            _a_rs_v is not None and _a_rs_v >= RL_OPP_RS_THRESH):
+                        log.info("RL blocked: home ace ERA=%.2f but opp RS=%.1f", _h_era_v, _a_rs_v)
                         continue
                 # ⑤ 天氣不利：雨/逆風時降低RL信心（得分更難預測，讓分風險高）
                 _wf_rl = pred.get("weather_factor", 1.0) or 1.0
