@@ -369,13 +369,13 @@
       "home_cn": "紅人",
       "away_cn": "金鶯",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 4,
       "away_runs": 8,
-      "projected_total": 15.2,
+      "projected_total": 14.6,
       "market_total": 9.5,
       "bet": "大小分 OVER",
-      "reason": "第7局已得12分（此時預期6.3分），高分走勢盤口9.5"
+      "reason": "第7局已得12分（此時預期6.9分），高分走勢盤口9.5"
     },
     {
       "home_cn": "太空人",
@@ -396,10 +396,10 @@
       "top_inning": true,
       "home_runs": 1,
       "away_runs": 2,
-      "projected_total": 4.2,
+      "projected_total": 3.8,
       "market_total": 7.5,
-      "bet": "大小分 UNDER",
-      "reason": "第8局僅3分（此時預期6.2分），低分走勢盤口7.5"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "小熊",
