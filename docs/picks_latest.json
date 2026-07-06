@@ -178,11 +178,11 @@
     {
       "home_cn": "光芒",
       "away_cn": "洋基",
-      "inning": 4,
-      "top_inning": false,
+      "inning": 5,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 4.6,
+      "projected_total": 4.2,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -192,9 +192,9 @@
       "away_cn": "太空人",
       "inning": 3,
       "top_inning": false,
-      "home_runs": 1,
+      "home_runs": 2,
       "away_runs": 6,
-      "projected_total": 14.2,
+      "projected_total": 15.2,
       "market_total": 10.0,
       "bet": null,
       "reason": null
@@ -202,11 +202,11 @@
     {
       "home_cn": "勇士",
       "away_cn": "大都會",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 8.5,
+      "away_runs": 1,
+      "projected_total": 9.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -224,7 +224,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783380875,
+  "live_updated_ts": 1783381176,
   "game_preds": {
     "royals|phillies": {
       "home_win_prob": 0.2725,
@@ -259,5 +259,5 @@
       "market_total": 9.5
     }
   },
-  "live_updated_at": "2026-07-07 07:34 (台灣時間)"
+  "live_updated_at": "2026-07-07 07:39 (台灣時間)"
 }
