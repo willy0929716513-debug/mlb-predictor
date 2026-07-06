@@ -401,7 +401,7 @@
       "top_inning": false,
       "home_runs": 0,
       "away_runs": 5,
-      "projected_total": 8.2,
+      "projected_total": 7.6,
       "market_total": 9.5,
       "bet": null,
       "reason": null
@@ -419,7 +419,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783302172,
+  "live_updated_ts": 1783302473,
   "game_preds": {
     "braves|mets": {
       "home_win_prob": 0.3856,
@@ -482,5 +482,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-06 09:42 (台灣時間)"
+  "live_updated_at": "2026-07-06 09:47 (台灣時間)"
 }
