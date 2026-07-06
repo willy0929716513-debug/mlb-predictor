@@ -407,7 +407,7 @@
       "reason": "主隊落後1分 第5局，賽前主隊勝率76%"
     }
   ],
-  "live_updated_ts": 1783299190,
+  "live_updated_ts": 1783299491,
   "game_preds": {
     "braves|mets": {
       "home_win_prob": 0.3856,
@@ -470,5 +470,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-06 08:53 (台灣時間)"
+  "live_updated_at": "2026-07-06 08:58 (台灣時間)"
 }
