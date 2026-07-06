@@ -409,17 +409,17 @@
     {
       "home_cn": "天使",
       "away_cn": "紅襪",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 11.7,
+      "projected_total": 11.2,
       "market_total": 8.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1783303982,
+  "live_updated_ts": 1783304283,
   "game_preds": {
     "braves|mets": {
       "home_win_prob": 0.3856,
@@ -482,5 +482,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-06 10:13 (台灣時間)"
+  "live_updated_at": "2026-07-06 10:18 (台灣時間)"
 }
