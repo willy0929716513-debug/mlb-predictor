@@ -2486,7 +2486,7 @@ def calc_pnl(hist):
                 vig_cost += stake * (1.0 / dv_p - price)
         else:
             total_pnl -= stake
-    pnl_novig = total_pnl - vig_cost
+    pnl_novig = total_pnl + vig_cost
     return round(total_in, 1), round(total_pnl, 1), round(pnl_novig, 1), round(vig_cost, 1)
 
 def calc_perf_by_type(hist):
@@ -3198,7 +3198,7 @@ def run():
                         log.info("RL blocked FIP-ERA gap: %s gap=%.2f (FIP=%.2f ERA=%.2f)",
                                  home_sp, _rl_sp_fip - _rl_sp_era_raw, _rl_sp_fip, _rl_sp_era_raw)
                         continue
-                    # ⑤ 主場超級王牌+客隊強攻：主場依賴ERA ≤ 2.0王牌推薦+1.5，但客隊RS高 → 爆投即大輸
+                    # ⑥ 主場超級王牌+客隊強攻：主場依賴ERA ≤ 2.0王牌推薦+1.5，但客隊RS高 → 爆投即大輸
                     _a_rs_v = _PITCHER_RS.get(away_sp)
                     if (_h_era_v <= RL_HOME_ACE_ERA and
                             _a_rs_v is not None and _a_rs_v >= RL_OPP_RS_THRESH):
