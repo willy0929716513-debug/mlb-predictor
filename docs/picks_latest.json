@@ -188,7 +188,7 @@
       "reason": "第7局已得12分（此時預期5.7分），高分走勢盤口8.5"
     }
   ],
-  "live_updated_ts": 1783370007,
+  "live_updated_ts": 1783370308,
   "game_preds": {
     "royals|phillies": {
       "home_win_prob": 0.2725,
@@ -223,5 +223,5 @@
       "market_total": 9.5
     }
   },
-  "live_updated_at": "2026-07-07 04:33 (台灣時間)"
+  "live_updated_at": "2026-07-07 04:38 (台灣時間)"
 }
