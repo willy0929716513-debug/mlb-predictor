@@ -174,8 +174,21 @@
       "sp_confirmed": false
     }
   ],
-  "live_games": [],
-  "live_updated_ts": 1783311520,
+  "live_games": [
+    {
+      "home_cn": "皇家",
+      "away_cn": "費城人",
+      "inning": 3,
+      "top_inning": false,
+      "home_runs": 7,
+      "away_runs": 1,
+      "projected_total": 14.1,
+      "market_total": 8.5,
+      "bet": null,
+      "reason": null
+    }
+  ],
+  "live_updated_ts": 1783365480,
   "game_preds": {
     "royals|phillies": {
       "home_win_prob": 0.2725,
@@ -209,5 +222,6 @@
       "home_win_prob": 0.5886,
       "market_total": 9.5
     }
-  }
+  },
+  "live_updated_at": "2026-07-07 03:18 (台灣時間)"
 }
