@@ -3,7 +3,7 @@
     "ts": "2026-07-06",
     "home_ml": 2.85,
     "away_ml": 1.53,
-    "rl_h": 2.11,
+    "rl_h": 2.12,
     "rl_a": 1.89,
     "rl_h_25": null,
     "rl_a_25": null,
@@ -12,14 +12,14 @@
   },
   "2026-07-07|rays|yankees": {
     "ts": "2026-07-06",
-    "home_ml": 1.93,
+    "home_ml": 1.95,
     "away_ml": 1.99,
-    "rl_h": 1.53,
+    "rl_h": 1.54,
     "rl_a": 2.55,
     "rl_h_25": null,
     "rl_a_25": null,
     "over": 2.01,
-    "under": 1.89
+    "under": 1.88
   },
   "2026-07-07|nationals|astros": {
     "ts": "2026-07-06",
