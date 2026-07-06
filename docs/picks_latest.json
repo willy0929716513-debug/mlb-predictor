@@ -179,16 +179,16 @@
       "home_cn": "皇家",
       "away_cn": "費城人",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 9,
       "away_runs": 1,
-      "projected_total": 14.7,
+      "projected_total": 14.2,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第5局已得10分（此時預期3.8分），高分走勢盤口8.5"
+      "reason": "第5局已得10分（此時預期4.2分），高分走勢盤口8.5"
     }
   ],
-  "live_updated_ts": 1783367894,
+  "live_updated_ts": 1783368196,
   "game_preds": {
     "royals|phillies": {
       "home_win_prob": 0.2725,
@@ -223,5 +223,5 @@
       "market_total": 9.5
     }
   },
-  "live_updated_at": "2026-07-07 03:58 (台灣時間)"
+  "live_updated_at": "2026-07-07 04:03 (台灣時間)"
 }
