@@ -400,14 +400,14 @@
       "inning": 7,
       "top_inning": true,
       "home_runs": 3,
-      "away_runs": 5,
-      "projected_total": 10.7,
+      "away_runs": 7,
+      "projected_total": 12.7,
       "market_total": 8.0,
       "bet": "大小分 OVER",
-      "reason": "第7局已得8分（此時預期5.3分），高分走勢盤口8.0"
+      "reason": "第7局已得10分（此時預期5.3分），高分走勢盤口8.0"
     }
   ],
-  "live_updated_ts": 1783309111,
+  "live_updated_ts": 1783309413,
   "game_preds": {
     "braves|mets": {
       "home_win_prob": 0.3856,
@@ -470,5 +470,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-06 11:38 (台灣時間)"
+  "live_updated_at": "2026-07-06 11:43 (台灣時間)"
 }
