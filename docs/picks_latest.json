@@ -176,18 +176,6 @@
   ],
   "live_games": [
     {
-      "home_cn": "國民",
-      "away_cn": "太空人",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 12,
-      "away_runs": 11,
-      "projected_total": 24.1,
-      "market_total": 10.0,
-      "bet": null,
-      "reason": null
-    },
-    {
       "home_cn": "勇士",
       "away_cn": "大都會",
       "inning": 7,
