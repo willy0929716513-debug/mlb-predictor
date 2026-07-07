@@ -182,7 +182,7 @@
       "top_inning": false,
       "home_runs": 12,
       "away_runs": 11,
-      "projected_total": 25.2,
+      "projected_total": 24.7,
       "market_total": 10.0,
       "bet": null,
       "reason": null
@@ -224,7 +224,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783387076,
+  "live_updated_ts": 1783387390,
   "game_preds": {
     "royals|phillies": {
       "home_win_prob": 0.2725,
@@ -259,5 +259,5 @@
       "market_total": 9.5
     }
   },
-  "live_updated_at": "2026-07-07 09:17 (台灣時間)"
+  "live_updated_at": "2026-07-07 09:23 (台灣時間)"
 }
