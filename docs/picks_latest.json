@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-07 17:46 (台灣時間)",
+  "generated_at": "2026-07-07 22:52 (台灣時間)",
   "date": "2026-07-07",
   "stats": {
     "settled": 182,
@@ -178,63 +178,63 @@
   "live_updated_ts": 1783397938,
   "game_preds": {
     "cardinals|brewers": {
-      "home_win_prob": 0.359,
-      "market_total": 7.5
+      "home_win_prob": 0.3578,
+      "market_total": 8.5
     },
     "orioles|cubs": {
-      "home_win_prob": 0.3573,
+      "home_win_prob": 0.3541,
       "market_total": 9.5
     },
     "tigers|athletics": {
-      "home_win_prob": 0.4094,
+      "home_win_prob": 0.4278,
       "market_total": 8.0
     },
     "pirates|braves": {
-      "home_win_prob": 0.4946,
+      "home_win_prob": 0.499,
       "market_total": 8.0
     },
     "marlins|mariners": {
-      "home_win_prob": 0.5146,
+      "home_win_prob": 0.5065,
       "market_total": 8.0
     },
     "rays|yankees": {
-      "home_win_prob": 0.7508,
+      "home_win_prob": 0.7486,
       "market_total": 8.0
     },
     "nationals|astros": {
-      "home_win_prob": 0.7088,
-      "market_total": 9.0
+      "home_win_prob": 0.701,
+      "market_total": 9.5
     },
     "reds|phillies": {
-      "home_win_prob": 0.3378,
-      "market_total": 8.5
+      "home_win_prob": 0.334,
+      "market_total": 9.0
     },
     "mets|royals": {
-      "home_win_prob": 0.6966,
-      "market_total": 8.0
+      "home_win_prob": 0.6969,
+      "market_total": 8.5
     },
     "white sox|red sox": {
-      "home_win_prob": 0.404,
+      "home_win_prob": 0.402,
       "market_total": 8.5
     },
     "twins|guardians": {
-      "home_win_prob": 0.6515,
+      "home_win_prob": 0.6538,
       "market_total": 8.5
     },
     "rangers|angels": {
-      "home_win_prob": 0.5473,
+      "home_win_prob": 0.5533,
       "market_total": 7.0
     },
     "padres|diamondbacks": {
-      "home_win_prob": 0.4153,
+      "home_win_prob": 0.4184,
       "market_total": 8.5
     },
     "giants|blue jays": {
-      "home_win_prob": 0.6616,
-      "market_total": 8.0
+      "home_win_prob": 0.6724,
+      "market_total": 7.5
     },
     "dodgers|rockies": {
-      "home_win_prob": 0.7516,
+      "home_win_prob": 0.7513,
       "market_total": 9.5
     }
   }
