@@ -179,10 +179,10 @@
       "home_cn": "勇士",
       "away_cn": "大都會",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 5,
-      "projected_total": 9.0,
+      "projected_total": 8.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -203,10 +203,10 @@
       "home_cn": "教士",
       "away_cn": "響尾蛇",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 9.6,
+      "projected_total": 9.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -236,7 +236,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783390107,
+  "live_updated_ts": 1783390408,
   "game_preds": {
     "royals|phillies": {
       "home_win_prob": 0.2725,
@@ -271,5 +271,5 @@
       "market_total": 9.5
     }
   },
-  "live_updated_at": "2026-07-07 10:08 (台灣時間)"
+  "live_updated_at": "2026-07-07 10:13 (台灣時間)"
 }
