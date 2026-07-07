@@ -215,10 +215,10 @@
       "home_cn": "巨人",
       "away_cn": "藍鳥",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 7.7,
+      "projected_total": 7.2,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -236,7 +236,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783389805,
+  "live_updated_ts": 1783390107,
   "game_preds": {
     "royals|phillies": {
       "home_win_prob": 0.2725,
@@ -271,5 +271,5 @@
       "market_total": 9.5
     }
   },
-  "live_updated_at": "2026-07-07 10:03 (台灣時間)"
+  "live_updated_at": "2026-07-07 10:08 (台灣時間)"
 }
