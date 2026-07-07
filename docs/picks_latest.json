@@ -224,7 +224,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783388299,
+  "live_updated_ts": 1783388600,
   "game_preds": {
     "royals|phillies": {
       "home_win_prob": 0.2725,
@@ -259,5 +259,5 @@
       "market_total": 9.5
     }
   },
-  "live_updated_at": "2026-07-07 09:38 (台灣時間)"
+  "live_updated_at": "2026-07-07 09:43 (台灣時間)"
 }
