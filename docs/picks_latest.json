@@ -179,16 +179,16 @@
       "home_cn": "紅雀",
       "away_cn": "釀酒人",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 9.7,
+      "projected_total": 9.2,
       "market_total": 8.5,
       "bet": "客隊讓分(+1.5)",
       "reason": "客隊落後1分 第5局，賽前客隊勝率59%"
     }
   ],
-  "live_updated_ts": 1783452368,
+  "live_updated_ts": 1783452671,
   "game_preds": {
     "cardinals|brewers": {
       "home_win_prob": 0.4073,
@@ -251,5 +251,5 @@
       "market_total": 9.5
     }
   },
-  "live_updated_at": "2026-07-08 03:26 (台灣時間)"
+  "live_updated_at": "2026-07-08 03:31 (台灣時間)"
 }
