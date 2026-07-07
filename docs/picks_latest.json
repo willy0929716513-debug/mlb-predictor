@@ -174,33 +174,8 @@
       "sp_confirmed": false
     }
   ],
-  "live_games": [
-    {
-      "home_cn": "教士",
-      "away_cn": "響尾蛇",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 0,
-      "away_runs": 8,
-      "projected_total": 8.9,
-      "market_total": 8.5,
-      "bet": "客隊獨贏",
-      "reason": "第9局客隊領先8分（賽前客隊勝率77%），大局已定"
-    },
-    {
-      "home_cn": "道奇",
-      "away_cn": "落磯",
-      "inning": 6,
-      "top_inning": false,
-      "home_runs": 6,
-      "away_runs": 3,
-      "projected_total": 12.7,
-      "market_total": 9.5,
-      "bet": "大小分 OVER",
-      "reason": "第6局已得9分（此時預期5.8分），高分走勢盤口9.5"
-    }
-  ],
-  "live_updated_ts": 1783396736,
+  "live_games": [],
+  "live_updated_ts": 1783397938,
   "game_preds": {
     "royals|phillies": {
       "home_win_prob": 0.2725,
@@ -235,5 +210,5 @@
       "market_total": 9.5
     }
   },
-  "live_updated_at": "2026-07-07 11:58 (台灣時間)"
+  "live_updated_at": ""
 }
