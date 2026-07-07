@@ -12,7 +12,7 @@ GIST_DESC = "mlb_bot_history"
 
 # ── 模型參數 ──────────────────────────────────
 EDGE_MIN       = 0.08   # ↑0.06→0.08，每注最低 $50，門檻更嚴才合理
-EDGE_MIN_RL    = 0.10   # ↑0.08→0.10
+EDGE_MIN_RL    = 0.09   # ↑0.08→0.10→↓0.09
 EDGE_MIN_TOT   = 0.09   # ↑0.07→0.09
 EDGE_MIN_ML_FAV= 0.11   # ML低賠（賠率<1.65）額外edge門檻（↓0.14→0.11：-170熱門若有11%優勢仍值得下注）
 MIN_MODEL_P_ML  = 0.65  # ML 模型勝率門檻（↑0.63→0.65，確保觀測勝率63%有足夠buffer）
@@ -40,7 +40,7 @@ KELLY_FLOOR    = 50.0   # 最低注額 $50
 KELLY_MIN      = 50.0   # 低於此值直接排除，不值得下注
 MAX_PICKS      = 5      # CLV 排序後只取前 N 名，讓推薦穩定
 MAX_RL_PICKS   = 2      # 每日RL推薦上限（防止同日過度集中）
-RL_BET_CONF_MIN= 0.68  # RL 最低信心門檻（↓0.70→0.68，RL ROI+71%，小幅鬆動增加穩定性）
+RL_BET_CONF_MIN= 0.63  # RL 最低信心門檻（↓0.70→0.68→0.63，RL ROI+71%，小幅鬆動增加推薦量）
 RL_KELLY_MULT  = 0.75  # RL Kelly 折扣（不確定性更高，下注降低25%）
 RL_KELLY_MAX   = 130.0 # RL 最大下注上限
 LINE_CLV_MIN   = -2.50  # 線路 CLV 門檻（↑-0.30→-1.50→-2.50）：允許高信心注在線路微幅逆移時仍通過
@@ -3087,9 +3087,8 @@ def run():
                 continue
             _mp_min = MIN_MODEL_P_RL if btype==BET_RL else (MIN_MODEL_P_TOT if btype==BET_TOT else MIN_MODEL_P_ML)
             if model_p < _mp_min: continue
-            if bet_conf<0.65: continue
+            if bet_conf < (RL_BET_CONF_MIN if btype == BET_RL else 0.65): continue
             if btype == BET_ML and bet_conf < ML_BET_CONF_MIN: continue  # ML 同RL，過濾邊際低賠
-            if btype == BET_RL and bet_conf < RL_BET_CONF_MIN: continue  # RL 需更高信心
             # ML低賠保護：賠率<1.65（損益平衡≥60.6%），需更大的devigged edge
             if btype == BET_ML and bp < 1.65 and raw_edge < EDGE_MIN_ML_FAV: continue
             # ── ★ ML 保護層（FIP回歸 · 對手強打線 · 模型市場差距）──
@@ -3220,11 +3219,11 @@ def run():
                     _fav_sp_era = _a_era_v
                 if _ud_sp_era - _fav_sp_era > 0.8:
                     _old_conf = bet_conf
-                    bet_conf = round(bet_conf - 0.20, 4)
+                    bet_conf = round(bet_conf - 0.15, 4)
                     log.info("SP_DELTA_PENALTY: ud=%.2f fav=%.2f delta=%.2f conf %.2f→%.2f",
                              _ud_sp_era, _fav_sp_era, _ud_sp_era-_fav_sp_era, _old_conf, bet_conf)
-                    if bet_conf < 0.65:
-                        log.info("SP_DELTA_PENALTY SKIP: conf %.2f below 0.65", bet_conf)
+                    if bet_conf < RL_BET_CONF_MIN:
+                        log.info("SP_DELTA_PENALTY SKIP: conf %.2f below %.2f", bet_conf, RL_BET_CONF_MIN)
                         continue
                 # SLUMP_LOWCONF_SKIP: 低迷期+低信心 → 跳過RL
                 if _slump_mult < 1.0 and bet_conf < 0.75:
