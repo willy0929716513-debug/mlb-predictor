@@ -181,20 +181,20 @@
       "inning": 8,
       "top_inning": true,
       "home_runs": 12,
-      "away_runs": 7,
-      "projected_total": 21.2,
+      "away_runs": 8,
+      "projected_total": 22.2,
       "market_total": 10.0,
       "bet": "主隊獨贏",
-      "reason": "第8局主隊領先5分（賽前主隊勝率49%），大局已定"
+      "reason": "第8局主隊領先4分（賽前主隊勝率49%），大局已定"
     },
     {
       "home_cn": "勇士",
       "away_cn": "大都會",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 9.0,
+      "projected_total": 8.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -212,7 +212,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783386604,
+  "live_updated_ts": 1783386774,
   "game_preds": {
     "royals|phillies": {
       "home_win_prob": 0.2725,
@@ -247,5 +247,5 @@
       "market_total": 9.5
     }
   },
-  "live_updated_at": "2026-07-07 09:10 (台灣時間)"
+  "live_updated_at": "2026-07-07 09:12 (台灣時間)"
 }
