@@ -40,7 +40,7 @@ KELLY_FLOOR    = 50.0   # 最低注額 $50
 KELLY_MIN      = 50.0   # 低於此值直接排除，不值得下注
 MAX_PICKS      = 5      # CLV 排序後只取前 N 名，讓推薦穩定
 MAX_RL_PICKS   = 2      # 每日RL推薦上限（防止同日過度集中）
-RL_BET_CONF_MIN= 0.63  # RL 最低信心門檻（↓0.70→0.68→0.63，RL ROI+71%，小幅鬆動增加推薦量）
+RL_BET_CONF_MIN= 0.61  # RL 最低信心門檻（↓0.70→0.68→0.63→0.61，RL ROI+71%，小幅鬆動增加推薦量）
 RL_KELLY_MULT  = 0.75  # RL Kelly 折扣（不確定性更高，下注降低25%）
 RL_KELLY_MAX   = 130.0 # RL 最大下注上限
 LINE_CLV_MIN   = -2.50  # 線路 CLV 門檻（↑-0.30→-1.50→-2.50）：允許高信心注在線路微幅逆移時仍通過
@@ -51,7 +51,7 @@ BLOWOUT_ERA_POOR = 4.20 # 弱投手ERA門檻（≥此值且ERA差距大，拒絕
 ELITE_ERA_DUAL   = 3.50 # 雙方投手都低於此值時視為菁英對決
 ELITE_ERA_OVER_P = 0.68 # 菁英投手對決時，OVER需達更高概率門檻（防RS拉高）
 ACE_ERA_RL       = 2.50 # 面對此ERA以下的真正頂級王牌時，拒絕推薦讓分受讓（↑2.20→2.50）
-ACE_ERA_OVER     = 2.20 # 任一先發ERA≤此值時，直接封鎖OVER（單王牌主導壓低總分）
+ACE_ERA_OVER     = 2.00 # 任一先發ERA≤此值時，直接封鎖OVER（↓2.20→2.00，僅極頂尖王牌才封OVER）
 FIP_ERA_WARN_GAP = 1.50 # RL: 推薦隊SP的FIP比ERA高超過此值 → 幸運ERA不可持續，拒絕RL
 FIP_ERA_UNDER_GAP= 1.00 # UNDER: 任一SP的FIP比ERA高超過此值 → 幸運ERA，失分回歸，拒絕UNDER
 RL_HOME_ACE_ERA  = 2.00 # 主場王牌ERA門檻：+1.5讓分依賴王牌，一旦爆投便大輸
@@ -3247,7 +3247,7 @@ def run():
                 _rl_model_mkt_gap = model_p - _rl_mkt_dv
                 if _rl_model_mkt_gap > 0.20:
                     _old_conf = bet_conf
-                    bet_conf = round(bet_conf * 0.85, 4)
+                    bet_conf = round(bet_conf * 0.90, 4)
                     log.info("RL_MKT_DISAGREE: model_p=%.3f mkt_p=%.3f gap=%.3f conf %.2f→%.2f",
                              model_p, _rl_mkt_dv, _rl_model_mkt_gap, _old_conf, bet_conf)
                     if _rl_model_mkt_gap > 0.30 or bet_conf < RL_BET_CONF_MIN:
@@ -3844,8 +3844,8 @@ def run():
             else:                con_p2 = None
             _price_dev = (bp2/con_p2 - 1) if (con_p2 and con_p2 > 0) else 0
             if _price_dev > MAX_PRICE_GAP: _why="❌賠率偏離共識%.0f%%(%.2f→%.2f)"%(_price_dev*100,con_p2,bp2)
-            elif cf < 0.65:             _why="❌低信心"
-            elif cf < _conf_min:      _why="❌信心<%.0f%%"%(_conf_min*100)
+            elif cf < _conf_min:      _why="❌低信心"
+            elif cf < 0.65:           _why="❌信心<%.0f%%"%(0.65*100)
             elif best_mp < _mp_min:   _why="❌modelP=%.2f<%.2f"%(best_mp,_mp_min)
             elif best_lbl=="RL" and (
                 (rl_he>=rl_ae and _a_era<=ACE_ERA_RL) or   # 主場RL：檢查客隊王牌
