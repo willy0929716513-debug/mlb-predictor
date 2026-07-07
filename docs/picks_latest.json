@@ -179,7 +179,7 @@
       "home_cn": "國民",
       "away_cn": "太空人",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 12,
       "away_runs": 11,
       "projected_total": 25.2,
@@ -190,11 +190,11 @@
     {
       "home_cn": "勇士",
       "away_cn": "大都會",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 8.5,
+      "projected_total": 8.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -202,14 +202,14 @@
     {
       "home_cn": "紅雀",
       "away_cn": "釀酒人",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 0,
-      "projected_total": 6.0,
+      "projected_total": 5.6,
       "market_total": 8.0,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 UNDER",
+      "reason": "第6局僅2分（此時預期4.4分），低分走勢盤口8.0"
     },
     {
       "home_cn": "教士",
