@@ -181,14 +181,14 @@
       "inning": 7,
       "top_inning": true,
       "home_runs": 3,
-      "away_runs": 3,
-      "projected_total": 8.8,
+      "away_runs": 4,
+      "projected_total": 9.8,
       "market_total": 8.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1783454179,
+  "live_updated_ts": 1783454481,
   "game_preds": {
     "cardinals|brewers": {
       "home_win_prob": 0.4073,
@@ -251,5 +251,5 @@
       "market_total": 9.5
     }
   },
-  "live_updated_at": "2026-07-08 03:56 (台灣時間)"
+  "live_updated_at": "2026-07-08 04:01 (台灣時間)"
 }
