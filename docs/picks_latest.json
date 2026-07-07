@@ -178,11 +178,11 @@
     {
       "home_cn": "國民",
       "away_cn": "太空人",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 12,
       "away_runs": 11,
-      "projected_total": 24.7,
+      "projected_total": 24.1,
       "market_total": 10.0,
       "bet": null,
       "reason": null
@@ -191,10 +191,10 @@
       "home_cn": "勇士",
       "away_cn": "大都會",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 8.0,
+      "projected_total": 7.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
