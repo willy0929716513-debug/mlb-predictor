@@ -188,18 +188,6 @@
       "reason": "第9局客隊領先8分（賽前客隊勝率77%），大局已定"
     },
     {
-      "home_cn": "巨人",
-      "away_cn": "藍鳥",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 10,
-      "away_runs": 1,
-      "projected_total": 11.8,
-      "market_total": 7.5,
-      "bet": "主隊獨贏",
-      "reason": "第9局主隊領先9分（賽前主隊勝率71%），大局已定"
-    },
-    {
       "home_cn": "道奇",
       "away_cn": "落磯",
       "inning": 6,
@@ -212,7 +200,7 @@
       "reason": "第6局已得9分（此時預期5.8分），高分走勢盤口9.5"
     }
   ],
-  "live_updated_ts": 1783396435,
+  "live_updated_ts": 1783396736,
   "game_preds": {
     "royals|phillies": {
       "home_win_prob": 0.2725,
@@ -247,5 +235,5 @@
       "market_total": 9.5
     }
   },
-  "live_updated_at": "2026-07-07 11:53 (台灣時間)"
+  "live_updated_at": "2026-07-07 11:58 (台灣時間)"
 }
