@@ -205,8 +205,8 @@
       "inning": 3,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 3,
-      "projected_total": 9.6,
+      "away_runs": 6,
+      "projected_total": 12.6,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -214,11 +214,11 @@
     {
       "home_cn": "巨人",
       "away_cn": "藍鳥",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 6.4,
+      "projected_total": 6.0,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -226,11 +226,11 @@
     {
       "home_cn": "道奇",
       "away_cn": "落磯",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 9.0,
+      "projected_total": 8.4,
       "market_total": 9.5,
       "bet": null,
       "reason": null
