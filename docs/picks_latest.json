@@ -222,6 +222,18 @@
       "market_total": 8.5,
       "bet": null,
       "reason": null
+    },
+    {
+      "home_cn": "巨人",
+      "away_cn": "藍鳥",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 7.5,
+      "market_total": 7.5,
+      "bet": null,
+      "reason": null
     }
   ],
   "live_updated_ts": 1783387390,
