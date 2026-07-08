@@ -212,7 +212,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783480685,
+  "live_updated_ts": 1783480987,
   "game_preds": {
     "cardinals|brewers": {
       "home_win_prob": 0.4073,
@@ -275,5 +275,5 @@
       "market_total": 9.5
     }
   },
-  "live_updated_at": "2026-07-08 11:18 (台灣時間)"
+  "live_updated_at": "2026-07-08 11:23 (台灣時間)"
 }
