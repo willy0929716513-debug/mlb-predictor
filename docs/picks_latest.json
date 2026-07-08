@@ -178,11 +178,11 @@
     {
       "home_cn": "紅雀",
       "away_cn": "釀酒人",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.0,
+      "projected_total": 7.6,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -190,11 +190,11 @@
     {
       "home_cn": "金鶯",
       "away_cn": "小熊",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 7.9,
+      "projected_total": 7.4,
       "market_total": 9.5,
       "bet": null,
       "reason": null
@@ -203,10 +203,10 @@
       "home_cn": "老虎",
       "away_cn": "運動家",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 1,
-      "projected_total": 7.4,
+      "projected_total": 7.0,
       "market_total": 8.0,
       "bet": "客隊讓分(+1.5)",
       "reason": "客隊落後1分 第5局，賽前客隊勝率58%"
@@ -214,62 +214,62 @@
     {
       "home_cn": "海盜",
       "away_cn": "勇士",
-      "inning": 4,
-      "top_inning": false,
+      "inning": 5,
+      "top_inning": true,
       "home_runs": 7,
       "away_runs": 2,
-      "projected_total": 13.9,
+      "projected_total": 13.4,
       "market_total": 8.0,
       "bet": "大小分 OVER",
-      "reason": "第4局已得9分（此時預期3.1分），高分走勢盤口8.0"
+      "reason": "第5局已得9分（此時預期3.6分），高分走勢盤口8.0"
     },
     {
       "home_cn": "馬林魚",
       "away_cn": "水手",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 4,
       "away_runs": 2,
-      "projected_total": 10.4,
+      "projected_total": 10.0,
       "market_total": 8.0,
       "bet": "大小分 OVER",
-      "reason": "第5局已得6分（此時預期3.6分），高分走勢盤口8.0"
+      "reason": "第5局已得6分（此時預期4.0分），高分走勢盤口8.0"
     },
     {
       "home_cn": "光芒",
       "away_cn": "洋基",
-      "inning": 4,
-      "top_inning": false,
+      "inning": 5,
+      "top_inning": true,
       "home_runs": 6,
       "away_runs": 3,
-      "projected_total": 13.9,
+      "projected_total": 13.4,
       "market_total": 8.0,
       "bet": "大小分 OVER",
-      "reason": "第4局已得9分（此時預期3.1分），高分走勢盤口8.0"
+      "reason": "第5局已得9分（此時預期3.6分），高分走勢盤口8.0"
     },
     {
       "home_cn": "國民",
       "away_cn": "太空人",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 4,
-      "projected_total": 12.3,
+      "projected_total": 11.8,
       "market_total": 9.5,
       "bet": "大小分 OVER",
-      "reason": "第4局已得6分（此時預期3.2分），高分走勢盤口9.5"
+      "reason": "第4局已得6分（此時預期3.7分），高分走勢盤口9.5"
     },
     {
       "home_cn": "大都會",
       "away_cn": "皇家",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 5,
       "away_runs": 2,
-      "projected_total": 13.1,
+      "projected_total": 12.7,
       "market_total": 8.5,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第4局已得7分（此時預期2.8分），高分走勢盤口8.5"
     },
     {
       "home_cn": "紅人",
@@ -287,10 +287,10 @@
       "home_cn": "雙城",
       "away_cn": "守護者",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 8.6,
+      "projected_total": 8.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -298,11 +298,11 @@
     {
       "home_cn": "白襪",
       "away_cn": "紅襪",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.0,
+      "projected_total": 7.6,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -320,7 +320,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783468914,
+  "live_updated_ts": 1783469216,
   "game_preds": {
     "cardinals|brewers": {
       "home_win_prob": 0.4073,
@@ -383,5 +383,5 @@
       "market_total": 9.5
     }
   },
-  "live_updated_at": "2026-07-08 08:01 (台灣時間)"
+  "live_updated_at": "2026-07-08 08:06 (台灣時間)"
 }
