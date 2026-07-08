@@ -2979,6 +2979,11 @@ def run():
         # RL 使用更高不確定性（RL_STD_MULT），避免模型對接近場次過度樂觀
         rl_dyn_std = dyn_std * RL_STD_MULT
         h_gives = (rl_h_pts is None or rl_h_pts < 0)
+        # 部分莊家以正值代表主隊讓分（+1.5 = 主隊給分），與ML方向交叉驗證修正
+        if not h_gives and rl_h_pts is not None and rl_h_pts > 0 and con_h < con_a:
+            h_gives = True
+            log.info("RL_SIGN_FIX: rl_h_pts=+%.1f但主隊是ML強隊(con_h=%.2f<con_a=%.2f)→修正h_gives=True",
+                     rl_h_pts, con_h, con_a)
         spread_val = abs(rl_h_pts) if rl_h_pts is not None else 1.5
         _mc_rl_probs = pred.get("mc_rl_probs", {})
         _rl_norm = runline_prob(margin, spread_val if h_gives else -spread_val, rl_dyn_std)
@@ -3512,10 +3517,11 @@ def run():
                 h_pt_raw = rl_h_pts_25 if rl_h_pts_25 is not None else -2.5
             else:
                 h_pt_raw = rl_h_pts if rl_h_pts is not None else -1.5
+            # 依 h_gives 決定顯示符號，防止 API 正值讓分導致符號顯示錯誤
             if bside in ("rl_h","rl_h_25"):
-                pts_str = "%.4g" % h_pt_raw
+                pts_str = "%.4g" % (-abs(h_pt_raw) if h_gives else abs(h_pt_raw))
             else:
-                pts_str = "%.4g" % (-h_pt_raw)
+                pts_str = "%.4g" % (abs(h_pt_raw) if h_gives else -abs(h_pt_raw))
             if not pts_str.startswith("-"): pts_str = "+"+pts_str
             if bside in ("rl_h_25","rl_a_25"):
                 con_h_p_use = con_rl_h_p_25; con_a_p_use = con_rl_a_p_25
