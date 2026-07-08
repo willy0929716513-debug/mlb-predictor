@@ -191,13 +191,13 @@
       "home_cn": "巨人",
       "away_cn": "藍鳥",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 8,
-      "projected_total": 13.5,
+      "projected_total": 13.1,
       "market_total": 7.5,
       "bet": "大小分 OVER",
-      "reason": "第7局已得11分（此時預期5.0分），高分走勢盤口7.5"
+      "reason": "第7局已得11分（此時預期5.4分），高分走勢盤口7.5"
     },
     {
       "home_cn": "道奇",
@@ -205,14 +205,14 @@
       "inning": 6,
       "top_inning": true,
       "home_runs": 2,
-      "away_runs": 0,
-      "projected_total": 6.2,
+      "away_runs": 1,
+      "projected_total": 7.2,
       "market_total": 9.5,
       "bet": "大小分 UNDER",
-      "reason": "第6局僅2分（此時預期5.3分），低分走勢盤口9.5"
+      "reason": "第6局僅3分（此時預期5.3分），低分走勢盤口9.5"
     }
   ],
-  "live_updated_ts": 1783481591,
+  "live_updated_ts": 1783481892,
   "game_preds": {
     "cardinals|brewers": {
       "home_win_prob": 0.4073,
@@ -275,5 +275,5 @@
       "market_total": 9.5
     }
   },
-  "live_updated_at": "2026-07-08 11:33 (台灣時間)"
+  "live_updated_at": "2026-07-08 11:38 (台灣時間)"
 }
