@@ -181,32 +181,32 @@
       "inning": 7,
       "top_inning": true,
       "home_runs": 2,
-      "away_runs": 8,
-      "projected_total": 12.8,
+      "away_runs": 10,
+      "projected_total": 14.8,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第7局已得10分（此時預期5.7分），高分走勢盤口8.5"
+      "reason": "第7局已得12分（此時預期5.7分），高分走勢盤口8.5"
     },
     {
       "home_cn": "金鶯",
       "away_cn": "小熊",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 4,
-      "projected_total": 8.6,
+      "projected_total": 8.1,
       "market_total": 9.5,
       "bet": "客隊獨贏",
-      "reason": "第7局客隊領先2分（賽前客隊勝率64%），大局已定"
+      "reason": "第8局客隊領先2分（賽前客隊勝率64%），大局已定"
     },
     {
       "home_cn": "馬林魚",
       "away_cn": "水手",
-      "inning": 9,
-      "top_inning": false,
+      "inning": 10,
+      "top_inning": true,
       "home_runs": 5,
       "away_runs": 5,
-      "projected_total": 10.4,
+      "projected_total": 10.0,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -277,11 +277,11 @@
       "inning": 7,
       "top_inning": true,
       "home_runs": 2,
-      "away_runs": 2,
-      "projected_total": 6.3,
+      "away_runs": 3,
+      "projected_total": 7.3,
       "market_total": 7.0,
-      "bet": null,
-      "reason": null
+      "bet": "主隊讓分(+1.5)",
+      "reason": "主隊落後1分 第7局，賽前主隊勝率55%"
     },
     {
       "home_cn": "教士",
@@ -320,7 +320,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783475251,
+  "live_updated_ts": 1783475553,
   "game_preds": {
     "cardinals|brewers": {
       "home_win_prob": 0.4073,
@@ -383,5 +383,5 @@
       "market_total": 9.5
     }
   },
-  "live_updated_at": "2026-07-08 09:47 (台灣時間)"
+  "live_updated_at": "2026-07-08 09:52 (台灣時間)"
 }
