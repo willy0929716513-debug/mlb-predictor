@@ -428,7 +428,7 @@
     }
   ],
   "live_games": [],
-  "live_updated_ts": 1783484302,
+  "live_updated_ts": 1783538666,
   "game_preds": {
     "giants|blue jays": {
       "home_win_prob": 0.5333,
@@ -490,5 +490,6 @@
       "home_win_prob": 0.5848,
       "market_total": 10.0
     }
-  }
+  },
+  "live_updated_at": ""
 }
