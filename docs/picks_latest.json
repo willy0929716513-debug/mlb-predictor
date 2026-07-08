@@ -263,7 +263,7 @@
       "home_cn": "大都會",
       "away_cn": "皇家",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 9,
       "away_runs": 9,
       "projected_total": 22.7,
