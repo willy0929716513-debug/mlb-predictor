@@ -443,14 +443,14 @@
     {
       "home_cn": "老虎",
       "away_cn": "運動家",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 6,
       "away_runs": 1,
-      "projected_total": 9.5,
+      "projected_total": 9.0,
       "market_total": 9.0,
       "bet": "主隊獨贏",
-      "reason": "第7局主隊領先5分（賽前主隊勝率76%），大局已定"
+      "reason": "第8局主隊領先5分（賽前主隊勝率76%），大局已定"
     },
     {
       "home_cn": "國民",
@@ -504,10 +504,10 @@
       "home_cn": "白襪",
       "away_cn": "紅襪",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 5,
-      "projected_total": 9.4,
+      "projected_total": 9.0,
       "market_total": 8.0,
       "bet": null,
       "reason": null
