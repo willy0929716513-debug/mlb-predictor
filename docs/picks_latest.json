@@ -179,10 +179,10 @@
       "home_cn": "海盜",
       "away_cn": "勇士",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 5,
       "away_runs": 10,
-      "projected_total": 16.1,
+      "projected_total": 15.6,
       "market_total": 10.0,
       "bet": null,
       "reason": null
@@ -200,7 +200,7 @@
       "reason": "第7局僅3分（此時預期6.5分），低分走勢盤口9.0"
     }
   ],
-  "live_updated_ts": 1783628018,
+  "live_updated_ts": 1783628319,
   "game_preds": {
     "pirates|braves": {
       "home_win_prob": 0.6943,
@@ -255,5 +255,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-10 04:13 (台灣時間)"
+  "live_updated_at": "2026-07-10 04:18 (台灣時間)"
 }
