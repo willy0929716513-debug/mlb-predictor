@@ -456,10 +456,10 @@
       "home_cn": "國民",
       "away_cn": "太空人",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 8,
       "away_runs": 2,
-      "projected_total": 12.1,
+      "projected_total": 11.6,
       "market_total": 9.5,
       "bet": "主隊獨贏",
       "reason": "第8局主隊領先6分（賽前主隊勝率76%），大局已定"
@@ -467,14 +467,14 @@
     {
       "home_cn": "大都會",
       "away_cn": "皇家",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 4.5,
+      "projected_total": 4.0,
       "market_total": 9.0,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅2分（此時預期6.5分），低分走勢盤口9.0"
+      "reason": "第8局僅2分（此時預期7.0分），低分走勢盤口9.0"
     },
     {
       "home_cn": "紅人",
@@ -492,10 +492,10 @@
       "home_cn": "雙城",
       "away_cn": "守護者",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 3,
-      "projected_total": 9.8,
+      "projected_total": 9.3,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -516,10 +516,10 @@
       "home_cn": "紅雀",
       "away_cn": "釀酒人",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 0,
-      "projected_total": 6.6,
+      "projected_total": 6.1,
       "market_total": 8.0,
       "bet": null,
       "reason": null
