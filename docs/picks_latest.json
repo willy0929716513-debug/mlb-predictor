@@ -444,10 +444,10 @@
       "home_cn": "雙城",
       "away_cn": "守護者",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 5,
       "away_runs": 5,
-      "projected_total": 11.9,
+      "projected_total": 11.4,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -459,7 +459,7 @@
       "top_inning": false,
       "home_runs": 0,
       "away_runs": 5,
-      "projected_total": 5.9,
+      "projected_total": 5.4,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -471,10 +471,10 @@
       "top_inning": false,
       "home_runs": 0,
       "away_runs": 9,
-      "projected_total": 11.5,
+      "projected_total": 11.1,
       "market_total": 7.5,
       "bet": "大小分 OVER",
-      "reason": "第7局已得9分（此時預期5.0分），高分走勢盤口7.5"
+      "reason": "第7局已得9分（此時預期5.4分），高分走勢盤口7.5"
     },
     {
       "home_cn": "道奇",
@@ -494,8 +494,8 @@
       "inning": 1,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 8.5,
+      "away_runs": 1,
+      "projected_total": 9.5,
       "market_total": 8.5,
       "bet": null,
       "reason": null
