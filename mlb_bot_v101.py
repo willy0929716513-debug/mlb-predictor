@@ -3256,7 +3256,8 @@ def run():
                     bet_conf = round(bet_conf * 0.90, 4)
                     log.info("RL_MKT_DISAGREE: model_p=%.3f mkt_p=%.3f gap=%.3f conf %.2f→%.2f",
                              model_p, _rl_mkt_dv, _rl_model_mkt_gap, _old_conf, bet_conf)
-                    if _rl_model_mkt_gap > 0.30 or bet_conf < RL_BET_CONF_MIN:
+                    # gap>0.30時：高信心(≥0.78)仍可通過，低信心直接封
+                    if bet_conf < RL_BET_CONF_MIN or (_rl_model_mkt_gap > 0.30 and bet_conf < 0.78):
                         log.info("RL_MKT_DISAGREE SKIP: gap=%.3f conf=%.2f", _rl_model_mkt_gap, bet_conf)
                         continue
             # ── ★ 菁英對決保護：雙方ERA均優時，OVER門檻提高 ──
@@ -3887,14 +3888,70 @@ def run():
                     _clv_key = "rl_h" if rl_he>=rl_ae else "rl_a"
                     _clv_p   = rl_hp  if rl_he>=rl_ae else rl_ap
                     _clv_v   = _diag_clv(_clv_key, _clv_p)
-                    _why = "❌CLV下行%.2f%%"%_clv_v if (_clv_v is not None and _clv_v < LINE_CLV_MIN) else "❌RL保護(其他)"
+                    if _clv_v is not None and _clv_v < LINE_CLV_MIN:
+                        _why = "❌CLV下行%.2f%%"%_clv_v
+                    else:
+                        # 細分其他RL保護原因
+                        _rl_dv_d = _dv.get("rl_h" if rl_he>=rl_ae else "rl_a", 0)
+                        _rl_gap_d = best_mp - _rl_dv_d if _rl_dv_d else 0
+                        _ud_era_d = (_h_era if rl_he>=rl_ae else _a_era)
+                        _fav_era_d= (_a_era if rl_he>=rl_ae else _h_era)
+                        _ud_sp_d  = hp_k if rl_he>=rl_ae else ap_k
+                        _fav_sp_d = ap_k if rl_he>=rl_ae else hp_k
+                        _h_dv_d   = _dv.get("home", 0.5); _a_dv_d = _dv.get("away", 0.5)
+                        _ud_away_d= (rl_he < rl_ae)  # True if recommended bet is away +1.5
+                        if _rl_gap_d > 0.30 and cf * 0.90 < 0.78:
+                            _why = "❌RL市場背離%.0f%%(gap=%.2f)"%((_rl_gap_d)*100, _rl_gap_d)
+                        elif _rl_gap_d > 0.20:
+                            _why = "❌RL市場偏高%.0f%%"%((_rl_gap_d)*100)
+                        elif _ud_era_d - _fav_era_d > 0.8:
+                            _why = "❌SP差距(ud%.2f>fav%.2f)"%(_ud_era_d, _fav_era_d)
+                        elif _ud_away_d and abs(_h_dv_d - _a_dv_d) > 0.22:
+                            _why = "❌客隊劣勢(MLgap%.0f%%)"%(abs(_h_dv_d-_a_dv_d)*100)
+                        else:
+                            _why = "❌RL保護(其他)"
             elif best_lbl=="ML" and bp2<ML_FAV_PRICE and be<EDGE_MIN_ML_FAV: _why="❌低賠edge不足"
             elif best_lbl=="ML" and ((bp2 < 2.0 and _best_blend_d < 0.57) or (bp2 >= 2.0 and _best_blend_d < 0.60)): _why="❌混合%.0f%%(模市背離)"%(_best_blend_d*100)
             else:
                 _clv_key = ("home_ml" if he>=ae else "away_ml") if best_lbl=="ML" else ("over" if tot_he>=tot_ue else "under")
                 _clv_p   = (hp if he>=ae else ap) if best_lbl=="ML" else (ov_p if tot_he>=tot_ue else un_p)
                 _clv_v   = _diag_clv(_clv_key, _clv_p)
-                _why = "❌CLV下行%.2f%%"%_clv_v if (_clv_v is not None and _clv_v < LINE_CLV_MIN) else "❌其他過濾"
+                if _clv_v is not None and _clv_v < LINE_CLV_MIN:
+                    _why = "❌CLV下行%.2f%%"%_clv_v
+                elif best_lbl=="TOT":
+                    # TOT診斷細分：OVER王牌封殺 / UNDER FIP / 市場差距
+                    _tot_side = "over" if tot_he>=tot_ue else "under"
+                    if _tot_side == "over":
+                        if _h_era <= ACE_ERA_OVER or _a_era <= ACE_ERA_OVER:
+                            _ace_p = hp_k if _h_era <= ACE_ERA_OVER else ap_k
+                            _ace_e = _h_era if _h_era <= ACE_ERA_OVER else _a_era
+                            _why = "❌王牌封OVER(%s ERA%.2f)"%(_ace_p or "?", _ace_e)
+                        elif _h_era < ELITE_ERA_DUAL and _a_era < ELITE_ERA_DUAL:
+                            _why = "❌菁英對決(OVER<%.0f%%)"%(ELITE_ERA_OVER_P*100)
+                        else:
+                            _why = "❌OVER其他"
+                    else:
+                        _h_fip_t = _PITCHER_FIP.get(hp_k); _a_fip_t = _PITCHER_FIP.get(ap_k)
+                        _h_era_t = _LIVE_SP_ERA.get(hp_k) or PITCHER_ERA.get(hp_k)
+                        _a_era_t = _LIVE_SP_ERA.get(ap_k) or PITCHER_ERA.get(ap_k)
+                        _mkt_gap_t = mt - pr.get("pure_total_tot", mt) if mt else 0
+                        if not hp_k or not ap_k:
+                            _why = "❌UNDER_TBD先發"
+                        elif (_h_fip_t and _h_fip_t > UNDER_FIP_ABS_MAX) or (_a_fip_t and _a_fip_t > UNDER_FIP_ABS_MAX):
+                            _fp = max(f for f in [_h_fip_t or 0, _a_fip_t or 0])
+                            _why = "❌UNDER_FIP絕對(%.2f>%.1f)"%(_fp, UNDER_FIP_ABS_MAX)
+                        elif (_h_fip_t and _h_era_t and (_h_fip_t-_h_era_t)>FIP_ERA_UNDER_GAP):
+                            _why = "❌UNDER_FIP回歸%s(gap+%.1f)"%(hp_k,_h_fip_t-_h_era_t)
+                        elif (_a_fip_t and _a_era_t and (_a_fip_t-_a_era_t)>FIP_ERA_UNDER_GAP):
+                            _why = "❌UNDER_FIP回歸%s(gap+%.1f)"%(ap_k,_a_fip_t-_a_era_t)
+                        elif _mkt_gap_t > UNDER_MKT_HARD_BLOCK:
+                            _why = "❌UNDER市場硬封(gap=%.1f)"%_mkt_gap_t
+                        elif _mkt_gap_t > 1.0:
+                            _why = "❌UNDER市場差距(gap=%.1f→conf低)"%_mkt_gap_t
+                        else:
+                            _why = "❌UNDER其他"
+                else:
+                    _why = "❌其他過濾"
             diag.append("`%s@%s` [%s] Edge=%+.1f%% P=%.2f conf=%.0f%% modelP=%.2f %s SP:%s/%s"%(
                 CN.get(a,a),CN.get(h,h),best_lbl,be*100,bp2,cf*100,best_mp,_why,hp_k or "?",ap_k or "?"))
         for d in sorted(diag,key=lambda x:-float(x.split("Edge=")[1].split("%")[0])): lines.append(d)
