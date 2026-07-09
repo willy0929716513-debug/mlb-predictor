@@ -174,8 +174,69 @@
       "sp_confirmed": false
     }
   ],
-  "live_games": [],
-  "live_updated_ts": 1783631029,
+  "live_games": [
+    {
+      "home_cn": "老虎",
+      "away_cn": "運動家",
+      "inning": 4,
+      "top_inning": false,
+      "home_runs": 1,
+      "away_runs": 0,
+      "projected_total": 6.5,
+      "market_total": 9.0,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "馬林魚",
+      "away_cn": "水手",
+      "inning": 4,
+      "top_inning": true,
+      "home_runs": 2,
+      "away_runs": 1,
+      "projected_total": 8.3,
+      "market_total": 8.0,
+      "bet": "客隊讓分(+1.5)",
+      "reason": "客隊落後1分 第4局，賽前客隊勝率60%"
+    },
+    {
+      "home_cn": "紅人",
+      "away_cn": "費城人",
+      "inning": 3,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 7.4,
+      "market_total": 9.5,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "紅雀",
+      "away_cn": "釀酒人",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 8.5,
+      "market_total": 8.5,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "遊騎兵",
+      "away_cn": "天使",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 7.0,
+      "market_total": 7.0,
+      "bet": null,
+      "reason": null
+    }
+  ],
+  "live_updated_ts": 1783640544,
   "game_preds": {
     "pirates|braves": {
       "home_win_prob": 0.6943,
@@ -230,5 +291,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": ""
+  "live_updated_at": "2026-07-10 07:42 (台灣時間)"
 }
