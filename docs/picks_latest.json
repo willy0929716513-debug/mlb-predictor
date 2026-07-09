@@ -446,8 +446,8 @@
       "inning": 8,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 9,
-      "projected_total": 10.7,
+      "away_runs": 11,
+      "projected_total": 12.7,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -457,9 +457,9 @@
       "away_cn": "落磯",
       "inning": 1,
       "top_inning": false,
-      "home_runs": 1,
+      "home_runs": 3,
       "away_runs": 0,
-      "projected_total": 10.4,
+      "projected_total": 12.4,
       "market_total": 10.0,
       "bet": null,
       "reason": null
@@ -467,17 +467,17 @@
     {
       "home_cn": "教士",
       "away_cn": "響尾蛇",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 9.0,
+      "projected_total": 8.6,
       "market_total": 8.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1783564051,
+  "live_updated_ts": 1783564352,
   "game_preds": {
     "giants|blue jays": {
       "home_win_prob": 0.5333,
@@ -540,5 +540,5 @@
       "market_total": 10.0
     }
   },
-  "live_updated_at": "2026-07-09 10:27 (台灣時間)"
+  "live_updated_at": "2026-07-09 10:32 (台灣時間)"
 }
