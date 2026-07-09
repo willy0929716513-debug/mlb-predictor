@@ -455,8 +455,8 @@
     {
       "home_cn": "道奇",
       "away_cn": "落磯",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 2,
       "projected_total": 13.3,
