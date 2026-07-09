@@ -190,14 +190,14 @@
     {
       "home_cn": "大都會",
       "away_cn": "皇家",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 7,
       "away_runs": 3,
-      "projected_total": 12.5,
+      "projected_total": 12.0,
       "market_total": 9.0,
-      "bet": "大小分 OVER",
-      "reason": "第7局已得10分（此時預期6.5分），高分走勢盤口9.0"
+      "bet": "主隊獨贏",
+      "reason": "第8局主隊領先4分（賽前主隊勝率46%），大局已定"
     },
     {
       "home_cn": "光芒",
@@ -205,11 +205,11 @@
       "inning": 6,
       "top_inning": true,
       "home_runs": 3,
-      "away_runs": 7,
-      "projected_total": 13.3,
+      "away_runs": 10,
+      "projected_total": 16.3,
       "market_total": 7.5,
       "bet": "大小分 OVER",
-      "reason": "第6局已得10分（此時預期4.2分），高分走勢盤口7.5"
+      "reason": "第6局已得13分（此時預期4.2分），高分走勢盤口7.5"
     },
     {
       "home_cn": "金鶯",
@@ -248,7 +248,7 @@
       "reason": "主隊落後2分 第4局，賽前主隊勝率74%"
     }
   ],
-  "live_updated_ts": 1783624098,
+  "live_updated_ts": 1783624400,
   "game_preds": {
     "pirates|braves": {
       "home_win_prob": 0.6943,
@@ -303,5 +303,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-10 03:08 (台灣時間)"
+  "live_updated_at": "2026-07-10 03:13 (台灣時間)"
 }
