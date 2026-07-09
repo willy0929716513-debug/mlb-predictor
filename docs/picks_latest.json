@@ -180,24 +180,24 @@
       "away_cn": "勇士",
       "inning": 6,
       "top_inning": false,
-      "home_runs": 4,
+      "home_runs": 5,
       "away_runs": 6,
-      "projected_total": 13.9,
+      "projected_total": 14.9,
       "market_total": 10.0,
       "bet": "大小分 OVER",
-      "reason": "第6局已得10分（此時預期6.1分），高分走勢盤口10.0"
+      "reason": "第6局已得11分（此時預期6.1分），高分走勢盤口10.0"
     },
     {
       "home_cn": "大都會",
       "away_cn": "皇家",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 7,
       "away_runs": 3,
-      "projected_total": 11.5,
+      "projected_total": 11.0,
       "market_total": 9.0,
       "bet": "主隊獨贏",
-      "reason": "第8局主隊領先4分（賽前主隊勝率46%），大局已定"
+      "reason": "第9局主隊領先4分（賽前主隊勝率46%），大局已定"
     },
     {
       "home_cn": "光芒",
@@ -205,11 +205,11 @@
       "inning": 7,
       "top_inning": true,
       "home_runs": 4,
-      "away_runs": 10,
-      "projected_total": 16.5,
+      "away_runs": 11,
+      "projected_total": 17.5,
       "market_total": 7.5,
       "bet": "大小分 OVER",
-      "reason": "第7局已得14分（此時預期5.0分），高分走勢盤口7.5"
+      "reason": "第7局已得15分（此時預期5.0分），高分走勢盤口7.5"
     },
     {
       "home_cn": "金鶯",
@@ -238,17 +238,17 @@
     {
       "home_cn": "白襪",
       "away_cn": "紅襪",
-      "inning": 4,
-      "top_inning": false,
+      "inning": 5,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 7.5,
+      "projected_total": 7.0,
       "market_total": 9.0,
       "bet": "主隊讓分(+1.5)",
-      "reason": "主隊落後2分 第4局，賽前主隊勝率74%"
+      "reason": "主隊落後2分 第5局，賽前主隊勝率74%"
     }
   ],
-  "live_updated_ts": 1783625002,
+  "live_updated_ts": 1783625304,
   "game_preds": {
     "pirates|braves": {
       "home_win_prob": 0.6943,
@@ -303,5 +303,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-10 03:23 (台灣時間)"
+  "live_updated_at": "2026-07-10 03:28 (台灣時間)"
 }
