@@ -431,14 +431,14 @@
     {
       "home_cn": "紅人",
       "away_cn": "費城人",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 11,
-      "away_runs": 4,
-      "projected_total": 16.5,
+      "away_runs": 5,
+      "projected_total": 17.0,
       "market_total": 9.0,
       "bet": "主隊獨贏",
-      "reason": "第8局主隊領先7分（賽前主隊勝率50%），大局已定"
+      "reason": "第9局主隊領先6分（賽前主隊勝率50%），大局已定"
     },
     {
       "home_cn": "雙城",
@@ -456,7 +456,7 @@
       "home_cn": "白襪",
       "away_cn": "紅襪",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 5,
       "projected_total": 5.9,
@@ -468,7 +468,7 @@
       "home_cn": "遊騎兵",
       "away_cn": "天使",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 9,
       "projected_total": 11.5,
@@ -480,10 +480,10 @@
       "home_cn": "道奇",
       "away_cn": "落磯",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 10.0,
+      "projected_total": 9.4,
       "market_total": 10.0,
       "bet": null,
       "reason": null
@@ -501,7 +501,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783563146,
+  "live_updated_ts": 1783563447,
   "game_preds": {
     "giants|blue jays": {
       "home_win_prob": 0.5333,
@@ -564,5 +564,5 @@
       "market_total": 10.0
     }
   },
-  "live_updated_at": "2026-07-09 10:12 (台灣時間)"
+  "live_updated_at": "2026-07-09 10:17 (台灣時間)"
 }
