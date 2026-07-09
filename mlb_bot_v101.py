@@ -3226,7 +3226,7 @@ def run():
                     _fav_sp_era = _a_era_v
                 if _ud_sp_era - _fav_sp_era > 0.8:
                     _old_conf = bet_conf
-                    bet_conf = round(bet_conf - 0.15, 4)
+                    bet_conf = round(bet_conf - 0.10, 4)
                     log.info("SP_DELTA_PENALTY: ud=%.2f fav=%.2f delta=%.2f conf %.2f→%.2f",
                              _ud_sp_era, _fav_sp_era, _ud_sp_era-_fav_sp_era, _old_conf, bet_conf)
                     if bet_conf < RL_BET_CONF_MIN:
@@ -3237,18 +3237,6 @@ def run():
                     log.info("SLUMP_LOWCONF_SKIP: slump_mult=%.2f conf=%.2f — RL skipped",
                              _slump_mult, bet_conf)
                     continue
-                # AWAY_UD_PENALTY: 客隊弱勢讓分且賠率差距大（門檻≥22%，即主場勝率61%以上才懲罰）
-                if bside in ("rl_a", "rl_a_25"):
-                    _h_dv = _dv.get("home", 0.5)
-                    _a_dv = _dv.get("away", 0.5)
-                    if abs(_h_dv - _a_dv) > 0.22:
-                        _old_conf = bet_conf
-                        bet_conf = round(bet_conf - 0.10, 4)
-                        log.info("AWAY_UD_PENALTY: h_dv=%.3f a_dv=%.3f gap=%.3f conf %.2f→%.2f",
-                                 _h_dv, _a_dv, abs(_h_dv-_a_dv), _old_conf, bet_conf)
-                        if bet_conf < RL_BET_CONF_MIN:
-                            log.info("AWAY_UD_PENALTY SKIP: conf %.2f below RL_BET_CONF_MIN", bet_conf)
-                            continue
                 # ⑥ RL市場大幅不認同：模型概率遠高於市場devigged概率 → 降低信心或封鎖
                 _rl_mkt_dv = _dv.get(bside, 1.0/con_p)
                 _rl_model_mkt_gap = model_p - _rl_mkt_dv
@@ -3257,8 +3245,7 @@ def run():
                     bet_conf = round(bet_conf * 0.90, 4)
                     log.info("RL_MKT_DISAGREE: model_p=%.3f mkt_p=%.3f gap=%.3f conf %.2f→%.2f",
                              model_p, _rl_mkt_dv, _rl_model_mkt_gap, _old_conf, bet_conf)
-                    # 不再以gap大小做硬封：累積懲罰(SP_DELTA/AWAY_UD/×0.90)已大幅降低conf
-                    # 只要conf仍高於最低門檻即可通過，避免高信心RL被過度過濾
+                    # 不再以gap大小做硬封：只要conf仍高於最低門檻即可通過，避免高信心RL被過度過濾
                     if bet_conf < RL_BET_CONF_MIN:
                         log.info("RL_MKT_DISAGREE SKIP: conf %.2f below RL_BET_CONF_MIN", bet_conf)
                         continue
@@ -3919,8 +3906,6 @@ def run():
                         _why = "❌RL市場背離%.0f%%(gap=%.2f)" % (_rl_gap*100, _rl_gap)
                     elif _rec_era - _opp_era > 0.8:
                         _why = "❌SP差距(推薦%.2f>對手%.2f)" % (_rec_era, _opp_era)
-                    elif not _rl_home and abs(_h_dv_d - _a_dv_d) > 0.22:
-                        _why = "❌客隊劣勢(MLgap%.0f%%)" % (abs(_h_dv_d - _a_dv_d)*100)
                     elif pr.get("weather_factor", 1.0) <= 0.93 and cf * 0.90 * 0.90 < RL_BET_CONF_MIN:
                         _why = "❌RL天氣(wf=%.2f)" % pr.get("weather_factor", 1.0)
                     else:
