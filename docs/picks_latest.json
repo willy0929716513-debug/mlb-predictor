@@ -468,13 +468,13 @@
       "home_cn": "大都會",
       "away_cn": "皇家",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 4.0,
+      "projected_total": 3.5,
       "market_total": 9.0,
       "bet": "大小分 UNDER",
-      "reason": "第8局僅2分（此時預期7.0分），低分走勢盤口9.0"
+      "reason": "第8局僅2分（此時預期7.5分），低分走勢盤口9.0"
     },
     {
       "home_cn": "紅人",
@@ -537,7 +537,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783560132,
+  "live_updated_ts": 1783560433,
   "game_preds": {
     "giants|blue jays": {
       "home_win_prob": 0.5333,
@@ -600,5 +600,5 @@
       "market_total": 10.0
     }
   },
-  "live_updated_at": "2026-07-09 09:22 (台灣時間)"
+  "live_updated_at": "2026-07-09 09:27 (台灣時間)"
 }
