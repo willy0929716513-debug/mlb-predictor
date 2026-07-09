@@ -429,18 +429,6 @@
   ],
   "live_games": [
     {
-      "home_cn": "紅人",
-      "away_cn": "費城人",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 11,
-      "away_runs": 5,
-      "projected_total": 17.0,
-      "market_total": 9.0,
-      "bet": "主隊獨贏",
-      "reason": "第9局主隊領先6分（賽前主隊勝率50%），大局已定"
-    },
-    {
       "home_cn": "雙城",
       "away_cn": "守護者",
       "inning": 8,
@@ -449,18 +437,6 @@
       "away_runs": 5,
       "projected_total": 11.4,
       "market_total": 8.5,
-      "bet": null,
-      "reason": null
-    },
-    {
-      "home_cn": "白襪",
-      "away_cn": "紅襪",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 0,
-      "away_runs": 5,
-      "projected_total": 5.4,
-      "market_total": 8.0,
       "bet": null,
       "reason": null
     },
@@ -492,10 +468,10 @@
       "home_cn": "教士",
       "away_cn": "響尾蛇",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 9.5,
+      "projected_total": 9.0,
       "market_total": 8.5,
       "bet": null,
       "reason": null
