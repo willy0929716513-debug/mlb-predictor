@@ -479,8 +479,8 @@
     {
       "home_cn": "遊騎兵",
       "away_cn": "天使",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 9,
       "projected_total": 11.9,
@@ -513,7 +513,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783562845,
+  "live_updated_ts": 1783563146,
   "game_preds": {
     "giants|blue jays": {
       "home_win_prob": 0.5333,
@@ -576,5 +576,5 @@
       "market_total": 10.0
     }
   },
-  "live_updated_at": "2026-07-09 10:07 (台灣時間)"
+  "live_updated_at": "2026-07-09 10:12 (台灣時間)"
 }
