@@ -178,14 +178,14 @@
     {
       "home_cn": "海盜",
       "away_cn": "勇士",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 5,
       "away_runs": 6,
-      "projected_total": 12.7,
+      "projected_total": 12.1,
       "market_total": 10.0,
-      "bet": "主隊讓分(+1.5)",
-      "reason": "主隊落後1分 第8局，賽前主隊勝率69%"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "光芒",
@@ -202,11 +202,11 @@
     {
       "home_cn": "金鶯",
       "away_cn": "小熊",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 6.7,
+      "projected_total": 6.1,
       "market_total": 10.0,
       "bet": null,
       "reason": null
@@ -236,7 +236,7 @@
       "reason": "第6局僅3分（此時預期5.5分），低分走勢盤口9.0"
     }
   ],
-  "live_updated_ts": 1783627113,
+  "live_updated_ts": 1783627415,
   "game_preds": {
     "pirates|braves": {
       "home_win_prob": 0.6943,
@@ -291,5 +291,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-10 03:58 (台灣時間)"
+  "live_updated_at": "2026-07-10 04:03 (台灣時間)"
 }
