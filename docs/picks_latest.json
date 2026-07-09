@@ -509,8 +509,8 @@
       "away_runs": 4,
       "projected_total": 8.2,
       "market_total": 7.5,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第5局已得7分（此時預期3.3分），高分走勢盤口7.5"
     }
   ],
   "live_updated_ts": 1783561036,
