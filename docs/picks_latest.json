@@ -467,11 +467,11 @@
     {
       "home_cn": "白襪",
       "away_cn": "紅襪",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 5,
-      "projected_total": 7.2,
+      "projected_total": 6.8,
       "market_total": 8.0,
       "bet": null,
       "reason": null
