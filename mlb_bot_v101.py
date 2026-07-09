@@ -3256,9 +3256,10 @@ def run():
                     bet_conf = round(bet_conf * 0.90, 4)
                     log.info("RL_MKT_DISAGREE: model_p=%.3f mkt_p=%.3f gap=%.3f conf %.2f→%.2f",
                              model_p, _rl_mkt_dv, _rl_model_mkt_gap, _old_conf, bet_conf)
-                    # gap>0.30時：高信心(≥0.78)仍可通過，低信心直接封
-                    if bet_conf < RL_BET_CONF_MIN or (_rl_model_mkt_gap > 0.30 and bet_conf < 0.78):
-                        log.info("RL_MKT_DISAGREE SKIP: gap=%.3f conf=%.2f", _rl_model_mkt_gap, bet_conf)
+                    # 不再以gap大小做硬封：累積懲罰(SP_DELTA/AWAY_UD/×0.90)已大幅降低conf
+                    # 只要conf仍高於最低門檻即可通過，避免高信心RL被過度過濾
+                    if bet_conf < RL_BET_CONF_MIN:
+                        log.info("RL_MKT_DISAGREE SKIP: conf %.2f below RL_BET_CONF_MIN", bet_conf)
                         continue
             # ── ★ 菁英對決保護：雙方ERA均優時，OVER門檻提高 ──
             # 若雙SP ERA < 3.50，RS易誤拉高total，需更高p_over才下Over
@@ -3891,9 +3892,12 @@ def run():
                     if _clv_v is not None and _clv_v < LINE_CLV_MIN:
                         _why = "❌CLV下行%.2f%%"%_clv_v
                     else:
-                        # 細分其他RL保護原因
-                        _rl_dv_d = _dv.get("rl_h" if rl_he>=rl_ae else "rl_a", 0)
-                        _rl_gap_d = best_mp - _rl_dv_d if _rl_dv_d else 0
+                        # 細分其他RL保護原因（直接從RL賠率計算devig，不依賴_dv dict）
+                        _rl_p_d = rl_hp if rl_he>=rl_ae else rl_ap
+                        _rl_oth_d = rl_ap if rl_he>=rl_ae else rl_hp
+                        _rl_inv_d = (1/_rl_p_d + 1/_rl_oth_d) if (_rl_p_d and _rl_oth_d) else 0
+                        _rl_dv_calc = (1/_rl_p_d/_rl_inv_d) if _rl_inv_d else (1/_rl_p_d if _rl_p_d else 0)
+                        _rl_gap_d = best_mp - _rl_dv_calc
                         _ud_era_d = (_h_era if rl_he>=rl_ae else _a_era)
                         _fav_era_d= (_a_era if rl_he>=rl_ae else _h_era)
                         _ud_sp_d  = hp_k if rl_he>=rl_ae else ap_k
