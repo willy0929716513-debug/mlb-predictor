@@ -178,17 +178,17 @@
     {
       "home_cn": "白襪",
       "away_cn": "紅襪",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 2,
-      "projected_total": 4.5,
+      "projected_total": 4.0,
       "market_total": 9.0,
-      "bet": "大小分 UNDER",
-      "reason": "第8局僅3分（此時預期7.5分），低分走勢盤口9.0"
+      "bet": null,
+      "reason": null
     }
   ],
-  "live_updated_ts": 1783628922,
+  "live_updated_ts": 1783629224,
   "game_preds": {
     "pirates|braves": {
       "home_win_prob": 0.6943,
@@ -243,5 +243,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-10 04:28 (台灣時間)"
+  "live_updated_at": "2026-07-10 04:33 (台灣時間)"
 }
