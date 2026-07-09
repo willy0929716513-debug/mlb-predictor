@@ -465,28 +465,16 @@
       "reason": null
     },
     {
-      "home_cn": "紅雀",
-      "away_cn": "釀酒人",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 5,
-      "away_runs": 1,
-      "projected_total": 6.9,
-      "market_total": 8.0,
-      "bet": null,
-      "reason": null
-    },
-    {
       "home_cn": "遊騎兵",
       "away_cn": "天使",
       "inning": 7,
       "top_inning": true,
       "home_runs": 0,
       "away_runs": 9,
-      "projected_total": 11.9,
+      "projected_total": 11.5,
       "market_total": 7.5,
       "bet": "大小分 OVER",
-      "reason": "第6局已得9分（此時預期4.6分），高分走勢盤口7.5"
+      "reason": "第7局已得9分（此時預期5.0分），高分走勢盤口7.5"
     },
     {
       "home_cn": "道奇",
