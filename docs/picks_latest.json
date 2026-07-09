@@ -431,11 +431,11 @@
     {
       "home_cn": "雙城",
       "away_cn": "守護者",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 5,
       "away_runs": 5,
-      "projected_total": 11.4,
+      "projected_total": 10.9,
       "market_total": 8.5,
       "bet": null,
       "reason": null
