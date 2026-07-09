@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-09 22:21 (台灣時間)",
+  "generated_at": "2026-07-09 22:34 (台灣時間)",
   "date": "2026-07-09",
   "stats": {
     "settled": 182,
@@ -178,35 +178,35 @@
   "live_updated_ts": 1783570676,
   "game_preds": {
     "pirates|braves": {
-      "home_win_prob": 0.6825,
+      "home_win_prob": 0.6898,
       "market_total": 9.5
     },
     "rays|yankees": {
-      "home_win_prob": 0.5097,
+      "home_win_prob": 0.5237,
       "market_total": 7.5
     },
     "mets|royals": {
-      "home_win_prob": 0.4643,
+      "home_win_prob": 0.4766,
       "market_total": 9.0
     },
     "orioles|cubs": {
-      "home_win_prob": 0.4584,
+      "home_win_prob": 0.559,
       "market_total": 10.0
     },
     "twins|guardians": {
-      "home_win_prob": 0.3561,
+      "home_win_prob": 0.3478,
       "market_total": 8.5
     },
     "white sox|red sox": {
-      "home_win_prob": 0.7485,
+      "home_win_prob": 0.6698,
       "market_total": 9.0
     },
     "tigers|athletics": {
-      "home_win_prob": 0.4709,
+      "home_win_prob": 0.4712,
       "market_total": 9.0
     },
     "marlins|mariners": {
-      "home_win_prob": 0.398,
+      "home_win_prob": 0.4038,
       "market_total": 8.0
     },
     "reds|phillies": {
@@ -214,7 +214,7 @@
       "market_total": 9.5
     },
     "cardinals|brewers": {
-      "home_win_prob": 0.3616,
+      "home_win_prob": 0.3629,
       "market_total": 8.5
     },
     "rangers|angels": {
@@ -222,11 +222,11 @@
       "market_total": 7.0
     },
     "padres|diamondbacks": {
-      "home_win_prob": 0.5322,
+      "home_win_prob": 0.532,
       "market_total": 9.0
     },
     "giants|rockies": {
-      "home_win_prob": 0.3166,
+      "home_win_prob": 0.3128,
       "market_total": 8.5
     }
   }
