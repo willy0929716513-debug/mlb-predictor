@@ -432,10 +432,10 @@
       "home_cn": "金鶯",
       "away_cn": "小熊",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 4,
-      "projected_total": 11.4,
+      "projected_total": 10.9,
       "market_total": 10.0,
       "bet": null,
       "reason": null
@@ -455,26 +455,26 @@
     {
       "home_cn": "海盜",
       "away_cn": "勇士",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 3.7,
+      "projected_total": 3.2,
       "market_total": 9.5,
       "bet": "大小分 UNDER",
-      "reason": "第6局僅0分（此時預期5.8分），低分走勢盤口9.5"
+      "reason": "第7局僅0分（此時預期6.3分），低分走勢盤口9.5"
     },
     {
       "home_cn": "馬林魚",
       "away_cn": "水手",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 0,
-      "projected_total": 5.8,
+      "projected_total": 5.3,
       "market_total": 8.5,
       "bet": "大小分 UNDER",
-      "reason": "第6局僅2分（此時預期4.7分），低分走勢盤口8.5"
+      "reason": "第6局僅2分（此時預期5.2分），低分走勢盤口8.5"
     },
     {
       "home_cn": "光芒",
@@ -528,10 +528,10 @@
       "home_cn": "雙城",
       "away_cn": "守護者",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 6.6,
+      "projected_total": 6.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -542,8 +542,8 @@
       "inning": 3,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 1,
-      "projected_total": 7.2,
+      "away_runs": 2,
+      "projected_total": 8.2,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -552,10 +552,10 @@
       "home_cn": "紅雀",
       "away_cn": "釀酒人",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 0,
-      "projected_total": 9.1,
+      "projected_total": 8.7,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -564,16 +564,16 @@
       "home_cn": "遊騎兵",
       "away_cn": "天使",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 7.5,
+      "away_runs": 1,
+      "projected_total": 8.1,
       "market_total": 7.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1783556053,
+  "live_updated_ts": 1783556355,
   "game_preds": {
     "giants|blue jays": {
       "home_win_prob": 0.5333,
@@ -636,5 +636,5 @@
       "market_total": 10.0
     }
   },
-  "live_updated_at": "2026-07-09 08:14 (台灣時間)"
+  "live_updated_at": "2026-07-09 08:19 (台灣時間)"
 }
