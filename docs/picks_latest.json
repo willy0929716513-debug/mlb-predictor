@@ -432,10 +432,10 @@
       "home_cn": "金鶯",
       "away_cn": "小熊",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 5,
       "away_runs": 9,
-      "projected_total": 16.2,
+      "projected_total": 15.7,
       "market_total": 10.0,
       "bet": "客隊獨贏",
       "reason": "第8局客隊領先4分（賽前客隊勝率74%），大局已定"
@@ -458,11 +458,11 @@
       "inning": 8,
       "top_inning": true,
       "home_runs": 8,
-      "away_runs": 1,
-      "projected_total": 11.1,
+      "away_runs": 2,
+      "projected_total": 12.1,
       "market_total": 9.5,
       "bet": "主隊獨贏",
-      "reason": "第8局主隊領先7分（賽前主隊勝率76%），大局已定"
+      "reason": "第8局主隊領先6分（賽前主隊勝率76%），大局已定"
     },
     {
       "home_cn": "大都會",
@@ -515,11 +515,11 @@
     {
       "home_cn": "紅雀",
       "away_cn": "釀酒人",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 0,
-      "projected_total": 7.0,
+      "projected_total": 6.6,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -537,7 +537,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783559227,
+  "live_updated_ts": 1783559529,
   "game_preds": {
     "giants|blue jays": {
       "home_win_prob": 0.5333,
@@ -600,5 +600,5 @@
       "market_total": 10.0
     }
   },
-  "live_updated_at": "2026-07-09 09:07 (台灣時間)"
+  "live_updated_at": "2026-07-09 09:12 (台灣時間)"
 }
