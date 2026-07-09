@@ -501,7 +501,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783563447,
+  "live_updated_ts": 1783563749,
   "game_preds": {
     "giants|blue jays": {
       "home_win_prob": 0.5333,
@@ -564,5 +564,5 @@
       "market_total": 10.0
     }
   },
-  "live_updated_at": "2026-07-09 10:17 (台灣時間)"
+  "live_updated_at": "2026-07-09 10:22 (台灣時間)"
 }
