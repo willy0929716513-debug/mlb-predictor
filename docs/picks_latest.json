@@ -491,14 +491,14 @@
     {
       "home_cn": "遊騎兵",
       "away_cn": "天使",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 7,
-      "projected_total": 10.8,
+      "projected_total": 10.3,
       "market_total": 7.5,
       "bet": "大小分 OVER",
-      "reason": "第5局已得7分（此時預期3.8分），高分走勢盤口7.5"
+      "reason": "第6局已得7分（此時預期4.2分），高分走勢盤口7.5"
     },
     {
       "home_cn": "道奇",
