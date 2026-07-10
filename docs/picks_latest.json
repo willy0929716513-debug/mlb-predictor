@@ -178,26 +178,26 @@
     {
       "home_cn": "紅雀",
       "away_cn": "釀酒人",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 4,
       "away_runs": 7,
-      "projected_total": 13.4,
+      "projected_total": 12.9,
       "market_total": 8.5,
-      "bet": "大小分 OVER",
-      "reason": "第7局已得11分（此時預期6.1分），高分走勢盤口8.5"
+      "bet": "客隊獨贏",
+      "reason": "第8局客隊領先3分（賽前客隊勝率64%），大局已定"
     },
     {
       "home_cn": "遊騎兵",
       "away_cn": "天使",
       "inning": 6,
       "top_inning": false,
-      "home_runs": 5,
+      "home_runs": 6,
       "away_runs": 1,
-      "projected_total": 8.7,
+      "projected_total": 9.7,
       "market_total": 7.0,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第6局已得7分（此時預期4.3分），高分走勢盤口7.0"
     },
     {
       "home_cn": "教士",
@@ -216,9 +216,9 @@
       "away_cn": "落磯",
       "inning": 1,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 7.6,
+      "projected_total": 8.6,
       "market_total": 8.0,
       "bet": null,
       "reason": null
