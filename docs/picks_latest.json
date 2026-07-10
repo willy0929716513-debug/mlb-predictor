@@ -317,11 +317,11 @@
     {
       "home_cn": "教士",
       "away_cn": "響尾蛇",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 2,
-      "projected_total": 6.9,
+      "projected_total": 6.1,
       "market_total": 7.0,
       "bet": null,
       "reason": null
@@ -336,10 +336,10 @@
       "projected_total": 10.0,
       "market_total": 8.0,
       "bet": "大小分 OVER",
-      "reason": "第5局已得6分（此時預期4.0分），高分走勢盤口8.0"
+      "reason": "第5局已得6分（此時預期4.2分），高分走勢盤口8.5"
     }
   ],
-  "live_updated_ts": 1783653086,
+  "live_updated_ts": 1783653388,
   "game_preds": {
     "rangers|angels": {
       "home_win_prob": 0.529,
@@ -409,5 +409,6 @@
       "home_win_prob": 0.7286,
       "market_total": 8.5
     }
-  }
+  },
+  "live_updated_at": "2026-07-10 11:16 (台灣時間)"
 }
