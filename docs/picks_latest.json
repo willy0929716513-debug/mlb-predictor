@@ -190,14 +190,14 @@
     {
       "home_cn": "遊騎兵",
       "away_cn": "天使",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 6,
       "away_runs": 1,
-      "projected_total": 9.7,
+      "projected_total": 9.3,
       "market_total": 7.0,
       "bet": "大小分 OVER",
-      "reason": "第6局已得7分（此時預期4.3分），高分走勢盤口7.0"
+      "reason": "第7局已得7分（此時預期4.7分），高分走勢盤口7.0"
     },
     {
       "home_cn": "教士",
@@ -214,11 +214,11 @@
     {
       "home_cn": "巨人",
       "away_cn": "落磯",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 8.6,
+      "projected_total": 8.1,
       "market_total": 8.0,
       "bet": null,
       "reason": null
