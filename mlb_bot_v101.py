@@ -3094,8 +3094,8 @@ def run():
                 continue
             _mp_min = MIN_MODEL_P_RL if btype==BET_RL else (MIN_MODEL_P_TOT if btype==BET_TOT else MIN_MODEL_P_ML)
             if model_p < _mp_min: continue
-            if bet_conf < (RL_BET_CONF_MIN if btype == BET_RL else 0.65): continue
-            if btype == BET_ML and bet_conf < ML_BET_CONF_MIN: continue  # ML 同RL，過濾邊際低賠
+            _min_conf_gate = RL_BET_CONF_MIN if btype==BET_RL else (ML_BET_CONF_MIN if btype==BET_ML else TOT_BET_CONF_MIN)
+            if bet_conf < _min_conf_gate: continue
             # ML低賠保護：賠率<1.65（損益平衡≥60.6%），需更大的devigged edge
             if btype == BET_ML and bp < 1.65 and raw_edge < EDGE_MIN_ML_FAV: continue
             # ── ★ ML 保護層（FIP回歸 · 對手強打線 · 模型市場差距）──
@@ -3153,10 +3153,14 @@ def run():
                         continue
             # ── ★ RL 保護層（依序：信心→TBD→爆冷→王牌→菁英對決）──
             if btype == BET_RL:
-                # ① TBD 投手：ERA預設值不可靠，不推薦讓分受讓
+                # ① TBD 投手：ERA預設值不可靠，不推薦讓分受讓（對手或推薦方任一TBD均拒絕）
                 if bside in ("rl_a","rl_a_25") and not home_sp:
                     continue
                 if bside in ("rl_h","rl_h_25") and not away_sp:
+                    continue
+                if bside in ("rl_h","rl_h_25") and not home_sp:
+                    continue
+                if bside in ("rl_a","rl_a_25") and not away_sp:
                     continue
                 # ① 牛棚輪替：對手用多投手接力，主場控制力更強，不推劣勢隊讓分受讓
                 if bside in ("rl_a","rl_a_25") and home_sp and home_sp in _RELIEVER_FLAGS:
@@ -3345,7 +3349,7 @@ def run():
                 if _suppress_key in _series_suppress:
                     _old_conf = bet_conf
                     bet_conf = round(bet_conf - 0.15, 4)
-                    _ss_floor = RL_BET_CONF_MIN if btype == BET_RL else 0.60
+                    _ss_floor = RL_BET_CONF_MIN if btype==BET_RL else (ML_BET_CONF_MIN if btype==BET_ML else TOT_BET_CONF_MIN)
                     if bet_conf < _ss_floor:
                         log.info("SeriesSuppress SKIP: %s@%s %s %s — conf %.0f%%→%.0f%% below %.0f%%",
                                  away, home, bteam, btype, _old_conf*100, bet_conf*100, _ss_floor*100)
@@ -3365,6 +3369,9 @@ def run():
                 _n_books = len(con_over) if bside=="over" else len(con_under)
             if _n_books < MIN_BOOKS:
                 bet_conf = round(bet_conf * LOW_BOOKS_CONF, 4)
+                _min_conf_lb = RL_BET_CONF_MIN if btype==BET_RL else (ML_BET_CONF_MIN if btype==BET_ML else TOT_BET_CONF_MIN)
+                if bet_conf < _min_conf_lb:
+                    continue
             # ── 線路 CLV 過濾：有前次賠率才比較，無資料直接放行 ──
             prev_bp = prev_game.get(_SIDE_KEY.get(bside,""))
             lclv = line_clv(bp, prev_bp)
@@ -3415,13 +3422,15 @@ def run():
         # 預先計算歷史紀錄所需的 label（RL=讓分點數, TOT=OVER/UNDER, ML=""）
         if btype==BET_RL:
             if bside in ("rl_h","rl_h_25"):
-                _h_pt = (rl_h_pts_25 if bside=="rl_h_25" and rl_h_pts_25 is not None
-                         else (rl_h_pts if rl_h_pts is not None else (-2.5 if bside=="rl_h_25" else -1.5)))
-                _hist_label = ("%.4g"%_h_pt if _h_pt<0 else "+%.4g"%_h_pt)
+                _h_pt_raw = (rl_h_pts_25 if bside=="rl_h_25" and rl_h_pts_25 is not None
+                             else (-2.5 if bside=="rl_h_25" else (rl_h_pts if rl_h_pts is not None else -1.5)))
+                _h_pt_signed = -abs(_h_pt_raw) if h_gives else abs(_h_pt_raw)
+                _hist_label = ("%.4g"%_h_pt_signed if _h_pt_signed<0 else "+%.4g"%_h_pt_signed)
             else:
-                _h_pt = (rl_h_pts_25 if bside=="rl_a_25" and rl_h_pts_25 is not None
-                         else (rl_h_pts if rl_h_pts is not None else (-2.5 if bside=="rl_a_25" else -1.5)))
-                _hist_label = ("+%.4g"%-_h_pt if -_h_pt>0 else "%.4g"%-_h_pt)
+                _h_pt_raw = (rl_h_pts_25 if bside=="rl_a_25" and rl_h_pts_25 is not None
+                             else (-2.5 if bside=="rl_a_25" else (rl_h_pts if rl_h_pts is not None else -1.5)))
+                _a_pt_signed = abs(_h_pt_raw) if h_gives else -abs(_h_pt_raw)
+                _hist_label = ("+%.4g"%_a_pt_signed if _a_pt_signed>0 else "%.4g"%_a_pt_signed)
         elif btype==BET_TOT:
             _hist_label = "OVER" if bside=="over" else "UNDER"
         else:
@@ -3488,10 +3497,11 @@ def run():
             ump_note=" ⚖️裁判%s(%.2f)"%("+" if _ump_adj_v>0 else "", _ump_adj_v)
         else:
             ump_note=""
-        ou_diff=pred["model_total"]-market_total
-        if   ou_diff>1.5:  ou_str="OVER偏向(%.1f/%.1f)"%(pred["model_total"],market_total)
-        elif ou_diff<-1.5: ou_str="UNDER偏向(%.1f/%.1f)"%(pred["model_total"],market_total)
-        else:              ou_str="大小分中性(%.1f/%.1f)"%(pred["model_total"],market_total)
+        _pure_tot = pred.get("pure_total_tot", pred["model_total"])
+        ou_diff = _pure_tot - market_total
+        if   ou_diff>1.5:  ou_str="OVER偏向(%.1f/%.1f)"%(_pure_tot,market_total)
+        elif ou_diff<-1.5: ou_str="UNDER偏向(%.1f/%.1f)"%(_pure_tot,market_total)
+        else:              ou_str="大小分中性(%.1f/%.1f)"%(_pure_tot,market_total)
 
         # 依注單類型產生推薦描述與統計行
         if btype==BET_ML:
@@ -3632,14 +3642,14 @@ def run():
         if _bt == "獨贏":
             if _gk in _game_rl_seen:
                 old_s = p["stake"]
-                p["stake"] = round(max(0, old_s * ML_RL_CORR_DAMP), 1)
+                p["stake"] = round(max(KELLY_FLOOR, old_s * ML_RL_CORR_DAMP), 1)
                 p["msg"] = re.sub(r"Kelly: \$[0-9.]+(?:\s*\[[^\]]*\])?",
                                   "Kelly: $%.1f [📊ML+RL折]"%p["stake"], p["msg"], count=1)
             _game_ml_seen.add(_gk)
         elif _bt == "讓分":
             if _gk in _game_ml_seen:
                 old_s = p["stake"]
-                p["stake"] = round(max(0, old_s * ML_RL_CORR_DAMP), 1)
+                p["stake"] = round(max(KELLY_FLOOR, old_s * ML_RL_CORR_DAMP), 1)
                 p["msg"] = re.sub(r"Kelly: \$[0-9.]+(?:\s*\[[^\]]*\])?",
                                   "Kelly: $%.1f [📊ML+RL折]"%p["stake"], p["msg"], count=1)
             _game_rl_seen.add(_gk)
@@ -3654,14 +3664,14 @@ def run():
             _under_seen += 1
             if _under_seen > 1:
                 old_s = p["stake"]
-                p["stake"] = round(max(0, old_s * CORR_DAMP_W), 1)
+                p["stake"] = round(max(KELLY_FLOOR, old_s * CORR_DAMP_W), 1)
                 p["msg"]   = re.sub(r"Kelly: \$[0-9.]+(?:\s*\[[^\]]*\])?",
                                     "Kelly: $%.1f [📊相關折]"%p["stake"], p["msg"], count=1)
         if _is_over:
             _over_seen += 1
             if _over_seen > 1:
                 old_s = p["stake"]
-                p["stake"] = round(max(0, old_s * CORR_DAMP_W), 1)
+                p["stake"] = round(max(KELLY_FLOOR, old_s * CORR_DAMP_W), 1)
                 p["msg"]   = re.sub(r"Kelly: \$[0-9.]+(?:\s*\[[^\]]*\])?",
                                     "Kelly: $%.1f [📊相關折]"%p["stake"], p["msg"], count=1)
 
@@ -3840,24 +3850,18 @@ def run():
             _best_blend_d = _h_blend_d if he>=ae else _a_blend_d
             # 診斷擋關原因
             _why=""
-            _conf_min = RL_BET_CONF_MIN if best_lbl=="RL" else (ML_BET_CONF_MIN if best_lbl=="ML" else 0.65)
+            _conf_min = RL_BET_CONF_MIN if best_lbl=="RL" else (ML_BET_CONF_MIN if best_lbl=="ML" else TOT_BET_CONF_MIN)
+            _conf_mult_d = 0.90 if best_lbl=="RL" else (0.88 if best_lbl=="TOT" else 1.00)
             _mp_min   = MIN_MODEL_P_RL  if best_lbl=="RL" else (MIN_MODEL_P_ML  if best_lbl=="ML" else MIN_MODEL_P_TOT)
             if best_lbl=="RL":   con_p2 = rl_hp_con if rl_he>=rl_ae else rl_ap_con
             elif best_lbl=="ML": con_p2 = hp_con if he>=ae else ap_con
             else:                con_p2 = None
             _price_dev = (bp2/con_p2 - 1) if (con_p2 and con_p2 > 0) else 0
             if _price_dev > MAX_PRICE_GAP: _why="❌賠率偏離共識%.0f%%(%.2f→%.2f)"%(_price_dev*100,con_p2,bp2)
-            elif cf < _conf_min:      _why="❌低信心"
+            elif cf * _conf_mult_d < _conf_min: _why="❌低信心(%.0f%%×%.2f=%.0f%%<%.0f%%)"%(cf*100,_conf_mult_d,cf*_conf_mult_d*100,_conf_min*100)
             elif best_mp < _mp_min:   _why="❌modelP=%.2f<%.2f"%(best_mp,_mp_min)
-            elif best_lbl=="RL" and (
-                (rl_he>=rl_ae and _a_era<=ACE_ERA_RL) or
-                (rl_he<rl_ae  and _h_era<=ACE_ERA_RL)
-            ):
-                _ace=ap_k if rl_he>=rl_ae else hp_k
-                _ace_era=_a_era if rl_he>=rl_ae else _h_era
-                _why="❌王牌%s ERA%.2f"%((_ace or "?"),_ace_era)
             elif best_lbl=="RL":
-                # RL細分原因（依主循環順序）
+                # RL細分原因（依主循環順序：TBD→牛棚→爆冷→王牌→FIP→主場王牌RS→天氣→SP差距→市場→CLV）
                 _rl_home = (rl_he >= rl_ae)   # True=推薦主場RL(bside=rl_h)
                 _rec_sp  = hp_k if _rl_home else ap_k   # 推薦方先發
                 _opp_sp  = ap_k if _rl_home else hp_k   # 對手先發
@@ -3867,47 +3871,48 @@ def run():
                 # FIP：使用賽季ERA（與主循環一致），只檢查推薦方先發
                 _fip_rec  = _PITCHER_FIP.get(_rec_sp)
                 _era_rec  = _LIVE_SP_ERA.get(_rec_sp) or PITCHER_ERA.get(_rec_sp)
-                # 重算本場ML devig（避免_dv被主循環最後一場覆蓋）
-                _m_d = (1/hp + 1/ap) if hp and ap else 0
-                _h_dv_d = ((1/hp)/_m_d) if _m_d else 0.5
-                _a_dv_d = ((1/ap)/_m_d) if _m_d else 0.5
-                # RL市場差距（直接從RL賠率devig）
-                _rl_p_d = rl_hp if _rl_home else rl_ap
-                _rl_o_d = rl_ap if _rl_home else rl_hp
-                _rl_inv = (1/_rl_p_d + 1/_rl_o_d) if (_rl_p_d and _rl_o_d) else 0
-                _rl_dv  = (1/_rl_p_d/_rl_inv) if _rl_inv else (1/_rl_p_d if _rl_p_d else 0)
+                # RL市場差距（使用共識賠率devig，與主循環一致）
+                _rl_p_con = rl_hp_con if _rl_home else rl_ap_con
+                _rl_o_con = rl_ap_con if _rl_home else rl_hp_con
+                _rl_inv = (1/_rl_p_con + 1/_rl_o_con) if (_rl_p_con and _rl_o_con) else 0
+                _rl_dv  = (1/_rl_p_con/_rl_inv) if _rl_inv else (1/_rl_p_con if _rl_p_con else 0)
                 _rl_gap = best_mp - _rl_dv
                 if not hp_k or not ap_k:
                     _why = "❌TBD先發"
-                elif _rec_sp and _rec_sp in _RELIEVER_FLAGS:
-                    _why = "❌推薦方牛棚(%s)" % _rec_sp
                 elif _opp_sp and _opp_sp in _RELIEVER_FLAGS:
                     _why = "❌對手牛棚(%s)" % _opp_sp
+                elif _rec_sp and _rec_sp in _RELIEVER_FLAGS:
+                    _why = "❌推薦方牛棚(%s)" % _rec_sp
                 elif (
                     (not _rl_home and _era_diff_d < -BLOWOUT_ERA_DIFF and _a_era>=BLOWOUT_ERA_POOR and mg>1.2) or
                     (_rl_home     and _era_diff_d > BLOWOUT_ERA_DIFF  and _h_era>=BLOWOUT_ERA_POOR and mg<-1.2)
                 ):
                     _why = "❌爆冷保護(ERAdiff%.1f)" % _era_diff_d
+                elif (rl_he>=rl_ae and _a_era<=ACE_ERA_RL) or (rl_he<rl_ae and _h_era<=ACE_ERA_RL):
+                    _ace = ap_k if rl_he>=rl_ae else hp_k
+                    _ace_era = _a_era if rl_he>=rl_ae else _h_era
+                    _why = "❌對手王牌%s ERA%.2f" % ((_ace or "?"), _ace_era)
+                elif _fip_rec and _era_rec and (_fip_rec - _era_rec) > FIP_ERA_WARN_GAP:
+                    _why = "❌FIP回歸%s(gap+%.1f)" % (_rec_sp, _fip_rec - _era_rec)
                 elif _rl_home and _h_era <= RL_HOME_ACE_ERA and (
                     _PITCHER_RS.get(ap_k) or 0) >= RL_OPP_RS_THRESH:
                     _why = "❌主場王牌+強攻(%s ERA%.2f RS%.1f)" % (
                         hp_k or "?", _h_era, _PITCHER_RS.get(ap_k))
-                elif _fip_rec and _era_rec and (_fip_rec - _era_rec) > FIP_ERA_WARN_GAP:
-                    _why = "❌FIP回歸%s(gap+%.1f)" % (_rec_sp, _fip_rec - _era_rec)
                 elif _slump_mult < 1.0 and cf * 0.90 < 0.75:
                     _why = "❌低迷期跳過RL(slump×%.2f)" % _slump_mult
                 else:
                     _clv_key = "rl_h" if _rl_home else "rl_a"
-                    _clv_p   = rl_hp  if _rl_home else rl_ap
+                    _clv_p   = rl_hp_con if _rl_home else rl_ap_con
                     _clv_v   = _diag_clv(_clv_key, _clv_p)
-                    if _clv_v is not None and _clv_v < LINE_CLV_MIN:
-                        _why = "❌CLV下行%.2f%%" % _clv_v
-                    elif _rl_gap > 0.20:
-                        _why = "❌RL市場背離%.0f%%(gap=%.2f)" % (_rl_gap*100, _rl_gap)
+                    _wf_rl_d = pr.get("weather_factor", 1.0) or 1.0
+                    if _wf_rl_d <= 0.93 and cf * 0.90 * 0.90 < RL_BET_CONF_MIN:
+                        _why = "❌RL天氣(wf=%.2f)" % _wf_rl_d
                     elif _rec_era - _opp_era > 0.8:
                         _why = "❌SP差距(推薦%.2f>對手%.2f)" % (_rec_era, _opp_era)
-                    elif pr.get("weather_factor", 1.0) <= 0.93 and cf * 0.90 * 0.90 < RL_BET_CONF_MIN:
-                        _why = "❌RL天氣(wf=%.2f)" % pr.get("weather_factor", 1.0)
+                    elif _rl_gap > 0.20:
+                        _why = "❌RL市場背離%.0f%%(gap=%.2f)" % (_rl_gap*100, _rl_gap)
+                    elif _clv_v is not None and _clv_v < LINE_CLV_MIN:
+                        _why = "❌CLV下行%.2f%%" % _clv_v
                     else:
                         _why = "❌RL保護(其他)"
             elif best_lbl=="ML" and bp2<ML_FAV_PRICE and be<EDGE_MIN_ML_FAV: _why="❌低賠edge不足"
@@ -3923,12 +3928,12 @@ def run():
                 elif best_lbl=="TOT":
                     _tot_side = "over" if tot_he>=tot_ue else "under"
                     if _tot_side == "over":
-                        if _h_era <= ACE_ERA_OVER or _a_era <= ACE_ERA_OVER:
+                        if _h_era < ELITE_ERA_DUAL and _a_era < ELITE_ERA_DUAL and best_mp < ELITE_ERA_OVER_P:
+                            _why = "❌菁英對決(OVER %.0f%%<%.0f%%)" % (best_mp*100, ELITE_ERA_OVER_P*100)
+                        elif _h_era <= ACE_ERA_OVER or _a_era <= ACE_ERA_OVER:
                             _ace_p = hp_k if _h_era <= ACE_ERA_OVER else ap_k
                             _ace_e = _h_era if _h_era <= ACE_ERA_OVER else _a_era
                             _why = "❌王牌封OVER(%s ERA%.2f)" % (_ace_p or "?", _ace_e)
-                        elif _h_era < ELITE_ERA_DUAL and _a_era < ELITE_ERA_DUAL and best_mp < ELITE_ERA_OVER_P:
-                            _why = "❌菁英對決(OVER %.0f%%<%.0f%%)" % (best_mp*100, ELITE_ERA_OVER_P*100)
                         else:
                             _why = "❌OVER其他"
                     else:
@@ -3940,7 +3945,8 @@ def run():
                         _h_ip_t   = _PITCHER_IP.get(hp_k, 6.0); _a_ip_t = _PITCHER_IP.get(ap_k, 6.0)
                         _h_wp_t   = _PITCHER_WHIP.get(hp_k); _a_wp_t = _PITCHER_WHIP.get(ap_k)
                         _h_rs_t   = _PITCHER_RS.get(hp_k); _a_rs_t = _PITCHER_RS.get(ap_k)
-                        _rs_max_t = max(r for r in [_h_rs_t or 0, _a_rs_t or 0])
+                        _rs_vals_t = [r for r in [_h_rs_t, _a_rs_t] if r is not None]
+                        _rs_max_t = max(_rs_vals_t) if _rs_vals_t else None
                         _wf_t     = pr.get("weather_factor", 1.0) or 1.0
                         if not hp_k or not ap_k:
                             _why = "❌UNDER_TBD先發"
@@ -3962,11 +3968,11 @@ def run():
                             _why = "❌UNDER_FIP絕對(%.2f>%.1f)" % (_fp, UNDER_FIP_ABS_MAX)
                         elif _mkt_gap_t > UNDER_MKT_HARD_BLOCK:
                             _why = "❌UNDER市場硬封(gap=%.1f)" % _mkt_gap_t
-                        elif _mkt_gap_t > 1.0:
+                        elif _mkt_gap_t > 1.0 and round(cf * 0.88 * 0.80, 4) < TOT_BET_CONF_MIN:
                             _why = "❌UNDER市場差距(gap=%.1f)" % _mkt_gap_t
-                        elif _wf_t <= 0.95:
+                        elif _wf_t <= 0.95 and round(cf * 0.88 * 0.90, 4) < TOT_BET_CONF_MIN:
                             _why = "❌UNDER天氣(wf=%.2f)" % _wf_t
-                        elif mt and _rs_max_t >= mt - UNDER_RS_SAFETY:
+                        elif mt and _rs_max_t is not None and _rs_max_t >= mt - UNDER_RS_SAFETY:
                             _why = "❌UNDER_RS安全(max_RS=%.1f≥%.1f)" % (_rs_max_t, mt-UNDER_RS_SAFETY)
                         else:
                             _why = "❌UNDER其他"
