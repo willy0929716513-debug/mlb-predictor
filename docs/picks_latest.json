@@ -302,7 +302,7 @@
     }
   ],
   "live_games": [],
-  "live_updated_ts": 1783657136,
+  "live_updated_ts": 1783712074,
   "game_preds": {
     "tigers|phillies": {
       "home_win_prob": 0.76,
@@ -364,5 +364,6 @@
       "home_win_prob": 0.6618,
       "market_total": 8.5
     }
-  }
+  },
+  "live_updated_at": ""
 }
