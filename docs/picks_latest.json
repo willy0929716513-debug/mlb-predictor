@@ -214,11 +214,11 @@
     {
       "home_cn": "遊騎兵",
       "away_cn": "天使",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 4,
       "away_runs": 1,
-      "projected_total": 10.1,
+      "projected_total": 9.7,
       "market_total": 7.0,
       "bet": "大小分 OVER",
       "reason": "第4局已得5分（此時預期2.3分），高分走勢盤口7.0"
