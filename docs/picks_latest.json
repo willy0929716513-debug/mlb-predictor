@@ -176,18 +176,6 @@
   ],
   "live_games": [
     {
-      "home_cn": "老虎",
-      "away_cn": "運動家",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 4,
-      "away_runs": 1,
-      "projected_total": 6.0,
-      "market_total": 9.0,
-      "bet": "主隊獨贏",
-      "reason": "第9局主隊領先3分（賽前主隊勝率48%），大局已定"
-    },
-    {
       "home_cn": "馬林魚",
       "away_cn": "水手",
       "inning": 8,
@@ -203,10 +191,10 @@
       "home_cn": "紅人",
       "away_cn": "費城人",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 2.1,
+      "projected_total": 1.5,
       "market_total": 9.5,
       "bet": null,
       "reason": null
@@ -214,23 +202,23 @@
     {
       "home_cn": "紅雀",
       "away_cn": "釀酒人",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 6,
-      "projected_total": 11.2,
+      "projected_total": 10.8,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第5局已得7分（此時預期4.2分），高分走勢盤口8.5"
+      "reason": "第6局已得7分（此時預期4.7分），高分走勢盤口8.5"
     },
     {
       "home_cn": "遊騎兵",
       "away_cn": "天使",
       "inning": 3,
       "top_inning": false,
-      "home_runs": 2,
+      "home_runs": 4,
       "away_runs": 1,
-      "projected_total": 8.1,
+      "projected_total": 10.1,
       "market_total": 7.0,
       "bet": null,
       "reason": null
