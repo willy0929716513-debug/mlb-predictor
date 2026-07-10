@@ -191,7 +191,7 @@
       "home_cn": "遊騎兵",
       "away_cn": "天使",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 6,
       "away_runs": 6,
       "projected_total": 14.3,
