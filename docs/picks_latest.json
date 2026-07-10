@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-07-10 00:32 (台灣時間)",
+  "generated_at": "2026-07-10 11:08 (台灣時間)",
   "date": "2026-07-10",
   "stats": {
-    "settled": 182,
-    "wins": 124,
-    "win_rate": 68.1,
-    "total_in": 5546.9,
-    "total_pnl": 1169.9,
-    "roi": 21.1,
-    "pnl_novig": 1203.9,
-    "vig_cost": 34.0,
+    "settled": 186,
+    "wins": 126,
+    "win_rate": 67.7,
+    "total_in": 5726.9,
+    "total_pnl": 1174.4,
+    "roi": 20.5,
+    "pnl_novig": 1207.2,
+    "vig_cost": 32.8,
     "by_type": {
       "ML": {
         "wins": 43,
@@ -18,20 +18,147 @@
         "roi": -0.7
       },
       "RL": {
-        "wins": 54,
-        "settled": 73,
-        "win_rate": 74.0,
-        "roi": 31.1
+        "wins": 55,
+        "settled": 74,
+        "win_rate": 74.3,
+        "roi": 32.0
       },
       "TOT": {
-        "wins": 27,
-        "settled": 40,
-        "win_rate": 67.5,
-        "roi": 39.1
+        "wins": 28,
+        "settled": 43,
+        "win_rate": 65.1,
+        "roi": 33.4
       }
     }
   },
-  "picks": [],
+  "picks": [
+    {
+      "tier": "⭐ 穩定",
+      "btype": "讓分",
+      "away": "mariners",
+      "home": "rays",
+      "away_cn": "水手",
+      "home_cn": "光芒",
+      "bet_label": "水手 讓分(+1.5)",
+      "bk": "MyBookie.ag",
+      "bp": 2.65,
+      "con_p": 2.227,
+      "dv_p": 0.4677,
+      "edge": 23.9,
+      "conf": 64.2,
+      "stake": 50.0,
+      "model_p": 68.5,
+      "away_sp": "Luis Castillo",
+      "home_sp": "Nick Martinez",
+      "away_era": 2.54,
+      "home_era": 4.73,
+      "away_fip": 1.98,
+      "home_fip": 5.06,
+      "away_k9": 6.8,
+      "home_k9": 6.1,
+      "away_avgip": 5.3,
+      "home_avgip": 5.4,
+      "away_whip": 1.12,
+      "home_whip": 1.04,
+      "away_rest": null,
+      "home_rest": null,
+      "away_rs": 1.67,
+      "home_rs": 4.33,
+      "away_rpg": 4.06,
+      "home_rpg": 4.54,
+      "pred_away": 3.5,
+      "pred_home": 3.5,
+      "model_total": null,
+      "market_total": null,
+      "park_factor": 0.95,
+      "weather_factor": null,
+      "ump_name": null,
+      "ump_adj": null,
+      "away_trend": -2.13,
+      "home_trend": -2.73,
+      "line_clv": null,
+      "game_date": "2026-07-11",
+      "game_time": "07:11",
+      "sp_src": "probable",
+      "home_hand": "R",
+      "away_hand": "R",
+      "home_babip": 0.4,
+      "away_babip": 0.533,
+      "home_lob": 94.2,
+      "away_lob": 61.1,
+      "away_road_days": 3,
+      "away_tz_cross": true,
+      "home_wpct": null,
+      "away_road_wpct": null,
+      "home_l10_wpct": 0.6,
+      "away_l10_wpct": 0.5,
+      "home_lineup": [],
+      "away_lineup": []
+    },
+    {
+      "tier": "💎 頂級",
+      "btype": "讓分",
+      "away": "braves",
+      "home": "cardinals",
+      "away_cn": "勇士",
+      "home_cn": "紅雀",
+      "bet_label": "紅雀 讓分(+1.5)",
+      "bk": "LowVig.ag",
+      "bp": 1.82,
+      "con_p": 1.799,
+      "dv_p": 0.5327,
+      "edge": 20.5,
+      "conf": 90.6,
+      "stake": 50.0,
+      "model_p": 71.9,
+      "away_sp": "Chris Sale",
+      "home_sp": "Kyle Leahy",
+      "away_era": 2.75,
+      "home_era": 2.33,
+      "away_fip": 3.16,
+      "home_fip": 2.85,
+      "away_k9": 11.1,
+      "home_k9": 7.8,
+      "away_avgip": 5.4,
+      "home_avgip": 5.4,
+      "away_whip": 1.48,
+      "home_whip": 0.93,
+      "away_rest": null,
+      "home_rest": null,
+      "away_rs": 5.33,
+      "home_rs": 2.67,
+      "away_rpg": 4.86,
+      "home_rpg": 4.54,
+      "pred_away": 3.5,
+      "pred_home": 3.8,
+      "model_total": null,
+      "market_total": null,
+      "park_factor": null,
+      "weather_factor": 1.016,
+      "ump_name": null,
+      "ump_adj": null,
+      "away_trend": 0.39,
+      "home_trend": -2.78,
+      "line_clv": null,
+      "game_date": "2026-07-11",
+      "game_time": "08:16",
+      "sp_src": "probable",
+      "home_hand": "R",
+      "away_hand": "R",
+      "home_babip": 0.276,
+      "away_babip": 0.429,
+      "home_lob": 93.8,
+      "away_lob": 94.6,
+      "away_road_days": 3,
+      "away_tz_cross": null,
+      "home_wpct": null,
+      "away_road_wpct": null,
+      "home_l10_wpct": 0.4,
+      "away_l10_wpct": 0.5,
+      "home_lineup": [],
+      "away_lineup": []
+    }
+  ],
   "recent_history": [
     {
       "date": "2026-07-09",
@@ -44,7 +171,7 @@
       "price": 1.71,
       "stake": 50.0,
       "edge": 14.6,
-      "result": null,
+      "result": "W",
       "sp_confirmed": true
     },
     {
@@ -58,7 +185,7 @@
       "price": 1.98,
       "stake": 50.0,
       "edge": 23.8,
-      "result": null,
+      "result": "W",
       "sp_confirmed": true
     },
     {
@@ -72,7 +199,7 @@
       "price": 1.91,
       "stake": 40.0,
       "edge": 20.1,
-      "result": null,
+      "result": "L",
       "sp_confirmed": true
     },
     {
@@ -86,7 +213,7 @@
       "price": 2.03,
       "stake": 40.0,
       "edge": 15.5,
-      "result": null,
+      "result": "L",
       "sp_confirmed": true
     },
     {
@@ -194,8 +321,8 @@
       "top_inning": true,
       "home_runs": 1,
       "away_runs": 2,
-      "projected_total": 8.0,
-      "market_total": 9.0,
+      "projected_total": 6.9,
+      "market_total": 7.0,
       "bet": null,
       "reason": null
     },
@@ -204,7 +331,7 @@
       "away_cn": "落磯",
       "inning": 5,
       "top_inning": false,
-      "home_runs": 3,
+      "home_runs": 4,
       "away_runs": 2,
       "projected_total": 9.0,
       "market_total": 8.0,
@@ -214,58 +341,73 @@
   ],
   "live_updated_ts": 1783652784,
   "game_preds": {
-    "pirates|braves": {
-      "home_win_prob": 0.6943,
-      "market_total": 10.0
-    },
-    "rays|yankees": {
-      "home_win_prob": 0.5213,
-      "market_total": 7.5
-    },
-    "mets|royals": {
-      "home_win_prob": 0.4614,
-      "market_total": 9.0
-    },
-    "orioles|cubs": {
-      "home_win_prob": 0.4634,
-      "market_total": 10.0
-    },
-    "twins|guardians": {
-      "home_win_prob": 0.351,
-      "market_total": 8.5
-    },
-    "white sox|red sox": {
-      "home_win_prob": 0.7413,
-      "market_total": 9.0
-    },
-    "tigers|athletics": {
-      "home_win_prob": 0.4768,
-      "market_total": 9.0
-    },
-    "marlins|mariners": {
-      "home_win_prob": 0.397,
-      "market_total": 8.0
-    },
-    "reds|phillies": {
-      "home_win_prob": 0.22,
-      "market_total": 9.5
-    },
-    "cardinals|brewers": {
-      "home_win_prob": 0.3636,
-      "market_total": 8.5
-    },
     "rangers|angels": {
-      "home_win_prob": 0.76,
-      "market_total": 7.0
+      "home_win_prob": 0.529,
+      "market_total": 13.5
     },
     "padres|diamondbacks": {
-      "home_win_prob": 0.5353,
-      "market_total": 9.0
+      "home_win_prob": 0.4603,
+      "market_total": 7.0
     },
     "giants|rockies": {
-      "home_win_prob": 0.3246,
+      "home_win_prob": 0.6468,
+      "market_total": 8.5
+    },
+    "tigers|phillies": {
+      "home_win_prob": 0.76,
+      "market_total": 9.0
+    },
+    "pirates|brewers": {
+      "home_win_prob": 0.4383,
+      "market_total": 8.5
+    },
+    "nationals|yankees": {
+      "home_win_prob": 0.5726,
+      "market_total": 10.0
+    },
+    "orioles|royals": {
+      "home_win_prob": 0.5835,
+      "market_total": 9.5
+    },
+    "reds|cubs": {
+      "home_win_prob": 0.3837,
+      "market_total": 9.5
+    },
+    "marlins|guardians": {
+      "home_win_prob": 0.6398,
+      "market_total": 7.5
+    },
+    "rays|mariners": {
+      "home_win_prob": 0.5025,
+      "market_total": 7.5
+    },
+    "mets|red sox": {
+      "home_win_prob": 0.483,
+      "market_total": 7.5
+    },
+    "white sox|athletics": {
+      "home_win_prob": 0.6977,
+      "market_total": 9.0
+    },
+    "rangers|astros": {
+      "home_win_prob": 0.5792,
       "market_total": 8.0
+    },
+    "twins|angels": {
+      "home_win_prob": 0.5192,
+      "market_total": 9.0
+    },
+    "cardinals|braves": {
+      "home_win_prob": 0.5502,
+      "market_total": 8.0
+    },
+    "padres|blue jays": {
+      "home_win_prob": 0.488,
+      "market_total": 7.5
+    },
+    "dodgers|diamondbacks": {
+      "home_win_prob": 0.7286,
+      "market_total": 8.5
     }
-  },
-  "live_updated_at": "2026-07-10 11:06 (台灣時間)"
+  }
 }
