@@ -176,18 +176,6 @@
   ],
   "live_games": [
     {
-      "home_cn": "紅雀",
-      "away_cn": "釀酒人",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 4,
-      "away_runs": 8,
-      "projected_total": 12.5,
-      "market_total": 8.5,
-      "bet": "客隊獨贏",
-      "reason": "第9局客隊領先4分（賽前客隊勝率64%），大局已定"
-    },
-    {
       "home_cn": "遊騎兵",
       "away_cn": "天使",
       "inning": 8,
@@ -205,8 +193,8 @@
       "inning": 4,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 0,
-      "projected_total": 7.0,
+      "away_runs": 1,
+      "projected_total": 8.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -214,17 +202,17 @@
     {
       "home_cn": "巨人",
       "away_cn": "落磯",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 6.8,
+      "projected_total": 6.3,
       "market_total": 8.0,
-      "bet": null,
-      "reason": null
+      "bet": "客隊讓分(+1.5)",
+      "reason": "客隊落後1分 第4局，賽前客隊勝率68%"
     }
   ],
-  "live_updated_ts": 1783650973,
+  "live_updated_ts": 1783651275,
   "game_preds": {
     "pirates|braves": {
       "home_win_prob": 0.6943,
@@ -279,5 +267,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-10 10:36 (台灣時間)"
+  "live_updated_at": "2026-07-10 10:41 (台灣時間)"
 }
