@@ -57,6 +57,7 @@ FIP_ERA_WARN_GAP = 1.50 # RL: 推薦隊SP的FIP比ERA高超過此值 → 幸運E
 FIP_ERA_UNDER_GAP= 1.00 # UNDER: 任一SP的FIP比ERA高超過此值 → 幸運ERA，失分回歸，拒絕UNDER
 RL_HOME_ACE_ERA  = 2.00 # 主場王牌ERA門檻：+1.5讓分依賴王牌，一旦爆投便大輸
 RL_OPP_RS_THRESH = 4.0  # 客隊近期RS ≥此值 → 進攻力足以在王牌爆投時擴大分差，主場+1.5風險高
+SLUMP_RL_CONF_MIN = 0.75 # 低迷期RL最低信心門檻（高於一般RL_BET_CONF_MIN，額外保護本金）
 ODDS_SNAP_PATH = "docs/odds_snapshot.json"
 LEAGUE_ERA     = 4.20
 HIST_TTL       = 90
@@ -3237,7 +3238,7 @@ def run():
                         log.info("SP_DELTA_PENALTY SKIP: conf %.2f below %.2f", bet_conf, RL_BET_CONF_MIN)
                         continue
                 # SLUMP_LOWCONF_SKIP: 低迷期+低信心 → 跳過RL
-                if _slump_mult < 1.0 and bet_conf < 0.75:
+                if _slump_mult < 1.0 and bet_conf < SLUMP_RL_CONF_MIN:
                     log.info("SLUMP_LOWCONF_SKIP: slump_mult=%.2f conf=%.2f — RL skipped",
                              _slump_mult, bet_conf)
                     continue
@@ -3317,7 +3318,7 @@ def run():
                              pred.get("pure_total_tot", market_total), market_total, _under_mkt_gap)
                     continue
                 if _under_mkt_gap > 1.0:
-                    bet_conf = round(bet_conf * 0.80, 4)
+                    bet_conf = round(bet_conf * 0.85, 4)
                     log.info("UNDER_MKT_DISAGREE: model_tot=%.1f mkt=%.1f gap=%.1f conf→%.3f",
                              pred.get("pure_total_tot", market_total), market_total, _under_mkt_gap, bet_conf)
                     if bet_conf < TOT_BET_CONF_MIN:
@@ -3376,6 +3377,9 @@ def run():
             prev_bp = prev_game.get(_SIDE_KEY.get(bside,""))
             lclv = line_clv(bp, prev_bp)
             if lclv is not None and lclv < LINE_CLV_MIN: continue
+            # TOT優先加成：TOT歷史ROI最佳—微幅信心加成（在Kelly計算前套用，注額也受益）
+            if btype == BET_TOT:
+                bet_conf = round(min(1.0, bet_conf + 0.02), 4)
             _dv_p_kelly = _dv.get(bside, 1.0/con_p) if con_p else None
             stake = kelly_stake(raw_edge, model_p, bp, conf=bet_conf, dv_p=_dv_p_kelly)
             if btype == BET_RL:
@@ -3387,9 +3391,6 @@ def run():
             if stake <= 0: continue   # Kelly建議不下（負期望值），排除
             stake = round(min(KELLY_MAX, max(KELLY_FLOOR, stake)), 1)
             if stake < KELLY_MIN: continue  # 注額低於最低門檻，排除
-            # TOT優先加成：TOT歷史ROI+54%/WR70%最佳—微幅信心加成以利競爭
-            if btype == BET_TOT:
-                bet_conf = round(min(1.0, bet_conf + 0.02), 4)
             score = raw_edge * bet_conf
             # ④ 菁英對決中RL降分，讓TOT注單更容易獲選（偏好UNDER而非RL）
             if btype == BET_RL and _h_era_v < ELITE_ERA_DUAL and _a_era_v < ELITE_ERA_DUAL:
@@ -3494,7 +3495,7 @@ def run():
         _ump_adj_v = pred.get("ump_adj", 0.0) or 0.0
         _ump_nm    = pred.get("ump_name") or ""
         if abs(_ump_adj_v) >= 0.20:
-            ump_note=" ⚖️裁判%s(%.2f)"%("+" if _ump_adj_v>0 else "", _ump_adj_v)
+            ump_note=" ⚖️裁判(%+.2f)" % _ump_adj_v
         else:
             ump_note=""
         _pure_tot = pred.get("pure_total_tot", pred["model_total"])
@@ -3508,7 +3509,12 @@ def run():
             bcn=CN.get(bteam,bteam)
             bet_desc="`%s 獨贏` @ **%.2f** (%s)"%(bcn,bp,bk)
             # ★ 使用 devigged 真實市場概率（已移除 bookmaker vig）
-            _mkt_true_p = _dv.get(bside, 1.0/con_p) * 100
+            if bside in _dv:
+                _mkt_true_p = _dv[bside] * 100
+            else:
+                _opp_con_p = con_a_prices and round(sum(con_a_prices)/len(con_a_prices),2) if bside=="home" else (con_h_prices and round(sum(con_h_prices)/len(con_h_prices),2))
+                _ml_inv = (1/con_p + 1/_opp_con_p) if (_opp_con_p and _opp_con_p>0) else 0
+                _mkt_true_p = ((1/con_p)/_ml_inv*100) if _ml_inv else (1.0/con_p)*100
             _break_even = (1.0/bp)*100
             stats_ln="> 共識賠率: %.2f | 真實市場: %.1f%% | 盈虧平衡: %.1f%% | 模型: %.1f%%"%(
                 con_p, _mkt_true_p, _break_even, model_p*100)
@@ -3871,7 +3877,7 @@ def run():
                 # FIP：使用賽季ERA（與主循環一致），只檢查推薦方先發
                 _fip_rec  = _PITCHER_FIP.get(_rec_sp)
                 _era_rec  = _LIVE_SP_ERA.get(_rec_sp) or PITCHER_ERA.get(_rec_sp)
-                # RL市場差距（使用共識賠率devig，與主循環一致）
+                # RL市場差距（使用共識賠率devig，與主循環一致；不再需要重算ML devig）
                 _rl_p_con = rl_hp_con if _rl_home else rl_ap_con
                 _rl_o_con = rl_ap_con if _rl_home else rl_hp_con
                 _rl_inv = (1/_rl_p_con + 1/_rl_o_con) if (_rl_p_con and _rl_o_con) else 0
@@ -3898,7 +3904,7 @@ def run():
                     _PITCHER_RS.get(ap_k) or 0) >= RL_OPP_RS_THRESH:
                     _why = "❌主場王牌+強攻(%s ERA%.2f RS%.1f)" % (
                         hp_k or "?", _h_era, _PITCHER_RS.get(ap_k))
-                elif _slump_mult < 1.0 and cf * 0.90 < 0.75:
+                elif _slump_mult < 1.0 and cf * 0.90 < SLUMP_RL_CONF_MIN:
                     _why = "❌低迷期跳過RL(slump×%.2f)" % _slump_mult
                 else:
                     _clv_key = "rl_h" if _rl_home else "rl_a"
@@ -3913,6 +3919,10 @@ def run():
                         _why = "❌RL市場背離%.0f%%(gap=%.2f)" % (_rl_gap*100, _rl_gap)
                     elif _clv_v is not None and _clv_v < LINE_CLV_MIN:
                         _why = "❌CLV下行%.2f%%" % _clv_v
+                    elif (h, a, h if _rl_home else a, BET_RL) in _series_suppress:
+                        _why = "❌系列賽抑制(conf-15%%)"
+                    elif (len(_rl_hp_all) if _rl_home else len(_rl_ap_all)) < MIN_BOOKS:
+                        _why = "❌書商不足(LOW_BOOKS)"
                     else:
                         _why = "❌RL保護(其他)"
             elif best_lbl=="ML" and bp2<ML_FAV_PRICE and be<EDGE_MIN_ML_FAV: _why="❌低賠edge不足"
@@ -3923,8 +3933,15 @@ def run():
                 _clv_key = ("home_ml" if he>=ae else "away_ml") if best_lbl=="ML" else ("over" if tot_he>=tot_ue else "under")
                 _clv_p   = (hp if he>=ae else ap) if best_lbl=="ML" else (ov_p if tot_he>=tot_ue else un_p)
                 _clv_v   = _diag_clv(_clv_key, _clv_p)
+                _ml_bteam_d = (h if he>=ae else a) if best_lbl=="ML" else None
+                _ss_ml_d = (h, a, _ml_bteam_d, BET_ML) if _ml_bteam_d else None
+                _n_books_ml_d = (len(_hp_all) if he>=ae else len(_ap_all)) if best_lbl=="ML" else 999
                 if _clv_v is not None and _clv_v < LINE_CLV_MIN:
                     _why = "❌CLV下行%.2f%%" % _clv_v
+                elif _ss_ml_d and _ss_ml_d in _series_suppress:
+                    _why = "❌系列賽抑制(conf-15%%)"
+                elif _n_books_ml_d < MIN_BOOKS:
+                    _why = "❌書商不足(LOW_BOOKS)"
                 elif best_lbl=="TOT":
                     _tot_side = "over" if tot_he>=tot_ue else "under"
                     if _tot_side == "over":
@@ -3945,6 +3962,9 @@ def run():
                         _h_ip_t   = _PITCHER_IP.get(hp_k, 6.0); _a_ip_t = _PITCHER_IP.get(ap_k, 6.0)
                         _h_wp_t   = _PITCHER_WHIP.get(hp_k); _a_wp_t = _PITCHER_WHIP.get(ap_k)
                         _h_rs_t   = _PITCHER_RS.get(hp_k); _a_rs_t = _PITCHER_RS.get(ap_k)
+                        # K9加成模擬（與主循環一致：雙方高三振則conf+0.04）
+                        _h_k9_t = _PITCHER_K9.get(hp_k, 7.0); _a_k9_t = _PITCHER_K9.get(ap_k, 7.0)
+                        _cf_under_d = min(1.0, cf * 0.88 + (K9_UNDER_CONF if _h_k9_t >= K9_HIGH_THRESH and _a_k9_t >= K9_HIGH_THRESH else 0))
                         _rs_vals_t = [r for r in [_h_rs_t, _a_rs_t] if r is not None]
                         _rs_max_t = max(_rs_vals_t) if _rs_vals_t else None
                         _wf_t     = pr.get("weather_factor", 1.0) or 1.0
@@ -3968,9 +3988,9 @@ def run():
                             _why = "❌UNDER_FIP絕對(%.2f>%.1f)" % (_fp, UNDER_FIP_ABS_MAX)
                         elif _mkt_gap_t > UNDER_MKT_HARD_BLOCK:
                             _why = "❌UNDER市場硬封(gap=%.1f)" % _mkt_gap_t
-                        elif _mkt_gap_t > 1.0 and round(cf * 0.88 * 0.80, 4) < TOT_BET_CONF_MIN:
+                        elif _mkt_gap_t > 1.0 and round(_cf_under_d * 0.85, 4) < TOT_BET_CONF_MIN:
                             _why = "❌UNDER市場差距(gap=%.1f)" % _mkt_gap_t
-                        elif _wf_t <= 0.95 and round(cf * 0.88 * 0.90, 4) < TOT_BET_CONF_MIN:
+                        elif _wf_t <= 0.95 and round(_cf_under_d * 0.90, 4) < TOT_BET_CONF_MIN:
                             _why = "❌UNDER天氣(wf=%.2f)" % _wf_t
                         elif mt and _rs_max_t is not None and _rs_max_t >= mt - UNDER_RS_SAFETY:
                             _why = "❌UNDER_RS安全(max_RS=%.1f≥%.1f)" % (_rs_max_t, mt-UNDER_RS_SAFETY)
