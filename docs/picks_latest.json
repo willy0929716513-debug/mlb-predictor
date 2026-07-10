@@ -327,7 +327,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783654595,
+  "live_updated_ts": 1783654896,
   "game_preds": {
     "rangers|angels": {
       "home_win_prob": 0.529,
@@ -398,5 +398,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-10 11:36 (台灣時間)"
+  "live_updated_at": "2026-07-10 11:41 (台灣時間)"
 }
