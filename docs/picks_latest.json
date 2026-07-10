@@ -179,10 +179,10 @@
       "home_cn": "遊騎兵",
       "away_cn": "天使",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 6,
       "away_runs": 6,
-      "projected_total": 12.8,
+      "projected_total": 12.4,
       "market_total": 7.0,
       "bet": null,
       "reason": null
@@ -206,7 +206,7 @@
       "top_inning": false,
       "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 8.0,
+      "projected_total": 9.0,
       "market_total": 8.0,
       "bet": "客隊讓分(+1.5)",
       "reason": "客隊落後1分 第5局，賽前客隊勝率68%"
