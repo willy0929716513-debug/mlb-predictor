@@ -179,13 +179,13 @@
       "home_cn": "紅雀",
       "away_cn": "釀酒人",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 4,
       "away_runs": 7,
-      "projected_total": 13.8,
+      "projected_total": 13.4,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第7局已得11分（此時預期5.7分），高分走勢盤口8.5"
+      "reason": "第7局已得11分（此時預期6.1分），高分走勢盤口8.5"
     },
     {
       "home_cn": "遊騎兵",
@@ -215,10 +215,10 @@
       "home_cn": "巨人",
       "away_cn": "落磯",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.0,
+      "projected_total": 7.6,
       "market_total": 8.0,
       "bet": null,
       "reason": null
