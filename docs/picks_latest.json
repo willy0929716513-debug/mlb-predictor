@@ -178,14 +178,14 @@
     {
       "home_cn": "老虎",
       "away_cn": "運動家",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 4,
       "away_runs": 1,
-      "projected_total": 7.5,
+      "projected_total": 7.0,
       "market_total": 9.0,
       "bet": "主隊獨贏",
-      "reason": "第7局主隊領先3分（賽前主隊勝率48%），大局已定"
+      "reason": "第8局主隊領先3分（賽前主隊勝率48%），大局已定"
     },
     {
       "home_cn": "馬林魚",
@@ -205,11 +205,11 @@
       "inning": 8,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 2.1,
+      "away_runs": 1,
+      "projected_total": 3.1,
       "market_total": 9.5,
       "bet": "大小分 UNDER",
-      "reason": "第8局僅0分（此時預期7.4分），低分走勢盤口9.5"
+      "reason": "第8局僅1分（此時預期7.4分），低分走勢盤口9.5"
     },
     {
       "home_cn": "紅雀",
@@ -236,7 +236,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783644166,
+  "live_updated_ts": 1783644468,
   "game_preds": {
     "pirates|braves": {
       "home_win_prob": 0.6943,
@@ -291,5 +291,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-10 08:42 (台灣時間)"
+  "live_updated_at": "2026-07-10 08:47 (台灣時間)"
 }
