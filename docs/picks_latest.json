@@ -203,10 +203,10 @@
       "home_cn": "教士",
       "away_cn": "響尾蛇",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 9.0,
+      "projected_total": 8.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -224,7 +224,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783648258,
+  "live_updated_ts": 1783648559,
   "game_preds": {
     "pirates|braves": {
       "home_win_prob": 0.6943,
@@ -279,5 +279,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-10 09:50 (台灣時間)"
+  "live_updated_at": "2026-07-10 09:55 (台灣時間)"
 }
