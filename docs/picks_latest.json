@@ -193,11 +193,11 @@
       "inning": 7,
       "top_inning": true,
       "home_runs": 6,
-      "away_runs": 2,
-      "projected_total": 10.3,
+      "away_runs": 4,
+      "projected_total": 12.3,
       "market_total": 7.0,
       "bet": "大小分 OVER",
-      "reason": "第7局已得8分（此時預期4.7分），高分走勢盤口7.0"
+      "reason": "第7局已得10分（此時預期4.7分），高分走勢盤口7.0"
     },
     {
       "home_cn": "教士",
@@ -224,7 +224,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783649465,
+  "live_updated_ts": 1783649767,
   "game_preds": {
     "pirates|braves": {
       "home_win_prob": 0.6943,
@@ -279,5 +279,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-10 10:11 (台灣時間)"
+  "live_updated_at": "2026-07-10 10:16 (台灣時間)"
 }
