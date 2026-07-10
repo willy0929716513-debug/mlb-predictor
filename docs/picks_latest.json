@@ -193,11 +193,11 @@
       "inning": 5,
       "top_inning": true,
       "home_runs": 6,
-      "away_runs": 1,
-      "projected_total": 11.4,
+      "away_runs": 2,
+      "projected_total": 12.4,
       "market_total": 8.0,
       "bet": "大小分 OVER",
-      "reason": "第5局已得7分（此時預期3.6分），高分走勢盤口8.0"
+      "reason": "第5局已得8分（此時預期3.6分），高分走勢盤口8.0"
     },
     {
       "home_cn": "紅人",
@@ -217,8 +217,8 @@
       "inning": 2,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 7.6,
+      "away_runs": 2,
+      "projected_total": 9.6,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -236,7 +236,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783642053,
+  "live_updated_ts": 1783642355,
   "game_preds": {
     "pirates|braves": {
       "home_win_prob": 0.6943,
@@ -291,5 +291,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-10 08:07 (台灣時間)"
+  "live_updated_at": "2026-07-10 08:12 (台灣時間)"
 }
