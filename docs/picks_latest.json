@@ -303,18 +303,6 @@
   ],
   "live_games": [
     {
-      "home_cn": "遊騎兵",
-      "away_cn": "天使",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 7,
-      "away_runs": 6,
-      "projected_total": 13.4,
-      "market_total": 7.0,
-      "bet": null,
-      "reason": null
-    },
-    {
       "home_cn": "教士",
       "away_cn": "響尾蛇",
       "inning": 6,
@@ -329,8 +317,8 @@
     {
       "home_cn": "巨人",
       "away_cn": "落磯",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 4,
       "away_runs": 2,
       "projected_total": 10.0,
