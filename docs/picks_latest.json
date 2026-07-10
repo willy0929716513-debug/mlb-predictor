@@ -191,13 +191,13 @@
       "home_cn": "遊騎兵",
       "away_cn": "天使",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 5,
       "away_runs": 1,
-      "projected_total": 9.1,
+      "projected_total": 8.7,
       "market_total": 7.0,
-      "bet": "大小分 OVER",
-      "reason": "第6局已得6分（此時預期3.9分），高分走勢盤口7.0"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "教士",
