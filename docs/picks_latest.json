@@ -180,21 +180,21 @@
       "away_cn": "釀酒人",
       "inning": 6,
       "top_inning": false,
-      "home_runs": 1,
+      "home_runs": 4,
       "away_runs": 6,
-      "projected_total": 10.3,
+      "projected_total": 13.3,
       "market_total": 8.5,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第6局已得10分（此時預期5.2分），高分走勢盤口8.5"
     },
     {
       "home_cn": "遊騎兵",
       "away_cn": "天使",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 5,
       "away_runs": 1,
-      "projected_total": 9.9,
+      "projected_total": 9.5,
       "market_total": 7.0,
       "bet": "大小分 OVER",
       "reason": "第5局已得6分（此時預期3.5分），高分走勢盤口7.0"
