@@ -308,8 +308,8 @@
       "inning": 6,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 2,
-      "projected_total": 6.1,
+      "away_runs": 3,
+      "projected_total": 7.1,
       "market_total": 7.0,
       "bet": null,
       "reason": null
@@ -321,13 +321,13 @@
       "top_inning": true,
       "home_runs": 4,
       "away_runs": 2,
-      "projected_total": 10.0,
-      "market_total": 8.0,
-      "bet": "大小分 OVER",
-      "reason": "第5局已得6分（此時預期4.2分），高分走勢盤口8.5"
+      "projected_total": 9.8,
+      "market_total": 8.5,
+      "bet": null,
+      "reason": null
     }
   ],
-  "live_updated_ts": 1783653388,
+  "live_updated_ts": 1783653689,
   "game_preds": {
     "rangers|angels": {
       "home_win_prob": 0.529,
@@ -398,5 +398,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-10 11:16 (台灣時間)"
+  "live_updated_at": "2026-07-10 11:21 (台灣時間)"
 }
