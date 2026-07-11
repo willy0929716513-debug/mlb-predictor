@@ -524,10 +524,10 @@
       "home_cn": "海盜",
       "away_cn": "釀酒人",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 8.0,
+      "projected_total": 7.5,
       "market_total": 9.0,
       "bet": "客隊讓分(+1.5)",
       "reason": "客隊落後1分 第7局，賽前客隊勝率67%"
@@ -535,14 +535,14 @@
     {
       "home_cn": "巨人",
       "away_cn": "落磯",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 4,
       "away_runs": 2,
-      "projected_total": 7.4,
+      "projected_total": 6.9,
       "market_total": 8.5,
       "bet": "主隊獨贏",
-      "reason": "第8局主隊領先2分（賽前主隊勝率45%），大局已定"
+      "reason": "第9局主隊領先2分（賽前主隊勝率45%），大局已定"
     },
     {
       "home_cn": "國民",
@@ -571,14 +571,14 @@
     {
       "home_cn": "光芒",
       "away_cn": "水手",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 1,
-      "projected_total": 5.7,
+      "projected_total": 5.3,
       "market_total": 7.0,
       "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後1分 第6局，賽前客隊勝率54%"
+      "reason": "客隊落後1分 第7局，賽前客隊勝率54%"
     },
     {
       "home_cn": "馬林魚",
@@ -605,7 +605,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783808080,
+  "live_updated_ts": 1783808382,
   "game_preds": {
     "pirates|brewers": {
       "home_win_prob": 0.3335,
@@ -668,5 +668,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-12 06:14 (台灣時間)"
+  "live_updated_at": "2026-07-12 06:19 (台灣時間)"
 }
