@@ -2716,9 +2716,9 @@ def run():
     now_tw    = datetime.datetime.utcnow() + datetime.timedelta(hours=8)
     today_str = now_tw.strftime("%Y-%m-%d")
     log.info("TW time: %s", now_tw.strftime("%Y-%m-%d %H:%M"))
-    # 官方記錄時段：TW 23:30–隔日08:00
+    # 官方記錄時段：TW 22:00–隔日08:00（提早至22:00以捕捉當晚早觸發的盤口）
     tw_mins  = now_tw.hour * 60 + now_tw.minute
-    official = (tw_mins >= 23 * 60 + 30) or (tw_mins < 8 * 60)
+    official = (tw_mins >= 22 * 60) or (tw_mins < 8 * 60)
     log.info("official=%s (TW %02d:%02d)", official, now_tw.hour, now_tw.minute)
 
     if not ODDS_API_KEY: log.error("ODDS_API_KEY not set"); return
