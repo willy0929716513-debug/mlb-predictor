@@ -327,18 +327,6 @@
       "reason": "第9局客隊領先5分（賽前客隊勝率51%），大局已定"
     },
     {
-      "home_cn": "遊騎兵",
-      "away_cn": "太空人",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 7,
-      "away_runs": 3,
-      "projected_total": 10.9,
-      "market_total": 8.5,
-      "bet": "主隊獨贏",
-      "reason": "第9局主隊領先4分（賽前主隊勝率58%），大局已定"
-    },
-    {
       "home_cn": "雙城",
       "away_cn": "天使",
       "inning": 9,
