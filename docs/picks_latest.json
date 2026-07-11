@@ -306,7 +306,7 @@
       "home_cn": "國民",
       "away_cn": "洋基",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 2,
       "projected_total": 9.7,
