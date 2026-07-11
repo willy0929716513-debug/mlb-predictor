@@ -305,14 +305,14 @@
     {
       "home_cn": "國民",
       "away_cn": "洋基",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 2,
-      "projected_total": 8.0,
+      "projected_total": 7.4,
       "market_total": 10.0,
-      "bet": "主隊讓分(+1.5)",
-      "reason": "主隊落後1分 第5局，賽前主隊勝率57%"
+      "bet": "大小分 UNDER",
+      "reason": "第6局僅3分（此時預期5.6分），低分走勢盤口10.0"
     },
     {
       "home_cn": "大都會",
