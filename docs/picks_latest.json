@@ -521,49 +521,13 @@
   ],
   "live_games": [
     {
-      "home_cn": "海盜",
-      "away_cn": "釀酒人",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 3,
-      "away_runs": 2,
-      "projected_total": 6.0,
-      "market_total": 9.0,
-      "bet": null,
-      "reason": null
-    },
-    {
-      "home_cn": "大都會",
-      "away_cn": "紅襪",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 0,
-      "away_runs": 4,
-      "projected_total": 4.5,
-      "market_total": 8.5,
-      "bet": "客隊獨贏",
-      "reason": "第9局客隊領先4分（賽前客隊勝率49%），大局已定"
-    },
-    {
-      "home_cn": "光芒",
-      "away_cn": "水手",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 6,
-      "away_runs": 1,
-      "projected_total": 7.8,
-      "market_total": 7.0,
-      "bet": "主隊獨贏",
-      "reason": "第9局主隊領先5分（賽前主隊勝率46%），大局已定"
-    },
-    {
       "home_cn": "老虎",
       "away_cn": "費城人",
       "inning": 4,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 3,
-      "projected_total": 8.0,
+      "away_runs": 4,
+      "projected_total": 9.0,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -617,7 +581,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783811101,
+  "live_updated_ts": 1783811403,
   "game_preds": {
     "pirates|brewers": {
       "home_win_prob": 0.3335,
@@ -680,5 +644,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-12 07:05 (台灣時間)"
+  "live_updated_at": "2026-07-12 07:10 (台灣時間)"
 }
