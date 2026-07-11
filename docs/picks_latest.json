@@ -523,11 +523,11 @@
     {
       "home_cn": "老虎",
       "away_cn": "費城人",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 4,
-      "projected_total": 8.8,
+      "projected_total": 8.3,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -536,10 +536,10 @@
       "home_cn": "金鶯",
       "away_cn": "皇家",
       "inning": 2,
-      "top_inning": true,
-      "home_runs": 0,
+      "top_inning": false,
+      "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 8.0,
+      "projected_total": 8.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -548,10 +548,10 @@
       "home_cn": "遊騎兵",
       "away_cn": "太空人",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 9.6,
+      "projected_total": 9.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -560,10 +560,10 @@
       "home_cn": "紅人",
       "away_cn": "小熊",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.9,
+      "projected_total": 8.3,
       "market_total": 10.0,
       "bet": null,
       "reason": null
@@ -581,7 +581,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783812597,
+  "live_updated_ts": 1783812898,
   "game_preds": {
     "pirates|brewers": {
       "home_win_prob": 0.3335,
@@ -644,5 +644,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-12 07:29 (台灣時間)"
+  "live_updated_at": "2026-07-12 07:34 (台灣時間)"
 }
