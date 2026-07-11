@@ -342,10 +342,10 @@
       "home_cn": "遊騎兵",
       "away_cn": "太空人",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 3,
-      "projected_total": 7.9,
+      "projected_total": 7.4,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -377,11 +377,11 @@
     {
       "home_cn": "教士",
       "away_cn": "藍鳥",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 0,
-      "projected_total": 9.1,
+      "projected_total": 8.6,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -392,8 +392,8 @@
       "inning": 1,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 8.5,
+      "away_runs": 2,
+      "projected_total": 10.5,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -411,7 +411,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783736138,
+  "live_updated_ts": 1783736440,
   "game_preds": {
     "tigers|phillies": {
       "home_win_prob": 0.76,
@@ -474,5 +474,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-11 10:15 (台灣時間)"
+  "live_updated_at": "2026-07-11 10:20 (台灣時間)"
 }
