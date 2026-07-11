@@ -306,10 +306,10 @@
       "home_cn": "老虎",
       "away_cn": "費城人",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 2,
-      "projected_total": 9.0,
+      "projected_total": 8.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -317,11 +317,11 @@
     {
       "home_cn": "金鶯",
       "away_cn": "皇家",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 0,
-      "projected_total": 9.6,
+      "projected_total": 9.0,
       "market_total": 10.5,
       "bet": null,
       "reason": null
@@ -341,11 +341,11 @@
     {
       "home_cn": "光芒",
       "away_cn": "水手",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 6.8,
+      "projected_total": 6.3,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -356,11 +356,11 @@
       "inning": 4,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 4.7,
+      "away_runs": 2,
+      "projected_total": 6.7,
       "market_total": 7.0,
-      "bet": null,
-      "reason": null
+      "bet": "主隊讓分(+1.5)",
+      "reason": "主隊落後2分 第4局，賽前主隊勝率63%"
     },
     {
       "home_cn": "大都會",
@@ -378,10 +378,10 @@
       "home_cn": "白襪",
       "away_cn": "運動家",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.0,
+      "projected_total": 7.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -423,7 +423,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783727772,
+  "live_updated_ts": 1783728073,
   "game_preds": {
     "tigers|phillies": {
       "home_win_prob": 0.76,
@@ -486,5 +486,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-11 07:56 (台灣時間)"
+  "live_updated_at": "2026-07-11 08:01 (台灣時間)"
 }
