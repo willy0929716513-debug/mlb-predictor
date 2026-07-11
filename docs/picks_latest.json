@@ -521,6 +521,18 @@
   ],
   "live_games": [
     {
+      "home_cn": "海盜",
+      "away_cn": "釀酒人",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 9.0,
+      "market_total": 9.0,
+      "bet": null,
+      "reason": null
+    },
+    {
       "home_cn": "雙城",
       "away_cn": "天使",
       "inning": 6,
@@ -593,7 +605,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783800533,
+  "live_updated_ts": 1783800835,
   "game_preds": {
     "pirates|brewers": {
       "home_win_prob": 0.3335,
@@ -656,5 +668,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-12 04:08 (台灣時間)"
+  "live_updated_at": "2026-07-12 04:13 (台灣時間)"
 }
