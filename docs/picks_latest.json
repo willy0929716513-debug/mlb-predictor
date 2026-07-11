@@ -378,10 +378,10 @@
       "home_cn": "教士",
       "away_cn": "藍鳥",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 0,
-      "projected_total": 9.6,
+      "projected_total": 9.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
