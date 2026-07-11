@@ -329,11 +329,11 @@
     {
       "home_cn": "紅人",
       "away_cn": "小熊",
-      "inning": 4,
-      "top_inning": false,
+      "inning": 5,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 5.8,
+      "projected_total": 5.3,
       "market_total": 9.5,
       "bet": null,
       "reason": null
@@ -344,8 +344,8 @@
       "inning": 5,
       "top_inning": true,
       "home_runs": 2,
-      "away_runs": 0,
-      "projected_total": 6.4,
+      "away_runs": 1,
+      "projected_total": 7.4,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -354,10 +354,10 @@
       "home_cn": "馬林魚",
       "away_cn": "守護者",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 3,
-      "projected_total": 6.9,
+      "projected_total": 6.5,
       "market_total": 7.0,
       "bet": null,
       "reason": null
