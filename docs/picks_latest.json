@@ -535,11 +535,11 @@
     {
       "home_cn": "雙城",
       "away_cn": "天使",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 8.5,
+      "projected_total": 8.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -548,22 +548,22 @@
       "home_cn": "白襪",
       "away_cn": "運動家",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 2.9,
+      "projected_total": 2.4,
       "market_total": 8.5,
       "bet": "大小分 UNDER",
-      "reason": "第8局僅1分（此時預期6.6分），低分走勢盤口8.5"
+      "reason": "第8局僅1分（此時預期7.1分），低分走勢盤口8.5"
     },
     {
       "home_cn": "巨人",
       "away_cn": "落磯",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.5,
+      "projected_total": 8.0,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -572,10 +572,10 @@
       "home_cn": "國民",
       "away_cn": "洋基",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 9.0,
+      "projected_total": 8.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -584,10 +584,10 @@
       "home_cn": "大都會",
       "away_cn": "紅襪",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.5,
+      "projected_total": 8.0,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -605,7 +605,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783800835,
+  "live_updated_ts": 1783801136,
   "game_preds": {
     "pirates|brewers": {
       "home_win_prob": 0.3335,
@@ -668,5 +668,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-12 04:13 (台灣時間)"
+  "live_updated_at": "2026-07-12 04:18 (台灣時間)"
 }
