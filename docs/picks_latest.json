@@ -312,7 +312,7 @@
       "projected_total": 13.5,
       "market_total": 9.0,
       "bet": "主隊獨贏",
-      "reason": "第8局主隊領先8分（賽前主隊勝率76%），大局已定"
+      "reason": "第9局主隊領先8分（賽前主隊勝率76%），大局已定"
     },
     {
       "home_cn": "國民",
@@ -378,10 +378,10 @@
       "home_cn": "大都會",
       "away_cn": "紅襪",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 2,
-      "projected_total": 8.0,
+      "projected_total": 7.6,
       "market_total": 7.5,
       "bet": null,
       "reason": null
