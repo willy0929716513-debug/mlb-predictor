@@ -301,57 +301,8 @@
       "sp_confirmed": false
     }
   ],
-  "live_games": [
-    {
-      "home_cn": "紅雀",
-      "away_cn": "勇士",
-      "inning": 4,
-      "top_inning": false,
-      "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 4.9,
-      "market_total": 8.0,
-      "bet": null,
-      "reason": null
-    },
-    {
-      "home_cn": "教士",
-      "away_cn": "藍鳥",
-      "inning": 7,
-      "top_inning": false,
-      "home_runs": 2,
-      "away_runs": 5,
-      "projected_total": 9.4,
-      "market_total": 8.5,
-      "bet": "客隊獨贏",
-      "reason": "第7局客隊領先3分（賽前客隊勝率52%），大局已定"
-    },
-    {
-      "home_cn": "道奇",
-      "away_cn": "響尾蛇",
-      "inning": 6,
-      "top_inning": true,
-      "home_runs": 2,
-      "away_runs": 7,
-      "projected_total": 12.8,
-      "market_total": 8.5,
-      "bet": "大小分 OVER",
-      "reason": "第6局已得9分（此時預期4.7分），高分走勢盤口8.5"
-    },
-    {
-      "home_cn": "巨人",
-      "away_cn": "落磯",
-      "inning": 6,
-      "top_inning": true,
-      "home_runs": 1,
-      "away_runs": 1,
-      "projected_total": 5.8,
-      "market_total": 8.5,
-      "bet": "大小分 UNDER",
-      "reason": "第6局僅2分（此時預期4.7分），低分走勢盤口8.5"
-    }
-  ],
-  "live_updated_ts": 1783742168,
+  "live_games": [],
+  "live_updated_ts": 1783743370,
   "game_preds": {
     "tigers|phillies": {
       "home_win_prob": 0.76,
@@ -414,5 +365,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-11 11:56 (台灣時間)"
+  "live_updated_at": ""
 }
