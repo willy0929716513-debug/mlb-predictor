@@ -332,11 +332,11 @@
       "inning": 5,
       "top_inning": true,
       "home_runs": 2,
-      "away_runs": 2,
-      "projected_total": 8.7,
+      "away_runs": 5,
+      "projected_total": 11.7,
       "market_total": 8.5,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第5局已得7分（此時預期3.8分），高分走勢盤口8.5"
     },
     {
       "home_cn": "道奇",
@@ -363,7 +363,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783739153,
+  "live_updated_ts": 1783739455,
   "game_preds": {
     "tigers|phillies": {
       "home_win_prob": 0.76,
@@ -426,5 +426,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-11 11:05 (台灣時間)"
+  "live_updated_at": "2026-07-11 11:10 (台灣時間)"
 }
