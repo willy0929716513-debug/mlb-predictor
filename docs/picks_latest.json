@@ -356,8 +356,8 @@
       "inning": 5,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 0,
-      "projected_total": 5.7,
+      "away_runs": 1,
+      "projected_total": 6.7,
       "market_total": 8.5,
       "bet": null,
       "reason": null
