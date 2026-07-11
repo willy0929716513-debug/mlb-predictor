@@ -535,11 +535,11 @@
     {
       "home_cn": "金鶯",
       "away_cn": "皇家",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 8.5,
+      "projected_total": 8.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -571,17 +571,17 @@
     {
       "home_cn": "紅雀",
       "away_cn": "勇士",
-      "inning": 1,
-      "top_inning": false,
-      "home_runs": 0,
+      "inning": 2,
+      "top_inning": true,
+      "home_runs": 3,
       "away_runs": 0,
-      "projected_total": 7.6,
+      "projected_total": 10.1,
       "market_total": 8.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1783812898,
+  "live_updated_ts": 1783813200,
   "game_preds": {
     "pirates|brewers": {
       "home_win_prob": 0.3335,
@@ -644,5 +644,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-12 07:34 (台灣時間)"
+  "live_updated_at": "2026-07-12 07:40 (台灣時間)"
 }
