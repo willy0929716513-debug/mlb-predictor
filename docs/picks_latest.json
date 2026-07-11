@@ -318,25 +318,13 @@
       "home_cn": "大都會",
       "away_cn": "紅襪",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 4,
-      "projected_total": 6.7,
+      "projected_total": 6.2,
       "market_total": 7.5,
       "bet": "客隊獨贏",
       "reason": "第8局客隊領先3分（賽前客隊勝率51%），大局已定"
-    },
-    {
-      "home_cn": "白襪",
-      "away_cn": "運動家",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 14,
-      "away_runs": 1,
-      "projected_total": 16.0,
-      "market_total": 9.0,
-      "bet": "主隊獨贏",
-      "reason": "第9局主隊領先13分（賽前主隊勝率70%），大局已定"
     },
     {
       "home_cn": "遊騎兵",
