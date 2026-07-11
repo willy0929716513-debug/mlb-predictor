@@ -330,13 +330,13 @@
       "home_cn": "教士",
       "away_cn": "藍鳥",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 5,
-      "projected_total": 11.7,
+      "projected_total": 11.2,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第5局已得7分（此時預期3.8分），高分走勢盤口8.5"
+      "reason": "第5局已得7分（此時預期4.2分），高分走勢盤口8.5"
     },
     {
       "home_cn": "道奇",
@@ -344,26 +344,26 @@
       "inning": 4,
       "top_inning": true,
       "home_runs": 2,
-      "away_runs": 2,
-      "projected_total": 9.7,
+      "away_runs": 4,
+      "projected_total": 11.7,
       "market_total": 8.5,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第4局已得6分（此時預期2.8分），高分走勢盤口8.5"
     },
     {
       "home_cn": "巨人",
       "away_cn": "落磯",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 7.1,
+      "projected_total": 6.7,
       "market_total": 8.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1783739455,
+  "live_updated_ts": 1783739756,
   "game_preds": {
     "tigers|phillies": {
       "home_win_prob": 0.76,
@@ -426,5 +426,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-11 11:10 (台灣時間)"
+  "live_updated_at": "2026-07-11 11:15 (台灣時間)"
 }
