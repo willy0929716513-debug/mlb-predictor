@@ -306,10 +306,10 @@
       "home_cn": "國民",
       "away_cn": "洋基",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 7.2,
+      "projected_total": 6.7,
       "market_total": 10.0,
       "bet": null,
       "reason": null
