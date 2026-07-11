@@ -342,13 +342,13 @@
       "home_cn": "道奇",
       "away_cn": "響尾蛇",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 4,
-      "projected_total": 11.7,
+      "projected_total": 11.2,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第4局已得6分（此時預期2.8分），高分走勢盤口8.5"
+      "reason": "第4局已得6分（此時預期3.3分），高分走勢盤口8.5"
     },
     {
       "home_cn": "巨人",
@@ -363,7 +363,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783739756,
+  "live_updated_ts": 1783740058,
   "game_preds": {
     "tigers|phillies": {
       "home_win_prob": 0.76,
@@ -426,5 +426,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-11 11:15 (台灣時間)"
+  "live_updated_at": "2026-07-11 11:20 (台灣時間)"
 }
