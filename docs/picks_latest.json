@@ -306,10 +306,10 @@
       "home_cn": "國民",
       "away_cn": "洋基",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 2,
-      "projected_total": 8.6,
+      "projected_total": 8.0,
       "market_total": 10.0,
       "bet": "主隊讓分(+1.5)",
       "reason": "主隊落後1分 第5局，賽前主隊勝率57%"
@@ -331,12 +331,12 @@
       "away_cn": "運動家",
       "inning": 8,
       "top_inning": false,
-      "home_runs": 12,
+      "home_runs": 13,
       "away_runs": 1,
-      "projected_total": 14.5,
+      "projected_total": 15.5,
       "market_total": 9.0,
       "bet": "主隊獨贏",
-      "reason": "第8局主隊領先11分（賽前主隊勝率70%），大局已定"
+      "reason": "第8局主隊領先12分（賽前主隊勝率70%），大局已定"
     },
     {
       "home_cn": "遊騎兵",
@@ -411,7 +411,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783735535,
+  "live_updated_ts": 1783735837,
   "game_preds": {
     "tigers|phillies": {
       "home_win_prob": 0.76,
@@ -474,5 +474,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-11 10:05 (台灣時間)"
+  "live_updated_at": "2026-07-11 10:10 (台灣時間)"
 }
