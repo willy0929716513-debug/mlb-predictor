@@ -562,11 +562,11 @@
       "inning": 4,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 6.0,
+      "away_runs": 1,
+      "projected_total": 7.0,
       "market_total": 9.0,
-      "bet": null,
-      "reason": null
+      "bet": "主隊讓分(+1.5)",
+      "reason": "主隊落後1分 第4局，賽前主隊勝率66%"
     }
   ],
   "live_updated_ts": 1783821596,
