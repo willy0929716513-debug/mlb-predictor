@@ -286,28 +286,16 @@
   ],
   "live_games": [
     {
-      "home_cn": "遊騎兵",
-      "away_cn": "太空人",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 5,
-      "away_runs": 5,
-      "projected_total": 10.5,
-      "market_total": 9.0,
-      "bet": null,
-      "reason": null
-    },
-    {
       "home_cn": "巨人",
       "away_cn": "落磯",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 5.5,
+      "projected_total": 5.0,
       "market_total": 9.0,
       "bet": "大小分 UNDER",
-      "reason": "第6局僅2分（此時預期5.5分），低分走勢盤口9.0"
+      "reason": "第7局僅2分（此時預期6.0分），低分走勢盤口9.0"
     },
     {
       "home_cn": "道奇",
@@ -315,8 +303,8 @@
       "inning": 5,
       "top_inning": true,
       "home_runs": 3,
-      "away_runs": 0,
-      "projected_total": 8.3,
+      "away_runs": 1,
+      "projected_total": 9.3,
       "market_total": 9.5,
       "bet": null,
       "reason": null
@@ -334,7 +322,7 @@
       "reason": "第5局已得6分（此時預期3.8分），高分走勢盤口8.5"
     }
   ],
-  "live_updated_ts": 1783892101,
+  "live_updated_ts": 1783892402,
   "game_preds": {
     "pirates|brewers": {
       "home_win_prob": 0.4021,
@@ -397,5 +385,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-13 05:35 (台灣時間)"
+  "live_updated_at": "2026-07-13 05:40 (台灣時間)"
 }
