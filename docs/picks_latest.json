@@ -521,18 +521,6 @@
   ],
   "live_games": [
     {
-      "home_cn": "老虎",
-      "away_cn": "費城人",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 2,
-      "away_runs": 4,
-      "projected_total": 6.4,
-      "market_total": 7.5,
-      "bet": null,
-      "reason": null
-    },
-    {
       "home_cn": "金鶯",
       "away_cn": "皇家",
       "inning": 7,
@@ -559,14 +547,14 @@
     {
       "home_cn": "紅人",
       "away_cn": "小熊",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 1,
       "projected_total": 8.0,
       "market_total": 10.0,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 UNDER",
+      "reason": "第6局僅3分（此時預期5.6分），低分走勢盤口10.0"
     },
     {
       "home_cn": "紅雀",
@@ -605,7 +593,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783816471,
+  "live_updated_ts": 1783816773,
   "game_preds": {
     "pirates|brewers": {
       "home_win_prob": 0.3335,
@@ -668,5 +656,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-12 08:34 (台灣時間)"
+  "live_updated_at": "2026-07-12 08:39 (台灣時間)"
 }
