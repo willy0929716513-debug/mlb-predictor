@@ -537,9 +537,9 @@
       "away_cn": "皇家",
       "inning": 5,
       "top_inning": false,
-      "home_runs": 3,
+      "home_runs": 4,
       "away_runs": 0,
-      "projected_total": 7.5,
+      "projected_total": 8.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -548,13 +548,13 @@
       "home_cn": "遊騎兵",
       "away_cn": "太空人",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 7,
-      "projected_total": 12.7,
+      "projected_total": 12.2,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第4局已得7分（此時預期2.8分），高分走勢盤口8.5"
+      "reason": "第4局已得7分（此時預期3.3分），高分走勢盤口8.5"
     },
     {
       "home_cn": "紅人",
@@ -581,7 +581,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783815265,
+  "live_updated_ts": 1783815567,
   "game_preds": {
     "pirates|brewers": {
       "home_win_prob": 0.3335,
@@ -644,5 +644,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-12 08:14 (台灣時間)"
+  "live_updated_at": "2026-07-12 08:19 (台灣時間)"
 }
