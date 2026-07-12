@@ -523,14 +523,14 @@
     {
       "home_cn": "金鶯",
       "away_cn": "皇家",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 5,
       "away_runs": 1,
-      "projected_total": 8.5,
+      "projected_total": 8.0,
       "market_total": 9.0,
       "bet": "主隊獨贏",
-      "reason": "第7局主隊領先4分（賽前主隊勝率55%），大局已定"
+      "reason": "第8局主隊領先4分（賽前主隊勝率55%），大局已定"
     },
     {
       "home_cn": "遊騎兵",
@@ -593,7 +593,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783817677,
+  "live_updated_ts": 1783817979,
   "game_preds": {
     "pirates|brewers": {
       "home_win_prob": 0.3335,
@@ -656,5 +656,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-12 08:54 (台灣時間)"
+  "live_updated_at": "2026-07-12 08:59 (台灣時間)"
 }
