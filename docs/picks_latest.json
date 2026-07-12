@@ -298,7 +298,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783896622,
+  "live_updated_ts": 1783896924,
   "game_preds": {
     "pirates|brewers": {
       "home_win_prob": 0.4021,
@@ -361,5 +361,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-13 06:50 (台灣時間)"
+  "live_updated_at": "2026-07-13 06:55 (台灣時間)"
 }
