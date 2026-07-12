@@ -526,11 +526,11 @@
       "inning": 7,
       "top_inning": true,
       "home_runs": 5,
-      "away_runs": 0,
-      "projected_total": 8.0,
+      "away_runs": 1,
+      "projected_total": 9.0,
       "market_total": 9.0,
       "bet": "主隊獨贏",
-      "reason": "第7局主隊領先5分（賽前主隊勝率55%），大局已定"
+      "reason": "第7局主隊領先4分（賽前主隊勝率55%），大局已定"
     },
     {
       "home_cn": "遊騎兵",
@@ -553,35 +553,23 @@
       "away_runs": 2,
       "projected_total": 8.4,
       "market_total": 10.0,
-      "bet": "大小分 UNDER",
-      "reason": "第6局僅3分（此時預期5.6分），低分走勢盤口10.0"
-    },
-    {
-      "home_cn": "紅雀",
-      "away_cn": "勇士",
-      "inning": 5,
-      "top_inning": false,
-      "home_runs": 4,
-      "away_runs": 0,
-      "projected_total": 8.0,
-      "market_total": 8.0,
       "bet": null,
       "reason": null
     },
     {
-      "home_cn": "教士",
-      "away_cn": "藍鳥",
-      "inning": 1,
+      "home_cn": "紅雀",
+      "away_cn": "勇士",
+      "inning": 6,
       "top_inning": true,
-      "home_runs": 0,
+      "home_runs": 4,
       "away_runs": 0,
-      "projected_total": 8.0,
+      "projected_total": 7.6,
       "market_total": 8.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1783816773,
+  "live_updated_ts": 1783817074,
   "game_preds": {
     "pirates|brewers": {
       "home_win_prob": 0.3335,
@@ -644,5 +632,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-12 08:39 (台灣時間)"
+  "live_updated_at": "2026-07-12 08:44 (台灣時間)"
 }
