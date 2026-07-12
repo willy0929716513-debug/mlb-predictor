@@ -521,18 +521,6 @@
   ],
   "live_games": [
     {
-      "home_cn": "紅人",
-      "away_cn": "小熊",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 3,
-      "away_runs": 5,
-      "projected_total": 8.6,
-      "market_total": 10.0,
-      "bet": null,
-      "reason": null
-    },
-    {
       "home_cn": "教士",
       "away_cn": "藍鳥",
       "inning": 4,
@@ -557,7 +545,7 @@
       "reason": "主隊落後1分 第4局，賽前主隊勝率66%"
     }
   ],
-  "live_updated_ts": 1783822199,
+  "live_updated_ts": 1783822501,
   "game_preds": {
     "pirates|brewers": {
       "home_win_prob": 0.3335,
@@ -620,5 +608,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-12 10:09 (台灣時間)"
+  "live_updated_at": "2026-07-12 10:15 (台灣時間)"
 }
