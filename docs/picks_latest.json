@@ -524,13 +524,13 @@
       "home_cn": "教士",
       "away_cn": "藍鳥",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 8,
       "away_runs": 7,
-      "projected_total": 17.7,
+      "projected_total": 17.2,
       "market_total": 8.0,
       "bet": "大小分 OVER",
-      "reason": "第7局已得15分（此時預期5.3分），高分走勢盤口8.0"
+      "reason": "第7局已得15分（此時預期5.8分），高分走勢盤口8.0"
     },
     {
       "home_cn": "道奇",
@@ -545,7 +545,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1783825820,
+  "live_updated_ts": 1783826121,
   "game_preds": {
     "pirates|brewers": {
       "home_win_prob": 0.3335,
@@ -608,5 +608,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-12 11:10 (台灣時間)"
+  "live_updated_at": "2026-07-12 11:15 (台灣時間)"
 }
