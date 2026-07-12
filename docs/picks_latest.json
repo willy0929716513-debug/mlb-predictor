@@ -524,10 +524,10 @@
       "home_cn": "金鶯",
       "away_cn": "皇家",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 5,
       "away_runs": 1,
-      "projected_total": 9.0,
+      "projected_total": 8.5,
       "market_total": 9.0,
       "bet": "主隊獨贏",
       "reason": "第7局主隊領先4分（賽前主隊勝率55%），大局已定"
