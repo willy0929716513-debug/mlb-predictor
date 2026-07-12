@@ -548,13 +548,13 @@
       "home_cn": "紅人",
       "away_cn": "小熊",
       "inning": 6,
-      "top_inning": true,
-      "home_runs": 2,
+      "top_inning": false,
+      "home_runs": 3,
       "away_runs": 3,
-      "projected_total": 9.4,
+      "projected_total": 9.9,
       "market_total": 10.0,
-      "bet": "主隊讓分(+1.5)",
-      "reason": "主隊落後1分 第6局，賽前主隊勝率56%"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "紅雀",
