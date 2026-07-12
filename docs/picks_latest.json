@@ -536,16 +536,16 @@
       "home_cn": "道奇",
       "away_cn": "響尾蛇",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 9,
-      "projected_total": 13.0,
+      "projected_total": 12.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1783827327,
+  "live_updated_ts": 1783827629,
   "game_preds": {
     "pirates|brewers": {
       "home_win_prob": 0.3335,
@@ -608,5 +608,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-12 11:35 (台灣時間)"
+  "live_updated_at": "2026-07-12 11:40 (台灣時間)"
 }
