@@ -547,14 +547,14 @@
     {
       "home_cn": "教士",
       "away_cn": "藍鳥",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 6,
       "away_runs": 4,
-      "projected_total": 15.8,
+      "projected_total": 15.3,
       "market_total": 8.0,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第4局已得10分（此時預期2.7分），高分走勢盤口8.0"
     },
     {
       "home_cn": "道奇",
