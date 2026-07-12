@@ -524,13 +524,13 @@
       "home_cn": "教士",
       "away_cn": "藍鳥",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 7,
       "away_runs": 4,
-      "projected_total": 15.4,
+      "projected_total": 15.0,
       "market_total": 8.0,
       "bet": "大小分 OVER",
-      "reason": "第5局已得11分（此時預期3.6分），高分走勢盤口8.0"
+      "reason": "第5局已得11分（此時預期4.0分），高分走勢盤口8.0"
     },
     {
       "home_cn": "道奇",
