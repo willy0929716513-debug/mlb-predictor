@@ -289,22 +289,22 @@
       "home_cn": "巨人",
       "away_cn": "落磯",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 5.0,
+      "projected_total": 4.5,
       "market_total": 9.0,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅2分（此時預期6.0分），低分走勢盤口9.0"
+      "reason": "第7局僅2分（此時預期6.5分），低分走勢盤口9.0"
     },
     {
       "home_cn": "道奇",
       "away_cn": "響尾蛇",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
-      "away_runs": 1,
-      "projected_total": 9.3,
+      "away_runs": 2,
+      "projected_total": 9.8,
       "market_total": 9.5,
       "bet": null,
       "reason": null
@@ -312,17 +312,17 @@
     {
       "home_cn": "教士",
       "away_cn": "藍鳥",
-      "inning": 5,
+      "inning": 6,
       "top_inning": true,
       "home_runs": 3,
       "away_runs": 3,
-      "projected_total": 10.7,
+      "projected_total": 9.8,
       "market_total": 8.5,
-      "bet": "大小分 OVER",
-      "reason": "第5局已得6分（此時預期3.8分），高分走勢盤口8.5"
+      "bet": null,
+      "reason": null
     }
   ],
-  "live_updated_ts": 1783892402,
+  "live_updated_ts": 1783892703,
   "game_preds": {
     "pirates|brewers": {
       "home_win_prob": 0.4021,
@@ -385,5 +385,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-13 05:40 (台灣時間)"
+  "live_updated_at": "2026-07-13 05:45 (台灣時間)"
 }
