@@ -1,33 +1,33 @@
 {
-  "generated_at": "2026-07-14 00:07 (台灣時間)",
+  "generated_at": "2026-07-14 16:09 (台灣時間)",
   "date": "2026-07-14",
   "stats": {
-    "settled": 180,
+    "settled": 175,
     "wins": 124,
-    "win_rate": 68.9,
-    "total_in": 5929.2,
-    "total_pnl": 1429.6,
-    "roi": 24.1,
-    "pnl_novig": 1424.4,
-    "vig_cost": -5.2,
+    "win_rate": 70.9,
+    "total_in": 5979.2,
+    "total_pnl": 1478.6,
+    "roi": 24.7,
+    "pnl_novig": 1476.0,
+    "vig_cost": -2.6,
     "by_type": {
       "ML": {
         "wins": 42,
-        "settled": 66,
-        "win_rate": 63.6,
+        "settled": 65,
+        "win_rate": 64.6,
         "roi": -0.7
       },
       "RL": {
-        "wins": 53,
-        "settled": 70,
-        "win_rate": 75.7,
+        "wins": 52,
+        "settled": 65,
+        "win_rate": 80.0,
         "roi": 37.7
       },
       "TOT": {
-        "wins": 29,
-        "settled": 44,
-        "win_rate": 65.9,
-        "roi": 37.1
+        "wins": 30,
+        "settled": 45,
+        "win_rate": 66.7,
+        "roi": 39.0
       }
     }
   },
@@ -44,7 +44,7 @@
       "price": 1.98,
       "stake": 50.0,
       "edge": 22.2,
-      "result": null,
+      "result": "W",
       "sp_confirmed": true
     },
     {
@@ -176,6 +176,5 @@
   ],
   "live_games": [],
   "live_updated_ts": 1783989732,
-  "game_preds": {},
-  "live_updated_at": ""
+  "game_preds": {}
 }
