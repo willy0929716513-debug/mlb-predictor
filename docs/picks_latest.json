@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-07-14 16:09 (台灣時間)",
-  "date": "2026-07-14",
+  "generated_at": "2026-07-16 16:17 (台灣時間)",
+  "date": "2026-07-16",
   "stats": {
-    "settled": 175,
-    "wins": 124,
-    "win_rate": 70.9,
+    "settled": 154,
+    "wins": 104,
+    "win_rate": 67.5,
     "total_in": 5979.2,
     "total_pnl": 1478.6,
     "roi": 24.7,
@@ -12,21 +12,21 @@
     "vig_cost": -2.6,
     "by_type": {
       "ML": {
-        "wins": 42,
-        "settled": 65,
-        "win_rate": 64.6,
+        "wins": 34,
+        "settled": 57,
+        "win_rate": 59.6,
         "roi": -0.7
       },
       "RL": {
-        "wins": 52,
-        "settled": 65,
-        "win_rate": 80.0,
+        "wins": 44,
+        "settled": 56,
+        "win_rate": 78.6,
         "roi": 37.7
       },
       "TOT": {
-        "wins": 30,
-        "settled": 45,
-        "win_rate": 66.7,
+        "wins": 26,
+        "settled": 41,
+        "win_rate": 63.4,
         "roi": 39.0
       }
     }
@@ -176,6 +176,26 @@
   ],
   "live_games": [],
   "live_updated_ts": 1784162706,
-  "game_preds": {},
-  "live_updated_at": ""
+  "game_preds": {
+    "phillies|mets": {
+      "home_win_prob": 0.5504,
+      "market_total": 9.5
+    },
+    "yankees|dodgers": {
+      "home_win_prob": 0.3717,
+      "market_total": 8.5
+    },
+    "guardians|pirates": {
+      "home_win_prob": 0.3187,
+      "market_total": 8.5
+    },
+    "blue jays|white sox": {
+      "home_win_prob": 0.4215,
+      "market_total": 8.5
+    },
+    "royals|padres": {
+      "home_win_prob": 0.527,
+      "market_total": 8.5
+    }
+  }
 }
