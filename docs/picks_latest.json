@@ -188,7 +188,7 @@
       "reason": "主隊落後1分 第5局，賽前主隊勝率56%"
     }
   ],
-  "live_updated_ts": 1784244764,
+  "live_updated_ts": 1784245065,
   "game_preds": {
     "phillies|mets": {
       "home_win_prob": 0.5567,
@@ -211,5 +211,5 @@
       "market_total": 10.0
     }
   },
-  "live_updated_at": "2026-07-17 07:32 (台灣時間)"
+  "live_updated_at": "2026-07-17 07:37 (台灣時間)"
 }
