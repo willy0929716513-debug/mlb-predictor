@@ -364,8 +364,21 @@
       "sp_confirmed": true
     }
   ],
-  "live_games": [],
-  "live_updated_ts": 1784250491,
+  "live_games": [
+    {
+      "home_cn": "紅襪",
+      "away_cn": "光芒",
+      "inning": 5,
+      "top_inning": true,
+      "home_runs": 3,
+      "away_runs": 0,
+      "projected_total": 8.0,
+      "market_total": 9.0,
+      "bet": null,
+      "reason": null
+    }
+  ],
+  "live_updated_ts": 1784313330,
   "game_preds": {
     "red sox|rays": {
       "home_win_prob": 0.4602,
@@ -423,5 +436,6 @@
       "home_win_prob": 0.4264,
       "market_total": 7.0
     }
-  }
+  },
+  "live_updated_at": "2026-07-18 02:35 (台灣時間)"
 }
