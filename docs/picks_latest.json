@@ -371,8 +371,8 @@
       "inning": 1,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 9.0,
+      "away_runs": 2,
+      "projected_total": 11.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -380,11 +380,11 @@
     {
       "home_cn": "洋基",
       "away_cn": "道奇",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.5,
+      "projected_total": 8.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -393,10 +393,10 @@
       "home_cn": "勇士",
       "away_cn": "遊騎兵",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.0,
+      "projected_total": 7.6,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -405,10 +405,10 @@
       "home_cn": "藍鳥",
       "away_cn": "白襪",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.5,
+      "projected_total": 8.0,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -426,7 +426,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784330606,
+  "live_updated_ts": 1784330907,
   "game_preds": {
     "red sox|rays": {
       "home_win_prob": 0.4602,
@@ -485,5 +485,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-18 07:23 (台灣時間)"
+  "live_updated_at": "2026-07-18 07:28 (台灣時間)"
 }
