@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-07-16 22:40 (台灣時間)",
-  "date": "2026-07-16",
+  "generated_at": "2026-07-17 16:12 (台灣時間)",
+  "date": "2026-07-17",
   "stats": {
-    "settled": 154,
-    "wins": 104,
-    "win_rate": 67.5,
+    "settled": 149,
+    "wins": 101,
+    "win_rate": 67.8,
     "total_in": 5979.2,
     "total_pnl": 1478.6,
     "roi": 24.7,
@@ -12,26 +12,153 @@
     "vig_cost": -2.6,
     "by_type": {
       "ML": {
-        "wins": 34,
-        "settled": 57,
-        "win_rate": 59.6,
+        "wins": 33,
+        "settled": 55,
+        "win_rate": 60.0,
         "roi": -0.7
       },
       "RL": {
-        "wins": 44,
-        "settled": 56,
-        "win_rate": 78.6,
+        "wins": 42,
+        "settled": 54,
+        "win_rate": 77.8,
         "roi": 37.7
       },
       "TOT": {
         "wins": 26,
-        "settled": 41,
-        "win_rate": 63.4,
+        "settled": 40,
+        "win_rate": 65.0,
         "roi": 39.0
       }
     }
   },
-  "picks": [],
+  "picks": [
+    {
+      "tier": "⭐ 穩定",
+      "btype": "讓分",
+      "away": "tigers",
+      "home": "angels",
+      "away_cn": "老虎",
+      "home_cn": "天使",
+      "bet_label": "老虎 讓分(-1.5)",
+      "bk": "FanDuel",
+      "bp": 2.58,
+      "con_p": 2.536,
+      "dv_p": 0.379,
+      "edge": 30.9,
+      "conf": 62.9,
+      "stake": 50.0,
+      "model_p": 66.0,
+      "away_sp": "Troy Melton",
+      "home_sp": "Reid Detmers",
+      "away_era": 1.48,
+      "home_era": 6.97,
+      "away_fip": 1.65,
+      "home_fip": 6.48,
+      "away_k9": 11.5,
+      "home_k9": 12.0,
+      "away_avgip": 5.7,
+      "home_avgip": 4.7,
+      "away_whip": 0.58,
+      "home_whip": 1.76,
+      "away_rest": null,
+      "home_rest": null,
+      "away_rs": 4.33,
+      "home_rs": 4.33,
+      "away_rpg": 4.22,
+      "home_rpg": 4.45,
+      "pred_away": 5.7,
+      "pred_home": 2.8,
+      "model_total": null,
+      "market_total": null,
+      "park_factor": null,
+      "weather_factor": null,
+      "ump_name": null,
+      "ump_adj": null,
+      "away_trend": -3.18,
+      "home_trend": 6.54,
+      "line_clv": null,
+      "game_date": "2026-07-18",
+      "game_time": "09:39",
+      "sp_src": "probable",
+      "home_hand": "R",
+      "away_hand": "R",
+      "home_babip": 0.333,
+      "away_babip": 0.226,
+      "home_lob": 72.2,
+      "away_lob": 104.7,
+      "away_road_days": null,
+      "away_tz_cross": null,
+      "home_wpct": null,
+      "away_road_wpct": null,
+      "home_l10_wpct": 0.2,
+      "away_l10_wpct": 0.7,
+      "home_lineup": [],
+      "away_lineup": []
+    },
+    {
+      "tier": "🔥 強力",
+      "btype": "讓分",
+      "away": "pirates",
+      "home": "guardians",
+      "away_cn": "海盜",
+      "home_cn": "守護者",
+      "bet_label": "海盜 讓分(+1.5)",
+      "bk": "MyBookie.ag",
+      "bp": 1.52,
+      "con_p": 1.638,
+      "dv_p": 0.6085,
+      "edge": 15.6,
+      "conf": 80.2,
+      "stake": 50.0,
+      "model_p": 75.0,
+      "away_sp": "Jared Jones",
+      "home_sp": "Gavin Williams",
+      "away_era": 1.99,
+      "home_era": 3.47,
+      "away_fip": 2.11,
+      "home_fip": 3.16,
+      "away_k9": 11.4,
+      "home_k9": 12.8,
+      "away_avgip": 4.7,
+      "home_avgip": 5.4,
+      "away_whip": 0.63,
+      "home_whip": 1.23,
+      "away_rest": null,
+      "home_rest": null,
+      "away_rs": 4.33,
+      "home_rs": 5.0,
+      "away_rpg": 5.25,
+      "home_rpg": 3.95,
+      "pred_away": 4.7,
+      "pred_home": 2.7,
+      "model_total": null,
+      "market_total": null,
+      "park_factor": 0.95,
+      "weather_factor": 1.046,
+      "ump_name": null,
+      "ump_adj": null,
+      "away_trend": -6.48,
+      "home_trend": -2.58,
+      "line_clv": -0.44,
+      "game_date": "2026-07-18",
+      "game_time": "07:11",
+      "sp_src": "probable",
+      "home_hand": "R",
+      "away_hand": "R",
+      "home_babip": 0.293,
+      "away_babip": 0.192,
+      "home_lob": 76.9,
+      "away_lob": 65.8,
+      "away_road_days": null,
+      "away_tz_cross": null,
+      "home_wpct": null,
+      "away_road_wpct": null,
+      "home_l10_wpct": 0.6,
+      "away_l10_wpct": 0.7,
+      "home_lineup": [],
+      "away_lineup": []
+    }
+  ],
   "recent_history": [
     {
       "date": "2026-07-13",
@@ -177,26 +304,61 @@
   "live_games": [],
   "live_updated_ts": 1784250491,
   "game_preds": {
-    "phillies|mets": {
-      "home_win_prob": 0.5567,
-      "market_total": 9.5
-    },
-    "yankees|dodgers": {
-      "home_win_prob": 0.3717,
+    "red sox|rays": {
+      "home_win_prob": 0.4671,
       "market_total": 8.5
     },
+    "yankees|dodgers": {
+      "home_win_prob": 0.4251,
+      "market_total": 9.0
+    },
     "guardians|pirates": {
-      "home_win_prob": 0.3246,
+      "home_win_prob": 0.2277,
       "market_total": 7.5
     },
+    "braves|rangers": {
+      "home_win_prob": 0.5935,
+      "market_total": 8.0
+    },
     "blue jays|white sox": {
-      "home_win_prob": 0.4159,
+      "home_win_prob": 0.4148,
+      "market_total": 8.5
+    },
+    "brewers|marlins": {
+      "home_win_prob": 0.593,
+      "market_total": 8.0
+    },
+    "cubs|twins": {
+      "home_win_prob": 0.6856,
+      "market_total": 10.5
+    },
+    "astros|orioles": {
+      "home_win_prob": 0.6191,
       "market_total": 8.5
     },
     "royals|padres": {
-      "home_win_prob": 0.521,
+      "home_win_prob": 0.2686,
       "market_total": 10.0
+    },
+    "rockies|reds": {
+      "home_win_prob": 0.737,
+      "market_total": 12.0
+    },
+    "angels|tigers": {
+      "home_win_prob": 0.22,
+      "market_total": 8.0
+    },
+    "diamondbacks|cardinals": {
+      "home_win_prob": 0.4893,
+      "market_total": 9.0
+    },
+    "athletics|nationals": {
+      "home_win_prob": 0.22,
+      "market_total": 10.0
+    },
+    "mariners|giants": {
+      "home_win_prob": 0.4321,
+      "market_total": 7.0
     }
-  },
-  "live_updated_at": ""
+  }
 }
