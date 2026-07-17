@@ -369,16 +369,16 @@
       "home_cn": "紅襪",
       "away_cn": "光芒",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 0,
-      "projected_total": 7.0,
+      "projected_total": 6.5,
       "market_total": 9.0,
       "bet": "大小分 UNDER",
-      "reason": "第6局僅3分（此時預期5.0分），低分走勢盤口9.0"
+      "reason": "第6局僅3分（此時預期5.5分），低分走勢盤口9.0"
     }
   ],
-  "live_updated_ts": 1784314234,
+  "live_updated_ts": 1784314536,
   "game_preds": {
     "red sox|rays": {
       "home_win_prob": 0.4602,
@@ -437,5 +437,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-18 02:50 (台灣時間)"
+  "live_updated_at": "2026-07-18 02:55 (台灣時間)"
 }
