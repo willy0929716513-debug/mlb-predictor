@@ -178,17 +178,17 @@
     {
       "home_cn": "費城人",
       "away_cn": "大都會",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 3,
-      "projected_total": 5.6,
+      "projected_total": 5.1,
       "market_total": 9.5,
-      "bet": "大小分 UNDER",
-      "reason": "第8局僅4分（此時預期7.9分），低分走勢盤口9.5"
+      "bet": null,
+      "reason": null
     }
   ],
-  "live_updated_ts": 1784248384,
+  "live_updated_ts": 1784248685,
   "game_preds": {
     "phillies|mets": {
       "home_win_prob": 0.5567,
@@ -211,5 +211,5 @@
       "market_total": 10.0
     }
   },
-  "live_updated_at": "2026-07-17 08:33 (台灣時間)"
+  "live_updated_at": "2026-07-17 08:38 (台灣時間)"
 }
