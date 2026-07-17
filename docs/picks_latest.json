@@ -393,10 +393,10 @@
       "home_cn": "勇士",
       "away_cn": "遊騎兵",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 7.1,
+      "projected_total": 6.7,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -407,8 +407,8 @@
       "inning": 2,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 1,
-      "projected_total": 8.6,
+      "away_runs": 3,
+      "projected_total": 10.6,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -438,7 +438,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784331511,
+  "live_updated_ts": 1784331812,
   "game_preds": {
     "red sox|rays": {
       "home_win_prob": 0.4602,
@@ -497,5 +497,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-18 07:38 (台灣時間)"
+  "live_updated_at": "2026-07-18 07:43 (台灣時間)"
 }
