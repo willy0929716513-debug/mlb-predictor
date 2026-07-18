@@ -240,43 +240,19 @@
   ],
   "live_games": [
     {
-      "home_cn": "守護者",
-      "away_cn": "海盜",
-      "inning": 1,
-      "top_inning": true,
-      "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 8.5,
-      "market_total": 8.5,
-      "bet": null,
-      "reason": null
-    },
-    {
-      "home_cn": "太空人",
-      "away_cn": "金鶯",
-      "inning": 11,
-      "top_inning": false,
-      "home_runs": 2,
-      "away_runs": 4,
-      "projected_total": 6.0,
-      "market_total": 9.0,
-      "bet": "客隊獨贏",
-      "reason": "第11局客隊領先2分（賽前客隊勝率69%），大局已定"
-    },
-    {
       "home_cn": "紅襪",
       "away_cn": "光芒",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 7,
       "away_runs": 6,
-      "projected_total": 15.1,
+      "projected_total": 14.6,
       "market_total": 9.5,
       "bet": "客隊讓分(+1.5)",
       "reason": "客隊落後1分 第8局，賽前客隊勝率63%"
     }
   ],
-  "live_updated_ts": 1784417706,
+  "live_updated_ts": 1784418008,
   "game_preds": {
     "guardians|pirates": {
       "home_win_prob": 0.4481,
@@ -339,5 +315,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-19 07:35 (台灣時間)"
+  "live_updated_at": "2026-07-19 07:40 (台灣時間)"
 }
