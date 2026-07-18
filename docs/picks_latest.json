@@ -382,9 +382,9 @@
       "away_cn": "教士",
       "inning": 10,
       "top_inning": false,
-      "home_runs": 3,
+      "home_runs": 4,
       "away_runs": 6,
-      "projected_total": 9.0,
+      "projected_total": 10.0,
       "market_total": 10.0,
       "bet": "客隊獨贏",
       "reason": "第10局客隊領先2分（賽前客隊勝率73%），大局已定"
@@ -438,7 +438,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784343897,
+  "live_updated_ts": 1784344199,
   "game_preds": {
     "red sox|rays": {
       "home_win_prob": 0.4602,
