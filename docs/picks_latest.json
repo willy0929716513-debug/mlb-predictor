@@ -369,13 +369,13 @@
       "home_cn": "天使",
       "away_cn": "老虎",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 2.9,
+      "projected_total": 2.4,
       "market_total": 8.5,
       "bet": "大小分 UNDER",
-      "reason": "第8局僅1分（此時預期6.6分），低分走勢盤口8.5"
+      "reason": "第8局僅1分（此時預期7.1分），低分走勢盤口8.5"
     },
     {
       "home_cn": "運動家",
@@ -383,11 +383,11 @@
       "inning": 6,
       "top_inning": true,
       "home_runs": 2,
-      "away_runs": 10,
-      "projected_total": 16.2,
+      "away_runs": 13,
+      "projected_total": 19.2,
       "market_total": 9.5,
       "bet": "大小分 OVER",
-      "reason": "第6局已得12分（此時預期5.3分），高分走勢盤口9.5"
+      "reason": "第6局已得15分（此時預期5.3分），高分走勢盤口9.5"
     },
     {
       "home_cn": "響尾蛇",
@@ -473,5 +473,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-18 11:39 (台灣時間)"
+  "live_updated_at": "2026-07-18 11:44 (台灣時間)"
 }
