@@ -369,10 +369,10 @@
       "home_cn": "紅襪",
       "away_cn": "光芒",
       "inning": 3,
-      "top_inning": true,
-      "home_runs": 3,
+      "top_inning": false,
+      "home_runs": 4,
       "away_runs": 3,
-      "projected_total": 13.0,
+      "projected_total": 13.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -382,21 +382,21 @@
       "away_cn": "道奇",
       "inning": 4,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 5.5,
+      "projected_total": 6.5,
       "market_total": 9.0,
-      "bet": null,
-      "reason": null
+      "bet": "客隊讓分(+1.5)",
+      "reason": "客隊落後1分 第4局，賽前客隊勝率58%"
     },
     {
       "home_cn": "勇士",
       "away_cn": "遊騎兵",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 0,
-      "projected_total": 7.8,
+      "projected_total": 7.3,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -429,10 +429,10 @@
       "home_cn": "小熊",
       "away_cn": "雙城",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 11.0,
+      "projected_total": 10.4,
       "market_total": 11.0,
       "bet": null,
       "reason": null
@@ -441,10 +441,10 @@
       "home_cn": "太空人",
       "away_cn": "金鶯",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.5,
+      "projected_total": 8.0,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -453,11 +453,23 @@
       "home_cn": "皇家",
       "away_cn": "教士",
       "inning": 1,
+      "top_inning": false,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 9.4,
+      "market_total": 10.0,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "落磯",
+      "away_cn": "紅人",
+      "inning": 1,
       "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 10.0,
-      "market_total": 10.0,
+      "projected_total": 12.0,
+      "market_total": 12.0,
       "bet": null,
       "reason": null
     }
@@ -521,5 +533,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-18 08:13 (台灣時間)"
+  "live_updated_at": "2026-07-18 08:18 (台灣時間)"
 }
