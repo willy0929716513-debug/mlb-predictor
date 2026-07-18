@@ -383,20 +383,20 @@
       "inning": 6,
       "top_inning": true,
       "home_runs": 2,
-      "away_runs": 13,
-      "projected_total": 19.2,
+      "away_runs": 14,
+      "projected_total": 20.2,
       "market_total": 9.5,
       "bet": "大小分 OVER",
-      "reason": "第6局已得15分（此時預期5.3分），高分走勢盤口9.5"
+      "reason": "第6局已得16分（此時預期5.3分），高分走勢盤口9.5"
     },
     {
       "home_cn": "響尾蛇",
       "away_cn": "紅雀",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 3,
-      "projected_total": 7.5,
+      "projected_total": 7.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -407,11 +407,11 @@
       "inning": 6,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 2,
-      "projected_total": 5.1,
+      "away_runs": 3,
+      "projected_total": 6.1,
       "market_total": 7.0,
-      "bet": "大小分 UNDER",
-      "reason": "第6局僅2分（此時預期3.9分），低分走勢盤口7.0"
+      "bet": null,
+      "reason": null
     }
   ],
   "live_updated_ts": 1784346310,
@@ -473,5 +473,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-18 11:44 (台灣時間)"
+  "live_updated_at": "2026-07-18 11:49 (台灣時間)"
 }
