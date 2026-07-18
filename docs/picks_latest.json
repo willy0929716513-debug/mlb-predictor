@@ -240,18 +240,6 @@
   ],
   "live_games": [
     {
-      "home_cn": "小熊",
-      "away_cn": "雙城",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 6,
-      "away_runs": 2,
-      "projected_total": 9.0,
-      "market_total": 9.0,
-      "bet": "主隊獨贏",
-      "reason": "第9局主隊領先4分（賽前主隊勝率45%），大局已定"
-    },
-    {
       "home_cn": "費城人",
       "away_cn": "大都會",
       "inning": 6,
@@ -290,11 +278,11 @@
     {
       "home_cn": "太空人",
       "away_cn": "金鶯",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 6.5,
+      "projected_total": 6.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -316,9 +304,9 @@
       "away_cn": "紅雀",
       "inning": 3,
       "top_inning": false,
-      "home_runs": 2,
+      "home_runs": 4,
       "away_runs": 0,
-      "projected_total": 8.5,
+      "projected_total": 10.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -341,8 +329,8 @@
       "inning": 3,
       "top_inning": true,
       "home_runs": 4,
-      "away_runs": 1,
-      "projected_total": 12.0,
+      "away_runs": 2,
+      "projected_total": 13.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -350,17 +338,17 @@
     {
       "home_cn": "釀酒人",
       "away_cn": "馬林魚",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 3,
-      "projected_total": 10.7,
+      "projected_total": 10.2,
       "market_total": 8.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1784408099,
+  "live_updated_ts": 1784408401,
   "game_preds": {
     "guardians|pirates": {
       "home_win_prob": 0.4481,
@@ -423,5 +411,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-19 04:54 (台灣時間)"
+  "live_updated_at": "2026-07-19 05:00 (台灣時間)"
 }
