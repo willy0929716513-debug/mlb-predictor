@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-18 23:19 (台灣時間)",
+  "generated_at": "2026-07-18 23:22 (台灣時間)",
   "date": "2026-07-18",
   "stats": {
     "settled": 139,
@@ -31,7 +31,71 @@
       }
     }
   },
-  "picks": [],
+  "picks": [
+    {
+      "tier": "⭐ 穩定",
+      "btype": "讓分",
+      "away": "nationals",
+      "home": "athletics",
+      "away_cn": "國民",
+      "home_cn": "運動家",
+      "bet_label": "國民 讓分(-1.5)",
+      "bk": "MyBookie.ag",
+      "bp": 2.51,
+      "con_p": 2.093,
+      "dv_p": 0.4861,
+      "edge": 18.2,
+      "conf": 63.2,
+      "stake": 50.0,
+      "model_p": 65.2,
+      "away_sp": "Zack Littell",
+      "home_sp": "J.T. Ginn",
+      "away_era": 3.76,
+      "home_era": 5.39,
+      "away_fip": 3.97,
+      "home_fip": 7.21,
+      "away_k9": 6.6,
+      "home_k9": 9.6,
+      "away_avgip": 5.0,
+      "home_avgip": 4.7,
+      "away_whip": 1.0,
+      "home_whip": 1.49,
+      "away_rest": null,
+      "home_rest": null,
+      "away_rs": 3.33,
+      "home_rs": 3.33,
+      "away_rpg": 5.43,
+      "home_rpg": 4.46,
+      "pred_away": 6.8,
+      "pred_home": 4.0,
+      "model_total": null,
+      "market_total": null,
+      "park_factor": null,
+      "weather_factor": null,
+      "ump_name": null,
+      "ump_adj": null,
+      "away_trend": -3.34,
+      "home_trend": 7.43,
+      "line_clv": 0.0,
+      "game_date": "2026-07-19",
+      "game_time": "10:06",
+      "sp_src": "probable",
+      "home_hand": "R",
+      "away_hand": "R",
+      "home_babip": 0.219,
+      "away_babip": 0.417,
+      "home_lob": 69.0,
+      "away_lob": 90.2,
+      "away_road_days": 1,
+      "away_tz_cross": true,
+      "home_wpct": null,
+      "away_road_wpct": null,
+      "home_l10_wpct": 0.0,
+      "away_l10_wpct": 0.4,
+      "home_lineup": [],
+      "away_lineup": []
+    }
+  ],
   "recent_history": [
     {
       "date": "2026-07-18",
@@ -182,51 +246,51 @@
       "market_total": 8.5
     },
     "cubs|twins": {
-      "home_win_prob": 0.4606,
+      "home_win_prob": 0.4511,
       "market_total": 9.0
     },
     "blue jays|white sox": {
-      "home_win_prob": 0.3537,
+      "home_win_prob": 0.4115,
       "market_total": 9.5
     },
     "rockies|reds": {
-      "home_win_prob": 0.753,
+      "home_win_prob": 0.7476,
       "market_total": 12.5
     },
     "phillies|mets": {
-      "home_win_prob": 0.7483,
+      "home_win_prob": 0.76,
       "market_total": 8.5
     },
     "diamondbacks|cardinals": {
-      "home_win_prob": 0.4887,
+      "home_win_prob": 0.4978,
       "market_total": 9.0
     },
     "braves|rangers": {
-      "home_win_prob": 0.6929,
+      "home_win_prob": 0.7003,
       "market_total": 9.0
     },
     "astros|orioles": {
-      "home_win_prob": 0.3145,
+      "home_win_prob": 0.3129,
       "market_total": 9.0
     },
     "red sox|rays": {
-      "home_win_prob": 0.3769,
+      "home_win_prob": 0.3707,
       "market_total": 9.5
     },
     "royals|padres": {
-      "home_win_prob": 0.5901,
+      "home_win_prob": 0.5748,
       "market_total": 10.5
     },
     "brewers|marlins": {
-      "home_win_prob": 0.6311,
+      "home_win_prob": 0.641,
       "market_total": 8.0
     },
     "yankees|dodgers": {
-      "home_win_prob": 0.404,
+      "home_win_prob": 0.3988,
       "market_total": 9.0
     },
     "mariners|giants": {
-      "home_win_prob": 0.6209,
+      "home_win_prob": 0.6093,
       "market_total": 7.0
     },
     "athletics|nationals": {
@@ -234,7 +298,7 @@
       "market_total": 11.0
     },
     "angels|tigers": {
-      "home_win_prob": 0.4361,
+      "home_win_prob": 0.4421,
       "market_total": 8.0
     }
   }
