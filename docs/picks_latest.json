@@ -432,7 +432,7 @@
       "top_inning": false,
       "home_runs": 1,
       "away_runs": 5,
-      "projected_total": 10.0,
+      "projected_total": 10.3,
       "market_total": 12.0,
       "bet": null,
       "reason": null
@@ -476,17 +476,17 @@
     {
       "home_cn": "水手",
       "away_cn": "巨人",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 6.6,
+      "projected_total": 6.2,
       "market_total": 7.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1784341482,
+  "live_updated_ts": 1784341784,
   "game_preds": {
     "red sox|rays": {
       "home_win_prob": 0.4602,
