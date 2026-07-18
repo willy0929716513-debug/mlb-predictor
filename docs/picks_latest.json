@@ -254,26 +254,14 @@
     {
       "home_cn": "藍鳥",
       "away_cn": "白襪",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 3.6,
+      "projected_total": 3.1,
       "market_total": 9.5,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅1分（此時預期6.9分），低分走勢盤口9.5"
-    },
-    {
-      "home_cn": "落磯",
-      "away_cn": "紅人",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 10,
-      "away_runs": 3,
-      "projected_total": 14.4,
-      "market_total": 12.5,
-      "bet": "主隊獨贏",
-      "reason": "第9局主隊領先7分（賽前主隊勝率75%），大局已定"
+      "reason": "第8局僅1分（此時預期7.4分），低分走勢盤口9.5"
     },
     {
       "home_cn": "太空人",
@@ -338,17 +326,17 @@
     {
       "home_cn": "釀酒人",
       "away_cn": "馬林魚",
-      "inning": 4,
-      "top_inning": false,
+      "inning": 5,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 3,
-      "projected_total": 9.9,
+      "projected_total": 9.4,
       "market_total": 8.0,
-      "bet": "大小分 OVER",
-      "reason": "第4局已得5分（此時預期3.1分），高分走勢盤口8.0"
+      "bet": "主隊讓分(+1.5)",
+      "reason": "主隊落後1分 第5局，賽前主隊勝率64%"
     }
   ],
-  "live_updated_ts": 1784410516,
+  "live_updated_ts": 1784410818,
   "game_preds": {
     "guardians|pirates": {
       "home_win_prob": 0.4481,
@@ -411,5 +399,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-19 05:35 (台灣時間)"
+  "live_updated_at": "2026-07-19 05:40 (台灣時間)"
 }
