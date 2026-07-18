@@ -266,14 +266,14 @@
     {
       "home_cn": "太空人",
       "away_cn": "金鶯",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 5.5,
+      "projected_total": 5.0,
       "market_total": 9.0,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 UNDER",
+      "reason": "第6局僅1分（此時預期5.0分），低分走勢盤口9.0"
     },
     {
       "home_cn": "皇家",
@@ -303,10 +303,10 @@
       "home_cn": "紅襪",
       "away_cn": "光芒",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
-      "away_runs": 1,
-      "projected_total": 9.4,
+      "away_runs": 2,
+      "projected_total": 9.9,
       "market_total": 9.5,
       "bet": null,
       "reason": null
@@ -315,13 +315,13 @@
       "home_cn": "勇士",
       "away_cn": "遊騎兵",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 5,
       "away_runs": 3,
-      "projected_total": 13.0,
+      "projected_total": 12.5,
       "market_total": 9.0,
       "bet": "大小分 OVER",
-      "reason": "第5局已得8分（此時預期4.0分），高分走勢盤口9.0"
+      "reason": "第5局已得8分（此時預期4.5分），高分走勢盤口9.0"
     },
     {
       "home_cn": "釀酒人",
@@ -336,7 +336,7 @@
       "reason": "主隊落後1分 第5局，賽前主隊勝率64%"
     }
   ],
-  "live_updated_ts": 1784410818,
+  "live_updated_ts": 1784411120,
   "game_preds": {
     "guardians|pirates": {
       "home_win_prob": 0.4481,
@@ -399,5 +399,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-19 05:40 (台灣時間)"
+  "live_updated_at": "2026-07-19 05:45 (台灣時間)"
 }
