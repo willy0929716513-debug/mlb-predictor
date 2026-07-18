@@ -369,13 +369,13 @@
       "home_cn": "紅襪",
       "away_cn": "光芒",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 5,
       "away_runs": 3,
-      "projected_total": 13.0,
+      "projected_total": 12.5,
       "market_total": 9.0,
       "bet": "大小分 OVER",
-      "reason": "第5局已得8分（此時預期4.0分），高分走勢盤口9.0"
+      "reason": "第5局已得8分（此時預期4.5分），高分走勢盤口9.0"
     },
     {
       "home_cn": "洋基",
@@ -467,8 +467,8 @@
       "inning": 1,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 12.0,
+      "away_runs": 1,
+      "projected_total": 13.0,
       "market_total": 12.0,
       "bet": null,
       "reason": null
@@ -533,5 +533,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-18 08:43 (台灣時間)"
+  "live_updated_at": "2026-07-18 08:48 (台灣時間)"
 }
