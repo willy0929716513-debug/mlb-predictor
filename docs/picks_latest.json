@@ -393,13 +393,13 @@
       "home_cn": "勇士",
       "away_cn": "遊騎兵",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 8,
       "away_runs": 0,
-      "projected_total": 10.7,
+      "projected_total": 10.2,
       "market_total": 8.0,
-      "bet": "大小分 OVER",
-      "reason": "第7局已得8分（此時預期5.3分），高分走勢盤口8.0"
+      "bet": "主隊獨贏",
+      "reason": "第7局主隊領先8分（賽前主隊勝率59%），大局已定"
     },
     {
       "home_cn": "藍鳥",
@@ -464,14 +464,14 @@
     {
       "home_cn": "落磯",
       "away_cn": "紅人",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 9.7,
+      "projected_total": 9.0,
       "market_total": 12.0,
-      "bet": null,
-      "reason": null
+      "bet": "主隊讓分(+1.5)",
+      "reason": "主隊落後1分 第4局，賽前主隊勝率74%"
     },
     {
       "home_cn": "天使",
@@ -494,6 +494,18 @@
       "away_runs": 0,
       "projected_total": 9.5,
       "market_total": 9.5,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "響尾蛇",
+      "away_cn": "紅雀",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 9.0,
+      "market_total": 9.0,
       "bet": null,
       "reason": null
     }
@@ -557,5 +569,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-18 09:24 (台灣時間)"
+  "live_updated_at": "2026-07-18 09:29 (台灣時間)"
 }
