@@ -369,7 +369,7 @@
       "home_cn": "釀酒人",
       "away_cn": "馬林魚",
       "inning": 10,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 1,
       "projected_total": 2.0,
@@ -381,10 +381,10 @@
       "home_cn": "小熊",
       "away_cn": "雙城",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 5,
-      "projected_total": 8.2,
+      "projected_total": 7.6,
       "market_total": 11.0,
       "bet": null,
       "reason": null
@@ -392,14 +392,14 @@
     {
       "home_cn": "太空人",
       "away_cn": "金鶯",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 1,
-      "projected_total": 5.4,
+      "projected_total": 4.9,
       "market_total": 8.5,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅3分（此時預期6.1分），低分走勢盤口8.5"
+      "reason": "第8局僅3分（此時預期6.6分），低分走勢盤口8.5"
     },
     {
       "home_cn": "皇家",
@@ -408,7 +408,7 @@
       "top_inning": false,
       "home_runs": 3,
       "away_runs": 3,
-      "projected_total": 7.1,
+      "projected_total": 6.6,
       "market_total": 10.0,
       "bet": null,
       "reason": null
@@ -429,10 +429,10 @@
       "home_cn": "天使",
       "away_cn": "老虎",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 6.7,
+      "projected_total": 6.2,
       "market_total": 8.5,
       "bet": "客隊讓分(+1.5)",
       "reason": "客隊落後1分 第4局，賽前客隊勝率78%"
@@ -453,10 +453,10 @@
       "home_cn": "響尾蛇",
       "away_cn": "紅雀",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 2,
-      "projected_total": 10.0,
+      "projected_total": 9.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -533,5 +533,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-18 10:39 (台灣時間)"
+  "live_updated_at": "2026-07-18 10:44 (台灣時間)"
 }
