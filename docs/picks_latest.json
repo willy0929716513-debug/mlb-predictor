@@ -366,28 +366,16 @@
   ],
   "live_games": [
     {
-      "home_cn": "太空人",
-      "away_cn": "金鶯",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 2,
-      "away_runs": 3,
-      "projected_total": 5.5,
-      "market_total": 8.5,
-      "bet": null,
-      "reason": null
-    },
-    {
       "home_cn": "天使",
       "away_cn": "老虎",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 3.8,
+      "projected_total": 3.4,
       "market_total": 8.5,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅1分（此時預期5.7分），低分走勢盤口8.5"
+      "reason": "第7局僅1分（此時預期6.1分），低分走勢盤口8.5"
     },
     {
       "home_cn": "運動家",
@@ -419,8 +407,8 @@
       "inning": 5,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 3.9,
+      "away_runs": 2,
+      "projected_total": 5.9,
       "market_total": 7.0,
       "bet": null,
       "reason": null
@@ -485,5 +473,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-18 11:19 (台灣時間)"
+  "live_updated_at": "2026-07-18 11:24 (台灣時間)"
 }
