@@ -243,10 +243,10 @@
       "home_cn": "費城人",
       "away_cn": "大都會",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 6,
       "away_runs": 1,
-      "projected_total": 8.9,
+      "projected_total": 8.4,
       "market_total": 8.5,
       "bet": "主隊獨贏",
       "reason": "第8局主隊領先5分（賽前主隊勝率76%），大局已定"
@@ -255,13 +255,13 @@
       "home_cn": "太空人",
       "away_cn": "金鶯",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 4.0,
+      "projected_total": 3.5,
       "market_total": 9.0,
       "bet": "大小分 UNDER",
-      "reason": "第8局僅2分（此時預期7.0分），低分走勢盤口9.0"
+      "reason": "第8局僅2分（此時預期7.5分），低分走勢盤口9.0"
     },
     {
       "home_cn": "皇家",
@@ -278,14 +278,14 @@
     {
       "home_cn": "響尾蛇",
       "away_cn": "紅雀",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 5,
       "away_runs": 2,
-      "projected_total": 9.5,
+      "projected_total": 9.0,
       "market_total": 9.0,
       "bet": "主隊獨贏",
-      "reason": "第7局主隊領先3分（賽前主隊勝率50%），大局已定"
+      "reason": "第8局主隊領先3分（賽前主隊勝率50%），大局已定"
     },
     {
       "home_cn": "紅襪",
@@ -304,12 +304,12 @@
       "away_cn": "遊騎兵",
       "inning": 7,
       "top_inning": false,
-      "home_runs": 5,
+      "home_runs": 6,
       "away_runs": 7,
-      "projected_total": 14.5,
+      "projected_total": 15.5,
       "market_total": 9.0,
       "bet": "大小分 OVER",
-      "reason": "第7局已得12分（此時預期6.5分），高分走勢盤口9.0"
+      "reason": "第7局已得13分（此時預期6.5分），高分走勢盤口9.0"
     },
     {
       "home_cn": "釀酒人",
@@ -324,7 +324,7 @@
       "reason": "第7局已得9分（此時預期5.3分），高分走勢盤口8.0"
     }
   ],
-  "live_updated_ts": 1784413836,
+  "live_updated_ts": 1784414137,
   "game_preds": {
     "guardians|pirates": {
       "home_win_prob": 0.4481,
@@ -387,5 +387,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-19 06:30 (台灣時間)"
+  "live_updated_at": "2026-07-19 06:35 (台灣時間)"
 }
