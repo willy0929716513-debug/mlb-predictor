@@ -242,11 +242,11 @@
     {
       "home_cn": "小熊",
       "away_cn": "雙城",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 5,
       "away_runs": 1,
-      "projected_total": 10.5,
+      "projected_total": 10.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -255,10 +255,10 @@
       "home_cn": "費城人",
       "away_cn": "大都會",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 1,
-      "projected_total": 9.6,
+      "projected_total": 9.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -267,10 +267,10 @@
       "home_cn": "藍鳥",
       "away_cn": "白襪",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 9.5,
+      "projected_total": 9.0,
       "market_total": 9.5,
       "bet": null,
       "reason": null
@@ -348,7 +348,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784404478,
+  "live_updated_ts": 1784404779,
   "game_preds": {
     "guardians|pirates": {
       "home_win_prob": 0.4481,
@@ -411,5 +411,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-19 03:54 (台灣時間)"
+  "live_updated_at": "2026-07-19 03:59 (台灣時間)"
 }
