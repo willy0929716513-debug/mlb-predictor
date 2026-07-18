@@ -366,85 +366,73 @@
   ],
   "live_games": [
     {
-      "home_cn": "紅襪",
-      "away_cn": "光芒",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 5,
-      "away_runs": 3,
-      "projected_total": 9.0,
-      "market_total": 9.0,
-      "bet": "主隊獨贏",
-      "reason": "第9局主隊領先2分（賽前主隊勝率46%），大局已定"
-    },
-    {
       "home_cn": "洋基",
       "away_cn": "道奇",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 2,
-      "projected_total": 4.5,
+      "projected_total": 4.0,
       "market_total": 9.0,
-      "bet": "大小分 UNDER",
-      "reason": "第8局僅3分（此時預期7.5分），低分走勢盤口9.0"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "勇士",
       "away_cn": "遊騎兵",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 12,
       "away_runs": 0,
-      "projected_total": 14.2,
+      "projected_total": 13.8,
       "market_total": 8.0,
-      "bet": "大小分 OVER",
-      "reason": "第7局已得12分（此時預期5.8分），高分走勢盤口8.0"
+      "bet": "主隊獨贏",
+      "reason": "第8局主隊領先12分（賽前主隊勝率59%），大局已定"
     },
     {
       "home_cn": "藍鳥",
       "away_cn": "白襪",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 4,
       "away_runs": 12,
-      "projected_total": 18.8,
+      "projected_total": 18.4,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第7局已得16分（此時預期5.7分），高分走勢盤口8.5"
+      "reason": "第7局已得16分（此時預期6.1分），高分走勢盤口8.5"
     },
     {
       "home_cn": "釀酒人",
       "away_cn": "馬林魚",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 4.7,
+      "projected_total": 4.2,
       "market_total": 8.0,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅2分（此時預期5.3分），低分走勢盤口8.0"
+      "reason": "第7局僅2分（此時預期5.8分），低分走勢盤口8.0"
     },
     {
       "home_cn": "小熊",
       "away_cn": "雙城",
       "inning": 6,
       "top_inning": false,
-      "home_runs": 1,
+      "home_runs": 2,
       "away_runs": 4,
-      "projected_total": 9.3,
+      "projected_total": 10.3,
       "market_total": 11.0,
-      "bet": null,
-      "reason": null
+      "bet": "主隊讓分(+1.5)",
+      "reason": "主隊落後2分 第6局，賽前主隊勝率70%"
     },
     {
       "home_cn": "太空人",
       "away_cn": "金鶯",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 1,
-      "projected_total": 7.7,
+      "projected_total": 7.2,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -453,22 +441,22 @@
       "home_cn": "皇家",
       "away_cn": "教士",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 2,
-      "projected_total": 7.4,
+      "projected_total": 6.9,
       "market_total": 10.0,
       "bet": "大小分 UNDER",
-      "reason": "第6局僅3分（此時預期5.6分），低分走勢盤口10.0"
+      "reason": "第6局僅3分（此時預期6.1分），低分走勢盤口10.0"
     },
     {
       "home_cn": "落磯",
       "away_cn": "紅人",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 7.7,
+      "projected_total": 7.0,
       "market_total": 12.0,
       "bet": "主隊讓分(+1.5)",
       "reason": "主隊落後1分 第5局，賽前主隊勝率74%"
@@ -477,10 +465,10 @@
       "home_cn": "天使",
       "away_cn": "老虎",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.5,
+      "projected_total": 8.0,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -506,6 +494,18 @@
       "away_runs": 0,
       "projected_total": 9.0,
       "market_total": 9.0,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "水手",
+      "away_cn": "巨人",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 7.0,
+      "market_total": 7.0,
       "bet": null,
       "reason": null
     }
@@ -569,5 +569,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-18 09:44 (台灣時間)"
+  "live_updated_at": "2026-07-18 09:49 (台灣時間)"
 }
