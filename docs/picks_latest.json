@@ -386,17 +386,17 @@
       "away_runs": 4,
       "projected_total": 7.0,
       "market_total": 10.0,
-      "bet": null,
-      "reason": null
+      "bet": "客隊獨贏",
+      "reason": "第10局客隊領先2分（賽前客隊勝率73%），大局已定"
     },
     {
       "home_cn": "落磯",
       "away_cn": "紅人",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 2,
-      "away_runs": 6,
-      "projected_total": 10.0,
+      "away_runs": 7,
+      "projected_total": 10.3,
       "market_total": 12.0,
       "bet": null,
       "reason": null
@@ -405,10 +405,10 @@
       "home_cn": "天使",
       "away_cn": "老虎",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 5.7,
+      "projected_total": 5.2,
       "market_total": 8.5,
       "bet": "客隊讓分(+1.5)",
       "reason": "客隊落後1分 第5局，賽前客隊勝率78%"
@@ -429,7 +429,7 @@
       "home_cn": "響尾蛇",
       "away_cn": "紅雀",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 3,
       "projected_total": 10.0,
@@ -509,5 +509,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-18 10:54 (台灣時間)"
+  "live_updated_at": "2026-07-18 10:59 (台灣時間)"
 }
