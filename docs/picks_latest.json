@@ -243,10 +243,10 @@
       "home_cn": "守護者",
       "away_cn": "海盜",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 7,
-      "projected_total": 9.9,
+      "projected_total": 9.4,
       "market_total": 8.5,
       "bet": "客隊獨贏",
       "reason": "第8局客隊領先6分（賽前客隊勝率55%），大局已定"
@@ -255,10 +255,10 @@
       "home_cn": "小熊",
       "away_cn": "雙城",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 1,
-      "projected_total": 11.0,
+      "projected_total": 10.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -288,7 +288,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784401762,
+  "live_updated_ts": 1784402064,
   "game_preds": {
     "guardians|pirates": {
       "home_win_prob": 0.4481,
@@ -351,5 +351,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-19 03:09 (台灣時間)"
+  "live_updated_at": "2026-07-19 03:14 (台灣時間)"
 }
