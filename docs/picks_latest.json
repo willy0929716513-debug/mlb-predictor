@@ -393,10 +393,10 @@
       "home_cn": "響尾蛇",
       "away_cn": "紅雀",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 3,
-      "projected_total": 8.0,
+      "projected_total": 7.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -473,5 +473,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-18 11:29 (台灣時間)"
+  "live_updated_at": "2026-07-18 11:34 (台灣時間)"
 }
