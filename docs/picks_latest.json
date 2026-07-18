@@ -395,11 +395,11 @@
       "inning": 8,
       "top_inning": true,
       "home_runs": 2,
-      "away_runs": 1,
-      "projected_total": 4.9,
+      "away_runs": 3,
+      "projected_total": 6.9,
       "market_total": 8.5,
-      "bet": "大小分 UNDER",
-      "reason": "第8局僅3分（此時預期6.6分），低分走勢盤口8.5"
+      "bet": "主隊讓分(+1.5)",
+      "reason": "主隊落後1分 第8局，賽前主隊勝率62%"
     },
     {
       "home_cn": "皇家",
@@ -417,10 +417,10 @@
       "home_cn": "落磯",
       "away_cn": "紅人",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 6,
-      "projected_total": 10.7,
+      "projected_total": 10.0,
       "market_total": 12.0,
       "bet": null,
       "reason": null
@@ -428,14 +428,14 @@
     {
       "home_cn": "天使",
       "away_cn": "老虎",
-      "inning": 4,
-      "top_inning": false,
+      "inning": 5,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 6.2,
+      "projected_total": 5.7,
       "market_total": 8.5,
       "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後1分 第4局，賽前客隊勝率78%"
+      "reason": "客隊落後1分 第5局，賽前客隊勝率78%"
     },
     {
       "home_cn": "運動家",
@@ -533,5 +533,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-18 10:44 (台灣時間)"
+  "live_updated_at": "2026-07-18 10:49 (台灣時間)"
 }
