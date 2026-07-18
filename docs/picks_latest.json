@@ -443,11 +443,11 @@
       "inning": 6,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 1,
-      "projected_total": 7.3,
+      "away_runs": 3,
+      "projected_total": 9.3,
       "market_total": 12.0,
       "bet": "大小分 UNDER",
-      "reason": "第6局僅2分（此時預期6.7分），低分走勢盤口12.0"
+      "reason": "第6局僅4分（此時預期6.7分），低分走勢盤口12.0"
     },
     {
       "home_cn": "天使",
@@ -498,7 +498,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784339974,
+  "live_updated_ts": 1784340275,
   "game_preds": {
     "red sox|rays": {
       "home_win_prob": 0.4602,
