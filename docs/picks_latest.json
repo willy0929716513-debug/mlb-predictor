@@ -245,11 +245,11 @@
       "inning": 8,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 6,
-      "projected_total": 8.9,
+      "away_runs": 7,
+      "projected_total": 9.9,
       "market_total": 8.5,
       "bet": "客隊獨贏",
-      "reason": "第8局客隊領先5分（賽前客隊勝率55%），大局已定"
+      "reason": "第8局客隊領先6分（賽前客隊勝率55%），大局已定"
     },
     {
       "home_cn": "小熊",
@@ -288,7 +288,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784401461,
+  "live_updated_ts": 1784401762,
   "game_preds": {
     "guardians|pirates": {
       "home_win_prob": 0.4481,
@@ -351,5 +351,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-19 03:04 (台灣時間)"
+  "live_updated_at": "2026-07-19 03:09 (台灣時間)"
 }
