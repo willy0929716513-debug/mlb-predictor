@@ -443,7 +443,7 @@
       "reason": "第6局已得8分（此時預期5.5分），高分走勢盤口9.0"
     }
   ],
-  "live_updated_ts": 1784498740,
+  "live_updated_ts": 1784499041,
   "game_preds": {
     "blue jays|white sox": {
       "home_win_prob": 0.3165,
@@ -506,5 +506,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-20 06:05 (台灣時間)"
+  "live_updated_at": "2026-07-20 06:10 (台灣時間)"
 }
