@@ -266,11 +266,11 @@
     {
       "home_cn": "運動家",
       "away_cn": "國民",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 5,
       "away_runs": 0,
-      "projected_total": 15.4,
+      "projected_total": 14.8,
       "market_total": 11.0,
       "bet": null,
       "reason": null
