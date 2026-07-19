@@ -397,23 +397,23 @@
     {
       "home_cn": "太空人",
       "away_cn": "金鶯",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 5,
-      "projected_total": 8.4,
+      "projected_total": 7.9,
       "market_total": 8.5,
       "bet": "客隊獨贏",
-      "reason": "第8局客隊領先3分（賽前客隊勝率58%），大局已定"
+      "reason": "第9局客隊領先3分（賽前客隊勝率58%），大局已定"
     },
     {
       "home_cn": "皇家",
       "away_cn": "教士",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 13,
-      "projected_total": 16.6,
+      "projected_total": 16.1,
       "market_total": 9.5,
       "bet": null,
       "reason": null
@@ -422,10 +422,10 @@
       "home_cn": "釀酒人",
       "away_cn": "馬林魚",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 1.9,
+      "projected_total": 1.4,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -447,21 +447,21 @@
       "away_cn": "紅人",
       "inning": 6,
       "top_inning": false,
-      "home_runs": 1,
+      "home_runs": 3,
       "away_runs": 9,
-      "projected_total": 14.3,
+      "projected_total": 16.3,
       "market_total": 11.0,
       "bet": "大小分 OVER",
-      "reason": "第6局已得10分（此時預期6.7分），高分走勢盤口11.0"
+      "reason": "第6局已得12分（此時預期6.7分），高分走勢盤口11.0"
     },
     {
       "home_cn": "運動家",
       "away_cn": "國民",
       "inning": 3,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 8.6,
+      "projected_total": 9.6,
       "market_total": 10.5,
       "bet": null,
       "reason": null
@@ -482,10 +482,10 @@
       "home_cn": "水手",
       "away_cn": "巨人",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 7.4,
+      "projected_total": 7.1,
       "market_total": 7.0,
       "bet": null,
       "reason": null
@@ -496,14 +496,14 @@
       "inning": 3,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 2,
-      "projected_total": 9.0,
+      "away_runs": 5,
+      "projected_total": 12.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1784494214,
+  "live_updated_ts": 1784494516,
   "game_preds": {
     "blue jays|white sox": {
       "home_win_prob": 0.3165,
@@ -566,5 +566,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-20 04:50 (台灣時間)"
+  "live_updated_at": "2026-07-20 04:55 (台灣時間)"
 }
