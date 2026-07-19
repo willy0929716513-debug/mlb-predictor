@@ -12,10 +12,10 @@ GIST_DESC = "mlb_bot_history"
 
 # ── 模型參數 ──────────────────────────────────
 EDGE_MIN       = 0.08   # ↑0.06→0.08，每注最低 $50，門檻更嚴才合理
-EDGE_MIN_RL    = 0.09   # ↑0.08→0.10→↓0.09
+EDGE_MIN_RL    = 0.08   # ↓0.09→0.08，RL移除雙重懲罰後適度放寬
 EDGE_MIN_TOT   = 0.09   # ↑0.07→0.09
 EDGE_MIN_ML_FAV= 0.11   # ML低賠（賠率<1.65）額外edge門檻（↓0.14→0.11：-170熱門若有11%優勢仍值得下注）
-MIN_MODEL_P_ML  = 0.65  # ML 模型勝率門檻（↑0.63→0.65，確保觀測勝率63%有足夠buffer）
+MIN_MODEL_P_ML  = 0.63  # ML 模型勝率門檻（↓0.65→0.63，回歸舊值；其他保護層已足夠）
 MIN_MODEL_P_RL  = 0.65  # RL 門檻（↓0.67→0.65，與ML更一致）
 MIN_MODEL_P_TOT = 0.60  # TOT 門檻：避免貼線邊際注單
 ML_BET_CONF_MIN  = 0.70  # ML 最低信心門檻（↓0.72→0.70，小幅鬆動；blend過濾仍保護ML品質）
@@ -45,8 +45,8 @@ RL_BET_CONF_MIN= 0.61  # RL 最低信心門檻（↓0.70→0.68→0.63→0.61，
 RL_KELLY_MULT  = 0.75  # RL Kelly 折扣（不確定性更高，下注降低25%）
 RL_KELLY_MAX   = 130.0 # RL 最大下注上限
 LINE_CLV_MIN   = -2.50  # 線路 CLV 門檻（↑-0.30→-1.50→-2.50）：允許高信心注在線路微幅逆移時仍通過
-STALE_PRICE_GAP = 0.12  # 最佳賠率超過共識12%以上 → 顯示警告（↓0.20→0.12）
-MAX_PRICE_GAP   = 0.18  # 超過18% → 直接封鎖（可能為錯誤賠率或過時報價）（↓0.25→0.18）
+STALE_PRICE_GAP = 0.15  # 最佳賠率超過共識15%以上 → 顯示警告（↑0.12→0.15）
+MAX_PRICE_GAP   = 0.22  # 超過22% → 直接封鎖（可能為錯誤賠率或過時報價）（↑0.18→0.22）
 BLOWOUT_ERA_DIFF = 1.5  # ERA差門檻：弱投手隊不推薦讓分受讓
 BLOWOUT_ERA_POOR = 4.20 # 弱投手ERA門檻（≥此值且ERA差距大，拒絕RL）
 ELITE_ERA_DUAL   = 3.50 # 雙方投手都低於此值時視為菁英對決
@@ -3078,15 +3078,9 @@ def run():
                 elif _wr_hist > 0.65: _calib = 1.05  # 優秀：edge×1.05
                 else:                 _calib = 1.00
                 raw_edge = round(raw_edge * _calib, 4)
-                # ② bet_conf 附加調整（影響Kelly縮放）
-                if   _wr_hist < 0.50: bet_conf = round(bet_conf * 0.92, 4)
-                elif _wr_hist < 0.55: bet_conf = round(bet_conf * 0.97, 4)
-                elif _wr_hist > 0.68: bet_conf = round(min(1.0, bet_conf * 1.05), 4)
+                # bet_conf 不再雙重校正：raw_edge校正已充分反映歷史勝率，
+                # 再打conf會疊加conf_mult(×0.90/0.88)造成過度過濾
             # 統一用 edge×conf ≥ threshold（所有注單類型一致，低信心高edge也會被過濾）
-            # SP_UNCONFIRMED_PENALTY: SP not officially confirmed -> conf x0.93
-            if not _sp_confirmed:
-                bet_conf = round(bet_conf * 0.93, 4)
-                log.info("SP_UNCONFIRMED(%s): conf->%.3f", _sp_src, bet_conf)
             edge_ok = raw_edge * bet_conf >= edge_min
             if not edge_ok: continue
             if bp<MIN_P or bp>MAX_P: continue
@@ -3107,7 +3101,7 @@ def run():
                 _ml_sp_era_raw = _LIVE_SP_ERA.get(_ml_sp) or PITCHER_ERA.get(_ml_sp)
                 if (_ml_sp_fip and _ml_sp_era_raw and
                         (_ml_sp_fip - _ml_sp_era_raw) > FIP_ERA_UNDER_GAP):
-                    bet_conf = round(bet_conf * 0.90, 4)
+                    bet_conf = round(bet_conf * 0.93, 4)  # 軟化：×0.90→×0.93
                     log.info("ML_FIP_PENALTY: %s gap=%.2f (FIP=%.2f ERA=%.2f) conf→%.3f",
                              _ml_sp, _ml_sp_fip - _ml_sp_era_raw, _ml_sp_fip, _ml_sp_era_raw, bet_conf)
                     if bet_conf < ML_BET_CONF_MIN:
@@ -3116,20 +3110,21 @@ def run():
                 # ② 對手強打線：對手投手RS過高 → 對手打線強，推薦隊失分風險高
                 _opp_rs = pred.get("a_rs" if bside == "home" else "h_rs")
                 if _opp_rs is not None:
-                    if _opp_rs >= 6.5:
-                        bet_conf = round(bet_conf * 0.93, 4)
+                    if _opp_rs >= 7.0:  # 提高觸發門檻 6.5→7.0
+                        bet_conf = round(bet_conf * 0.95, 4)  # 軟化：×0.93→×0.95
                         log.info("ML_OPP_RS_PENALTY(high): opp_rs=%.1f conf→%.3f", _opp_rs, bet_conf)
                         if bet_conf < ML_BET_CONF_MIN:
                             log.info("ML_OPP_RS_PENALTY SKIP: conf %.2f below ML_BET_CONF_MIN", bet_conf)
                             continue
                     elif _opp_rs >= ML_OPP_RS_WARN:
-                        bet_conf = round(bet_conf * 0.97, 4)
+                        bet_conf = round(bet_conf * 0.98, 4)  # 軟化：×0.97→×0.98
                         log.info("ML_OPP_RS_WARN(med): opp_rs=%.1f conf→%.3f", _opp_rs, bet_conf)
                 # ③ 模型大幅超越市場：model_p遠高於devigged市場概率 → 降低信心
+                # 門檻提高0.18→0.24（模型高於市場是正常的，24%以上才算真正分歧）
                 _ml_mkt_dv = _dv.get(bside, 1.0/con_p)
                 _ml_model_mkt_gap = model_p - _ml_mkt_dv
-                if _ml_model_mkt_gap > 0.18:
-                    bet_conf = round(bet_conf * 0.88, 4)
+                if _ml_model_mkt_gap > 0.24:
+                    bet_conf = round(bet_conf * 0.91, 4)  # 軟化：×0.88→×0.91
                     log.info("ML_MKT_DISAGREE: model_p=%.3f mkt_p=%.3f gap=%.3f conf→%.3f",
                              model_p, _ml_mkt_dv, _ml_model_mkt_gap, bet_conf)
                     if bet_conf < ML_BET_CONF_MIN:
@@ -3218,34 +3213,19 @@ def run():
                 # ⑤ 天氣不利：雨/逆風時降低RL信心（得分更難預測，讓分風險高）
                 _wf_rl = pred.get("weather_factor", 1.0) or 1.0
                 if _wf_rl <= 0.93:
-                    bet_conf = round(bet_conf * 0.90, 4)
+                    bet_conf = round(bet_conf * 0.92, 4)  # 軟化：×0.90→×0.92
                     if bet_conf < RL_BET_CONF_MIN:
                         log.info("RL blocked by weather: wf=%.3f conf→%.3f", _wf_rl, bet_conf)
                         continue
-                # SP_DELTA_PENALTY: 受讓方SP ERA明顯差於對手SP → 降低RL信心
-                if bside in ("rl_a", "rl_a_25"):
-                    _ud_sp_era = _a_era_v
-                    _fav_sp_era = _h_era_v
-                else:
-                    _ud_sp_era = _h_era_v
-                    _fav_sp_era = _a_era_v
-                if _ud_sp_era - _fav_sp_era > 0.8:
-                    _old_conf = bet_conf
-                    bet_conf = round(bet_conf - 0.10, 4)
-                    log.info("SP_DELTA_PENALTY: ud=%.2f fav=%.2f delta=%.2f conf %.2f→%.2f",
-                             _ud_sp_era, _fav_sp_era, _ud_sp_era-_fav_sp_era, _old_conf, bet_conf)
-                    if bet_conf < RL_BET_CONF_MIN:
-                        log.info("SP_DELTA_PENALTY SKIP: conf %.2f below %.2f", bet_conf, RL_BET_CONF_MIN)
-                        continue
-                # SLUMP_LOWCONF_SKIP: 低迷期+低信心 → 跳過RL
-                if _slump_mult < 1.0 and bet_conf < SLUMP_RL_CONF_MIN:
-                    log.info("SLUMP_LOWCONF_SKIP: slump_mult=%.2f conf=%.2f — RL skipped",
-                             _slump_mult, bet_conf)
-                    continue
+                # SP_DELTA_PENALTY 已移除：ERA差距由BLOWOUT/ACE_ERA_RL保護層覆蓋，
+                # 在此再懲罰conf會與conf_mult(×0.90)造成不必要疊加
+                # SLUMP_LOWCONF_SKIP 已移除：低迷期風險由全局SLUMP_KELLY_MUL管理，
+                # 在RL層再設conf門檻導致過度過濾
                 # ⑥ RL市場大幅不認同：模型概率遠高於市場devigged概率 → 降低信心或封鎖
+                # 觸發門檻提高至0.30（0.20時太頻繁，RL正是靠模型vs市場偏差賺邊際）
                 _rl_mkt_dv = _dv.get(bside, 1.0/con_p)
                 _rl_model_mkt_gap = model_p - _rl_mkt_dv
-                if _rl_model_mkt_gap > 0.20:
+                if _rl_model_mkt_gap > 0.30:
                     _old_conf = bet_conf
                     bet_conf = round(bet_conf * 0.90, 4)
                     log.info("RL_MKT_DISAGREE: model_p=%.3f mkt_p=%.3f gap=%.3f conf %.2f→%.2f",
@@ -3904,18 +3884,14 @@ def run():
                     _PITCHER_RS.get(ap_k) or 0) >= RL_OPP_RS_THRESH:
                     _why = "❌主場王牌+強攻(%s ERA%.2f RS%.1f)" % (
                         hp_k or "?", _h_era, _PITCHER_RS.get(ap_k))
-                elif _slump_mult < 1.0 and cf * 0.90 < SLUMP_RL_CONF_MIN:
-                    _why = "❌低迷期跳過RL(slump×%.2f)" % _slump_mult
                 else:
                     _clv_key = "rl_h" if _rl_home else "rl_a"
                     _clv_p   = rl_hp_con if _rl_home else rl_ap_con
                     _clv_v   = _diag_clv(_clv_key, _clv_p)
                     _wf_rl_d = pr.get("weather_factor", 1.0) or 1.0
-                    if _wf_rl_d <= 0.93 and cf * 0.90 * 0.90 < RL_BET_CONF_MIN:
+                    if _wf_rl_d <= 0.93 and cf * 0.90 * 0.92 < RL_BET_CONF_MIN:
                         _why = "❌RL天氣(wf=%.2f)" % _wf_rl_d
-                    elif _rec_era - _opp_era > 0.8:
-                        _why = "❌SP差距(推薦%.2f>對手%.2f)" % (_rec_era, _opp_era)
-                    elif _rl_gap > 0.20:
+                    elif _rl_gap > 0.30:
                         _why = "❌RL市場背離%.0f%%(gap=%.2f)" % (_rl_gap*100, _rl_gap)
                     elif _clv_v is not None and _clv_v < LINE_CLV_MIN:
                         _why = "❌CLV下行%.2f%%" % _clv_v
