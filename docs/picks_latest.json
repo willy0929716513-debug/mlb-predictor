@@ -243,23 +243,11 @@
       "home_cn": "守護者",
       "away_cn": "海盜",
       "inning": 9,
-      "top_inning": true,
-      "home_runs": 3,
-      "away_runs": 3,
-      "projected_total": 6.9,
-      "market_total": 8.5,
-      "bet": null,
-      "reason": null
-    },
-    {
-      "home_cn": "水手",
-      "away_cn": "巨人",
-      "inning": 10,
       "top_inning": false,
       "home_runs": 3,
       "away_runs": 3,
-      "projected_total": 6.0,
-      "market_total": 7.0,
+      "projected_total": 6.5,
+      "market_total": 8.5,
       "bet": null,
       "reason": null
     },
@@ -267,13 +255,13 @@
       "home_cn": "運動家",
       "away_cn": "國民",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 6,
       "away_runs": 0,
-      "projected_total": 13.3,
+      "projected_total": 12.7,
       "market_total": 11.0,
-      "bet": "大小分 OVER",
-      "reason": "第4局已得6分（此時預期3.7分），高分走勢盤口11.0"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "天使",
@@ -288,7 +276,7 @@
       "reason": "第4局已得6分（此時預期3.1分），高分走勢盤口8.0"
     }
   ],
-  "live_updated_ts": 1784430584,
+  "live_updated_ts": 1784430885,
   "game_preds": {
     "guardians|pirates": {
       "home_win_prob": 0.4481,
@@ -351,5 +339,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-19 11:09 (台灣時間)"
+  "live_updated_at": "2026-07-19 11:14 (台灣時間)"
 }
