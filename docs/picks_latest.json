@@ -278,14 +278,14 @@
     {
       "home_cn": "天使",
       "away_cn": "老虎",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 6,
-      "projected_total": 11.8,
+      "projected_total": 11.3,
       "market_total": 8.0,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第4局已得6分（此時預期2.7分），高分走勢盤口8.0"
     }
   ],
   "live_updated_ts": 1784429980,
