@@ -264,7 +264,7 @@
       "reason": "主隊落後1分 第5局，賽前主隊勝率61%"
     }
   ],
-  "live_updated_ts": 1784423650,
+  "live_updated_ts": 1784423951,
   "game_preds": {
     "guardians|pirates": {
       "home_win_prob": 0.4481,
@@ -327,5 +327,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-19 09:14 (台灣時間)"
+  "live_updated_at": "2026-07-19 09:19 (台灣時間)"
 }
