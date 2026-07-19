@@ -254,17 +254,17 @@
     {
       "home_cn": "水手",
       "away_cn": "巨人",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 4.5,
+      "projected_total": 4.1,
       "market_total": 7.0,
-      "bet": "主隊讓分(+1.5)",
-      "reason": "主隊落後1分 第5局，賽前主隊勝率61%"
+      "bet": "大小分 UNDER",
+      "reason": "第6局僅1分（此時預期3.9分），低分走勢盤口7.0"
     }
   ],
-  "live_updated_ts": 1784424554,
+  "live_updated_ts": 1784424856,
   "game_preds": {
     "guardians|pirates": {
       "home_win_prob": 0.4481,
@@ -327,5 +327,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-19 09:29 (台灣時間)"
+  "live_updated_at": "2026-07-19 09:34 (台灣時間)"
 }
