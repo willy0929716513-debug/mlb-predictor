@@ -395,18 +395,6 @@
   ],
   "live_games": [
     {
-      "home_cn": "天使",
-      "away_cn": "老虎",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 3,
-      "away_runs": 2,
-      "projected_total": 6.1,
-      "market_total": 9.5,
-      "bet": null,
-      "reason": null
-    },
-    {
       "home_cn": "響尾蛇",
       "away_cn": "紅雀",
       "inning": 8,
@@ -419,7 +407,7 @@
       "reason": "第8局客隊領先2分（賽前客隊勝率51%），大局已定"
     }
   ],
-  "live_updated_ts": 1784501756,
+  "live_updated_ts": 1784502058,
   "game_preds": {
     "blue jays|white sox": {
       "home_win_prob": 0.3165,
@@ -482,5 +470,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-20 06:55 (台灣時間)"
+  "live_updated_at": "2026-07-20 07:00 (台灣時間)"
 }
