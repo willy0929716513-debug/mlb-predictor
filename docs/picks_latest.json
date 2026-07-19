@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-19 16:22 (台灣時間)",
+  "generated_at": "2026-07-19 23:49 (台灣時間)",
   "date": "2026-07-19",
   "stats": {
     "settled": 136,
@@ -33,6 +33,161 @@
   },
   "picks": [
     {
+      "tier": "⭐ 穩定",
+      "btype": "讓分",
+      "away": "pirates",
+      "home": "guardians",
+      "away_cn": "海盜",
+      "home_cn": "守護者",
+      "bet_label": "海盜 讓分(+1.5)",
+      "bk": "DraftKings",
+      "bp": 2.55,
+      "con_p": 2.109,
+      "dv_p": 0.5038,
+      "edge": 27.1,
+      "conf": 73.3,
+      "stake": 53.0,
+      "model_p": 75.0,
+      "away_sp": "Paul Skenes",
+      "home_sp": "Joey Cantillo",
+      "away_era": 4.37,
+      "home_era": 2.61,
+      "away_fip": 3.7,
+      "home_fip": 2.63,
+      "away_k9": 9.5,
+      "home_k9": 12.0,
+      "away_avgip": 5.0,
+      "home_avgip": 5.0,
+      "away_whip": 1.39,
+      "home_whip": 1.67,
+      "away_rest": null,
+      "home_rest": null,
+      "away_rs": 8.0,
+      "home_rs": 5.0,
+      "away_rpg": 5.24,
+      "home_rpg": 3.94,
+      "pred_away": 4.5,
+      "pred_home": 3.5,
+      "model_total": null,
+      "market_total": null,
+      "park_factor": 0.95,
+      "weather_factor": 0.983,
+      "ump_name": "alex mackay",
+      "ump_adj": null,
+      "away_trend": -4.56,
+      "home_trend": -0.99,
+      "line_clv": -2.11,
+      "game_date": "2026-07-20",
+      "game_time": "01:41",
+      "sp_src": "gamefeed",
+      "home_hand": "R",
+      "away_hand": "R",
+      "home_babip": 0.333,
+      "away_babip": 0.429,
+      "home_lob": 88.5,
+      "away_lob": 57.3,
+      "away_road_days": 3,
+      "away_tz_cross": null,
+      "home_wpct": null,
+      "away_road_wpct": null,
+      "home_l10_wpct": 0.5,
+      "away_l10_wpct": 0.7,
+      "home_lineup": [
+        {
+          "order": 1,
+          "name": "Steven Kwan",
+          "pos": "LF"
+        },
+        {
+          "order": 2,
+          "name": "Travis Bazzana",
+          "pos": "2B"
+        },
+        {
+          "order": 3,
+          "name": "Chase DeLauter",
+          "pos": "DH"
+        },
+        {
+          "order": 4,
+          "name": "Brayan Rocchio",
+          "pos": "SS"
+        },
+        {
+          "order": 5,
+          "name": "Kyle Manzardo",
+          "pos": "1B"
+        },
+        {
+          "order": 6,
+          "name": "Kahlil Watson",
+          "pos": "RF"
+        },
+        {
+          "order": 7,
+          "name": "Gabriel Arias",
+          "pos": "3B"
+        },
+        {
+          "order": 8,
+          "name": "Patrick Bailey",
+          "pos": "C"
+        },
+        {
+          "order": 9,
+          "name": "Petey Halpin",
+          "pos": "CF"
+        }
+      ],
+      "away_lineup": [
+        {
+          "order": 1,
+          "name": "Jake Mangum",
+          "pos": "LF"
+        },
+        {
+          "order": 2,
+          "name": "Jared Triolo",
+          "pos": "3B"
+        },
+        {
+          "order": 3,
+          "name": "Bryan Reynolds",
+          "pos": "DH"
+        },
+        {
+          "order": 4,
+          "name": "Esmerlyn Valdez",
+          "pos": "RF"
+        },
+        {
+          "order": 5,
+          "name": "Ryan O'Hearn",
+          "pos": "1B"
+        },
+        {
+          "order": 6,
+          "name": "Nick Gonzales",
+          "pos": "2B"
+        },
+        {
+          "order": 7,
+          "name": "Jacob Gonzalez",
+          "pos": "SS"
+        },
+        {
+          "order": 8,
+          "name": "Henry Davis",
+          "pos": "C"
+        },
+        {
+          "order": 9,
+          "name": "Billy Cook",
+          "pos": "CF"
+        }
+      ]
+    },
+    {
       "tier": "🔥 強力",
       "btype": "大小分",
       "away": "giants",
@@ -42,12 +197,12 @@
       "bet_label": "UNDER 7.0",
       "bk": "LowVig.ag",
       "bp": 2.07,
-      "con_p": 1.966,
-      "dv_p": 0.4883,
-      "edge": 15.3,
+      "con_p": 2.004,
+      "dv_p": 0.4785,
+      "edge": 15.8,
       "conf": 81.7,
       "stake": 50.0,
-      "model_p": 63.4,
+      "model_p": 62.8,
       "away_sp": "Robbie Ray",
       "home_sp": "Logan Gilbert",
       "away_era": 3.68,
@@ -71,12 +226,12 @@
       "model_total": 6.7,
       "market_total": 7.0,
       "park_factor": 0.93,
-      "weather_factor": 0.979,
+      "weather_factor": 0.978,
       "ump_name": null,
       "ump_adj": null,
       "away_trend": 3.27,
       "home_trend": 0.02,
-      "line_clv": null,
+      "line_clv": 0.0,
       "game_date": "2026-07-20",
       "game_time": "04:11",
       "sp_src": "probable",
@@ -242,47 +397,47 @@
   "live_updated_ts": 1784434801,
   "game_preds": {
     "blue jays|white sox": {
-      "home_win_prob": 0.316,
+      "home_win_prob": 0.3165,
       "market_total": 8.0
     },
     "yankees|dodgers": {
-      "home_win_prob": 0.3859,
-      "market_total": 7.5
-    },
-    "braves|rangers": {
-      "home_win_prob": 0.5353,
+      "home_win_prob": 0.3939,
       "market_total": 9.0
     },
-    "red sox|rays": {
-      "home_win_prob": 0.433,
-      "market_total": 8.0
-    },
-    "phillies|mets": {
-      "home_win_prob": 0.335,
+    "braves|rangers": {
+      "home_win_prob": 0.5342,
       "market_total": 8.5
     },
+    "red sox|rays": {
+      "home_win_prob": 0.4265,
+      "market_total": 8.5
+    },
+    "phillies|mets": {
+      "home_win_prob": 0.3521,
+      "market_total": 9.0
+    },
     "guardians|pirates": {
-      "home_win_prob": 0.22,
+      "home_win_prob": 0.3541,
       "market_total": 7.0
     },
     "astros|orioles": {
-      "home_win_prob": 0.4271,
-      "market_total": 8.0
+      "home_win_prob": 0.4184,
+      "market_total": 8.5
     },
     "royals|padres": {
-      "home_win_prob": 0.6647,
-      "market_total": 10.0
+      "home_win_prob": 0.6723,
+      "market_total": 9.5
     },
     "brewers|marlins": {
-      "home_win_prob": 0.6083,
+      "home_win_prob": 0.6642,
       "market_total": 8.0
     },
     "cubs|twins": {
-      "home_win_prob": 0.7143,
+      "home_win_prob": 0.6535,
       "market_total": 7.5
     },
     "rockies|reds": {
-      "home_win_prob": 0.5793,
+      "home_win_prob": 0.5837,
       "market_total": 11.0
     },
     "athletics|nationals": {
@@ -290,15 +445,15 @@
       "market_total": 10.5
     },
     "angels|tigers": {
-      "home_win_prob": 0.2635,
-      "market_total": 8.5
+      "home_win_prob": 0.2542,
+      "market_total": 9.5
     },
     "diamondbacks|cardinals": {
-      "home_win_prob": 0.4945,
+      "home_win_prob": 0.4851,
       "market_total": 9.0
     },
     "mariners|giants": {
-      "home_win_prob": 0.6836,
+      "home_win_prob": 0.6845,
       "market_total": 7.0
     }
   }
