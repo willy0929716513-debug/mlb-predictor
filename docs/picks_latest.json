@@ -255,10 +255,10 @@
       "home_cn": "水手",
       "away_cn": "巨人",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 4.9,
+      "projected_total": 4.5,
       "market_total": 7.0,
       "bet": "主隊讓分(+1.5)",
       "reason": "主隊落後1分 第5局，賽前主隊勝率61%"
