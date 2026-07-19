@@ -240,18 +240,6 @@
   ],
   "live_games": [
     {
-      "home_cn": "守護者",
-      "away_cn": "海盜",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 5,
-      "away_runs": 3,
-      "projected_total": 8.5,
-      "market_total": 8.5,
-      "bet": null,
-      "reason": null
-    },
-    {
       "home_cn": "運動家",
       "away_cn": "國民",
       "inning": 5,
@@ -269,14 +257,14 @@
       "inning": 5,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 6,
-      "projected_total": 10.4,
+      "away_runs": 7,
+      "projected_total": 11.4,
       "market_total": 8.0,
       "bet": "大小分 OVER",
-      "reason": "第5局已得6分（此時預期3.6分），高分走勢盤口8.0"
+      "reason": "第5局已得7分（此時預期3.6分），高分走勢盤口8.0"
     }
   ],
-  "live_updated_ts": 1784431187,
+  "live_updated_ts": 1784431488,
   "game_preds": {
     "guardians|pirates": {
       "home_win_prob": 0.4481,
@@ -339,5 +327,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-19 11:19 (台灣時間)"
+  "live_updated_at": "2026-07-19 11:24 (台灣時間)"
 }
