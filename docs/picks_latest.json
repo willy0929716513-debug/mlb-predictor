@@ -252,7 +252,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784419214,
+  "live_updated_ts": 1784419516,
   "game_preds": {
     "guardians|pirates": {
       "home_win_prob": 0.4481,
@@ -315,5 +315,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-19 08:00 (台灣時間)"
+  "live_updated_at": "2026-07-19 08:05 (台灣時間)"
 }
