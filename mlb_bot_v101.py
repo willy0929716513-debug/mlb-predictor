@@ -51,7 +51,7 @@ BLOWOUT_ERA_DIFF = 1.5  # ERA差門檻：弱投手隊不推薦讓分受讓
 BLOWOUT_ERA_POOR = 4.20 # 弱投手ERA門檻（≥此值且ERA差距大，拒絕RL）
 ELITE_ERA_DUAL   = 3.50 # 雙方投手都低於此值時視為菁英對決
 ELITE_ERA_OVER_P = 0.68 # 菁英投手對決時，OVER需達更高概率門檻（防RS拉高）
-ACE_ERA_RL       = 2.70 # 面對此ERA以下的頂級王牌時，拒絕推薦讓分受讓（↑2.50→2.70：ERA≤2.70已屬頂級）
+ACE_ERA_RL       = 2.50 # 面對此ERA以下的真正頂級王牌時，拒絕推薦讓分受讓（↑2.20→2.50）
 ACE_ERA_OVER     = 2.20 # 任一先發ERA≤此值時，直接封鎖OVER（保守門檻，防止高打線場次OVER）
 FIP_ERA_WARN_GAP = 1.50 # RL: 推薦隊SP的FIP比ERA高超過此值 → 幸運ERA不可持續，拒絕RL
 FIP_ERA_UNDER_GAP= 1.00 # UNDER: 任一SP的FIP比ERA高超過此值 → 幸運ERA，失分回歸，拒絕UNDER
@@ -2862,6 +2862,9 @@ def run():
         _rl_h_bids=[]; _rl_a_bids=[]
         _rl_h_bids_25=[]; _rl_a_bids_25=[]
         _ov_bids=[]; _un_bids=[]
+        # 方向分組：依書商報價中主隊點數正負分開收集，用多數決防止跨方向混池
+        _rl_h_neg=[]; _rl_h_pos=[]  # home負(主隊讓分-1.5) / 正(主隊受讓+1.5)
+        _rl_a_neg=[]; _rl_a_pos=[]  # away負(客隊讓分-1.5) / 正(客隊受讓+1.5)
         for bm in bms:
             bk_name=bm.get("title","?")
             for mkt in bm.get("markets",[]):
@@ -2877,12 +2880,20 @@ def run():
                         t=norm_team(o.get("name","")); p=o.get("price",0)
                         pt=o.get("point")
                         if p<=1.0: continue
+                        try: pt_f = float(pt) if pt is not None else None
+                        except (ValueError, TypeError): pt_f = None
                         if t==home:
                             _rl_h_bids.append((p,bk_name))
-                            if rl_h_pts is None and pt is not None:
-                                try: rl_h_pts=float(pt)
-                                except (ValueError, TypeError): pass
-                        elif t==away: _rl_a_bids.append((p,bk_name))
+                            if pt_f is not None:
+                                if pt_f < 0: _rl_h_neg.append((p,bk_name))
+                                else:        _rl_h_pos.append((p,bk_name))
+                            if rl_h_pts is None and pt_f is not None:
+                                rl_h_pts = pt_f
+                        elif t==away:
+                            _rl_a_bids.append((p,bk_name))
+                            if pt_f is not None:
+                                if pt_f < 0: _rl_a_neg.append((p,bk_name))
+                                else:        _rl_a_pos.append((p,bk_name))
                 elif mk=="alternate_spreads":
                     for o in mkt.get("outcomes",[]):
                         t=norm_team(o.get("name","")); p=o.get("price",0)
@@ -2981,12 +2992,21 @@ def run():
         # ── ★ 讓分概率（根據 API 實際 spread 方向）───────────
         # RL 使用更高不確定性（RL_STD_MULT），避免模型對接近場次過度樂觀
         rl_dyn_std = dyn_std * RL_STD_MULT
-        h_gives = (rl_h_pts is None or rl_h_pts < 0)
-        # 部分莊家以正值代表主隊讓分（+1.5 = 主隊給分），與ML方向交叉驗證修正
-        if not h_gives and rl_h_pts is not None and rl_h_pts > 0 and con_h < con_a:
-            h_gives = True
-            log.info("RL_SIGN_FIX: rl_h_pts=+%.1f但主隊是ML強隊(con_h=%.2f<con_a=%.2f)→修正h_gives=True",
-                     rl_h_pts, con_h, con_a)
+        # h_gives 多數決：依各書商實際回報的主隊讓分點數正負投票
+        # 避免單一書商方向異常（如DK報PIT -1.5但其他書商報PIT +1.5）污染整體方向判斷
+        _h_neg_votes = len(_rl_h_neg)  # 書商數：主隊在 -1.5（主隊讓分）
+        _h_pos_votes = len(_rl_h_pos)  # 書商數：主隊在 +1.5（主隊受讓）
+        if _h_neg_votes > 0 or _h_pos_votes > 0:
+            h_gives = (_h_neg_votes >= _h_pos_votes)
+            # 若書商間方向有分歧，只保留多數方向的報價，移除少數異向報價
+            if _h_neg_votes > 0 and _h_pos_votes > 0:
+                log.info("RL_DIR_SPLIT: home neg=%d pos=%d → h_gives=%s, 過濾少數方向",
+                         _h_neg_votes, _h_pos_votes, h_gives)
+                _rl_h_bids = _rl_h_neg if h_gives else _rl_h_pos
+                _rl_a_bids = _rl_a_pos if h_gives else _rl_a_neg
+        else:
+            # fallback：無方向資訊時沿用 rl_h_pts 符號
+            h_gives = (rl_h_pts is None or rl_h_pts < 0)
         spread_val = abs(rl_h_pts) if rl_h_pts is not None else 1.5
         _mc_rl_probs = pred.get("mc_rl_probs", {})
         _rl_norm = runline_prob(margin, spread_val if h_gives else -spread_val, rl_dyn_std)
