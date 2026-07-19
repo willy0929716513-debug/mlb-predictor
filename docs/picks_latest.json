@@ -412,8 +412,8 @@
       "inning": 9,
       "top_inning": true,
       "home_runs": 2,
-      "away_runs": 13,
-      "projected_total": 16.1,
+      "away_runs": 16,
+      "projected_total": 19.1,
       "market_total": 9.5,
       "bet": null,
       "reason": null
@@ -423,24 +423,24 @@
       "away_cn": "馬林魚",
       "inning": 9,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 3,
       "away_runs": 1,
-      "projected_total": 1.4,
+      "projected_total": 4.4,
       "market_total": 8.0,
-      "bet": null,
-      "reason": null
+      "bet": "主隊獨贏",
+      "reason": "第9局主隊領先2分（賽前主隊勝率66%），大局已定"
     },
     {
       "home_cn": "小熊",
       "away_cn": "雙城",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 10,
       "away_runs": 1,
-      "projected_total": 12.2,
+      "projected_total": 11.8,
       "market_total": 7.5,
       "bet": "主隊獨贏",
-      "reason": "第8局主隊領先9分（賽前主隊勝率65%），大局已定"
+      "reason": "第9局主隊領先9分（賽前主隊勝率65%），大局已定"
     },
     {
       "home_cn": "落磯",
@@ -457,11 +457,11 @@
     {
       "home_cn": "運動家",
       "away_cn": "國民",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 9.6,
+      "projected_total": 9.0,
       "market_total": 10.5,
       "bet": null,
       "reason": null
@@ -470,10 +470,10 @@
       "home_cn": "天使",
       "away_cn": "老虎",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 9.4,
+      "projected_total": 8.9,
       "market_total": 9.5,
       "bet": null,
       "reason": null
@@ -503,7 +503,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784494516,
+  "live_updated_ts": 1784494818,
   "game_preds": {
     "blue jays|white sox": {
       "home_win_prob": 0.3165,
@@ -566,5 +566,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-20 04:55 (台灣時間)"
+  "live_updated_at": "2026-07-20 05:00 (台灣時間)"
 }
