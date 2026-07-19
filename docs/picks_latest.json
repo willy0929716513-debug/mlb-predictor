@@ -397,14 +397,14 @@
     {
       "home_cn": "洋基",
       "away_cn": "道奇",
-      "inning": 8,
-      "top_inning": false,
-      "home_runs": 1,
+      "inning": 9,
+      "top_inning": true,
+      "home_runs": 2,
       "away_runs": 8,
-      "projected_total": 10.5,
+      "projected_total": 11.0,
       "market_total": 9.0,
       "bet": "客隊獨贏",
-      "reason": "第8局客隊領先7分（賽前客隊勝率61%），大局已定"
+      "reason": "第9局客隊領先6分（賽前客隊勝率61%），大局已定"
     },
     {
       "home_cn": "紅襪",
@@ -470,13 +470,13 @@
       "home_cn": "皇家",
       "away_cn": "教士",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
-      "away_runs": 6,
-      "projected_total": 14.3,
+      "away_runs": 7,
+      "projected_total": 14.8,
       "market_total": 9.5,
       "bet": "大小分 OVER",
-      "reason": "第4局已得8分（此時預期3.2分），高分走勢盤口9.5"
+      "reason": "第4局已得9分（此時預期3.7分），高分走勢盤口9.5"
     },
     {
       "home_cn": "釀酒人",
@@ -508,14 +508,14 @@
       "inning": 1,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 3,
-      "projected_total": 14.0,
+      "away_runs": 5,
+      "projected_total": 16.0,
       "market_total": 11.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1784488784,
+  "live_updated_ts": 1784489085,
   "game_preds": {
     "blue jays|white sox": {
       "home_win_prob": 0.3165,
@@ -578,5 +578,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-20 03:19 (台灣時間)"
+  "live_updated_at": "2026-07-20 03:24 (台灣時間)"
 }
