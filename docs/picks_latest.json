@@ -399,9 +399,9 @@
       "away_cn": "道奇",
       "inning": 1,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 8.5,
+      "projected_total": 9.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -410,7 +410,7 @@
       "home_cn": "響尾蛇",
       "away_cn": "紅雀",
       "inning": 10,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 7,
       "away_runs": 7,
       "projected_total": 14.0,
@@ -419,7 +419,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784503757,
+  "live_updated_ts": 1784504058,
   "game_preds": {
     "blue jays|white sox": {
       "home_win_prob": 0.3165,
@@ -482,5 +482,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-20 07:29 (台灣時間)"
+  "live_updated_at": "2026-07-20 07:34 (台灣時間)"
 }
