@@ -398,10 +398,10 @@
       "home_cn": "落磯",
       "away_cn": "紅人",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 5,
       "away_runs": 9,
-      "projected_total": 15.2,
+      "projected_total": 14.6,
       "market_total": 11.0,
       "bet": null,
       "reason": null
@@ -409,11 +409,11 @@
     {
       "home_cn": "運動家",
       "away_cn": "國民",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 5,
-      "projected_total": 11.2,
+      "projected_total": 10.7,
       "market_total": 10.5,
       "bet": null,
       "reason": null
@@ -422,10 +422,10 @@
       "home_cn": "天使",
       "away_cn": "老虎",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 7.3,
+      "projected_total": 6.8,
       "market_total": 9.5,
       "bet": null,
       "reason": null
@@ -434,13 +434,13 @@
       "home_cn": "水手",
       "away_cn": "巨人",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 3,
-      "projected_total": 8.9,
+      "projected_total": 8.5,
       "market_total": 7.0,
       "bet": "大小分 OVER",
-      "reason": "第5局已得5分（此時預期3.1分），高分走勢盤口7.0"
+      "reason": "第5局已得5分（此時預期3.5分），高分走勢盤口7.0"
     },
     {
       "home_cn": "響尾蛇",
@@ -455,7 +455,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784496929,
+  "live_updated_ts": 1784497231,
   "game_preds": {
     "blue jays|white sox": {
       "home_win_prob": 0.3165,
@@ -518,5 +518,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-20 05:35 (台灣時間)"
+  "live_updated_at": "2026-07-20 05:40 (台灣時間)"
 }
