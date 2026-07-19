@@ -410,13 +410,13 @@
       "home_cn": "天使",
       "away_cn": "老虎",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 1,
-      "projected_total": 6.1,
+      "projected_total": 5.6,
       "market_total": 9.5,
       "bet": "大小分 UNDER",
-      "reason": "第8局僅4分（此時預期7.4分），低分走勢盤口9.5"
+      "reason": "第8局僅4分（此時預期7.9分），低分走勢盤口9.5"
     },
     {
       "home_cn": "水手",
@@ -443,7 +443,7 @@
       "reason": "第7局已得10分（此時預期6.5分），高分走勢盤口9.0"
     }
   ],
-  "live_updated_ts": 1784500550,
+  "live_updated_ts": 1784500851,
   "game_preds": {
     "blue jays|white sox": {
       "home_win_prob": 0.3165,
@@ -506,5 +506,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-20 06:35 (台灣時間)"
+  "live_updated_at": "2026-07-20 06:40 (台灣時間)"
 }
