@@ -397,35 +397,35 @@
     {
       "home_cn": "運動家",
       "away_cn": "國民",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 5,
-      "projected_total": 7.8,
+      "projected_total": 7.2,
       "market_total": 10.5,
       "bet": "客隊獨贏",
-      "reason": "第8局客隊領先4分（賽前客隊勝率78%），大局已定"
+      "reason": "第9局客隊領先4分（賽前客隊勝率78%），大局已定"
     },
     {
       "home_cn": "天使",
       "away_cn": "老虎",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 1,
-      "projected_total": 6.6,
+      "projected_total": 6.1,
       "market_total": 9.5,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅4分（此時預期6.9分），低分走勢盤口9.5"
+      "reason": "第8局僅4分（此時預期7.4分），低分走勢盤口9.5"
     },
     {
       "home_cn": "水手",
       "away_cn": "巨人",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 6,
       "away_runs": 3,
-      "projected_total": 10.6,
+      "projected_total": 10.2,
       "market_total": 7.0,
       "bet": "主隊獨贏",
       "reason": "第8局主隊領先3分（賽前主隊勝率68%），大局已定"
@@ -434,16 +434,16 @@
       "home_cn": "響尾蛇",
       "away_cn": "紅雀",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 7,
-      "projected_total": 13.0,
+      "projected_total": 12.5,
       "market_total": 9.0,
       "bet": "大小分 OVER",
-      "reason": "第7局已得10分（此時預期6.0分），高分走勢盤口9.0"
+      "reason": "第7局已得10分（此時預期6.5分），高分走勢盤口9.0"
     }
   ],
-  "live_updated_ts": 1784500248,
+  "live_updated_ts": 1784500550,
   "game_preds": {
     "blue jays|white sox": {
       "home_win_prob": 0.3165,
@@ -506,5 +506,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-20 06:30 (台灣時間)"
+  "live_updated_at": "2026-07-20 06:35 (台灣時間)"
 }
