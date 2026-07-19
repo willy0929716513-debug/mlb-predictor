@@ -242,11 +242,11 @@
     {
       "home_cn": "守護者",
       "away_cn": "海盜",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.0,
+      "projected_total": 7.6,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -254,29 +254,17 @@
     {
       "home_cn": "水手",
       "away_cn": "巨人",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.5,
-      "market_total": 8.5,
-      "bet": null,
-      "reason": null
-    },
-    {
-      "home_cn": "水手",
-      "away_cn": "巨人",
-      "inning": 2,
-      "top_inning": false,
-      "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 5.8,
+      "projected_total": 5.4,
       "market_total": 7.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1784421239,
+  "live_updated_ts": 1784421540,
   "game_preds": {
     "guardians|pirates": {
       "home_win_prob": 0.4481,
@@ -339,5 +327,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-19 08:33 (台灣時間)"
+  "live_updated_at": "2026-07-19 08:39 (台灣時間)"
 }
