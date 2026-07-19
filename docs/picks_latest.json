@@ -244,9 +244,9 @@
       "away_cn": "國民",
       "inning": 6,
       "top_inning": false,
-      "home_runs": 6,
+      "home_runs": 8,
       "away_runs": 0,
-      "projected_total": 10.3,
+      "projected_total": 12.3,
       "market_total": 11.0,
       "bet": null,
       "reason": null
@@ -264,7 +264,7 @@
       "reason": "第6局已得7分（此時預期4.9分），高分走勢盤口8.0"
     }
   ],
-  "live_updated_ts": 1784432393,
+  "live_updated_ts": 1784432694,
   "game_preds": {
     "guardians|pirates": {
       "home_win_prob": 0.4481,
@@ -327,5 +327,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-19 11:39 (台灣時間)"
+  "live_updated_at": "2026-07-19 11:44 (台灣時間)"
 }
