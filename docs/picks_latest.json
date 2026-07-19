@@ -242,11 +242,11 @@
     {
       "home_cn": "守護者",
       "away_cn": "海盜",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 3,
-      "projected_total": 7.4,
+      "projected_total": 6.9,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -266,14 +266,14 @@
     {
       "home_cn": "運動家",
       "away_cn": "國民",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 6,
       "away_runs": 0,
-      "projected_total": 13.9,
+      "projected_total": 13.3,
       "market_total": 11.0,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第4局已得6分（此時預期3.7分），高分走勢盤口11.0"
     },
     {
       "home_cn": "天使",
