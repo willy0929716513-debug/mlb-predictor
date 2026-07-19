@@ -244,12 +244,12 @@
       "away_cn": "海盜",
       "inning": 8,
       "top_inning": false,
-      "home_runs": 1,
+      "home_runs": 3,
       "away_runs": 3,
-      "projected_total": 5.4,
+      "projected_total": 7.4,
       "market_total": 8.5,
-      "bet": "大小分 UNDER",
-      "reason": "第8局僅4分（此時預期7.1分），低分走勢盤口8.5"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "水手",
@@ -282,7 +282,7 @@
       "top_inning": false,
       "home_runs": 0,
       "away_runs": 6,
-      "projected_total": 12.2,
+      "projected_total": 11.8,
       "market_total": 8.0,
       "bet": null,
       "reason": null
