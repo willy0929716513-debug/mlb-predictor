@@ -407,7 +407,7 @@
       "reason": "客隊落後1分 第4局，賽前客隊勝率61%"
     }
   ],
-  "live_updated_ts": 1784507072,
+  "live_updated_ts": 1784507374,
   "game_preds": {
     "blue jays|white sox": {
       "home_win_prob": 0.3165,
@@ -470,5 +470,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-20 08:24 (台灣時間)"
+  "live_updated_at": "2026-07-20 08:29 (台灣時間)"
 }
