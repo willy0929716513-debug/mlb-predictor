@@ -400,11 +400,11 @@
       "inning": 8,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 0,
-      "projected_total": 3.0,
+      "away_runs": 1,
+      "projected_total": 4.0,
       "market_total": 9.0,
       "bet": "大小分 UNDER",
-      "reason": "第8局僅1分（此時預期7.0分），低分走勢盤口9.0"
+      "reason": "第8局僅2分（此時預期7.0分），低分走勢盤口9.0"
     }
   ],
   "live_updated_ts": 1784511266,
