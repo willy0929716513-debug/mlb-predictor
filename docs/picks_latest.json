@@ -398,10 +398,10 @@
       "home_cn": "洋基",
       "away_cn": "道奇",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 7.0,
+      "projected_total": 6.5,
       "market_total": 9.0,
       "bet": "客隊讓分(+1.5)",
       "reason": "客隊落後1分 第4局，賽前客隊勝率61%"
