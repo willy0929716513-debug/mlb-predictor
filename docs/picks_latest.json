@@ -397,17 +397,17 @@
     {
       "home_cn": "洋基",
       "away_cn": "道奇",
-      "inning": 4,
-      "top_inning": false,
+      "inning": 5,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 6.5,
+      "projected_total": 6.0,
       "market_total": 9.0,
       "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後1分 第4局，賽前客隊勝率61%"
+      "reason": "客隊落後1分 第5局，賽前客隊勝率61%"
     }
   ],
-  "live_updated_ts": 1784507977,
+  "live_updated_ts": 1784508278,
   "game_preds": {
     "blue jays|white sox": {
       "home_win_prob": 0.3165,
@@ -470,5 +470,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-20 08:39 (台灣時間)"
+  "live_updated_at": "2026-07-20 08:44 (台灣時間)"
 }
