@@ -254,11 +254,11 @@
     {
       "home_cn": "洋基",
       "away_cn": "海盜",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 4,
       "away_runs": 0,
-      "projected_total": 11.1,
+      "projected_total": 10.7,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -267,10 +267,10 @@
       "home_cn": "藍鳥",
       "away_cn": "光芒",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 6.7,
+      "away_runs": 1,
+      "projected_total": 7.2,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -302,11 +302,11 @@
     {
       "home_cn": "勇士",
       "away_cn": "教士",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.5,
+      "projected_total": 8.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -336,7 +336,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784590080,
+  "live_updated_ts": 1784590381,
   "game_preds": {
     "guardians|twins": {
       "home_win_prob": 0.22,
@@ -399,5 +399,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-21 07:28 (台灣時間)"
+  "live_updated_at": "2026-07-21 07:33 (台灣時間)"
 }
