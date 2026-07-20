@@ -393,21 +393,8 @@
       "sp_confirmed": true
     }
   ],
-  "live_games": [
-    {
-      "home_cn": "洋基",
-      "away_cn": "道奇",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 2,
-      "away_runs": 1,
-      "projected_total": 4.0,
-      "market_total": 9.0,
-      "bet": null,
-      "reason": null
-    }
-  ],
-  "live_updated_ts": 1784513377,
+  "live_games": [],
+  "live_updated_ts": 1784514579,
   "game_preds": {
     "blue jays|white sox": {
       "home_win_prob": 0.3165,
@@ -470,5 +457,5 @@
       "market_total": 7.0
     }
   },
-  "live_updated_at": "2026-07-20 10:09 (台灣時間)"
+  "live_updated_at": ""
 }
