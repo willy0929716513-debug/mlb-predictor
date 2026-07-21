@@ -242,14 +242,14 @@
     {
       "home_cn": "小熊",
       "away_cn": "老虎",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 4,
-      "projected_total": 10.2,
+      "projected_total": 9.6,
       "market_total": 11.5,
       "bet": "主隊讓分(+1.5)",
-      "reason": "主隊落後1分 第7局，賽前主隊勝率55%"
+      "reason": "主隊落後1分 第8局，賽前主隊勝率55%"
     },
     {
       "home_cn": "遊騎兵",
@@ -279,10 +279,10 @@
       "home_cn": "落磯",
       "away_cn": "國民",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 6,
-      "projected_total": 11.6,
+      "projected_total": 10.9,
       "market_total": 11.5,
       "bet": "客隊獨贏",
       "reason": "第8局客隊領先3分（賽前客隊勝率59%），大局已定"
@@ -324,7 +324,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784601992,
+  "live_updated_ts": 1784602293,
   "game_preds": {
     "guardians|twins": {
       "home_win_prob": 0.22,
@@ -387,5 +387,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-21 10:46 (台灣時間)"
+  "live_updated_at": "2026-07-21 10:51 (台灣時間)"
 }
