@@ -288,7 +288,7 @@
       "reason": "第7局僅3分（此時預期6.5分），低分走勢盤口9.0"
     }
   ],
-  "live_updated_ts": 1784605913,
+  "live_updated_ts": 1784606214,
   "game_preds": {
     "guardians|twins": {
       "home_win_prob": 0.22,
@@ -351,5 +351,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-21 11:51 (台灣時間)"
+  "live_updated_at": "2026-07-21 11:56 (台灣時間)"
 }
