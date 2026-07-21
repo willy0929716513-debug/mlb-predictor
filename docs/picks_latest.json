@@ -281,11 +281,11 @@
       "inning": 7,
       "top_inning": true,
       "home_runs": 3,
-      "away_runs": 4,
-      "projected_total": 10.8,
+      "away_runs": 6,
+      "projected_total": 12.8,
       "market_total": 11.5,
-      "bet": null,
-      "reason": null
+      "bet": "客隊獨贏",
+      "reason": "第7局客隊領先3分（賽前客隊勝率59%），大局已定"
     },
     {
       "home_cn": "響尾蛇",
