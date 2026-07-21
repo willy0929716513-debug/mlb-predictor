@@ -240,18 +240,6 @@
   ],
   "live_games": [
     {
-      "home_cn": "釀酒人",
-      "away_cn": "大都會",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 8,
-      "away_runs": 3,
-      "projected_total": 11.8,
-      "market_total": 7.5,
-      "bet": "主隊獨贏",
-      "reason": "第9局主隊領先5分（賽前主隊勝率74%），大局已定"
-    },
-    {
       "home_cn": "小熊",
       "away_cn": "老虎",
       "inning": 6,
@@ -267,13 +255,13 @@
       "home_cn": "遊騎兵",
       "away_cn": "白襪",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 5,
-      "projected_total": 9.5,
+      "projected_total": 9.1,
       "market_total": 7.5,
-      "bet": "大小分 OVER",
-      "reason": "第7局已得7分（此時預期5.0分），高分走勢盤口7.5"
+      "bet": "客隊獨贏",
+      "reason": "第7局客隊領先3分（賽前客隊勝率46%），大局已定"
     },
     {
       "home_cn": "太空人",
@@ -327,10 +315,10 @@
       "home_cn": "天使",
       "away_cn": "紅雀",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 9.0,
+      "projected_total": 8.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
