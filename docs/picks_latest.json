@@ -258,7 +258,7 @@
       "top_inning": false,
       "home_runs": 3,
       "away_runs": 3,
-      "projected_total": 7.2,
+      "projected_total": 6.6,
       "market_total": 10.5,
       "bet": null,
       "reason": null
@@ -270,10 +270,10 @@
       "top_inning": false,
       "home_runs": 8,
       "away_runs": 3,
-      "projected_total": 12.7,
+      "projected_total": 11.8,
       "market_total": 7.5,
       "bet": "主隊獨贏",
-      "reason": "第8局主隊領先5分（賽前主隊勝率74%），大局已定"
+      "reason": "第9局主隊領先5分（賽前主隊勝率74%），大局已定"
     },
     {
       "home_cn": "小熊",
@@ -290,35 +290,35 @@
     {
       "home_cn": "遊騎兵",
       "away_cn": "白襪",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 5,
-      "projected_total": 9.9,
+      "projected_total": 9.5,
       "market_total": 7.5,
       "bet": "大小分 OVER",
-      "reason": "第6局已得7分（此時預期4.6分），高分走勢盤口7.5"
+      "reason": "第7局已得7分（此時預期5.0分），高分走勢盤口7.5"
     },
     {
       "home_cn": "太空人",
       "away_cn": "馬林魚",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 7,
       "away_runs": 4,
-      "projected_total": 14.3,
+      "projected_total": 13.8,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第6局已得11分（此時預期5.2分），高分走勢盤口8.5"
+      "reason": "第7局已得11分（此時預期5.7分），高分走勢盤口8.5"
     },
     {
       "home_cn": "落磯",
       "away_cn": "國民",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 3,
-      "away_runs": 3,
-      "projected_total": 11.8,
+      "away_runs": 4,
+      "projected_total": 12.1,
       "market_total": 11.5,
       "bet": null,
       "reason": null
