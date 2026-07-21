@@ -243,10 +243,10 @@
       "home_cn": "小熊",
       "away_cn": "老虎",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 4,
-      "projected_total": 10.8,
+      "projected_total": 10.2,
       "market_total": 11.5,
       "bet": "主隊讓分(+1.5)",
       "reason": "主隊落後1分 第7局，賽前主隊勝率55%"
@@ -255,10 +255,10 @@
       "home_cn": "遊騎兵",
       "away_cn": "白襪",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 5,
-      "projected_total": 9.7,
+      "projected_total": 9.2,
       "market_total": 7.5,
       "bet": "客隊獨贏",
       "reason": "第8局客隊領先2分（賽前客隊勝率46%），大局已定"
@@ -278,14 +278,14 @@
     {
       "home_cn": "落磯",
       "away_cn": "國民",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 6,
-      "projected_total": 12.2,
+      "projected_total": 11.6,
       "market_total": 11.5,
       "bet": "客隊獨贏",
-      "reason": "第7局客隊領先3分（賽前客隊勝率59%），大局已定"
+      "reason": "第8局客隊領先3分（賽前客隊勝率59%），大局已定"
     },
     {
       "home_cn": "響尾蛇",
