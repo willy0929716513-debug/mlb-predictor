@@ -245,8 +245,8 @@
       "inning": 10,
       "top_inning": true,
       "home_runs": 5,
-      "away_runs": 6,
-      "projected_total": 11.0,
+      "away_runs": 8,
+      "projected_total": 13.0,
       "market_total": 11.5,
       "bet": null,
       "reason": null
@@ -279,13 +279,13 @@
       "home_cn": "天使",
       "away_cn": "紅雀",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 2,
-      "projected_total": 6.0,
+      "projected_total": 5.5,
       "market_total": 9.0,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅3分（此時預期6.0分），低分走勢盤口9.0"
+      "reason": "第7局僅3分（此時預期6.5分），低分走勢盤口9.0"
     }
   ],
   "live_updated_ts": 1784605913,
