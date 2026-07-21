@@ -240,18 +240,6 @@
   ],
   "live_games": [
     {
-      "home_cn": "洋基",
-      "away_cn": "海盜",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 8,
-      "away_runs": 5,
-      "projected_total": 13.8,
-      "market_total": 7.5,
-      "bet": "主隊獨贏",
-      "reason": "第9局主隊領先3分（賽前主隊勝率56%），大局已定"
-    },
-    {
       "home_cn": "費城人",
       "away_cn": "道奇",
       "inning": 8,
@@ -281,11 +269,11 @@
       "inning": 8,
       "top_inning": true,
       "home_runs": 8,
-      "away_runs": 1,
-      "projected_total": 10.7,
+      "away_runs": 2,
+      "projected_total": 11.7,
       "market_total": 7.5,
       "bet": "主隊獨贏",
-      "reason": "第8局主隊領先7分（賽前主隊勝率74%），大局已定"
+      "reason": "第8局主隊領先6分（賽前主隊勝率74%），大局已定"
     },
     {
       "home_cn": "小熊",
@@ -350,11 +338,11 @@
     {
       "home_cn": "水手",
       "away_cn": "紅人",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 7.1,
+      "projected_total": 6.7,
       "market_total": 7.5,
       "bet": null,
       "reason": null
