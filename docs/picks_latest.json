@@ -242,11 +242,11 @@
     {
       "home_cn": "費城人",
       "away_cn": "道奇",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 10,
       "away_runs": 4,
-      "projected_total": 15.4,
+      "projected_total": 14.9,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -303,22 +303,22 @@
       "home_cn": "太空人",
       "away_cn": "馬林魚",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 7,
       "away_runs": 4,
-      "projected_total": 14.8,
+      "projected_total": 14.3,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第6局已得11分（此時預期4.7分），高分走勢盤口8.5"
+      "reason": "第6局已得11分（此時預期5.2分），高分走勢盤口8.5"
     },
     {
       "home_cn": "落磯",
       "away_cn": "國民",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 3,
-      "projected_total": 12.4,
+      "projected_total": 11.8,
       "market_total": 11.5,
       "bet": null,
       "reason": null
@@ -326,11 +326,11 @@
     {
       "home_cn": "響尾蛇",
       "away_cn": "運動家",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.5,
+      "projected_total": 8.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -360,7 +360,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784598976,
+  "live_updated_ts": 1784599278,
   "game_preds": {
     "guardians|twins": {
       "home_win_prob": 0.22,
@@ -423,5 +423,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-21 09:56 (台灣時間)"
+  "live_updated_at": "2026-07-21 10:01 (台灣時間)"
 }
