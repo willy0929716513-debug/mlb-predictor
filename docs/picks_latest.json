@@ -257,23 +257,11 @@
       "inning": 9,
       "top_inning": true,
       "home_runs": 3,
-      "away_runs": 9,
-      "projected_total": 12.8,
+      "away_runs": 10,
+      "projected_total": 13.8,
       "market_total": 7.5,
       "bet": "客隊獨贏",
-      "reason": "第9局客隊領先6分（賽前客隊勝率46%），大局已定"
-    },
-    {
-      "home_cn": "落磯",
-      "away_cn": "國民",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 3,
-      "away_runs": 7,
-      "projected_total": 10.6,
-      "market_total": 11.5,
-      "bet": "客隊獨贏",
-      "reason": "第9局客隊領先4分（賽前客隊勝率59%），大局已定"
+      "reason": "第9局客隊領先7分（賽前客隊勝率46%），大局已定"
     },
     {
       "home_cn": "響尾蛇",
@@ -312,7 +300,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784603198,
+  "live_updated_ts": 1784603500,
   "game_preds": {
     "guardians|twins": {
       "home_win_prob": 0.22,
@@ -375,5 +363,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-21 11:06 (台灣時間)"
+  "live_updated_at": "2026-07-21 11:11 (台灣時間)"
 }
