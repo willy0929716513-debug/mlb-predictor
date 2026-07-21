@@ -279,13 +279,13 @@
       "home_cn": "費城人",
       "away_cn": "道奇",
       "inning": 7,
-      "top_inning": true,
-      "home_runs": 8,
+      "top_inning": false,
+      "home_runs": 9,
       "away_runs": 4,
-      "projected_total": 14.8,
+      "projected_total": 15.4,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第7局已得12分（此時預期5.7分），高分走勢盤口8.5"
+      "reason": "第7局已得13分（此時預期6.1分），高分走勢盤口8.5"
     },
     {
       "home_cn": "勇士",
@@ -341,11 +341,11 @@
       "inning": 5,
       "top_inning": true,
       "home_runs": 2,
-      "away_runs": 2,
-      "projected_total": 8.2,
+      "away_runs": 5,
+      "projected_total": 11.2,
       "market_total": 7.5,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第5局已得7分（此時預期3.3分），高分走勢盤口7.5"
     },
     {
       "home_cn": "太空人",
@@ -394,9 +394,21 @@
       "market_total": 7.5,
       "bet": null,
       "reason": null
+    },
+    {
+      "home_cn": "天使",
+      "away_cn": "紅雀",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 9.0,
+      "market_total": 9.0,
+      "bet": null,
+      "reason": null
     }
   ],
-  "live_updated_ts": 1784597468,
+  "live_updated_ts": 1784597770,
   "game_preds": {
     "guardians|twins": {
       "home_win_prob": 0.22,
@@ -459,5 +471,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-21 09:31 (台灣時間)"
+  "live_updated_at": "2026-07-21 09:36 (台灣時間)"
 }
