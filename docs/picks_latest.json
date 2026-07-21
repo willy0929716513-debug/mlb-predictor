@@ -290,14 +290,14 @@
     {
       "home_cn": "水手",
       "away_cn": "紅人",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 4.8,
+      "projected_total": 4.3,
       "market_total": 7.5,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 UNDER",
+      "reason": "第6局僅1分（此時預期4.2分），低分走勢盤口7.5"
     },
     {
       "home_cn": "天使",
