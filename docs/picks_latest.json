@@ -266,8 +266,8 @@
     {
       "home_cn": "藍鳥",
       "away_cn": "光芒",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 6,
       "projected_total": 9.1,
@@ -280,7 +280,7 @@
       "away_cn": "金鶯",
       "inning": 7,
       "top_inning": false,
-      "home_runs": 4,
+      "home_runs": 5,
       "away_runs": 5,
       "projected_total": 11.5,
       "market_total": 9.0,
@@ -327,13 +327,13 @@
       "home_cn": "釀酒人",
       "away_cn": "大都會",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 5,
       "away_runs": 1,
-      "projected_total": 10.2,
+      "projected_total": 9.8,
       "market_total": 7.5,
       "bet": "大小分 OVER",
-      "reason": "第5局已得6分（此時預期3.3分），高分走勢盤口7.5"
+      "reason": "第5局已得6分（此時預期3.8分），高分走勢盤口7.5"
     },
     {
       "home_cn": "小熊",
@@ -374,17 +374,17 @@
     {
       "home_cn": "落磯",
       "away_cn": "國民",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 3,
-      "projected_total": 13.9,
+      "projected_total": 13.2,
       "market_total": 11.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1784595658,
+  "live_updated_ts": 1784595960,
   "game_preds": {
     "guardians|twins": {
       "home_win_prob": 0.22,
@@ -447,5 +447,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-21 09:00 (台灣時間)"
+  "live_updated_at": "2026-07-21 09:06 (台灣時間)"
 }
