@@ -257,8 +257,8 @@
       "inning": 9,
       "top_inning": true,
       "home_runs": 3,
-      "away_runs": 1,
-      "projected_total": 5.2,
+      "away_runs": 3,
+      "projected_total": 7.2,
       "market_total": 10.5,
       "bet": null,
       "reason": null
@@ -269,20 +269,20 @@
       "inning": 8,
       "top_inning": true,
       "home_runs": 8,
-      "away_runs": 2,
-      "projected_total": 11.7,
+      "away_runs": 3,
+      "projected_total": 12.7,
       "market_total": 7.5,
       "bet": "主隊獨贏",
-      "reason": "第8局主隊領先6分（賽前主隊勝率74%），大局已定"
+      "reason": "第8局主隊領先5分（賽前主隊勝率74%），大局已定"
     },
     {
       "home_cn": "小熊",
       "away_cn": "老虎",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 4,
-      "projected_total": 13.4,
+      "projected_total": 12.8,
       "market_total": 11.5,
       "bet": "主隊讓分(+1.5)",
       "reason": "主隊落後1分 第5局，賽前主隊勝率55%"
