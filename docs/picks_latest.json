@@ -245,8 +245,8 @@
       "inning": 9,
       "top_inning": true,
       "home_runs": 10,
-      "away_runs": 4,
-      "projected_total": 14.9,
+      "away_runs": 7,
+      "projected_total": 17.9,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -255,7 +255,7 @@
       "home_cn": "皇家",
       "away_cn": "巨人",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 3,
       "projected_total": 7.2,
@@ -267,7 +267,7 @@
       "home_cn": "釀酒人",
       "away_cn": "大都會",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 8,
       "away_runs": 3,
       "projected_total": 12.7,
@@ -329,8 +329,8 @@
       "inning": 2,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 0,
-      "projected_total": 8.0,
+      "away_runs": 1,
+      "projected_total": 9.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -339,10 +339,10 @@
       "home_cn": "水手",
       "away_cn": "紅人",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 6.7,
+      "projected_total": 6.2,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -360,7 +360,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784599278,
+  "live_updated_ts": 1784599579,
   "game_preds": {
     "guardians|twins": {
       "home_win_prob": 0.22,
@@ -423,5 +423,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-21 10:01 (台灣時間)"
+  "live_updated_at": "2026-07-21 10:06 (台灣時間)"
 }
