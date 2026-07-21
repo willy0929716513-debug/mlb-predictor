@@ -254,23 +254,23 @@
     {
       "home_cn": "遊騎兵",
       "away_cn": "白襪",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 5,
-      "projected_total": 9.2,
+      "projected_total": 8.8,
       "market_total": 7.5,
       "bet": "客隊獨贏",
-      "reason": "第8局客隊領先2分（賽前客隊勝率46%），大局已定"
+      "reason": "第9局客隊領先2分（賽前客隊勝率46%），大局已定"
     },
     {
       "home_cn": "太空人",
       "away_cn": "馬林魚",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 8,
       "away_runs": 4,
-      "projected_total": 13.4,
+      "projected_total": 12.9,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -285,7 +285,7 @@
       "projected_total": 10.9,
       "market_total": 11.5,
       "bet": "客隊獨贏",
-      "reason": "第8局客隊領先3分（賽前客隊勝率59%），大局已定"
+      "reason": "第9局客隊領先3分（賽前客隊勝率59%），大局已定"
     },
     {
       "home_cn": "響尾蛇",
@@ -303,10 +303,10 @@
       "home_cn": "水手",
       "away_cn": "紅人",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 4.2,
+      "projected_total": 3.8,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -316,9 +316,9 @@
       "away_cn": "紅雀",
       "inning": 3,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 1,
       "away_runs": 2,
-      "projected_total": 8.5,
+      "projected_total": 9.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
