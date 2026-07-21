@@ -242,11 +242,11 @@
     {
       "home_cn": "小熊",
       "away_cn": "老虎",
-      "inning": 9,
-      "top_inning": false,
+      "inning": 10,
+      "top_inning": true,
       "home_runs": 5,
       "away_runs": 5,
-      "projected_total": 10.6,
+      "projected_total": 10.0,
       "market_total": 11.5,
       "bet": null,
       "reason": null
@@ -256,12 +256,12 @@
       "away_cn": "運動家",
       "inning": 6,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 2,
       "away_runs": 2,
-      "projected_total": 5.5,
+      "projected_total": 7.5,
       "market_total": 9.0,
-      "bet": "大小分 UNDER",
-      "reason": "第6局僅2分（此時預期5.5分），低分走勢盤口9.0"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "水手",
