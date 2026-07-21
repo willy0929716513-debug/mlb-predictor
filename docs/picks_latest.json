@@ -267,13 +267,13 @@
       "home_cn": "水手",
       "away_cn": "紅人",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 3.5,
+      "projected_total": 3.1,
       "market_total": 7.5,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅1分（此時預期5.0分），低分走勢盤口7.5"
+      "reason": "第7局僅1分（此時預期5.4分），低分走勢盤口7.5"
     },
     {
       "home_cn": "天使",
@@ -288,7 +288,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784604405,
+  "live_updated_ts": 1784604707,
   "game_preds": {
     "guardians|twins": {
       "home_win_prob": 0.22,
@@ -351,5 +351,5 @@
       "market_total": 9.0
     }
   },
-  "live_updated_at": "2026-07-21 11:26 (台灣時間)"
+  "live_updated_at": "2026-07-21 11:31 (台灣時間)"
 }
