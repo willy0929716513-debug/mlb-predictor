@@ -252,30 +252,6 @@
       "reason": "第8局主隊領先3分（賽前主隊勝率56%），大局已定"
     },
     {
-      "home_cn": "藍鳥",
-      "away_cn": "光芒",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 1,
-      "away_runs": 7,
-      "projected_total": 8.4,
-      "market_total": 7.5,
-      "bet": null,
-      "reason": null
-    },
-    {
-      "home_cn": "紅襪",
-      "away_cn": "金鶯",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 6,
-      "away_runs": 5,
-      "projected_total": 12.0,
-      "market_total": 9.0,
-      "bet": null,
-      "reason": null
-    },
-    {
       "home_cn": "費城人",
       "away_cn": "道奇",
       "inning": 7,
@@ -327,13 +303,13 @@
       "home_cn": "小熊",
       "away_cn": "老虎",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 4,
-      "projected_total": 14.7,
+      "projected_total": 14.0,
       "market_total": 11.5,
       "bet": "大小分 OVER",
-      "reason": "第4局已得7分（此時預期3.8分），高分走勢盤口11.5"
+      "reason": "第4局已得7分（此時預期4.5分），高分走勢盤口11.5"
     },
     {
       "home_cn": "遊騎兵",
@@ -362,14 +338,14 @@
     {
       "home_cn": "落磯",
       "away_cn": "國民",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 3,
-      "projected_total": 14.3,
+      "projected_total": 13.7,
       "market_total": 11.5,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第4局已得6分（此時預期3.8分），高分走勢盤口11.5"
     },
     {
       "home_cn": "響尾蛇",
