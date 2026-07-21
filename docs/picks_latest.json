@@ -254,26 +254,26 @@
     {
       "home_cn": "響尾蛇",
       "away_cn": "運動家",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 6.5,
+      "projected_total": 6.0,
       "market_total": 9.0,
-      "bet": "主隊讓分(+1.5)",
-      "reason": "主隊落後2分 第5局，賽前主隊勝率63%"
+      "bet": "大小分 UNDER",
+      "reason": "第6局僅2分（此時預期5.0分），低分走勢盤口9.0"
     },
     {
       "home_cn": "水手",
       "away_cn": "紅人",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 3.9,
+      "projected_total": 3.5,
       "market_total": 7.5,
       "bet": "大小分 UNDER",
-      "reason": "第6局僅1分（此時預期4.6分），低分走勢盤口7.5"
+      "reason": "第7局僅1分（此時預期5.0分），低分走勢盤口7.5"
     },
     {
       "home_cn": "天使",
