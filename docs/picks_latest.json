@@ -254,14 +254,14 @@
     {
       "home_cn": "遊騎兵",
       "away_cn": "白襪",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 5,
-      "projected_total": 10.1,
+      "projected_total": 9.7,
       "market_total": 7.5,
-      "bet": "大小分 OVER",
-      "reason": "第7局已得8分（此時預期5.4分），高分走勢盤口7.5"
+      "bet": "客隊獨贏",
+      "reason": "第8局客隊領先2分（賽前客隊勝率46%），大局已定"
     },
     {
       "home_cn": "太空人",
@@ -278,11 +278,11 @@
     {
       "home_cn": "落磯",
       "away_cn": "國民",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 4,
-      "projected_total": 11.5,
+      "projected_total": 10.8,
       "market_total": 11.5,
       "bet": null,
       "reason": null
@@ -302,11 +302,11 @@
     {
       "home_cn": "水手",
       "away_cn": "紅人",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 5.4,
+      "projected_total": 5.0,
       "market_total": 7.5,
       "bet": null,
       "reason": null
