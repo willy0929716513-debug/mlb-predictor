@@ -276,7 +276,7 @@
       "reason": "第7局客隊領先2分（賽前客隊勝率49%），大局已定"
     }
   ],
-  "live_updated_ts": 1784692196,
+  "live_updated_ts": 1784692498,
   "game_preds": {
     "guardians|twins": {
       "home_win_prob": 0.3619,
@@ -339,5 +339,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-07-22 11:49 (台灣時間)"
+  "live_updated_at": "2026-07-22 11:54 (台灣時間)"
 }
