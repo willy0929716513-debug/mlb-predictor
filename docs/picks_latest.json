@@ -380,14 +380,14 @@
     {
       "home_cn": "紅襪",
       "away_cn": "金鶯",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 6,
       "away_runs": 3,
-      "projected_total": 11.5,
+      "projected_total": 11.0,
       "market_total": 9.0,
       "bet": "主隊獨贏",
-      "reason": "第7局主隊領先3分（賽前主隊勝率61%），大局已定"
+      "reason": "第8局主隊領先3分（賽前主隊勝率61%），大局已定"
     },
     {
       "home_cn": "皇家",
@@ -395,20 +395,20 @@
       "inning": 7,
       "top_inning": true,
       "home_runs": 0,
-      "away_runs": 1,
-      "projected_total": 4.0,
+      "away_runs": 3,
+      "projected_total": 6.0,
       "market_total": 9.0,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅1分（此時預期6.0分），低分走勢盤口9.0"
+      "reason": "第7局僅3分（此時預期6.0分），低分走勢盤口9.0"
     },
     {
       "home_cn": "釀酒人",
       "away_cn": "大都會",
-      "inning": 4,
-      "top_inning": false,
+      "inning": 5,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 1,
-      "projected_total": 9.2,
+      "projected_total": 8.7,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -417,10 +417,10 @@
       "home_cn": "落磯",
       "away_cn": "國民",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 10.2,
+      "projected_total": 9.6,
       "market_total": 11.5,
       "bet": null,
       "reason": null
@@ -450,7 +450,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784748788,
+  "live_updated_ts": 1784749089,
   "game_preds": {
     "yankees|pirates": {
       "home_win_prob": 0.4671,
@@ -513,5 +513,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-23 03:33 (台灣時間)"
+  "live_updated_at": "2026-07-23 03:38 (台灣時間)"
 }
