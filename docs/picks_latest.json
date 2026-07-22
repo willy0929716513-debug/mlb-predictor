@@ -382,12 +382,12 @@
       "away_cn": "運動家",
       "inning": 6,
       "top_inning": false,
-      "home_runs": 10,
+      "home_runs": 11,
       "away_runs": 2,
-      "projected_total": 15.5,
+      "projected_total": 16.5,
       "market_total": 9.0,
       "bet": "大小分 OVER",
-      "reason": "第6局已得12分（此時預期5.5分），高分走勢盤口9.0"
+      "reason": "第6局已得13分（此時預期5.5分），高分走勢盤口9.0"
     },
     {
       "home_cn": "水手",
@@ -414,7 +414,7 @@
       "reason": "第7局僅1分（此時預期6.0分），低分走勢盤口9.0"
     }
   ],
-  "live_updated_ts": 1784756934,
+  "live_updated_ts": 1784757236,
   "game_preds": {
     "yankees|pirates": {
       "home_win_prob": 0.4671,
@@ -477,5 +477,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-23 05:48 (台灣時間)"
+  "live_updated_at": "2026-07-23 05:53 (台灣時間)"
 }
