@@ -266,26 +266,26 @@
     {
       "home_cn": "小熊",
       "away_cn": "老虎",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 11,
       "away_runs": 0,
-      "projected_total": 13.4,
+      "projected_total": 12.9,
       "market_total": 8.5,
-      "bet": "大小分 OVER",
-      "reason": "第7局已得11分（此時預期6.1分），高分走勢盤口8.5"
+      "bet": "主隊獨贏",
+      "reason": "第8局主隊領先11分（賽前主隊勝率67%），大局已定"
     },
     {
       "home_cn": "遊騎兵",
       "away_cn": "白襪",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 10,
       "away_runs": 0,
-      "projected_total": 12.8,
+      "projected_total": 12.4,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第7局已得10分（此時預期5.7分），高分走勢盤口8.5"
+      "reason": "第7局已得10分（此時預期6.1分），高分走勢盤口8.5"
     },
     {
       "home_cn": "太空人",
