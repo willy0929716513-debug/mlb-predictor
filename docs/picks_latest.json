@@ -255,13 +255,13 @@
       "home_cn": "響尾蛇",
       "away_cn": "運動家",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 1,
-      "projected_total": 7.2,
+      "projected_total": 6.6,
       "market_total": 9.5,
-      "bet": "主隊獨贏",
-      "reason": "第7局主隊領先2分（賽前主隊勝率56%），大局已定"
+      "bet": "大小分 UNDER",
+      "reason": "第7局僅4分（此時預期6.9分），低分走勢盤口9.5"
     },
     {
       "home_cn": "水手",
