@@ -394,9 +394,9 @@
       "away_cn": "雙城",
       "inning": 2,
       "top_inning": false,
-      "home_runs": 1,
+      "home_runs": 2,
       "away_runs": 1,
-      "projected_total": 8.7,
+      "projected_total": 9.7,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -404,11 +404,11 @@
     {
       "home_cn": "費城人",
       "away_cn": "道奇",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 0,
-      "projected_total": 9.9,
+      "projected_total": 9.4,
       "market_total": 9.5,
       "bet": null,
       "reason": null
@@ -438,7 +438,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784761760,
+  "live_updated_ts": 1784762062,
   "game_preds": {
     "yankees|pirates": {
       "home_win_prob": 0.4671,
@@ -501,5 +501,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-23 07:09 (台灣時間)"
+  "live_updated_at": "2026-07-23 07:14 (台灣時間)"
 }
