@@ -240,18 +240,6 @@
   ],
   "live_games": [
     {
-      "home_cn": "費城人",
-      "away_cn": "道奇",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 1,
-      "away_runs": 2,
-      "projected_total": 3.5,
-      "market_total": 8.5,
-      "bet": null,
-      "reason": null
-    },
-    {
       "home_cn": "釀酒人",
       "away_cn": "大都會",
       "inning": 9,
@@ -303,13 +291,13 @@
       "home_cn": "落磯",
       "away_cn": "國民",
       "inning": 6,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 6,
       "away_runs": 6,
-      "projected_total": 17.8,
+      "projected_total": 17.1,
       "market_total": 13.0,
       "bet": "大小分 OVER",
-      "reason": "第6局已得12分（此時預期7.2分），高分走勢盤口13.0"
+      "reason": "第6局已得12分（此時預期7.9分），高分走勢盤口13.0"
     },
     {
       "home_cn": "天使",
@@ -338,17 +326,17 @@
     {
       "home_cn": "水手",
       "away_cn": "紅人",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 6.4,
+      "projected_total": 6.0,
       "market_total": 7.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1784687060,
+  "live_updated_ts": 1784687362,
   "game_preds": {
     "guardians|twins": {
       "home_win_prob": 0.3619,
@@ -411,5 +399,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-07-22 10:24 (台灣時間)"
+  "live_updated_at": "2026-07-22 10:29 (台灣時間)"
 }
