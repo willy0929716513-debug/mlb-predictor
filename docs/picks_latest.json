@@ -254,14 +254,14 @@
     {
       "home_cn": "皇家",
       "away_cn": "巨人",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 2,
-      "projected_total": 6.6,
+      "projected_total": 6.1,
       "market_total": 9.5,
-      "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後1分 第8局，賽前客隊勝率56%"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "釀酒人",
@@ -279,13 +279,13 @@
       "home_cn": "小熊",
       "away_cn": "老虎",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 9,
       "away_runs": 0,
-      "projected_total": 11.8,
+      "projected_total": 11.4,
       "market_total": 8.5,
       "bet": "大小分 OVER",
-      "reason": "第7局已得9分（此時預期5.7分），高分走勢盤口8.5"
+      "reason": "第7局已得9分（此時預期6.1分），高分走勢盤口8.5"
     },
     {
       "home_cn": "遊騎兵",
@@ -315,13 +315,13 @@
       "home_cn": "落磯",
       "away_cn": "國民",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 5,
       "away_runs": 6,
-      "projected_total": 18.2,
+      "projected_total": 17.5,
       "market_total": 13.0,
       "bet": "大小分 OVER",
-      "reason": "第5局已得11分（此時預期5.8分），高分走勢盤口13.0"
+      "reason": "第5局已得11分（此時預期6.5分），高分走勢盤口13.0"
     },
     {
       "home_cn": "天使",
@@ -360,7 +360,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784686154,
+  "live_updated_ts": 1784686456,
   "game_preds": {
     "guardians|twins": {
       "home_win_prob": 0.3619,
@@ -423,5 +423,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-07-22 10:09 (台灣時間)"
+  "live_updated_at": "2026-07-22 10:14 (台灣時間)"
 }
