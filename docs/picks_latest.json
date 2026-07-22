@@ -242,14 +242,14 @@
     {
       "home_cn": "小熊",
       "away_cn": "老虎",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 11,
       "away_runs": 0,
-      "projected_total": 12.4,
+      "projected_total": 11.9,
       "market_total": 8.5,
       "bet": "主隊獨贏",
-      "reason": "第8局主隊領先11分（賽前主隊勝率67%），大局已定"
+      "reason": "第9局主隊領先11分（賽前主隊勝率67%），大局已定"
     },
     {
       "home_cn": "遊騎兵",
@@ -266,14 +266,14 @@
     {
       "home_cn": "太空人",
       "away_cn": "馬林魚",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 5,
       "away_runs": 3,
-      "projected_total": 9.4,
+      "projected_total": 8.9,
       "market_total": 8.5,
       "bet": "主隊獨贏",
-      "reason": "第8局主隊領先2分（賽前主隊勝率50%），大局已定"
+      "reason": "第9局主隊領先2分（賽前主隊勝率50%），大局已定"
     },
     {
       "home_cn": "落磯",
@@ -315,7 +315,7 @@
       "home_cn": "水手",
       "away_cn": "紅人",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
       "projected_total": 7.0,
