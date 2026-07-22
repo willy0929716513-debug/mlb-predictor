@@ -416,11 +416,11 @@
     {
       "home_cn": "藍鳥",
       "away_cn": "光芒",
-      "inning": 1,
-      "top_inning": false,
+      "inning": 2,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 9.0,
+      "projected_total": 8.6,
       "market_total": 8.5,
       "bet": null,
       "reason": null
