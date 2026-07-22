@@ -404,17 +404,17 @@
     {
       "home_cn": "天使",
       "away_cn": "紅雀",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 3.5,
+      "projected_total": 3.0,
       "market_total": 9.0,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅1分（此時預期6.5分），低分走勢盤口9.0"
+      "reason": "第8局僅1分（此時預期7.0分），低分走勢盤口9.0"
     }
   ],
-  "live_updated_ts": 1784757839,
+  "live_updated_ts": 1784758140,
   "game_preds": {
     "yankees|pirates": {
       "home_win_prob": 0.4671,
@@ -477,5 +477,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-23 06:03 (台灣時間)"
+  "live_updated_at": "2026-07-23 06:09 (台灣時間)"
 }
