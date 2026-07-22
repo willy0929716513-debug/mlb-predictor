@@ -240,25 +240,13 @@
   ],
   "live_games": [
     {
-      "home_cn": "落磯",
-      "away_cn": "國民",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 8,
-      "away_runs": 7,
-      "projected_total": 16.4,
-      "market_total": 13.0,
-      "bet": null,
-      "reason": null
-    },
-    {
       "home_cn": "天使",
       "away_cn": "紅雀",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 5,
       "away_runs": 1,
-      "projected_total": 9.0,
+      "projected_total": 8.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -266,14 +254,14 @@
     {
       "home_cn": "響尾蛇",
       "away_cn": "運動家",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 1,
-      "projected_total": 7.7,
+      "projected_total": 7.2,
       "market_total": 9.5,
-      "bet": null,
-      "reason": null
+      "bet": "主隊獨贏",
+      "reason": "第7局主隊領先2分（賽前主隊勝率56%），大局已定"
     },
     {
       "home_cn": "水手",
