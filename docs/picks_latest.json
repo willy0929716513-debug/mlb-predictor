@@ -267,10 +267,10 @@
       "home_cn": "勇士",
       "away_cn": "教士",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 8,
-      "projected_total": 13.0,
+      "projected_total": 12.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -384,7 +384,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784684341,
+  "live_updated_ts": 1784684643,
   "game_preds": {
     "guardians|twins": {
       "home_win_prob": 0.3619,
@@ -447,5 +447,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-07-22 09:39 (台灣時間)"
+  "live_updated_at": "2026-07-22 09:44 (台灣時間)"
 }
