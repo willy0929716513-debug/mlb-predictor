@@ -438,6 +438,18 @@
       "reason": null
     },
     {
+      "home_cn": "遊騎兵",
+      "away_cn": "白襪",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 8.5,
+      "market_total": 8.5,
+      "bet": null,
+      "reason": null
+    },
+    {
       "home_cn": "小熊",
       "away_cn": "老虎",
       "inning": 1,
@@ -462,7 +474,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784764065,
+  "live_updated_ts": 1784764367,
   "game_preds": {
     "yankees|pirates": {
       "home_win_prob": 0.4671,
@@ -525,5 +537,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-23 07:47 (台灣時間)"
+  "live_updated_at": "2026-07-23 07:52 (台灣時間)"
 }
