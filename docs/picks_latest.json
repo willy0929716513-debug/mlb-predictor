@@ -254,11 +254,11 @@
     {
       "home_cn": "費城人",
       "away_cn": "道奇",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 2,
-      "projected_total": 7.2,
+      "projected_total": 6.8,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -302,26 +302,26 @@
     {
       "home_cn": "釀酒人",
       "away_cn": "大都會",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 3,
-      "projected_total": 7.5,
+      "projected_total": 7.0,
       "market_total": 9.0,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 UNDER",
+      "reason": "第6局僅3分（此時預期5.0分），低分走勢盤口9.0"
     },
     {
       "home_cn": "小熊",
       "away_cn": "老虎",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 7,
       "away_runs": 0,
-      "projected_total": 13.1,
+      "projected_total": 12.7,
       "market_total": 8.5,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 OVER",
+      "reason": "第4局已得7分（此時預期2.8分），高分走勢盤口8.5"
     },
     {
       "home_cn": "遊騎兵",
@@ -352,9 +352,9 @@
       "away_cn": "國民",
       "inning": 2,
       "top_inning": false,
-      "home_runs": 1,
+      "home_runs": 4,
       "away_runs": 2,
-      "projected_total": 13.8,
+      "projected_total": 16.8,
       "market_total": 13.0,
       "bet": null,
       "reason": null
@@ -368,6 +368,18 @@
       "away_runs": 0,
       "projected_total": 9.0,
       "market_total": 9.0,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "響尾蛇",
+      "away_cn": "運動家",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 9.5,
+      "market_total": 9.5,
       "bet": null,
       "reason": null
     },
