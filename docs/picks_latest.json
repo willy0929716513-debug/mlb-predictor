@@ -369,10 +369,10 @@
       "home_cn": "落磯",
       "away_cn": "國民",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 8,
-      "projected_total": 9.3,
+      "projected_total": 8.6,
       "market_total": 11.5,
       "bet": "客隊獨贏",
       "reason": "第9局客隊領先8分（賽前客隊勝率76%），大局已定"
@@ -380,23 +380,23 @@
     {
       "home_cn": "響尾蛇",
       "away_cn": "運動家",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 14,
       "away_runs": 2,
-      "projected_total": 19.5,
+      "projected_total": 19.0,
       "market_total": 9.0,
       "bet": "大小分 OVER",
-      "reason": "第6局已得16分（此時預期5.5分），高分走勢盤口9.0"
+      "reason": "第7局已得16分（此時預期6.0分），高分走勢盤口9.0"
     },
     {
       "home_cn": "水手",
       "away_cn": "紅人",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 3,
       "away_runs": 5,
-      "projected_total": 8.8,
+      "projected_total": 8.4,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -405,16 +405,16 @@
       "home_cn": "天使",
       "away_cn": "紅雀",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 4.0,
+      "projected_total": 3.5,
       "market_total": 9.0,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅1分（此時預期6.0分），低分走勢盤口9.0"
+      "reason": "第7局僅1分（此時預期6.5分），低分走勢盤口9.0"
     }
   ],
-  "live_updated_ts": 1784757537,
+  "live_updated_ts": 1784757839,
   "game_preds": {
     "yankees|pirates": {
       "home_win_prob": 0.4671,
@@ -477,5 +477,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-23 05:58 (台灣時間)"
+  "live_updated_at": "2026-07-23 06:03 (台灣時間)"
 }
