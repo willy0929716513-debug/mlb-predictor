@@ -380,14 +380,14 @@
     {
       "home_cn": "紅襪",
       "away_cn": "金鶯",
-      "inning": 4,
-      "top_inning": false,
-      "home_runs": 5,
+      "inning": 5,
+      "top_inning": true,
+      "home_runs": 6,
       "away_runs": 2,
-      "projected_total": 12.5,
+      "projected_total": 13.0,
       "market_total": 9.0,
       "bet": "大小分 OVER",
-      "reason": "第4局已得7分（此時預期3.5分），高分走勢盤口9.0"
+      "reason": "第5局已得8分（此時預期4.0分），高分走勢盤口9.0"
     },
     {
       "home_cn": "皇家",
@@ -414,7 +414,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784745771,
+  "live_updated_ts": 1784746073,
   "game_preds": {
     "yankees|pirates": {
       "home_win_prob": 0.4671,
@@ -477,5 +477,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-23 02:42 (台灣時間)"
+  "live_updated_at": "2026-07-23 02:47 (台灣時間)"
 }
