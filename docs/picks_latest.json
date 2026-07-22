@@ -368,11 +368,11 @@
     {
       "home_cn": "洋基",
       "away_cn": "海盜",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 3,
-      "projected_total": 8.4,
+      "projected_total": 7.9,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -392,14 +392,14 @@
     {
       "home_cn": "皇家",
       "away_cn": "巨人",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 4.5,
+      "projected_total": 4.0,
       "market_total": 9.0,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 UNDER",
+      "reason": "第6局僅0分（此時預期5.0分），低分走勢盤口9.0"
     },
     {
       "home_cn": "釀酒人",
@@ -426,7 +426,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784747279,
+  "live_updated_ts": 1784747581,
   "game_preds": {
     "yankees|pirates": {
       "home_win_prob": 0.4671,
@@ -489,5 +489,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-23 03:07 (台灣時間)"
+  "live_updated_at": "2026-07-23 03:13 (台灣時間)"
 }
