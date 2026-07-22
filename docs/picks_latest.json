@@ -244,12 +244,12 @@
       "away_cn": "雙城",
       "inning": 6,
       "top_inning": false,
-      "home_runs": 3,
+      "home_runs": 4,
       "away_runs": 2,
-      "projected_total": 8.1,
+      "projected_total": 9.1,
       "market_total": 8.0,
       "bet": "客隊讓分(+1.5)",
-      "reason": "客隊落後1分 第6局，賽前客隊勝率64%"
+      "reason": "客隊落後2分 第6局，賽前客隊勝率64%"
     },
     {
       "home_cn": "費城人",
@@ -316,9 +316,9 @@
       "away_cn": "老虎",
       "inning": 1,
       "top_inning": false,
-      "home_runs": 5,
+      "home_runs": 6,
       "away_runs": 0,
-      "projected_total": 13.0,
+      "projected_total": 14.0,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -339,10 +339,10 @@
       "home_cn": "太空人",
       "away_cn": "馬林魚",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 8.6,
+      "projected_total": 8.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
