@@ -288,7 +288,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784689476,
+  "live_updated_ts": 1784689778,
   "game_preds": {
     "guardians|twins": {
       "home_win_prob": 0.3619,
@@ -351,5 +351,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-07-22 11:04 (台灣時間)"
+  "live_updated_at": "2026-07-22 11:09 (台灣時間)"
 }
