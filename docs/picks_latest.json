@@ -350,17 +350,17 @@
     {
       "home_cn": "水手",
       "away_cn": "紅人",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 7.2,
+      "projected_total": 6.8,
       "market_total": 7.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1784686456,
+  "live_updated_ts": 1784686758,
   "game_preds": {
     "guardians|twins": {
       "home_win_prob": 0.3619,
@@ -423,5 +423,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-07-22 10:14 (台灣時間)"
+  "live_updated_at": "2026-07-22 10:19 (台灣時間)"
 }
