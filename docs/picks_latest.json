@@ -255,10 +255,10 @@
       "home_cn": "釀酒人",
       "away_cn": "大都會",
       "inning": 9,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 4,
-      "projected_total": 5.0,
+      "projected_total": 4.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -315,10 +315,10 @@
       "home_cn": "天使",
       "away_cn": "紅雀",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 5,
       "away_runs": 0,
-      "projected_total": 12.0,
+      "projected_total": 11.5,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -339,16 +339,16 @@
       "home_cn": "水手",
       "away_cn": "紅人",
       "inning": 3,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 1,
-      "projected_total": 6.8,
+      "projected_total": 6.4,
       "market_total": 7.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1784686758,
+  "live_updated_ts": 1784687060,
   "game_preds": {
     "guardians|twins": {
       "home_win_prob": 0.3619,
@@ -411,5 +411,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-07-22 10:19 (台灣時間)"
+  "live_updated_at": "2026-07-22 10:24 (台灣時間)"
 }
