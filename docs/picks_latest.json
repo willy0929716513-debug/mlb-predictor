@@ -242,14 +242,14 @@
     {
       "home_cn": "落磯",
       "away_cn": "國民",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 7,
       "away_runs": 7,
-      "projected_total": 17.6,
+      "projected_total": 16.9,
       "market_total": 13.0,
-      "bet": "大小分 OVER",
-      "reason": "第7局已得14分（此時預期9.4分），高分走勢盤口13.0"
+      "bet": null,
+      "reason": null
     },
     {
       "home_cn": "天使",
