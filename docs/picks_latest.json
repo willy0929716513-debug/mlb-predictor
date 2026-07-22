@@ -257,8 +257,8 @@
       "inning": 4,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 0,
-      "projected_total": 6.7,
+      "away_runs": 2,
+      "projected_total": 8.7,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -351,7 +351,7 @@
       "home_cn": "落磯",
       "away_cn": "國民",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
       "projected_total": 15.0,
@@ -360,7 +360,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784681318,
+  "live_updated_ts": 1784681621,
   "game_preds": {
     "guardians|twins": {
       "home_win_prob": 0.3619,
@@ -423,5 +423,5 @@
       "market_total": 7.5
     }
   },
-  "live_updated_at": "2026-07-22 08:48 (台灣時間)"
+  "live_updated_at": "2026-07-22 08:53 (台灣時間)"
 }
