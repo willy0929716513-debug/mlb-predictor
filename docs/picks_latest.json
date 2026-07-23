@@ -179,7 +179,7 @@
       "home_cn": "紅雀",
       "away_cn": "響尾蛇",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 9,
       "projected_total": 13.0,
