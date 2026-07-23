@@ -393,16 +393,16 @@
       "home_cn": "太空人",
       "away_cn": "馬林魚",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 2,
-      "projected_total": 6.7,
+      "projected_total": 6.2,
       "market_total": 8.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1784772472,
+  "live_updated_ts": 1784772774,
   "game_preds": {
     "yankees|pirates": {
       "home_win_prob": 0.4671,
@@ -465,5 +465,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-23 10:07 (台灣時間)"
+  "live_updated_at": "2026-07-23 10:12 (台灣時間)"
 }
