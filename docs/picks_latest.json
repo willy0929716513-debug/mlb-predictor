@@ -188,7 +188,7 @@
       "reason": "第6局僅3分（此時預期5.2分），低分走勢盤口8.5"
     }
   ],
-  "live_updated_ts": 1784839060,
+  "live_updated_ts": 1784839362,
   "game_preds": {
     "braves|padres": {
       "home_win_prob": 0.7103,
@@ -211,5 +211,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-24 04:37 (台灣時間)"
+  "live_updated_at": "2026-07-24 04:42 (台灣時間)"
 }
