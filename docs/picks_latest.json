@@ -191,16 +191,16 @@
       "home_cn": "藍鳥",
       "away_cn": "光芒",
       "inning": 2,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 8.6,
+      "projected_total": 8.1,
       "market_total": 8.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1784835133,
+  "live_updated_ts": 1784835436,
   "game_preds": {
     "braves|padres": {
       "home_win_prob": 0.7103,
@@ -223,5 +223,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-24 03:32 (台灣時間)"
+  "live_updated_at": "2026-07-24 03:37 (台灣時間)"
 }
