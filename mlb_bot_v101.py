@@ -1030,7 +1030,8 @@ def fetch_probable_pitchers():
     )
     result   = {}
     game_pks = {}  # (hs, as_) -> (gamePk, detailedState, commence_utc)
-    if not data: return result
+    _all_games = {}  # (hs, as_) -> [(ct_utc, entry_dict), ...] 含加賽多場
+    if not data: return result, {}
     for de in data.get("dates",[]):
         for game in de.get("games",[]):
             hd  = game.get("teams",{}).get("home",{})
@@ -1052,12 +1053,15 @@ def fetch_probable_pitchers():
             except Exception:
                 ct_utc = None
             if hs and as_:
-                result[(hs, as_)] = {
+                entry = {
                     "home_pitcher":_name_to_key(hp),"away_pitcher":_name_to_key(ap),
                     "home_name":hp or "TBD","away_name":ap or "TBD",
                     "home_pitcher_id": hp_id, "away_pitcher_id": ap_id,
                     "_src": "probable",
+                    "_ct_utc": ct_utc,  # ★ 場次時間，加賽匹配用
                 }
+                result[(hs, as_)] = entry   # 同組覆蓋（後場覆蓋前場；加賽用 _all_games 區分）
+                _all_games.setdefault((hs, as_), []).append((ct_utc, entry))
                 # ★ 儲存投手慣用手（L/R）
                 if hp and hp_hand:
                     _PITCHER_HAND[_name_to_key(hp)] = hp_hand
@@ -1181,7 +1185,18 @@ def fetch_probable_pitchers():
         log.info("SP(final/%s): %s vs %s | H=%s A=%s",
                  v.get("_src","probable"), k[0], k[1], v["home_pitcher"], v["away_pitcher"])
     log.info("Pitchers resolved: %d games", len(result))
-    return result
+    # ★ 加賽投手：同一組超過一場比賽，排序後回傳供 run() 按場次時間匹配
+    dh_pitchers = {}
+    for pair, entries in _all_games.items():
+        if len(entries) > 1:
+            dh_pitchers[pair] = sorted(entries, key=lambda x: x[0] or datetime.datetime.max)
+            log.info("DH pitchers: %s@%s G1=%s/%s G2=%s/%s",
+                     pair[0], pair[1],
+                     dh_pitchers[pair][0][1].get("home_name","?"),
+                     dh_pitchers[pair][0][1].get("away_name","?"),
+                     dh_pitchers[pair][1][1].get("home_name","?"),
+                     dh_pitchers[pair][1][1].get("away_name","?"))
+    return result, dh_pitchers
 
 # ══════════════════════════════════════════════
 # ★ 即時先發投手賽季ERA（MLB Stats API）
@@ -2763,9 +2778,14 @@ def run():
     il_src    = fetch_injury_list()
     try: fetch_roto_probable_pitchers()
     except Exception as e: log.warning("RotoWire SP failed: %s", e)
-    pitchers  = fetch_probable_pitchers()
-    if pitchers:
-        try: build_recent_era_cache(pitchers)
+    pitchers, _dh_pitchers = fetch_probable_pitchers()
+    if pitchers or _dh_pitchers:
+        # 加賽時兩場有不同投手；合併全部投手資料送入ERA快取（加賽第一場用合成key）
+        _era_pitchers = dict(pitchers)
+        for (_h, _a), _entries in _dh_pitchers.items():
+            for _i, (_ct, _info) in enumerate(_entries[:-1]):  # 末場已在 pitchers 裡，只補前場
+                _era_pitchers[(_h + "__dh%d" % (_i + 1), _a)] = _info
+        try: build_recent_era_cache(_era_pitchers)
         except Exception as e: log.warning("Recent ERA failed: %s", e)
     # ★ 即時賽季 ERA（bulk API，74+投手）
     try: fetch_live_sp_era()
@@ -2870,7 +2890,19 @@ def run():
         # 加賽標籤：同一對球隊同一天有兩場比賽 → 加賽（補賽）
         is_doubleheader = (game_date_str, home, away) in _dh_pairs
 
-        sp_info  = pitchers.get((home,away),{})
+        # 加賽時依場次時間選對應投手；一般比賽直接取 pitchers[(home,away)]
+        if is_doubleheader and (home, away) in _dh_pitchers:
+            _game_utc_naive = (game_dt - datetime.timedelta(hours=8)) if game_dt else None
+            _dh_entries = _dh_pitchers[(home, away)]
+            if _game_utc_naive and _dh_entries:
+                sp_info = min(
+                    _dh_entries,
+                    key=lambda e: abs((e[0] - _game_utc_naive).total_seconds()) if e[0] else float("inf")
+                )[1]
+            else:
+                sp_info = _dh_entries[0][1] if _dh_entries else {}
+        else:
+            sp_info = pitchers.get((home, away), {})
         home_sp  = sp_info.get("home_pitcher")
         away_sp  = sp_info.get("away_pitcher")
         _sp_src       = sp_info.get("_src","probable") if sp_info else "probable"
