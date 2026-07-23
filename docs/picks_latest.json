@@ -182,7 +182,7 @@
       "top_inning": true,
       "home_runs": 2,
       "away_runs": 9,
-      "projected_total": 12.5,
+      "projected_total": 12.0,
       "market_total": 9.0,
       "bet": "客隊獨贏",
       "reason": "第9局客隊領先7分（賽前客隊勝率55%），大局已定"
@@ -200,7 +200,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784850036,
+  "live_updated_ts": 1784850337,
   "game_preds": {
     "cardinals|diamondbacks": {
       "home_win_prob": 0.4452,
@@ -267,5 +267,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-24 07:40 (台灣時間)"
+  "live_updated_at": "2026-07-24 07:45 (台灣時間)"
 }
