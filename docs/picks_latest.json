@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-23 16:33 (台灣時間)",
+  "generated_at": "2026-07-23 23:40 (台灣時間)",
   "date": "2026-07-23",
   "stats": {
     "settled": 127,
@@ -178,23 +178,23 @@
   "live_updated_ts": 1784776087,
   "game_preds": {
     "braves|padres": {
-      "home_win_prob": 0.7227,
+      "home_win_prob": 0.7103,
       "market_total": 8.0
     },
     "guardians|twins": {
-      "home_win_prob": 0.4735,
+      "home_win_prob": 0.4845,
       "market_total": 7.5
     },
     "blue jays|rays": {
-      "home_win_prob": 0.2714,
+      "home_win_prob": 0.2692,
       "market_total": 8.5
     },
     "cardinals|diamondbacks": {
-      "home_win_prob": 0.4714,
+      "home_win_prob": 0.4609,
       "market_total": 7.5
     },
     "tigers|royals": {
-      "home_win_prob": 0.648,
+      "home_win_prob": 0.6522,
       "market_total": 8.5
     }
   }
