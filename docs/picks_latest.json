@@ -174,8 +174,33 @@
       "sp_confirmed": true
     }
   ],
-  "live_games": [],
-  "live_updated_ts": 1784776087,
+  "live_games": [
+    {
+      "home_cn": "勇士",
+      "away_cn": "教士",
+      "inning": 9,
+      "top_inning": true,
+      "home_runs": 6,
+      "away_runs": 5,
+      "projected_total": 11.9,
+      "market_total": 8.0,
+      "bet": null,
+      "reason": null
+    },
+    {
+      "home_cn": "守護者",
+      "away_cn": "雙城",
+      "inning": 7,
+      "top_inning": true,
+      "home_runs": 1,
+      "away_runs": 0,
+      "projected_total": 3.5,
+      "market_total": 7.5,
+      "bet": "大小分 UNDER",
+      "reason": "第7局僅1分（此時預期5.0分），低分走勢盤口7.5"
+    }
+  ],
+  "live_updated_ts": 1784832416,
   "game_preds": {
     "braves|padres": {
       "home_win_prob": 0.7103,
@@ -197,5 +222,6 @@
       "home_win_prob": 0.6522,
       "market_total": 8.5
     }
-  }
+  },
+  "live_updated_at": "2026-07-24 02:46 (台灣時間)"
 }
