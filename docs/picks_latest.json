@@ -388,21 +388,9 @@
       "market_total": 8.0,
       "bet": "客隊獨贏",
       "reason": "第9局客隊領先4分（賽前客隊勝率49%），大局已定"
-    },
-    {
-      "home_cn": "太空人",
-      "away_cn": "馬林魚",
-      "inning": 9,
-      "top_inning": true,
-      "home_runs": 5,
-      "away_runs": 2,
-      "projected_total": 7.9,
-      "market_total": 8.0,
-      "bet": "主隊獨贏",
-      "reason": "第9局主隊領先3分（賽前主隊勝率59%），大局已定"
     }
   ],
-  "live_updated_ts": 1784774281,
+  "live_updated_ts": 1784774583,
   "game_preds": {
     "yankees|pirates": {
       "home_win_prob": 0.4671,
@@ -465,5 +453,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-23 10:38 (台灣時間)"
+  "live_updated_at": "2026-07-23 10:43 (台灣時間)"
 }
