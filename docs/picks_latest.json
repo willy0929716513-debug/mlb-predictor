@@ -178,11 +178,11 @@
     {
       "home_cn": "守護者",
       "away_cn": "雙城",
-      "inning": 9,
-      "top_inning": false,
+      "inning": 10,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 2.4,
+      "projected_total": 2.0,
       "market_total": 7.5,
       "bet": null,
       "reason": null
@@ -200,7 +200,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784835436,
+  "live_updated_ts": 1784835737,
   "game_preds": {
     "braves|padres": {
       "home_win_prob": 0.7103,
@@ -223,5 +223,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-24 03:37 (台灣時間)"
+  "live_updated_at": "2026-07-24 03:42 (台灣時間)"
 }
