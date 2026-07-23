@@ -178,14 +178,14 @@
     {
       "home_cn": "紅雀",
       "away_cn": "響尾蛇",
-      "inning": 8,
-      "top_inning": false,
+      "inning": 9,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 9,
       "projected_total": 12.5,
       "market_total": 9.0,
       "bet": "客隊獨贏",
-      "reason": "第8局客隊領先7分（賽前客隊勝率55%），大局已定"
+      "reason": "第9局客隊領先7分（賽前客隊勝率55%），大局已定"
     },
     {
       "home_cn": "老虎",
