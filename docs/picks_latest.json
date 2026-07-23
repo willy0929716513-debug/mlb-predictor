@@ -369,10 +369,10 @@
       "home_cn": "洋基",
       "away_cn": "海盜",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 4.7,
+      "projected_total": 4.2,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -380,11 +380,11 @@
     {
       "home_cn": "紅襪",
       "away_cn": "金鶯",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 4,
-      "projected_total": 10.5,
+      "projected_total": 10.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -404,11 +404,11 @@
     {
       "home_cn": "費城人",
       "away_cn": "道奇",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 3,
       "away_runs": 3,
-      "projected_total": 10.8,
+      "projected_total": 10.2,
       "market_total": 9.5,
       "bet": null,
       "reason": null
@@ -441,10 +441,10 @@
       "home_cn": "遊騎兵",
       "away_cn": "白襪",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.5,
+      "projected_total": 8.0,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -453,10 +453,10 @@
       "home_cn": "小熊",
       "away_cn": "老虎",
       "inning": 1,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 8.0,
+      "projected_total": 7.6,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -474,7 +474,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784765573,
+  "live_updated_ts": 1784765875,
   "game_preds": {
     "yankees|pirates": {
       "home_win_prob": 0.4671,
@@ -537,5 +537,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-23 08:12 (台灣時間)"
+  "live_updated_at": "2026-07-23 08:17 (台灣時間)"
 }
