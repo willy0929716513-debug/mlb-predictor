@@ -380,11 +380,11 @@
     {
       "home_cn": "紅襪",
       "away_cn": "金鶯",
-      "inning": 7,
-      "top_inning": false,
+      "inning": 8,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 5,
-      "projected_total": 8.5,
+      "projected_total": 8.0,
       "market_total": 9.0,
       "bet": null,
       "reason": null
@@ -417,10 +417,10 @@
       "home_cn": "藍鳥",
       "away_cn": "光芒",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 4,
-      "projected_total": 7.9,
+      "projected_total": 7.4,
       "market_total": 8.5,
       "bet": "客隊獨贏",
       "reason": "第8局客隊領先2分（賽前客隊勝率47%），大局已定"
@@ -429,22 +429,22 @@
       "home_cn": "勇士",
       "away_cn": "教士",
       "inning": 8,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 3.9,
+      "projected_total": 3.4,
       "market_total": 8.5,
       "bet": "大小分 UNDER",
-      "reason": "第8局僅2分（此時預期6.6分），低分走勢盤口8.5"
+      "reason": "第8局僅2分（此時預期7.1分），低分走勢盤口8.5"
     },
     {
       "home_cn": "遊騎兵",
       "away_cn": "白襪",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 3,
-      "projected_total": 9.7,
+      "projected_total": 9.2,
       "market_total": 8.5,
       "bet": null,
       "reason": null
@@ -474,7 +474,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784770060,
+  "live_updated_ts": 1784770362,
   "game_preds": {
     "yankees|pirates": {
       "home_win_prob": 0.4671,
@@ -537,5 +537,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-23 09:27 (台灣時間)"
+  "live_updated_at": "2026-07-23 09:32 (台灣時間)"
 }
