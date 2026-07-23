@@ -181,14 +181,26 @@
       "inning": 4,
       "top_inning": true,
       "home_runs": 2,
-      "away_runs": 0,
-      "projected_total": 7.0,
+      "away_runs": 3,
+      "projected_total": 10.0,
       "market_total": 7.5,
+      "bet": "大小分 OVER",
+      "reason": "第4局已得5分（此時預期2.5分），高分走勢盤口7.5"
+    },
+    {
+      "home_cn": "老虎",
+      "away_cn": "皇家",
+      "inning": 1,
+      "top_inning": true,
+      "home_runs": 0,
+      "away_runs": 0,
+      "projected_total": 8.5,
+      "market_total": 8.5,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1784845098,
+  "live_updated_ts": 1784845400,
   "game_preds": {
     "braves|padres": {
       "home_win_prob": 0.7103,
@@ -211,5 +223,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-24 06:18 (台灣時間)"
+  "live_updated_at": "2026-07-24 06:23 (台灣時間)"
 }
