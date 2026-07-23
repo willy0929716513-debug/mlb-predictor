@@ -178,14 +178,14 @@
     {
       "home_cn": "藍鳥",
       "away_cn": "光芒",
-      "inning": 7,
-      "top_inning": false,
-      "home_runs": 2,
+      "inning": 8,
+      "top_inning": true,
+      "home_runs": 3,
       "away_runs": 1,
-      "projected_total": 5.4,
+      "projected_total": 5.9,
       "market_total": 8.5,
-      "bet": "大小分 UNDER",
-      "reason": "第7局僅3分（此時預期6.1分），低分走勢盤口8.5"
+      "bet": "客隊讓分(+1.5)",
+      "reason": "客隊落後2分 第8局，賽前客隊勝率73%"
     },
     {
       "home_cn": "紅雀",
@@ -200,7 +200,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784840268,
+  "live_updated_ts": 1784840570,
   "game_preds": {
     "braves|padres": {
       "home_win_prob": 0.7103,
@@ -223,5 +223,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-24 04:57 (台灣時間)"
+  "live_updated_at": "2026-07-24 05:02 (台灣時間)"
 }
