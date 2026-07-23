@@ -2821,6 +2821,26 @@ def run():
     odds_data = fetch_odds()
     if not odds_data: log.error("No odds data"); return
 
+    # ★ 加賽偵測：同一組球隊在同一天出現兩場比賽 → 雙頭賽（加賽）
+    _dh_count = {}  # (date, home_key, away_key) -> count
+    for _g in odds_data:
+        if _g.get("sport_key") != "baseball_mlb": continue
+        _comm = _g.get("commence_time","")
+        try:
+            _gutc = datetime.datetime.fromisoformat(_comm.replace("Z","+00:00"))
+            _gdate = (_gutc.replace(tzinfo=None) + datetime.timedelta(hours=8)).strftime("%Y-%m-%d")
+        except Exception:
+            continue
+        _gh = norm_team(_g.get("home_team",""))
+        _ga = norm_team(_g.get("away_team",""))
+        if _gh not in BASE or _ga not in BASE: continue
+        _dk = (_gdate, _gh, _ga)
+        _dh_count[_dk] = _dh_count.get(_dk, 0) + 1
+    _dh_pairs = {k for k, v in _dh_count.items() if v > 1}
+    if _dh_pairs:
+        log.info("加賽偵測: %d 組雙頭賽 %s", len(_dh_pairs),
+                 ", ".join("%s %s@%s" % k for k in sorted(_dh_pairs)))
+
     season_start = "%d-03-25" % datetime.date.today().year
     season_games = sum(1 for r in hist if r.get("date","") >= season_start)
     picks, today_records = [], []
@@ -2846,6 +2866,9 @@ def run():
         home = norm_team(game.get("home_team",""))
         away = norm_team(game.get("away_team",""))
         if home not in BASE or away not in BASE: continue
+
+        # 加賽標籤：同一對球隊同一天有兩場比賽 → 加賽（補賽）
+        is_doubleheader = (game_date_str, home, away) in _dh_pairs
 
         sp_info  = pitchers.get((home,away),{})
         home_sp  = sp_info.get("home_pitcher")
@@ -3574,9 +3597,10 @@ def run():
         else:
             last_line=None
 
+        _dh_tag = " 【加賽】" if is_doubleheader else " 【正常】"
         msg_lines=[
             "**%s  %s @ %s**"%(tier,acn,hcn),
-            "🕐 %s %s (台灣時間)%s%s%s%s"%(game_date_str[5:].replace("-","/"),game_time_str,pf_note,weather_note,ump_note,mkt_tag),
+            "🕐 %s %s (台灣時間)%s%s%s%s%s"%(game_date_str[5:].replace("-","/"),game_time_str,pf_note,weather_note,ump_note,mkt_tag,_dh_tag),
             "⚾ 先發 [%s]: %s — %s"%(sp_src_tag,a_sp_str,h_sp_str),
             "💰 推薦: %s"%bet_desc,
             stats_ln,
