@@ -200,7 +200,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784841174,
+  "live_updated_ts": 1784841476,
   "game_preds": {
     "braves|padres": {
       "home_win_prob": 0.7103,
@@ -223,5 +223,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-24 05:12 (台灣時間)"
+  "live_updated_at": "2026-07-24 05:17 (台灣時間)"
 }
