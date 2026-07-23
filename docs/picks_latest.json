@@ -396,19 +396,19 @@
       "top_inning": false,
       "home_runs": 4,
       "away_runs": 7,
-      "projected_total": 14.9,
+      "projected_total": 15.4,
       "market_total": 8.0,
       "bet": "大小分 OVER",
-      "reason": "第4局已得10分（此時預期3.1分），高分走勢盤口8.0"
+      "reason": "第5局已得11分（此時預期3.6分），高分走勢盤口8.0"
     },
     {
       "home_cn": "費城人",
       "away_cn": "道奇",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 3,
-      "projected_total": 10.3,
+      "projected_total": 9.8,
       "market_total": 9.5,
       "bet": null,
       "reason": null
@@ -428,11 +428,11 @@
     {
       "home_cn": "勇士",
       "away_cn": "教士",
-      "inning": 2,
-      "top_inning": false,
+      "inning": 3,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 8.1,
+      "projected_total": 7.6,
       "market_total": 8.5,
       "bet": null,
       "reason": null
