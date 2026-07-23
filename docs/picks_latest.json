@@ -370,12 +370,12 @@
       "away_cn": "海盜",
       "inning": 7,
       "top_inning": false,
-      "home_runs": 0,
+      "home_runs": 2,
       "away_runs": 0,
-      "projected_total": 2.4,
+      "projected_total": 4.4,
       "market_total": 8.5,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅0分（此時預期6.1分），低分走勢盤口8.5"
+      "reason": "第7局僅2分（此時預期6.1分），低分走勢盤口8.5"
     },
     {
       "home_cn": "紅襪",
@@ -416,26 +416,26 @@
     {
       "home_cn": "藍鳥",
       "away_cn": "光芒",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 4,
-      "projected_total": 8.3,
+      "projected_total": 7.8,
       "market_total": 8.5,
-      "bet": null,
-      "reason": null
+      "bet": "客隊獨贏",
+      "reason": "第7局客隊領先3分（賽前客隊勝率47%），大局已定"
     },
     {
       "home_cn": "勇士",
       "away_cn": "教士",
-      "inning": 6,
-      "top_inning": false,
+      "inning": 7,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 0,
-      "projected_total": 4.3,
+      "projected_total": 3.8,
       "market_total": 8.5,
       "bet": "大小分 UNDER",
-      "reason": "第6局僅1分（此時預期5.2分），低分走勢盤口8.5"
+      "reason": "第7局僅1分（此時預期5.7分），低分走勢盤口8.5"
     },
     {
       "home_cn": "遊騎兵",
@@ -452,11 +452,11 @@
     {
       "home_cn": "小熊",
       "away_cn": "老虎",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 1,
       "away_runs": 1,
-      "projected_total": 7.8,
+      "projected_total": 7.3,
       "market_total": 8.0,
       "bet": null,
       "reason": null
@@ -464,17 +464,17 @@
     {
       "home_cn": "太空人",
       "away_cn": "馬林魚",
-      "inning": 3,
-      "top_inning": false,
+      "inning": 4,
+      "top_inning": true,
       "home_runs": 2,
       "away_runs": 0,
-      "projected_total": 7.8,
+      "projected_total": 7.3,
       "market_total": 8.0,
       "bet": null,
       "reason": null
     }
   ],
-  "live_updated_ts": 1784768251,
+  "live_updated_ts": 1784768552,
   "game_preds": {
     "yankees|pirates": {
       "home_win_prob": 0.4671,
@@ -537,5 +537,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-23 08:57 (台灣時間)"
+  "live_updated_at": "2026-07-23 09:02 (台灣時間)"
 }
