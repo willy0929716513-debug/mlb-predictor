@@ -181,26 +181,26 @@
       "inning": 12,
       "top_inning": true,
       "home_runs": 1,
-      "away_runs": 1,
-      "projected_total": 2.0,
+      "away_runs": 3,
+      "projected_total": 4.0,
       "market_total": 7.5,
-      "bet": null,
-      "reason": null
+      "bet": "客隊獨贏",
+      "reason": "第12局客隊領先2分（賽前客隊勝率52%），大局已定"
     },
     {
       "home_cn": "藍鳥",
       "away_cn": "光芒",
       "inning": 5,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 1,
-      "projected_total": 7.7,
+      "projected_total": 7.2,
       "market_total": 8.5,
       "bet": "客隊讓分(+1.5)",
       "reason": "客隊落後1分 第5局，賽前客隊勝率73%"
     }
   ],
-  "live_updated_ts": 1784837851,
+  "live_updated_ts": 1784838153,
   "game_preds": {
     "braves|padres": {
       "home_win_prob": 0.7103,
@@ -223,5 +223,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-24 04:17 (台灣時間)"
+  "live_updated_at": "2026-07-24 04:22 (台灣時間)"
 }
