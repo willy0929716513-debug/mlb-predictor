@@ -179,13 +179,13 @@
       "home_cn": "紅雀",
       "away_cn": "響尾蛇",
       "inning": 4,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 2,
       "away_runs": 3,
-      "projected_total": 10.0,
+      "projected_total": 9.6,
       "market_total": 7.5,
       "bet": "大小分 OVER",
-      "reason": "第4局已得5分（此時預期2.5分），高分走勢盤口7.5"
+      "reason": "第4局已得5分（此時預期2.9分），高分走勢盤口7.5"
     },
     {
       "home_cn": "老虎",
@@ -200,7 +200,7 @@
       "reason": null
     }
   ],
-  "live_updated_ts": 1784845400,
+  "live_updated_ts": 1784845702,
   "game_preds": {
     "braves|padres": {
       "home_win_prob": 0.7103,
@@ -223,5 +223,5 @@
       "market_total": 8.5
     }
   },
-  "live_updated_at": "2026-07-24 06:23 (台灣時間)"
+  "live_updated_at": "2026-07-24 06:28 (台灣時間)"
 }
