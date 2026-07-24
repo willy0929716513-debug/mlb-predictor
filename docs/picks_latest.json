@@ -179,13 +179,13 @@
       "home_cn": "老虎",
       "away_cn": "皇家",
       "inning": 7,
-      "top_inning": true,
+      "top_inning": false,
       "home_runs": 0,
       "away_runs": 2,
-      "projected_total": 4.5,
+      "projected_total": 4.1,
       "market_total": 7.5,
       "bet": "大小分 UNDER",
-      "reason": "第7局僅2分（此時預期5.0分），低分走勢盤口7.5"
+      "reason": "第7局僅2分（此時預期5.4分），低分走勢盤口7.5"
     }
   ],
   "live_updated_ts": 1784853653,
