@@ -188,7 +188,7 @@
       "reason": "第6局僅2分（此時預期4.6分），低分走勢盤口7.5"
     }
   ],
-  "live_updated_ts": 1784852448,
+  "live_updated_ts": 1784852749,
   "game_preds": {
     "cardinals|diamondbacks": {
       "home_win_prob": 0.4452,
@@ -255,5 +255,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-24 08:20 (台灣時間)"
+  "live_updated_at": "2026-07-24 08:25 (台灣時間)"
 }
