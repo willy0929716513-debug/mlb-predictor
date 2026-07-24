@@ -176,18 +176,6 @@
   ],
   "live_games": [
     {
-      "home_cn": "紅雀",
-      "away_cn": "響尾蛇",
-      "inning": 9,
-      "top_inning": false,
-      "home_runs": 4,
-      "away_runs": 10,
-      "projected_total": 14.5,
-      "market_total": 9.0,
-      "bet": "客隊獨贏",
-      "reason": "第9局客隊領先6分（賽前客隊勝率55%），大局已定"
-    },
-    {
       "home_cn": "老虎",
       "away_cn": "皇家",
       "inning": 6,
