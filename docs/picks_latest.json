@@ -190,17 +190,17 @@
     {
       "home_cn": "老虎",
       "away_cn": "皇家",
-      "inning": 5,
-      "top_inning": false,
+      "inning": 6,
+      "top_inning": true,
       "home_runs": 0,
       "away_runs": 0,
-      "projected_total": 3.8,
+      "projected_total": 3.3,
       "market_total": 7.5,
-      "bet": null,
-      "reason": null
+      "bet": "大小分 UNDER",
+      "reason": "第6局僅0分（此時預期4.2分），低分走勢盤口7.5"
     }
   ],
-  "live_updated_ts": 1784851543,
+  "live_updated_ts": 1784851845,
   "game_preds": {
     "cardinals|diamondbacks": {
       "home_win_prob": 0.4452,
@@ -267,5 +267,5 @@
       "market_total": 8.0
     }
   },
-  "live_updated_at": "2026-07-24 08:05 (台灣時間)"
+  "live_updated_at": "2026-07-24 08:10 (台灣時間)"
 }
